@@ -1,4 +1,9 @@
 const ServiceRepository = require('./src/Service/ServiceRepository');
+/*
+Todo see if using stream instead of events is better
+Todo move to typescript
+Todo add Test Codes and separate folder
+ */
 
 class NodeXYZ {
   constructor(name, devPort){
