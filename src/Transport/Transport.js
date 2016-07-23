@@ -35,7 +35,6 @@ class HTTPClient {
       method: 'POST',
       json: data
     };
-    console.log(options);
     request.post(options, (err, responseData) => {
       responseCallback(err, responseData);
     })

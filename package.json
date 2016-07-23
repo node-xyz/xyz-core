@@ -4,12 +4,16 @@
   "description": "Microservice platform wrapper for node js ",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js",
+    "test": "./node_modules/.bin/mocha --reporter spec",
     "run": "node math_ms.js"
   },
   "author": "Kian.peymani@gmail.com",
   "license": "ISC",
   "devDependencies": {
     "request": "^2.72.0"
+  },
+  "dependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
   }
 }
