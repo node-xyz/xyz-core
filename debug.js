@@ -29,4 +29,10 @@ snd.call('finger', {hello: 'world'}, (err, response) => {
   console.log(err, response);
 });
 
+snd.call('fffinger', {hello: 'world'}, (err, response) => {
+  console.log(err, response);
+});
+
+
+
 

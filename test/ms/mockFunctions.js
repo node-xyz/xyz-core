@@ -1,21 +1,21 @@
 module.exports = {
-  mul: function mul(data, response) { response.end(JSON.stringify(data.x * data.y)) },
-  add: function add(data, response) { response.end(JSON.stringify(data.x + data.y)) },
-  up: function (data, response) {
-    response.end(data.toUpperCase());
+  mul: function mul(payload, xResponse) { xResponse.send(payload.x * payload.y) },
+  add: function add(payload, xResponse) { xResponse.send(payload.x + payload.y) },
+  up: function (payload, xResponse) {
+    xResponse.send(payload.toUpperCase());
   },
-  down: function (data, response) {
-    response.end(data.toLowerCase());
+  down: function (payload, xResponse) {
+    xResponse.send(payload.toLowerCase());
   },
-  neg: function (data, response) {
+  neg: function (payload, xResponse) {
     // TODO not good
-    response.end(JSON.stringify(!Boolean(data)));
+    xResponse.send(!Boolean(payload));
   },
-  rev: function (data, response) {
-    response.end(JSON.stringify(data.reverse()))
+  rev: function (payload, xResponse) {
+    xResponse.send(payload.reverse())
   },
-  finger: function (data, response) {
-    data['test'] = 'test';
-    response.end(JSON.stringify(data));
+  finger: function (payload, xResponse) {
+    payload['test'] = 'test';
+    xResponse.send(payload);
   }
 };

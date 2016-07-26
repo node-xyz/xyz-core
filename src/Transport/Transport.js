@@ -11,11 +11,11 @@ class HTTPServer extends EventEmitter {
     this.port = devPort || CONSTANTS.http.port;
     this.server = http.createServer()
       .listen(this.port, () => {
-        console.log(`Server listening on: http://localhost:${this.port}`);
+        // console.log(`Server listening on: http://localhost:${this.port}`);
       }).on('request', (req, resp) => {
         if ( url.parse(req.url).query.split('&').length > 1 ) {
           req.destroy();
-          console.log(`aborting request to ${req.url} - INVALID query`)
+          // console.log(`aborting request to ${req.url} - INVALID query`)
         }
         else {
           var body = [];

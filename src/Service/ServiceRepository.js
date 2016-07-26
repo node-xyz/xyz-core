@@ -4,6 +4,7 @@
 var http = require('http');
 var HTTP = require('../Transport/Transport');
 var CONSTANTS  = require('../Config/Constants');
+const XResponse = require('../Transport/XResponse');
 
 class ServiceRepository {
   constructor(devPort){
@@ -12,11 +13,10 @@ class ServiceRepository {
 
     this.services = {};
 
-    this.httpServer.on(CONSTANTS.events.REQUEST, (rcvPacketObject, response) => {
-      console.log(rcvPacketObject);
+    this.httpServer.on(CONSTANTS.events.REQUEST, (rcvPacket, response) => {
       for ( var serviceName in this.services ) {
-        if ( serviceName === rcvPacketObject.serviceName ) {
-          this.services[serviceName].fn(rcvPacketObject.userPayload , response);
+        if ( serviceName === rcvPacket.serviceName ) {
+          this.services[serviceName].fn(rcvPacket.userPayload , new XResponse(response));
           return
         }
       }
