@@ -1,5 +1,5 @@
-var ms = require('./test/ms/MockMicroservice').MockMicroservice;
-var fn = require('./test/ms/mockFunctions');
+var ms = require('./../test/ms/MockMicroservice').MockMicroservice;
+var fn = require('./../test/ms/mockFunctions');
 var snd = new ms('snd', 3334);
 var rcv = new ms('rcv', 3333);
 

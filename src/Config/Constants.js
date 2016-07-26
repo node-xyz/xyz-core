@@ -9,9 +9,11 @@ module.exports = {
   },
   events: {
     REQUEST: 'request',
-    SERVICE_CALL: 'serviceCall'
+    SERVICE_CALL: 'serviceCall',
+    PING: "ping"
   },
   url: {
-    CALL: 'call'
+    CALL: 'call',
+    PING: 'ping'
   }
 };

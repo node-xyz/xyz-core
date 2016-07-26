@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "run": "node math_ms.js"
+    "manual": "cd ./manualTest && node mathMs.js && node stringMs.js"
   },
   "author": "Kian.peymani@gmail.com",
   "license": "ISC",
