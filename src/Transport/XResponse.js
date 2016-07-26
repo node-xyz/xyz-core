@@ -7,5 +7,4 @@ module.exports =
     send(payload){
       this.response.end(JSON.stringify(payload))
     }
-
   };

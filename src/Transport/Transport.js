@@ -13,7 +13,8 @@ class HTTPServer extends EventEmitter {
       .listen(this.port, () => {
         // console.log(`Server listening on: http://localhost:${this.port}`);
       }).on('request', (req, resp) => {
-        if ( url.parse(req.url).query.split('&').length > 1 ) {
+        let parsedUrl = url.parse(req.url);
+        if ( parsedUrl.query.split('&').length > 1 || parsedUrl.pathname !== `/${CONSTANTS.url.CALL}`) {
           req.destroy();
           // console.log(`aborting request to ${req.url} - INVALID query`)
         }
@@ -42,7 +43,6 @@ class HTTPClient {
   constructor(){
     this.callPostfix = CONSTANTS.url.CALL;
   }
-
 
   send(config, userPayload, responseCallback) {
     let options = {
