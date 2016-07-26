@@ -10,5 +10,8 @@ module.exports = {
   events: {
     REQUEST: 'request',
     SERVICE_CALL: 'serviceCall'
+  },
+  url: {
+    CALL: 'call'
   }
 };

@@ -9,17 +9,21 @@ Todo Support local clustering[Must hack with it first]
  */
 
 class NodeXYZ {
-  constructor(name, devPort){
-    this.name = name;
+  constructor(serviceName, devPort){
+    this.name = serviceName;
     this.serviceRepository = new ServiceRepository(devPort);
   }
 
-  register(name , fn){
-    this.serviceRepository.register(name, fn);
+  terminate(){
+    this.serviceRepository.terminate();
+  }
+
+  register(serviceName , fn){
+    this.serviceRepository.register(serviceName, fn);
   };
 
-  call(name, data, responseCallback){
-    this.serviceRepository.call(name, data, responseCallback)
+  call(serviceName, userPayload, responseCallback){
+    this.serviceRepository.call(serviceName, userPayload, responseCallback)
   }
 }
 

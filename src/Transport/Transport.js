@@ -1,42 +1,58 @@
 const http = require('http');
+const url = require('url');
 const request = require('request');
-const CONSTANTS = require('../Config/Constants');
 const EventEmitter = require('events') ;
+const CONSTANTS = require('../Config/Constants');
 
 class HTTPServer extends EventEmitter {
 
   constructor(devPort) {
     super();
-    var a = 1;
     this.port = devPort || CONSTANTS.http.port;
     this.server = http.createServer()
       .listen(this.port, () => {
         console.log(`Server listening on: http://localhost:${this.port}`);
       }).on('request', (req, resp) => {
-        var body = [];
-        var self = this ; // TODO fix this
-        req
-          .on('data', (chuck) => {
-            body.push(chuck);
-          })
-          .on('end', () => {
-            self.emit(CONSTANTS.events.REQUEST, {url: req.url, body: body, response: resp});
-          });
+        if ( url.parse(req.url).query.split('&').length > 1 ) {
+          req.destroy();
+          console.log(`aborting request to ${req.url} - INVALID query`)
+        }
+        else {
+          var body = [];
+          var self = this ; // TODO fix this
+          req
+            .on('data', (chuck) => {
+              body.push(chuck);
+            })
+            .on('end', () => {
+              self.emit(
+                CONSTANTS.events.REQUEST,
+                { userPayload: JSON.parse(body).userPayload, serviceName: url.parse(req.url).query.split('=')[1] } , resp);
+            });
+        }
       });
+  }
+
+  close(){
+    this.server.close();
   }
 }
 
 class HTTPClient {
-  constructor(){}
+  constructor(){
+    this.callPostfix = CONSTANTS.url.CALL;
+  }
 
-  send(config, data, responseCallback) {
-    var options = {
-      uri: `${config.host}:${config.port}/${config.name}`,
+
+  send(config, userPayload, responseCallback) {
+    let options = {
+      uri: `${config.host}:${config.port}/${this.callPostfix}`,
       method: 'POST',
-      json: data
+      qs: {'service': config.serviceName},
+      json: {userPayload : userPayload}
     };
-    request.post(options, (err, responseData) => {
-      responseCallback(err, responseData);
+    request.post(options, (err, responseData, body) => {
+      responseCallback(err, body);
     })
   }
 }
