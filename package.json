@@ -5,15 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "manual": "cd ./manualTest && node mathMs.js && node stringMs.js"
+    "lint": "./node_modules/jshint/bin/jshint src --config ./jshintrc"
   },
   "author": "Kian.peymani@gmail.com",
   "license": "ISC",
   "devDependencies": {
-    "request": "^2.72.0"
+    "jshint": "^2.9.2"
   },
   "dependencies": {
     "chai": "^3.5.0",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "request": "^2.72.0"
   }
 }

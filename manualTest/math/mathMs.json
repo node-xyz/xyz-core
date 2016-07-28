@@ -1,0 +1,6 @@
+{
+  "name": "mathMs",
+  "net":{
+    "port": 3334
+  }
+}

@@ -6,9 +6,8 @@ Todo test log levels
  */
 
 class NodeXYZ {
-  constructor(selfName){
-    this.name = selfName;
-    this.serviceRepository = new ServiceRepository( selfName);
+  constructor(serviceConf, systemConf){
+    this.serviceRepository = new ServiceRepository(serviceConf, systemConf);
   }
 
   terminate(){

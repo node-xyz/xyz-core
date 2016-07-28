@@ -15,5 +15,8 @@ module.exports = {
   url: {
     CALL: 'call',
     PING: 'ping'
+  },
+  intervals: {
+    ping : 5000
   }
 };

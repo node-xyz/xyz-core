@@ -1,11 +1,20 @@
 var XYZ = require('./../../index');
+var fs = require('fs');
 
 /**
  * A Wrapper class around microservice interface
  */
 class MockMicroservice {
-  constructor(name, port) {
-    this.xyz = new XYZ(name, port);
+  constructor(name, port, cwd) {
+    let serviceConfiguration = {
+      "name": name,
+      "net": {
+        "port": port
+      }
+    };
+
+    fs.writeFileSync(`${cwd}/${name}.json`, JSON.stringify(serviceConfiguration));
+    this.xyz = new XYZ(require(`./../tests/${name}.json`), require(`./../tests/xyzTest.json`));
   }
 
   registerFn(name, fn) {

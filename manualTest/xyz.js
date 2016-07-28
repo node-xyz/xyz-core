@@ -1,7 +1,4 @@
 module.exports = {
-  "net":{
-    "port": 3333
-  },
   "microservices": [
     {
       "host": "http://localhost",

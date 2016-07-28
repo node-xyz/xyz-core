@@ -5,14 +5,14 @@ var http = require('http');
 var HTTP = require('../Transport/Transport');
 var CONSTANTS  = require('../Config/Constants');
 const XResponse = require('../Transport/XResponse');
+var path = require('path');
 
 class ServiceRepository {
-  constructor(selfName){
-    this.selfName = selfName;
-    this.configuration = require(`${process.cwd()}/_${this.selfName}`);
-    this.transportServer = new HTTP.HTTPServer(this.configuration.net.port);
+  constructor(serviceConf, systemConf){
+    this.serviceConfiguration = serviceConf;
+    this.systemConfiguration = systemConf;
+    this.transportServer = new HTTP.HTTPServer(this.serviceConfiguration.net.port);
     this.transportClient = new HTTP.HTTPClient();
-    console.log(this.configuration);
 
     this.services = {};
     this.foreignServices = {};
@@ -34,7 +34,7 @@ class ServiceRepository {
     });
 
     this.ping();
-    setInterval(() => this.ping(), 5000)
+    setInterval(() => this.ping(), CONSTANTS.intervals.ping)
 
   }
 
@@ -44,7 +44,6 @@ class ServiceRepository {
 
 
   call(serviceName, userPayload, responseCallback) {
-    // temp . no service discovery for now. all are expected to locate on port 3333
     for ( let node in this.foreignServices ) {
       let index = this.foreignServices[node].indexOf(serviceName) ;
       if ( index > -1 ) {
@@ -55,13 +54,14 @@ class ServiceRepository {
         return
       }
     }
-    responseCallback("Service Name not Found", null)
+    responseCallback(http.STATUS_CODES[404], null)
   };
   
   ping() {
-    let nodes = this.configuration.microservices;
+    let nodes = this.systemConfiguration.microservices;
     for ( let node of nodes ) {
       this.transportClient.ping(node, (err, responseData) => {
+        if ( err ) { return }
         this.foreignServices[node.host + ':' + node.port] = responseData;
       })
     }

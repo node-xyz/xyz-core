@@ -1,0 +1,6 @@
+{
+  "name": "stringMs",
+  "net":{
+    "port": 3333
+  }
+}
