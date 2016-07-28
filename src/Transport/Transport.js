@@ -3,7 +3,7 @@ const url = require('url');
 const request = require('request');
 const EventEmitter = require('events') ;
 const CONSTANTS = require('../Config/Constants');
-
+const logger = require('./../Log/Logger');
 class HTTPServer extends EventEmitter {
 
   constructor(devPort) {
@@ -11,7 +11,7 @@ class HTTPServer extends EventEmitter {
     this.port = devPort || CONSTANTS.http.port;
     this.server = http.createServer()
       .listen(this.port, () => {
-        // console.log(`Server listening on: http://localhost:${this.port}`);
+        logger.debug(`Server listening on: http://localhost:${this.port}`);
       }).on('request', (req, resp) => {
         let parsedUrl = url.parse(req.url);
         let self = this ; // TODO fix this
