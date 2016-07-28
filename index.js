@@ -1,5 +1,4 @@
 const ServiceRepository = require('./src/Service/ServiceRepository');
-const logger = require('./src/Log/Logger');
 /*
 Todo see if using stream instead of events is better
 Todo Support local clustering[Must hack with it first]

@@ -1,6 +1,6 @@
-var XYZ = require('./../../index');
-var fs = require('fs');
-
+const XYZ = require('./../../index');
+const fs = require('fs');
+const logger =require('./../../src/Log/Logger');
 /**
  * A Wrapper class around microservice interface
  */
@@ -26,6 +26,7 @@ class MockMicroservice {
   }
 
   stop() {
+    logger.debug('service stopped');
     this.xyz.terminate();
   }
 }
