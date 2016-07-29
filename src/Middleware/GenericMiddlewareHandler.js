@@ -11,7 +11,6 @@ class GenericMiddlewareHandler {
 
   apply(params) {
     this.middlewares[this.middlewareIndex](params, () => {
-      logger.debug(`Transport middleware ${this.middlewareIndex} applied.`);
       this.middlewareIndex += 1 ;
       if ( this.middlewareIndex < this.middlewares.length) {
         this.apply(params);

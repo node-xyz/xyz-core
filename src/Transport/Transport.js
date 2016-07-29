@@ -10,10 +10,14 @@ class HTTPServer extends EventEmitter {
   constructor(devPort) {
     super();
     this.port = devPort || CONSTANTS.http.port;
-    this.middlewareHandler = new GenericMiddlewareHandler();
 
-    this.middlewareHandler.add(require('./Middlewares/RequestLogger'));
-    this.middlewareHandler.add(require('./Middlewares/PassToRepo'));
+    this.publicMiddlewareHandler = new GenericMiddlewareHandler();
+    this.publicMiddlewareHandler.add(require('./Middlewares/request.logger.middleware'));
+    this.publicMiddlewareHandler.add(require('./Middlewares/request.event.middleware'));
+
+    this.internalMiddlewareHandler = new GenericMiddlewareHandler() ;
+    this.internalMiddlewareHandler.add(require('./Middlewares/ping.logger.middleware'));
+    this.internalMiddlewareHandler.add(require('./Middlewares/ping.event.middleware'));
 
     this.server = http.createServer()
       .listen(this.port, () => {
@@ -33,16 +37,12 @@ class HTTPServer extends EventEmitter {
                 body.push(chuck);
               })
               .on('end', () => {
-                this.middlewareHandler.apply([req, resp, body, self]);
-                // self.emit(
-                //   CONSTANTS.events.REQUEST,
-                //   { userPayload: JSON.parse(body).userPayload, serviceName: url.parse(req.url).query.split('=')[1] },
-                //   resp);
+                this.publicMiddlewareHandler.apply([req, resp, body, self]);
               });
           }
         }
         else if (  parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
-          self.emit(CONSTANTS.events.PING, resp)
+          this.internalMiddlewareHandler.apply([req, resp, body, self]);
         }
         else {
           req.destroy();

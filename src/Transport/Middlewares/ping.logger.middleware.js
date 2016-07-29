@@ -6,7 +6,7 @@ function requestLogger(params, next) {
   let body = params[2];
   let _transport = params[3];
 
-  logger.silly(`Request Hit at ${request.url}`);
+  logger.silly(`PING :: Ping Hit at ${request.url} | body is ${body}`);
   next();
 }
 
