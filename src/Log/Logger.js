@@ -7,7 +7,7 @@ var logger = new winston.Logger({
       handleExceptions: true,
       prettyPrint: true,
       colorize: true,
-      level: 'silly'
+      level: 'debug'
     })
   ],
   exitOnError: false

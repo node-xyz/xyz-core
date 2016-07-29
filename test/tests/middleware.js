@@ -22,22 +22,48 @@ before(function (done) {
   rcv.registerFn('mul', mockFunctions.mul);
   rcv.registerFn('up', mockFunctions.up);
 
-  function manipulatorMiddleware(params, next, end) {
-    params[2] = { userPayload : str };
-    next(params)
-  }
-
-  rcv.registerMiddleware(0, manipulatorMiddleware);
-
   setTimeout( done , 500)
 });
 
-it("a new middleware a new day", function (done) {
-  snd.call('up', 'hello', (err, response2) => {
-    expect(response2).to.equal(str.toUpperCase());
+it("manipulator", function (done) {
+  function manipulatorMiddleware(params, next, end) {
+    params[2] = { userPayload : str };
+    next()
+  }
+  rcv.registerMiddleware(0, manipulatorMiddleware);
+
+  snd.call('up', 'hello', (err, response) => {
+    expect(response).to.equal(str.toUpperCase());
     done();
   });
+});
 
+it('early response', function (done) {
+  function earlyResponseMiddleware(params, next, end) {
+    params[1].end('done');
+    end()
+  }
+
+  rcv.registerMiddleware(0, earlyResponseMiddleware);
+
+  snd.call('up', 'hello', (err, response) => {
+    expect(response).to.equal('done');
+    done();
+  });
+});
+
+it('early termination', function (done) {
+  function terminatorMiddleware(params, next, end) {
+    params[0].destroy();
+    end()
+  }
+
+  rcv.registerMiddleware(0, terminatorMiddleware);
+
+  snd.call('up', 'hello', (err, response) => {
+    expect(response).to.equal(undefined);
+    done()
+  })
 });
 
 after(function () {

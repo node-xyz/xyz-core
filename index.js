@@ -3,7 +3,7 @@ const ServiceRepository = require('./src/Service/ServiceRepository');
 Todo see if using stream instead of events is better
 Todo Support local clustering[Must hack with it first]
 TOdo Separate HTTP Server and Client
-TODO Test Middleware End Command
+TODO what happens when we early response using params[1].end() but meanwhile call the next() ??
  */
 
 class NodeXYZ {
