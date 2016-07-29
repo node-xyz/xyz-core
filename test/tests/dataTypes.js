@@ -38,3 +38,7 @@ it('arr', function (done) {
     done()
   }) ;
 });
+after(function () {
+  snd.stop();
+  rcv.stop();
+});

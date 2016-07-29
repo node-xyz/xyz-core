@@ -4,11 +4,17 @@ const request = require('request');
 const EventEmitter = require('events') ;
 const CONSTANTS = require('../Config/Constants');
 const logger = require('./../Log/Logger');
-class HTTPServer extends EventEmitter {
+const GenericMiddlewareHandler = require('./../Middleware/GenericMiddlewareHandler');
 
+class HTTPServer extends EventEmitter {
   constructor(devPort) {
     super();
     this.port = devPort || CONSTANTS.http.port;
+    this.middlewareHandler = new GenericMiddlewareHandler();
+
+    this.middlewareHandler.add(require('./Middlewares/RequestLogger'));
+    this.middlewareHandler.add(require('./Middlewares/PassToRepo'));
+
     this.server = http.createServer()
       .listen(this.port, () => {
         logger.debug(`Server listening on: http://localhost:${this.port}`);
@@ -27,9 +33,11 @@ class HTTPServer extends EventEmitter {
                 body.push(chuck);
               })
               .on('end', () => {
-                self.emit(
-                  CONSTANTS.events.REQUEST,
-                  { userPayload: JSON.parse(body).userPayload, serviceName: url.parse(req.url).query.split('=')[1] } , resp);
+                this.middlewareHandler.apply([req, resp, body, self]);
+                // self.emit(
+                //   CONSTANTS.events.REQUEST,
+                //   { userPayload: JSON.parse(body).userPayload, serviceName: url.parse(req.url).query.split('=')[1] },
+                //   resp);
               });
           }
         }

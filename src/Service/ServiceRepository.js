@@ -5,7 +5,6 @@ var http = require('http');
 var HTTP = require('../Transport/Transport');
 var CONSTANTS  = require('../Config/Constants');
 const XResponse = require('../Transport/XResponse');
-var path = require('path');
 
 class ServiceRepository {
   constructor(serviceConf, systemConf){
