@@ -11,7 +11,7 @@ function passToRepo(params, next) {
   logger.debug(`REQUEST :: Passing request to ${request.url} up to service repo`);
   _transport.emit(
       CONSTANTS.events.REQUEST,
-      { userPayload: JSON.parse(body).userPayload, serviceName: url.parse(request.url).query.split('=')[1] },
+      { userPayload: body.userPayload, serviceName: url.parse(request.url).query.split('=')[1] },
       response);
   next();
 }

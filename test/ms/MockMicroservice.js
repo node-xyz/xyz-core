@@ -21,6 +21,10 @@ class MockMicroservice {
     this.xyz.register(name, fn);
   }
 
+  registerMiddleware(index, fn) {
+    this.xyz.registerMiddleware(index, fn);
+  }
+
   call(name, data, callback){
     this.xyz.call(name, data, callback);
   }

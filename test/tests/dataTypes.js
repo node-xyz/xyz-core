@@ -4,7 +4,6 @@ let mockMicroservice = common.mockMicroService;
 let mockFunctions = common.mockFunctions;
 let mockSystem = common.mockSystem;
 
-
 var snd;
 var rcv;
 before(function (done) {

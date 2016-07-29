@@ -1,13 +1,11 @@
-/**
- * Created by Kian on 7/22/16.
- */
 var http = require('http');
 var HTTP = require('../Transport/Transport');
 var CONSTANTS  = require('../Config/Constants');
 const XResponse = require('../Transport/XResponse');
+const Util = require('./../Util/Util');
 
 class ServiceRepository {
-  constructor(serviceConf, systemConf){
+  constructor(serviceConf, systemConf) {
     this.serviceConfiguration = serviceConf;
     this.systemConfiguration = systemConf;
     this.transportServer = new HTTP.HTTPServer(this.serviceConfiguration.net.port);
@@ -33,14 +31,13 @@ class ServiceRepository {
     });
 
     this.ping();
-    setInterval(() => this.ping(), CONSTANTS.intervals.ping)
+    setInterval(() => this.ping(), (CONSTANTS.intervals.ping + Util.Random(CONSTANTS.intervals.threshold)) )
 
   }
 
   register(name, fn) {
     this.services[name] = {fn: fn}
   };
-
 
   call(serviceName, userPayload, responseCallback) {
     for ( let node in this.foreignServices ) {
@@ -55,7 +52,14 @@ class ServiceRepository {
     }
     responseCallback(http.STATUS_CODES[404], null)
   };
-  
+
+  getTransportLayer() {
+    return {
+      Server: this.transportServer,
+      Client: this.transportClient
+    }
+  }
+
   ping() {
     let nodes = this.systemConfiguration.microservices;
     for ( let node of nodes ) {

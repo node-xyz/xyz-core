@@ -12,12 +12,12 @@ class HTTPServer extends EventEmitter {
     this.port = devPort || CONSTANTS.http.port;
 
     this.publicMiddlewareHandler = new GenericMiddlewareHandler();
-    this.publicMiddlewareHandler.add(require('./Middlewares/request.logger.middleware'));
-    this.publicMiddlewareHandler.add(require('./Middlewares/request.event.middleware'));
+    this.publicMiddlewareHandler.register(-1, require('./Middlewares/request.logger.middleware'));
+    this.publicMiddlewareHandler.register(-1, require('./Middlewares/request.event.middleware'));
 
     this.internalMiddlewareHandler = new GenericMiddlewareHandler() ;
-    this.internalMiddlewareHandler.add(require('./Middlewares/ping.logger.middleware'));
-    this.internalMiddlewareHandler.add(require('./Middlewares/ping.event.middleware'));
+    this.internalMiddlewareHandler.register(-1, require('./Middlewares/ping.logger.middleware'));
+    this.internalMiddlewareHandler.register(-1, require('./Middlewares/ping.event.middleware'));
 
     this.server = http.createServer()
       .listen(this.port, () => {
@@ -37,7 +37,7 @@ class HTTPServer extends EventEmitter {
                 body.push(chuck);
               })
               .on('end', () => {
-                this.publicMiddlewareHandler.apply([req, resp, body, self]);
+                this.publicMiddlewareHandler.apply([req, resp, JSON.parse(body), self]);
               });
           }
         }
