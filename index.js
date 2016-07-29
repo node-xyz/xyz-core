@@ -2,7 +2,8 @@ const ServiceRepository = require('./src/Service/ServiceRepository');
 /*
 Todo see if using stream instead of events is better
 Todo Support local clustering[Must hack with it first]
-TOdo Separate HTTP Server and Client
+TODO add some sort of checking before waiting for body data
+TODO integrate the flow of body/response/XResponse params on middlewares
 TODO what happens when we early response using params[1].end() but meanwhile call the next() ??
  */
 

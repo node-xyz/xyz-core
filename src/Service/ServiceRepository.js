@@ -1,5 +1,5 @@
 var http = require('http');
-var HTTP = require('../Transport/Transport');
+var HTTP = require('../Transport/Transport').HTTP;
 var CONSTANTS  = require('../Config/Constants');
 const XResponse = require('../Transport/XResponse');
 const Util = require('./../Util/Util');
@@ -8,8 +8,8 @@ class ServiceRepository {
   constructor(serviceConf, systemConf) {
     this.serviceConfiguration = serviceConf;
     this.systemConfiguration = systemConf;
-    this.transportServer = new HTTP.HTTPServer(this.serviceConfiguration.net.port);
-    this.transportClient = new HTTP.HTTPClient();
+    this.transportServer = new HTTP.Server(this.serviceConfiguration.net.port);
+    this.transportClient = new HTTP.Client();
 
     this.services = {};
     this.foreignServices = {};
