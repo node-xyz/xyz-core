@@ -5,6 +5,7 @@ const EventEmitter = require('events') ;
 const CONSTANTS = require('../../Config/Constants');
 const logger = require('./../../Log/Logger');
 const GenericMiddlewareHandler = require('./../../Middleware/GenericMiddlewareHandler');
+const machineReport = require('./../../Util/machine.reporter') ;
 
 class HTTPServer extends EventEmitter {
   constructor(devPort) {
@@ -41,6 +42,7 @@ class HTTPServer extends EventEmitter {
               }
             }
             else if ( parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
+              console.log( machineReport( (err, data) => console.log(err, data)) );
               this.internalMiddlewareHandler.apply([req, resp, body, self]);
             }
             else {

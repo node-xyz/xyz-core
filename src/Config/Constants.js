@@ -7,6 +7,9 @@ module.exports = {
     port: 3333,
     host: "0.0.0.0"
   },
+  tcp: {
+    port: 3333
+  },
   events: {
     REQUEST: 'request',
     SERVICE_CALL: 'serviceCall',
