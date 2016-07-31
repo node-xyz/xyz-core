@@ -10,9 +10,11 @@ function passToRepo(params, next) {
 
   logger.debug(`REQUEST :: Passing request to ${request.url} up to service repo with ${body}`);
   _transport.emit(
-      CONSTANTS.events.REQUEST,
-      { userPayload: body.userPayload, serviceName: url.parse(request.url).query.split('=')[1] },
-      response);
+    CONSTANTS.events.REQUEST, {
+      userPayload: body.userPayload,
+      serviceName: url.parse(request.url).query.split('=')[1]
+    },
+    response);
   next();
 }
 

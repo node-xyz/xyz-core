@@ -1,6 +1,6 @@
 module.exports = {
   HTTP : {
-    Server: require('./HTTP/HTTPServer'),
-    Client: require('./HTTP/HTTPClient')
+    Server: require('./HTTP/http.server'),
+    Client: require('./HTTP/http.client')
   }
 } ;

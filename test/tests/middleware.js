@@ -11,23 +11,31 @@ let system;
 let cwd;
 let str = 'manipulated';
 
-before(function (done) {
+before(function(done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'));
   system = new mockSystem(cwd);
-  system.addMicroservice({host: "http://localhost", port: 3333});
-  system.addMicroservice({host: "http://localhost", port: 3334});
+  system.addMicroservice({
+    host: "http://localhost",
+    port: 3333
+  });
+  system.addMicroservice({
+    host: "http://localhost",
+    port: 3334
+  });
   system.write();
   snd = new mockMicroservice('snd', 3334, cwd);
   rcv = new mockMicroservice('rcv', 3333, cwd);
   rcv.registerFn('mul', mockFunctions.mul);
   rcv.registerFn('up', mockFunctions.up);
 
-  setTimeout( done , 500)
+  setTimeout(done, 500)
 });
 
-it("manipulator", function (done) {
+it("manipulator", function(done) {
   function manipulatorMiddleware(params, next, end) {
-    params[2] = { userPayload : str };
+    params[2] = {
+      userPayload: str
+    };
     next()
   }
   rcv.registerMiddleware(0, manipulatorMiddleware);
@@ -38,7 +46,7 @@ it("manipulator", function (done) {
   });
 });
 
-it('early response', function (done) {
+it('early response', function(done) {
   function earlyResponseMiddleware(params, next, end) {
     params[1].end('done');
     end()
@@ -52,7 +60,7 @@ it('early response', function (done) {
   });
 });
 
-it('early termination', function (done) {
+it('early termination', function(done) {
   function terminatorMiddleware(params, next, end) {
     params[0].destroy();
     end()
@@ -66,7 +74,7 @@ it('early termination', function (done) {
   })
 });
 
-after(function () {
+after(function() {
   snd.stop();
   rcv.stop();
 });

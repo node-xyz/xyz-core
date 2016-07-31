@@ -21,6 +21,6 @@ module.exports = {
   },
   intervals: {
     threshold: 1000,
-    ping : 5000
+    ping: 5000
   }
 };

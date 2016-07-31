@@ -2,7 +2,7 @@ const fs = require('fs');
 
 class MockSystem {
   constructor(cwd) {
-    this.microservices = [] ;
+    this.microservices = [];
     this.cwd = cwd;
   }
 
@@ -11,7 +11,9 @@ class MockSystem {
   }
 
   write() {
-    fs.writeFileSync(`${this.cwd}/xyzTest.json`, JSON.stringify({microservices: this.microservices}))
+    fs.writeFileSync(`${this.cwd}/xyzTest.json`, JSON.stringify({
+      microservices: this.microservices
+    }))
   }
 }
 

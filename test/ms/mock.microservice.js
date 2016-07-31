@@ -1,6 +1,6 @@
 const XYZ = require('./../../index');
 const fs = require('fs');
-const logger =require('./../../src/Log/Logger');
+const logger = require('./../../src/Log/Logger');
 /**
  * A Wrapper class around microservice interface
  */
@@ -25,7 +25,7 @@ class MockMicroservice {
     this.xyz.registerMiddleware(index, fn);
   }
 
-  call(name, data, callback){
+  call(name, data, callback) {
     this.xyz.call(name, data, callback);
   }
 
