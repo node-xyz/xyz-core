@@ -12,9 +12,9 @@ class HTTPServer extends EventEmitter {
     super();
     this.port = devPort || CONSTANTS.http.port;
 
-    this.publicMiddlewareHandler = new GenericMiddlewareHandler();
-    this.publicMiddlewareHandler.register(-1, require('./../Middlewares/request.logger.middleware.js'));
-    this.publicMiddlewareHandler.register(-1, require('./../Middlewares/request.event.middleware.js'));
+    this.callReceiveMiddleware = new GenericMiddlewareHandler();
+    this.callReceiveMiddleware.register(-1, require('./../Middlewares/request.logger.middleware.js'));
+    this.callReceiveMiddleware.register(-1, require('./../Middlewares/request.event.middleware.js'));
 
     this.internalMiddlewareHandler = new GenericMiddlewareHandler();
     this.internalMiddlewareHandler.register(-1, require('./../Middlewares/ping.logger.middleware.js'));
@@ -37,10 +37,9 @@ class HTTPServer extends EventEmitter {
               if (parsedUrl.query.split('&').length > 1) {
                 req.destroy();
               } else {
-                this.publicMiddlewareHandler.apply([req, resp, JSON.parse(body), self]);
+                this.callReceiveMiddleware.apply([req, resp, JSON.parse(body), self]);
               }
             } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
-              console.log(machineReport((err, data) => console.log(err, data)));
               this.internalMiddlewareHandler.apply([req, resp, body, self]);
             } else {
               req.destroy();

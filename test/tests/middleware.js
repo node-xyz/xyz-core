@@ -1,4 +1,5 @@
 const common = require('../common');
+let logger = require('./../../src/Log/Logger');
 const expect = common.expect;
 const mockMicroservice = common.mockMicroService;
 const mockSystem = common.mockSystem;
@@ -11,7 +12,7 @@ let system;
 let cwd;
 let str = 'manipulated';
 
-before(function(done) {
+before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'));
   system = new mockSystem(cwd);
   system.addMicroservice({
@@ -31,50 +32,91 @@ before(function(done) {
   setTimeout(done, 500)
 });
 
-it("manipulator", function(done) {
+it("manipulator", function (done) {
   function manipulatorMiddleware(params, next, end) {
     params[2] = {
       userPayload: str
     };
     next()
   }
-  rcv.registerMiddleware(0, manipulatorMiddleware);
+  rcv.middlewares().transport.server.callReceive.register(0, manipulatorMiddleware);
 
   snd.call('up', 'hello', (err, response) => {
     expect(response).to.equal(str.toUpperCase());
+    rcv.middlewares().transport.server.callReceive.remove(0);
     done();
   });
 });
 
-it('early response', function(done) {
+it('early response', function (done) {
   function earlyResponseMiddleware(params, next, end) {
     params[1].end('done');
     end()
   }
 
-  rcv.registerMiddleware(0, earlyResponseMiddleware);
+  rcv.middlewares().transport.server.callReceive.register(0, earlyResponseMiddleware);
 
   snd.call('up', 'hello', (err, response) => {
     expect(response).to.equal('done');
+    rcv.middlewares().transport.server.callReceive.remove(0);
     done();
   });
 });
 
-it('early termination', function(done) {
+it('early termination', function (done) {
   function terminatorMiddleware(params, next, end) {
     params[0].destroy();
     end()
   }
 
-  rcv.registerMiddleware(0, terminatorMiddleware);
+  rcv.middlewares().transport.server.callReceive.register(0, terminatorMiddleware);
 
   snd.call('up', 'hello', (err, response) => {
     expect(response).to.equal(undefined);
+    rcv.middlewares().transport.server.callReceive.remove(0);
     done()
   })
 });
 
-after(function() {
+it('False servicrDiscovery', function (done) {
+  function wrongServicediscoveryMiddleware(params, next, end) {
+    let serviceName = params[0],
+      userPayload = params[1],
+      foreignServices = params[2],
+      transportClient = params[3]
+    responseCallback = params[4];
+
+    for (let node in foreignServices) {
+      let index = foreignServices[node].indexOf(serviceName);
+      if (index === -1) {
+        logger.info(`WRONG DISCOVERY :: determined ${node} for ${serviceName}`);
+        let config = { serviceName: serviceName, uri: node };
+        transportClient.send(config, userPayload, (err, responseData) => {
+          responseCallback(err, responseData);
+        });
+        return
+      }
+    }
+    responseCallback(http.STATUS_CODES[404], null)
+  }
+
+  snd.middlewares().serviceRepository.callReceive.remove(-1);
+  snd.middlewares().serviceRepository.callReceive.register(-1, wrongServicediscoveryMiddleware);
+  snd.call('up', 'what the hell', (err, response) => {
+    logger.info("##", err, response);
+    expect(response).to.equal(http.STATUS_CODES[404]);
+    done()
+    snd.middlewares().serviceRepository.callReceive.remove(0);
+  })
+
+
+})
+
+it.skip('changeMiddlewareOnTheFly - How Swap', function (done) {
+
+})
+
+after(function () {
   snd.stop();
   rcv.stop();
 });

@@ -1,11 +1,11 @@
-describe("basic", function() {
+describe.skip("basic", function () {
   require('./tests/basic');
 });
 
-describe('data Types', function() {
+describe.skip('data Types', function () {
   require('./tests/dataTypes');
 });
 
-describe('middlewares', function() {
+describe('middlewares', function () {
   require('./tests/middleware');
 });
