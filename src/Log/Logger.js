@@ -36,9 +36,8 @@ var logger = new winston.Logger({
         return Date.now();
       },
       formatter: function (options) {
-        console.log(options);
         // Return string will be passed to logger.
-        return `${wrapper('underline', wrapper('bold', global._serviceName))} :: ${levelColor(options.level)}  ${options.message} \t\t ${__dirname}`
+        return `${wrapper('underline', wrapper('bold', global._serviceName))} :: ${levelColor(options.level)}  ${options.message}`
       }
     })
   ],

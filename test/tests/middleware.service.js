@@ -32,51 +32,6 @@ before(function (done) {
   setTimeout(done, 500)
 });
 
-it("manipulator", function (done) {
-  function manipulatorMiddleware(params, next, end) {
-    params[2] = {
-      userPayload: str
-    };
-    next()
-  }
-  rcv.middlewares().transport.server.callReceive.register(0, manipulatorMiddleware);
-
-  snd.call('up', 'hello', (err, response) => {
-    expect(response).to.equal(str.toUpperCase());
-    rcv.middlewares().transport.server.callReceive.remove(0);
-    done();
-  });
-});
-
-it('early response', function (done) {
-  function earlyResponseMiddleware(params, next, end) {
-    params[1].end('done');
-    end()
-  }
-
-  rcv.middlewares().transport.server.callReceive.register(0, earlyResponseMiddleware);
-
-  snd.call('up', 'hello', (err, response) => {
-    expect(response).to.equal('done');
-    rcv.middlewares().transport.server.callReceive.remove(0);
-    done();
-  });
-});
-
-it('early termination', function (done) {
-  function terminatorMiddleware(params, next, end) {
-    params[0].destroy();
-    end()
-  }
-
-  rcv.middlewares().transport.server.callReceive.register(0, terminatorMiddleware);
-
-  snd.call('up', 'hello', (err, response) => {
-    expect(response).to.equal(undefined);
-    rcv.middlewares().transport.server.callReceive.remove(0);
-    done()
-  })
-});
 
 it('False servicrDiscovery', function (done) {
   function wrongServicediscoveryMiddleware(params, next, end) {

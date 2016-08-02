@@ -6,6 +6,10 @@ describe('data Types', function () {
   require('./tests/dataTypes');
 });
 
-describe('middlewares', function () {
-  require('./tests/middleware');
+describe('transport middlewares', function () {
+  require('./tests/middleware.transport');
+});
+
+describe('service middlewares', function () {
+  require('./tests/middleware.service');
 });
