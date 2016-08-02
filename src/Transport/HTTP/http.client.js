@@ -20,7 +20,6 @@ class HTTPClient {
       } // Todo transform this to XRequest ?
     };
     request.post(options, (err, response, body) => {
-      logger.info(err, body);
       responseCallback(err, body);
     })
   }

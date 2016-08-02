@@ -1,8 +1,8 @@
-describe.skip("basic", function () {
+describe("basic", function () {
   require('./tests/basic');
 });
 
-describe.skip('data Types', function () {
+describe('data Types', function () {
   require('./tests/dataTypes');
 });
 

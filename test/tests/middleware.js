@@ -103,17 +103,47 @@ it('False servicrDiscovery', function (done) {
   snd.middlewares().serviceRepository.callReceive.remove(-1);
   snd.middlewares().serviceRepository.callReceive.register(-1, wrongServicediscoveryMiddleware);
   snd.call('up', 'what the hell', (err, response) => {
-    logger.info("##", err, response);
     expect(response).to.equal(http.STATUS_CODES[404]);
-    done()
     snd.middlewares().serviceRepository.callReceive.remove(0);
+    snd.middlewares().serviceRepository.callReceive.register(-1, require('./../../src/Service/Middlewares/call.middleware.first.find'))
+    done()
   })
 
 
 })
 
-it.skip('changeMiddlewareOnTheFly - How Swap', function (done) {
+it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
+  function wrongServicediscoveryMiddleware(params, next, end) {
+    let serviceName = params[0],
+      userPayload = params[1],
+      foreignServices = params[2],
+      transportClient = params[3]
+    responseCallback = params[4];
 
+    for (let node in foreignServices) {
+      let index = foreignServices[node].indexOf(serviceName);
+      if (index === -1) {
+        logger.info(`WRONG DISCOVERY :: determined ${node} for ${serviceName}`);
+        let config = { serviceName: serviceName, uri: node };
+        transportClient.send(config, userPayload, (err, responseData) => {
+          responseCallback(err, responseData);
+        });
+        return
+      }
+    }
+    responseCallback(http.STATUS_CODES[404], null)
+  }
+
+  snd.call('up', 'will be ok', (err, response) => {
+    expect(response).to.equal('WILL BE OK');
+    snd.middlewares().serviceRepository.callReceive.remove(-1);
+    snd.middlewares().serviceRepository.callReceive.register(-1, wrongServicediscoveryMiddleware);
+    snd.call('up', 'will be not OK', (err, response) => {
+      expect(response).to.equal(http.STATUS_CODES[404]);
+      snd.middlewares().serviceRepository.callReceive.remove(0);
+      done()
+    })
+  })
 })
 
 after(function () {
