@@ -10,6 +10,7 @@ TODO what happens when we early response using params[1].end() but meanwhile cal
 class NodeXYZ {
   constructor(serviceConf, systemConf) {
     this.serviceRepository = new ServiceRepository(serviceConf, systemConf);
+    global._serviceName = serviceConf.name; // JUST for log 
   }
 
   terminate() {

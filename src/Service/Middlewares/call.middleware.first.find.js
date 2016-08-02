@@ -12,7 +12,7 @@ function firstFind(params, next, done) {
     let index = foreignServices[node].indexOf(serviceName);
     if (index > -1) {
       let config = { serviceName: serviceName, uri: node };
-      logger.debug(`determined node by first find strategy ${node}`);
+      logger.silly(`determined node by first find strategy ${node}`);
       transportClient.send(config, userPayload, (err, responseData) => {
         responseCallback(err, responseData);
       });

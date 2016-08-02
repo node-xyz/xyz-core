@@ -22,7 +22,7 @@ class HTTPServer extends EventEmitter {
 
     this.server = http.createServer()
       .listen(this.port, () => {
-        logger.debug(`Server listening on: http://localhost:${this.port}`);
+        logger.verbose(`Server listening on: http://localhost:${this.port}`);
       }).on('request', (req, resp) => {
         var body = [];
         req

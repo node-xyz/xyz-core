@@ -1,4 +1,5 @@
 const logger = require('./../Log/Logger');
+
 class GenericMiddlewareHandler {
   constructor() {
     this.middlewares = [];
@@ -6,7 +7,7 @@ class GenericMiddlewareHandler {
   }
 
   register(index, fn) {
-    logger.silly(`Registering middleware at ${index} : ${fn.name}`);
+    logger.debug(`Registering middleware at ${index} : ${fn.name}`);
     if (index === -1) {
       this.middlewares.push(fn);
     } else {
@@ -15,7 +16,7 @@ class GenericMiddlewareHandler {
   }
 
   apply(params) {
-    logger.silly(`applying middleware ${this.middlewareIndex}`);
+    logger.debug(`applying middleware ${this.middlewareIndex}`);
     this.middlewares[this.middlewareIndex](params, (_params) => { //next
       this.middlewareIndex += 1;
       if (this.middlewareIndex < this.middlewares.length) {
@@ -33,6 +34,7 @@ class GenericMiddlewareHandler {
   }
 
   remove(idx) {
+    logger.debug(`removing middleware ${this.middlewareIndex}`);
     if (idx == -1) {
       this.middlewares = [];
       this.middlewareIndex = 0;
