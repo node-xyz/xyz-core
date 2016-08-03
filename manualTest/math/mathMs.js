@@ -1,10 +1,10 @@
-var fn = require('./../../test/ms/mockFunctions');
+var fn = require('./../../test/ms/mock.functions');
 var XYZ = require('./../../index');
 
-
-let serviceConfig = require('./mathMs.json');
-let systemConfig = require('./../xyz');
-var mathMs = new XYZ(serviceConfig, systemConfig);
+var mathMs = new XYZ({
+  serviceConf: require('./mathMs.json'),
+  systemConf: require('./../xyz')
+});
 
 mathMs.register('mul', fn.mul);
 mathMs.register('neg', fn.neg);

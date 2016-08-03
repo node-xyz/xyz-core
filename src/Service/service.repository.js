@@ -2,15 +2,13 @@ let http = require('http');
 let HTTP = require('../Transport/Transport').HTTP;
 let CONSTANTS = require('../Config/Constants');
 let GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
-
+let _CONFIGURATIONS = require('./../Config/config.global');
 const XResponse = require('../Transport/XResponse');
 const Util = require('./../Util/Util');
 
 class ServiceRepository {
-  constructor(serviceConf, systemConf) {
-    this.serviceConfiguration = serviceConf;
-    this.systemConfiguration = systemConf;
-    this.transportServer = new HTTP.Server(this.serviceConfiguration.net.port);
+  constructor() {
+    this.transportServer = new HTTP.Server(_CONFIGURATIONS.getServiceConf().net.port);
     this.transportClient = new HTTP.Client();
 
     this.callReceiveMiddleware = new GenericMiddlewareHandler();
@@ -56,7 +54,7 @@ class ServiceRepository {
   }
 
   ping() {
-    let nodes = this.systemConfiguration.microservices;
+    let nodes = _CONFIGURATIONS.getSystemConf().microservices;
     for (let node of nodes) {
       this.transportClient.ping(node, (err, responseData) => {
         if (err) {

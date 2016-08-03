@@ -8,9 +8,9 @@ const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.
 const machineReport = require('./../../Util/machine.reporter');
 
 class HTTPServer extends EventEmitter {
-  constructor(devPort) {
+  constructor(port) {
     super();
-    this.port = devPort || CONSTANTS.http.port;
+    this.port = port || CONSTANTS.http.port;
 
     this.callReceiveMiddleware = new GenericMiddlewareHandler();
     this.callReceiveMiddleware.register(-1, require('./../Middlewares/request.logger.middleware.js'));

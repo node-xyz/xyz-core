@@ -1,4 +1,5 @@
 {
+  "privatekey": "./key.pem",
   "name": "mathMs",
   "net":{
     "port": 3334
