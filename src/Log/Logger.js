@@ -31,7 +31,7 @@ var logger = new winston.Logger({
       handleExceptions: false,
       prettyPrint: true,
       colorize: true,
-      level: 'silly',
+      level: 'debug',
       timestamp: function () {
         return Date.now();
       },
