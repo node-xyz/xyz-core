@@ -17,8 +17,7 @@ class HTTPServer extends EventEmitter {
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'));
 
     this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler();
-    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares//ping/ping.receive.logger.middleware'));
-    // this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/rsa.auth.middleware'));
+    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.logger.middleware'));
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'));
 
 

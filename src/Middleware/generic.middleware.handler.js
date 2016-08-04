@@ -25,7 +25,7 @@ class GenericMiddlewareHandler {
           logger.debug(`middleware Stack for ${params[0].url} finished`);
         }
       }, () => { // end
-        logger.warn(`middleware Stack for ${params[0].url} terminated by calling end()`)
+        logger.warn(`middleware Stack for ${params[0].uri} terminated by calling end()`)
       })
   }
 

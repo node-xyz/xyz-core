@@ -18,7 +18,6 @@ class HTTPClient {
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.logger.middleware'));
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'));
 
-
   }
 
   send(config, userPayload, responseCallback) {
@@ -36,21 +35,13 @@ class HTTPClient {
     this.callDispatchMidllewareStack.apply([options, responseCallback], 0);
   }
 
-  ping(config, responseCallback) {
-    machineReport((err, report) => {
-      // TODO catch the error here
-      let options = {
-        uri: `${config.host}:${config.port}/${this.pingPrefix}`,
-        method: "POST",
-        body: JSON.stringify(report)
-      };
-      this.pingDispatchMiddlewareStack.apply([options], 0);
-    })
-
-    //
-    // request(options, (err, response, body) => {
-    //   responseCallback(err, body)
-    // })
+  ping(config) {
+    let _config = {
+      body: { services: config.body.services, report: config.body.report },
+      method: "POST",
+      uri: `${config.node.host}:${config.node.port}/${this.pingPrefix}`
+    }
+    this.pingDispatchMiddlewareStack.apply([_config], 0);
   }
 }
 

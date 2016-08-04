@@ -5,6 +5,7 @@ let GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handl
 let _CONFIGURATIONS = require('./../Config/config.global');
 const XResponse = require('../Transport/XResponse');
 const Util = require('./../Util/Util');
+let machineReport = require('./../Util/machine.reporter');
 
 class ServiceRepository {
   constructor() {
@@ -29,8 +30,8 @@ class ServiceRepository {
       response.end();
     });
 
-    this.transportServer.on(CONSTANTS.events.PING, (response) => {
-      response.end(JSON.stringify(Object.keys(this.services)));
+    this.transportServer.on(CONSTANTS.events.PING, (request, body) => {
+
     });
 
     this.ping();
@@ -54,15 +55,16 @@ class ServiceRepository {
   }
 
   ping() {
-    let nodes = _CONFIGURATIONS.getSystemConf().microservices;
-    for (let node of nodes) {
-      this.transportClient.ping(node, (err, responseData) => {
-        if (err) {
-          return
-        }
-        this.foreignServices[node.host + ':' + node.port] = responseData;
-      })
-    }
+    machineReport((err, report) => {
+      let nodes = _CONFIGURATIONS.getSystemConf().microservices;
+      for (let node of nodes) {
+        let options = {
+          node: node,
+          body: { report: report, services: Object.keys(this.services) }
+        };
+        this.transportClient.ping(options);
+      }
+    })
   }
 
   terminate() {
