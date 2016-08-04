@@ -9,6 +9,7 @@ function firstFind(params, next, done) {
   responseCallback = params[4];
 
   for (let node in foreignServices) {
+    logger.silly(`FIRST FIND :: target : ${JSON.stringify(foreignServices)}`)
     let index = foreignServices[node].indexOf(serviceName);
     if (index > -1) {
       let config = { serviceName: serviceName, uri: node };

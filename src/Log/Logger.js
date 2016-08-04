@@ -20,8 +20,6 @@ function levelColor(level) {
   if (level === "error") {
     return wrapper('red', level)
   }
-
-
 }
 //{ error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
 
@@ -31,7 +29,7 @@ var logger = new winston.Logger({
       handleExceptions: false,
       prettyPrint: true,
       colorize: true,
-      level: 'silly',
+      level: 'debug',
       timestamp: function () {
         return Date.now();
       },

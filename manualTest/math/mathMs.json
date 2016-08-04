@@ -2,6 +2,7 @@
   "privatekey": "/Users/Kian/Desktop/NodeXYZ/manualTest/math/key.pem",
   "name": "mathMs",
   "net":{
-    "port": 3334
+    "host": "http://localhost",
+    "port": 5000
   }
 }

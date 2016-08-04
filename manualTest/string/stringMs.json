@@ -2,6 +2,7 @@
   "privatekey": "/Users/Kian/Desktop/NodeXYZ/manualTest/string/key.pem",
   "name": "stringMs",
   "net":{
+    "host": "http://localhost", 
     "port": 3333
   }
 }

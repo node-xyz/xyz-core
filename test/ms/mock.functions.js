@@ -5,20 +5,19 @@ module.exports = {
   add: function add(payload, xResponse) {
     xResponse.send(payload.x + payload.y)
   },
-  up: function(payload, xResponse) {
+  up: function (payload, xResponse) {
     xResponse.send(payload.toUpperCase());
   },
-  down: function(payload, xResponse) {
+  down: function (payload, xResponse) {
     xResponse.send(payload.toLowerCase());
   },
-  neg: function(payload, xResponse) {
-    // TODO not good
+  neg: function (payload, xResponse) {
     xResponse.send(!Boolean(payload));
   },
-  rev: function(payload, xResponse) {
+  rev: function (payload, xResponse) {
     xResponse.send(payload.reverse())
   },
-  finger: function(payload, xResponse) {
+  finger: function (payload, xResponse) {
     payload['test'] = 'test';
     xResponse.send(payload);
   }

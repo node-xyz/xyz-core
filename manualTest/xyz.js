@@ -6,7 +6,7 @@ module.exports = {
     },
     {
       "host": "http://localhost",
-      "port": 3334, // math
+      "port": 5000, // math
       "pubkey": "/Users/Kian/Desktop/NodeXYZ/manualTest/math/key.pub"
     }
   ]

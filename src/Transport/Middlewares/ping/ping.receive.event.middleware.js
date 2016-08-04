@@ -9,7 +9,7 @@ function passToRepo(params, next) {
   let _transport = params[3];
 
   logger.debug(`PING :: Passing ping to up to service repo`);
-  _transport.emit(CONSTANTS.events.PING, body, request);
+  _transport.emit(CONSTANTS.events.PING, body, response);
   next();
 }
 

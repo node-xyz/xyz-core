@@ -6,7 +6,7 @@ function requestLogger(params, next) {
   let body = params[2];
   let _transport = params[3];
 
-  logger.debug(`PING :: Ping Hit at ${request.url} | body is ${body}`);
+  logger.debug(`PING :: Ping Receive at ${request.url} | body is ${JSON.stringify(body)}`);
   next();
 }
 

@@ -3,6 +3,7 @@ const CONSTANTS = require('../../Config/Constants');
 const _RSA = require('./../../Config/rsa.global');
 const logger = require('./../../Log/Logger');
 const machineReport = require('./../../Util/machine.reporter');
+const _CONFIGURATIONS = require('./../../Config/config.global');
 let GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler');
 
 class HTTPClient {
@@ -16,6 +17,7 @@ class HTTPClient {
 
     this.pingDispatchMiddlewareStack = new GenericMiddlewareHandler();
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.logger.middleware'));
+    this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.auth.basic'));
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'));
 
   }
@@ -35,14 +37,15 @@ class HTTPClient {
     this.callDispatchMidllewareStack.apply([options, responseCallback], 0);
   }
 
-  ping(config) {
-    let _config = {
-      body: { services: config.body.services, report: config.body.report },
+  ping(node, pingResponseCallback) {
+    let requestConfig = {
       method: "POST",
-      uri: `${config.node.host}:${config.node.port}/${this.pingPrefix}`
+      uri: `${node.host}:${node.port}/${this.pingPrefix}`,
+      json: { sender: `${_CONFIGURATIONS.getServiceConf().net.host}:${_CONFIGURATIONS.getServiceConf().net.port}` }
     }
-    this.pingDispatchMiddlewareStack.apply([_config], 0);
+    this.pingDispatchMiddlewareStack.apply([requestConfig, pingResponseCallback], 0);
   }
+
 }
 
 module.exports = HTTPClient;

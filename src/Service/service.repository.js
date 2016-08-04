@@ -4,6 +4,7 @@ let CONSTANTS = require('../Config/Constants');
 let GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
 let _CONFIGURATIONS = require('./../Config/config.global');
 const XResponse = require('../Transport/XResponse');
+const logger = require('./../Log/Logger');
 const Util = require('./../Util/Util');
 let machineReport = require('./../Util/machine.reporter');
 
@@ -30,8 +31,8 @@ class ServiceRepository {
       response.end();
     });
 
-    this.transportServer.on(CONSTANTS.events.PING, (request, body) => {
-
+    this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
+      response.end(JSON.stringify(Object.keys(this.services)));
     });
 
     this.ping();
@@ -55,16 +56,17 @@ class ServiceRepository {
   }
 
   ping() {
-    machineReport((err, report) => {
-      let nodes = _CONFIGURATIONS.getSystemConf().microservices;
-      for (let node of nodes) {
-        let options = {
-          node: node,
-          body: { report: report, services: Object.keys(this.services) }
-        };
-        this.transportClient.ping(options);
-      }
-    })
+    let nodes = _CONFIGURATIONS.getSystemConf().microservices;
+    for (let node of nodes) {
+      this.transportClient.ping(node, (err, response, body) => {
+        if (err) {
+          logger.error(`Ping Error :: ${JSON.stringify(err)}`);
+        } else {
+          logger.debug(`PING success :: foreignServices = ${JSON.stringify(this.foreignServices)}`)
+          this.foreignServices[`${node.host}:${node.port}`] = body;
+        }
+      });
+    }
   }
 
   terminate() {

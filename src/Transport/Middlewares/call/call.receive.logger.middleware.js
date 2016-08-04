@@ -6,7 +6,7 @@ function requestLogger(params, next, end) {
   let body = params[2];
   let _transport = params[3];
 
-  logger.silly(`REQUEST :: Request Hit at ${request.url} | body is ${body}`);
+  logger.silly(`CALL :: CALL Hit at ${request.url} | body is ${body}`);
   next();
 }
 
