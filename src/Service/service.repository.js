@@ -11,8 +11,8 @@ class ServiceRepository {
     this.transportServer = new HTTP.Server(_CONFIGURATIONS.getServiceConf().net.port);
     this.transportClient = new HTTP.Client();
 
-    this.callReceiveMiddleware = new GenericMiddlewareHandler();
-    this.callReceiveMiddleware.register(0, require('./Middlewares/call.middleware.first.find'));
+    this.callDispatchMiddlewareStack = new GenericMiddlewareHandler();
+    this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.middleware.first.find'));
 
     this.services = {};
     this.foreignServices = {};
@@ -43,7 +43,7 @@ class ServiceRepository {
   };
 
   call(serviceName, userPayload, responseCallback) {
-    this.callReceiveMiddleware.apply([serviceName, userPayload, this.foreignServices, this.transportClient, responseCallback])
+    this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignServices, this.transportClient, responseCallback], 0)
   };
 
   getTransportLayer() {

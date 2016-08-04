@@ -12,13 +12,16 @@ class HTTPServer extends EventEmitter {
     super();
     this.port = port || CONSTANTS.http.port;
 
-    this.callReceiveMiddleware = new GenericMiddlewareHandler();
-    this.callReceiveMiddleware.register(-1, require('./../Middlewares/request.logger.middleware.js'));
-    this.callReceiveMiddleware.register(-1, require('./../Middlewares/request.event.middleware.js'));
+    this.callReceiveMiddlewareStack = new GenericMiddlewareHandler();
+    this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.logger.middleware'));
+    this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'));
 
-    this.internalMiddlewareHandler = new GenericMiddlewareHandler();
-    this.internalMiddlewareHandler.register(-1, require('./../Middlewares/ping.logger.middleware.js'));
-    this.internalMiddlewareHandler.register(-1, require('./../Middlewares/ping.event.middleware.js'));
+    this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler();
+    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares//ping/ping.receive.logger.middleware'));
+    // this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/rsa.auth.middleware'));
+    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'));
+
+
 
     this.server = http.createServer()
       .listen(this.port, () => {
@@ -37,10 +40,10 @@ class HTTPServer extends EventEmitter {
               if (parsedUrl.query.split('&').length > 1) {
                 req.destroy();
               } else {
-                this.callReceiveMiddleware.apply([req, resp, JSON.parse(body), self]);
+                this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0);
               }
             } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
-              this.internalMiddlewareHandler.apply([req, resp, body, self]);
+              this.pingReceiveMiddlewareStack.apply([req, resp, body, self], 0);
             } else {
               req.destroy();
             }

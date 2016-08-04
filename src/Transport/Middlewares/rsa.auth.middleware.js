@@ -1,17 +1,16 @@
-let fs = require('fa');
+let fs = require('fs');
 let ursa = require('ursa');
+let _CONFIGURATIONS = require('./../../Config/config.global');
+let logger = require('./../../Log/Logger');
 
-
-const logger = require('./../../Log/Logger');
-
-function requestLogger(params, next) {
+function rsaAuth(params, next) {
   let request = params[0];
   let response = params[1];
   let body = params[2];
   let _transport = params[3];
 
-  logger.silly(`PING :: Ping Hit at ${request.url} | body is ${body}`);
+  logger.debug(`Bipassing ras middle ware`);
   next();
 }
 
-module.exports = requestLogger;
+module.exports = rsaAuth;

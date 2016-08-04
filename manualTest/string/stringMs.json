@@ -1,5 +1,5 @@
 {
-  "privatekey": "./key.pem",
+  "privatekey": "/Users/Kian/Desktop/NodeXYZ/manualTest/string/key.pem",
   "name": "stringMs",
   "net":{
     "port": 3333

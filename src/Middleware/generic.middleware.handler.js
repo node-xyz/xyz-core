@@ -7,7 +7,7 @@ class GenericMiddlewareHandler {
   }
 
   register(index, fn) {
-    logger.debug(`Registering middleware at ${index} : ${fn.name}`);
+    logger.verbose(`Registering middleware at ${index} : ${fn.name}`);
     if (index === -1) {
       this.middlewares.push(fn);
     } else {
@@ -15,18 +15,18 @@ class GenericMiddlewareHandler {
     }
   }
 
-  apply(params) {
-    logger.debug(`applying middleware ${this.middlewareIndex}`);
-    this.middlewares[this.middlewareIndex](params, (_params) => { //next
-      this.middlewareIndex += 1;
-      if (this.middlewareIndex < this.middlewares.length) {
-        this.apply(params);
-      } else {
-        this.middlewareIndex = 0;
-      }
-    }, () => { // end
-      this.middlewareIndex = 0;
-    })
+  apply(params, index) {
+    logger.silly(`applying middleware ${index}`);
+    this.middlewares[index](params,
+      (_params) => { //next
+        if ((index + 1) < this.middlewares.length) {
+          this.apply(params, index + 1);
+        } else {
+          logger.debug(`middleware Stack for ${params[0].url} finished`);
+        }
+      }, () => { // end
+        logger.warn(`middleware Stack for ${params[0].url} terminated by calling end()`)
+      })
   }
 
   getMiddlewares() {

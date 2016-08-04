@@ -55,16 +55,14 @@ it('False servicrDiscovery', function (done) {
     responseCallback(http.STATUS_CODES[404], null)
   }
 
-  snd.middlewares().serviceRepository.callReceive.remove(-1);
-  snd.middlewares().serviceRepository.callReceive.register(-1, wrongServicediscoveryMiddleware);
+  snd.middlewares().serviceRepository.callDispatch.remove(-1);
+  snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware);
   snd.call('up', 'what the hell', (err, response) => {
     expect(response).to.equal(http.STATUS_CODES[404]);
-    snd.middlewares().serviceRepository.callReceive.remove(0);
-    snd.middlewares().serviceRepository.callReceive.register(-1, require('./../../src/Service/Middlewares/call.middleware.first.find'))
+    snd.middlewares().serviceRepository.callDispatch.remove(0);
+    snd.middlewares().serviceRepository.callDispatch.register(-1, require('./../../src/Service/Middlewares/call.middleware.first.find'))
     done()
   })
-
-
 })
 
 it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
@@ -91,11 +89,11 @@ it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
 
   snd.call('up', 'will be ok', (err, response) => {
     expect(response).to.equal('WILL BE OK');
-    snd.middlewares().serviceRepository.callReceive.remove(-1);
-    snd.middlewares().serviceRepository.callReceive.register(-1, wrongServicediscoveryMiddleware);
+    snd.middlewares().serviceRepository.callDispatch.remove(-1);
+    snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware);
     snd.call('up', 'will be not OK', (err, response) => {
       expect(response).to.equal(http.STATUS_CODES[404]);
-      snd.middlewares().serviceRepository.callReceive.remove(0);
+      snd.middlewares().serviceRepository.callDispatch.remove(0);
       done()
     })
   })

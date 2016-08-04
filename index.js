@@ -1,5 +1,6 @@
 const ServiceRepository = require('./src/Service/service.repository');
 let _CONFIG = require('./src/Config/config.global');
+let _RSA = require('./src/Config/rsa.global')
 let logger = require('./src/Log/Logger');
 
 /*
@@ -19,8 +20,15 @@ class NodeXYZ {
     _CONFIG.setServiceConf(configuration.serviceConf);
     _CONFIG.setSystemConf(configuration.systemConf);
 
-    this.serviceRepository = new ServiceRepository();
+    // TODO this must be moved to a bootstrap + it should be optional
+    //
+    // _RSA.readPrivateKey(configuration.serviceConf.privatekey);
+    //
+    // for (let ms of configuration.systemConf.microservices) {
+    //   _RSA.readPublicKey(`${ms.host}:${ms.port}`, ms.pubkey);
+    // }
 
+    this.serviceRepository = new ServiceRepository();
   }
 
   terminate() {
@@ -39,11 +47,11 @@ class NodeXYZ {
     return {
       transport: {
         server: {
-          callReceive: this.serviceRepository.getTransportLayer().Server.callReceiveMiddleware
+          callReceive: this.serviceRepository.getTransportLayer().Server.callReceiveMiddlewareStack
         }
       },
       serviceRepository: {
-        callReceive: this.serviceRepository.callReceiveMiddleware
+        callDispatch: this.serviceRepository.callDispatchMiddlewareStack
       }
     }
   }

@@ -14,7 +14,10 @@ class MockMicroservice {
     };
 
     fs.writeFileSync(`${cwd}/${name}.json`, JSON.stringify(serviceConfiguration));
-    this.xyz = new XYZ(require(`./../tests/${name}.json`), require(`./../tests/xyzTest.json`));
+    this.xyz = new XYZ({
+      serviceConf: require(`./../tests/${name}.json`),
+      systemConf: require(`./../tests/xyzTest.json`)
+    });
   }
 
   registerFn(name, fn) {
