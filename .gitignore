@@ -73,6 +73,7 @@ build/Release
 
 # Dependency directories
 node_modules
+cli/node_modules
 jspm_packages
 
 # Optional npm cache directory
@@ -85,3 +86,4 @@ jspm_packages
 .idea/*
 .DS_Store
 /test/tests/*.json
+cli/test/*

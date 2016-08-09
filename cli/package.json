@@ -1,0 +1,31 @@
+{
+  "name": "xyz-cli",
+  "version": "0.0.1",
+  "description": "Command line tool dor node xyz",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "microservice",
+    "node",
+    "nodexyz"
+  ],
+  "author": "Kian Peymani @Kianenigma",
+  "license": "ISC",
+  "bin": {
+    "xyz": "./index.js"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "clear": "0.0.1",
+    "clui": "^0.3.1",
+    "commander": "^2.9.0",
+    "figlet": "^1.1.2",
+    "inquirer": "^1.1.0",
+    "lodash": "^4.13.1",
+    "minimist": "^1.2.0",
+    "preferences": "^0.2.1",
+    "touch": "^1.0.0"
+  }
+}
