@@ -14,13 +14,11 @@ function firstFind(params, next, done) {
     if (index > -1) {
       let config = { serviceName: serviceName, uri: node };
       logger.silly(`determined node by first find strategy ${node}`);
-      transportClient.send(config, userPayload, (err, responseData) => {
-        responseCallback(err, responseData);
-      });
+      transportClient.send(config, userPayload, responseCallback);
       return
     }
   }
-  responseCallback(http.STATUS_CODES[404], null)
+  responseCallback(http.STATUS_CODES[404], null, null)
 }
 
 module.exports = firstFind;

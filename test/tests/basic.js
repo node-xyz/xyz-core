@@ -9,7 +9,7 @@ let snd;
 let rcv;
 let system;
 let cwd;
-before(function(done) {
+before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'));
   system = new mockSystem(cwd);
   system.addMicroservice({
@@ -28,32 +28,32 @@ before(function(done) {
   setTimeout(done, 500)
 });
 
-it("hello world", function(done) {
+it("hello world", function (done) {
   snd.call('mul', {
     x: 2,
     y: 3
-  }, (err, response1) => {
-    expect(response1).to.equal(6);
-    snd.call('up', 'hello', (err, response2) => {
-      expect(response2).to.equal('HELLO');
+  }, (err, response1, body1) => {
+    expect(body1).to.equal(6);
+    snd.call('up', 'hello', (err, response2, body2) => {
+      expect(body2).to.equal('HELLO');
       done();
     });
   })
 
 });
 
-it("not found", function(done) {
+it("not found", function (done) {
   snd.call('mullll', {
     x: 2,
     y: 3
-  }, (err, response) => {
+  }, (err, response, body) => {
     expect(err).to.equal(http.STATUS_CODES[404]);
-    expect(response).to.equal(null);
+    expect(body).to.equal(null);
     done()
   })
 });
 
-after(function() {
+after(function () {
   snd.stop();
   rcv.stop();
 });

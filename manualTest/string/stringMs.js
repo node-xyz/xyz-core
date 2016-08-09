@@ -13,6 +13,5 @@ stringMs.register('finger', fn.finger);
 setInterval(() => {
   stringMs.call('mul', { x: new Date().getTime(), y: new Date().getTime() }, (err, response, body) => {
     console.log(err, body);
-    if (response) console.log(response.body);
   })
 }, 1000);

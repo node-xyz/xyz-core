@@ -46,19 +46,21 @@ it('False servicrDiscovery', function (done) {
       if (index === -1) {
         logger.info(`WRONG DISCOVERY :: determined ${node} for ${serviceName}`);
         let config = { serviceName: serviceName, uri: node };
-        transportClient.send(config, userPayload, (err, responseData) => {
-          responseCallback(err, responseData);
+        transportClient.send(config, userPayload, (err, response, body) => {
+          responseCallback(err, response, body);
         });
         return
       }
     }
-    responseCallback(http.STATUS_CODES[404], null)
+    responseCallback(http.STATUS_CODES[404], null, null)
   }
 
   snd.middlewares().serviceRepository.callDispatch.remove(-1);
   snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware);
-  snd.call('up', 'what the hell', (err, response) => {
-    expect(response).to.equal(http.STATUS_CODES[404]);
+  snd.call('up', 'what the hell', (err, response, body) => {
+    //this is exacly end of request event on serviceRepository
+    expect(response.statusCode).to.equal(404);
+    expect(body).to.equal(http.STATUS_CODES[404]);
     snd.middlewares().serviceRepository.callDispatch.remove(0);
     snd.middlewares().serviceRepository.callDispatch.register(-1, require('./../../src/Service/Middlewares/call.middleware.first.find'))
     done()
@@ -78,8 +80,8 @@ it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
       if (index === -1) {
         logger.info(`WRONG DISCOVERY :: determined ${node} for ${serviceName}`);
         let config = { serviceName: serviceName, uri: node };
-        transportClient.send(config, userPayload, (err, responseData) => {
-          responseCallback(err, responseData);
+        transportClient.send(config, userPayload, (err, response, body) => {
+          responseCallback(err, response, body);
         });
         return
       }
@@ -87,12 +89,12 @@ it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
     responseCallback(http.STATUS_CODES[404], null)
   }
 
-  snd.call('up', 'will be ok', (err, response) => {
-    expect(response).to.equal('WILL BE OK');
+  snd.call('up', 'will be ok', (err, response, body) => {
+    expect(body).to.equal('WILL BE OK');
     snd.middlewares().serviceRepository.callDispatch.remove(-1);
     snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware);
-    snd.call('up', 'will be not OK', (err, response) => {
-      expect(response).to.equal(http.STATUS_CODES[404]);
+    snd.call('up', 'will be not OK', (err, response, body) => {
+      expect(body).to.equal(http.STATUS_CODES[404]);
       snd.middlewares().serviceRepository.callDispatch.remove(0);
       done()
     })

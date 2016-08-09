@@ -41,8 +41,8 @@ it("manipulator", function (done) {
   }
   rcv.middlewares().transport.server.callReceive.register(0, manipulatorMiddleware);
 
-  snd.call('up', 'hello', (err, response) => {
-    expect(response).to.equal(str.toUpperCase());
+  snd.call('up', 'hello', (err, response, body) => {
+    expect(body).to.equal(str.toUpperCase());
     rcv.middlewares().transport.server.callReceive.remove(0);
     done();
   });
@@ -56,8 +56,8 @@ it('early response', function (done) {
 
   rcv.middlewares().transport.server.callReceive.register(0, earlyResponseMiddleware);
 
-  snd.call('up', 'hello', (err, response) => {
-    expect(response).to.equal('done');
+  snd.call('up', 'hello', (err, response, body) => {
+    expect(body).to.equal('done');
     rcv.middlewares().transport.server.callReceive.remove(0);
     done();
   });
@@ -71,8 +71,8 @@ it('early termination', function (done) {
 
   rcv.middlewares().transport.server.callReceive.register(0, terminatorMiddleware);
 
-  snd.call('up', 'hello', (err, response) => {
-    expect(response).to.equal(undefined);
+  snd.call('up', 'hello', (err, response, body) => {
+    expect(body).to.equal(undefined);
     rcv.middlewares().transport.server.callReceive.remove(0);
     done()
   })

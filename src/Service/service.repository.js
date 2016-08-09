@@ -26,9 +26,9 @@ class ServiceRepository {
           return
         }
       }
+      // this will be barely reached . most of the time callDisplatchfind middleware will find this.
       response.writeHead(404, {});
-      response.write(http.STATUS_CODES[404]);
-      response.end();
+      response.end(http.STATUS_CODES[404]);
     });
 
     this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
