@@ -40,6 +40,10 @@ class NodeXYZ {
     this.serviceRepository.call(serviceName, userPayload, responseCallback)
   }
 
+  emit(eventName, userPayload) {
+
+  };
+
   middlewares() {
     return {
       transport: {

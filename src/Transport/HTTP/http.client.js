@@ -12,17 +12,17 @@ class HTTPClient {
     this.pingPrefix = CONSTANTS.url.PING;
 
     this.callDispatchMidllewareStack = new GenericMiddlewareHandler();
-    this.callDispatchMidllewareStack.register(-1, require('./../Middlewares/call/call.dispatch.logger.middleware'));
+    this.callDispatchMidllewareStack.register(-1, require('./../Middlewares/global.dispatch.logger.middleware'));
     this.callDispatchMidllewareStack.register(-1, require('./../Middlewares/call/call.dispatch.export.middleware'));
 
     this.pingDispatchMiddlewareStack = new GenericMiddlewareHandler();
-    this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.logger.middleware'));
+    this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/global.dispatch.logger.middleware'));
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.auth.basic'));
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'));
 
   }
 
-  send(config, userPayload, responseCallback) {
+  send(config, userPayload, callResponseCallback) {
     let options = {
       uri: `${config.uri}/${this.callPostfix}`,
       method: 'POST',
@@ -31,10 +31,9 @@ class HTTPClient {
       },
       json: {
         userPayload: userPayload
-      } // Todo transform this to XRequest ?
+      }
     };
-    // TODO structure of these params gefählt mir nicht!
-    this.callDispatchMidllewareStack.apply([options, responseCallback], 0);
+    this.callDispatchMidllewareStack.apply([options, callResponseCallback], 0);
   }
 
   ping(node, pingResponseCallback) {
@@ -44,6 +43,13 @@ class HTTPClient {
       json: { sender: `${_CONFIGURATIONS.getServiceConf().net.host}:${_CONFIGURATIONS.getServiceConf().net.port}` }
     }
     this.pingDispatchMiddlewareStack.apply([requestConfig, pingResponseCallback], 0);
+  }
+
+  emit(node, userPayload) {
+    let requestConfig = {
+      method: 'POST',
+      uri: `${node.host}/`
+    }
   }
 
 }

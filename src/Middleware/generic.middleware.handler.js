@@ -7,7 +7,7 @@ class GenericMiddlewareHandler {
   }
 
   register(index, fn) {
-    logger.verbose(`Registering middleware at ${index} : ${fn.name}`);
+    logger.debug(`Registering middleware at ${index} : ${fn.name}`);
     if (index === -1) {
       this.middlewares.push(fn);
     } else {

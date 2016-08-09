@@ -13,11 +13,11 @@ class HTTPServer extends EventEmitter {
     this.port = port || CONSTANTS.http.port;
 
     this.callReceiveMiddlewareStack = new GenericMiddlewareHandler();
-    this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.logger.middleware'));
+    this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'));
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'));
 
     this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler();
-    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.logger.middleware'));
+    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'));
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.auth.basic'));
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'));
 
@@ -43,7 +43,7 @@ class HTTPServer extends EventEmitter {
                 this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0);
               }
             } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
-              this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body.toString()), self], 0);
+              this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0);
             } else {
               req.destroy();
             }

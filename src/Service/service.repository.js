@@ -48,10 +48,11 @@ class ServiceRepository {
     this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignServices, this.transportClient, responseCallback], 0)
   };
 
-  getTransportLayer() {
-    return {
-      Server: this.transportServer,
-      Client: this.transportClient
+  emit(eventName, userPayload) {
+    let nodes = _CONFIGURATIONS.microservices;
+    for (let node of nodes) {
+
+
     }
   }
 
@@ -62,10 +63,17 @@ class ServiceRepository {
         if (err) {
           logger.error(`Ping Error :: ${JSON.stringify(err)}`);
         } else {
-          logger.debug(`PING success :: foreignServices = ${JSON.stringify(this.foreignServices)}`)
+          logger.silly(`PING success :: foreignServices = ${JSON.stringify(this.foreignServices)}`)
           this.foreignServices[`${node.host}:${node.port}`] = body;
         }
       });
+    }
+  }
+
+  getTransportLayer() {
+    return {
+      Server: this.transportServer,
+      Client: this.transportClient
     }
   }
 
