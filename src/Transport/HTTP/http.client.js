@@ -17,7 +17,7 @@ class HTTPClient {
 
     this.pingDispatchMiddlewareStack = new GenericMiddlewareHandler();
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/global.dispatch.logger.middleware'));
-    this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.auth.basic'));
+    this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/global.dispatch.auth.basic.middleware'));
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'));
 
   }
