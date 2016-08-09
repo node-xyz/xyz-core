@@ -7,7 +7,7 @@ class GenericMiddlewareHandler {
   }
 
   register(index, fn) {
-    logger.debug(`Registering middleware at ${index} : ${fn.name}`);
+    logger.silly(`Registering middleware at ${index} : ${fn.name}`);
     if (index === -1) {
       this.middlewares.push(fn);
     } else {
@@ -22,10 +22,10 @@ class GenericMiddlewareHandler {
         if ((index + 1) < this.middlewares.length) {
           this.apply(params, index + 1);
         } else {
-          logger.debug(`middleware Stack for ${params[0].url} finished`);
+          logger.silly(`middleware Stack for ${params[0].url} finished`);
         }
       }, () => { // end
-        logger.warn(`middleware Stack for ${params[0].uri} terminated by calling end()`)
+        logger.silly(`middleware Stack for ${params[0].uri} terminated by calling end()`)
       })
   }
 
@@ -34,7 +34,7 @@ class GenericMiddlewareHandler {
   }
 
   remove(idx) {
-    logger.debug(`removing middleware ${this.middlewareIndex}`);
+    logger.silly(`removing middleware ${this.middlewareIndex}`);
     if (idx == -1) {
       this.middlewares = [];
       this.middlewareIndex = 0;

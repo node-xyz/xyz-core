@@ -7,10 +7,10 @@ let ReceveBasicAuth = function (params, next, end) {
   let body = params[2];
 
   if (body.auth === '123') {
-    logger.debug(`${wrapper('bold', 'AUTH')} | password vertified`);
+    logger.debug(`${wrapper('bold', 'AUTH')} | password vertified for ${request.url}`);
     next();
   } else {
-    logger.warn(`${wrapper('bold', 'AUTH')} | password invalid`);
+    logger.warn(`${wrapper('bold', 'AUTH')} | password invalid for ${request.url}`);
     request.destroy();
     end();
   }

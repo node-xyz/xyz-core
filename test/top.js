@@ -13,3 +13,7 @@ describe('transport middlewares', function () {
 describe('service middlewares', function () {
   require('./tests/middleware.service');
 });
+
+describe('transport authentication miidlewares', function () {
+  require('./tests/auth');
+})
