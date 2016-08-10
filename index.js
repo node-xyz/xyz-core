@@ -18,8 +18,14 @@ TODO implement rsa auth for ping / call
 TODO clean the cunstroctor and add a bootstrap()
  */
 
+/*
+ * @param something .
+ * Class description ..
+ *
+ */
 class NodeXYZ {
   constructor(configuration) {
+
     global._serviceName = configuration.serviceConf.name; // JUST for log
 
     _CONFIG.setServiceConf(configuration.serviceConf);

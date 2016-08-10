@@ -10,6 +10,8 @@ let machineReport = require('./../Util/machine.reporter');
 
 class ServiceRepository {
   constructor() {
+
+    console.log(_CONFIGURATIONS.getServiceConf());
     this.transportServer = new HTTP.Server(_CONFIGURATIONS.getServiceConf().net.port);
     this.transportClient = new HTTP.Client();
 

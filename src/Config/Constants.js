@@ -1,7 +1,3 @@
-/**
- * Created by Kian on 7/22/16.
- */
-
 module.exports = {
   http: {
     port: 3333,
@@ -19,5 +15,9 @@ module.exports = {
   intervals: {
     threshold: 1000,
     ping: 5000
+  },
+  environmet: {
+    dev: "dev",
+    production: "prod"
   }
 };
