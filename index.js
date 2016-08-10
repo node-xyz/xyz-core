@@ -40,6 +40,8 @@ class NodeXYZ {
     this.serviceRepository.call(serviceName, userPayload, responseCallback)
   }
 
+  bootstrap(configuration) {}
+
   emit(eventName, userPayload) {
 
   };

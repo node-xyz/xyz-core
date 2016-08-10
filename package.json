@@ -5,15 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
+    "docs": "esdoc -c esdoc.json",
     "lint": "./node_modules/jshint/bin/jshint src --config ./jshintrc"
   },
   "author": "Kian.peymani@gmail.com",
   "license": "ISC",
   "devDependencies": {
-    "jshint": "^2.9.2",
-    "standard": "^7.1.2",
     "chai": "^3.5.0",
-    "mocha": "^2.5.3"
+    "esdoc": "^0.4.8",
+    "jshint": "^2.9.2",
+    "mocha": "^2.5.3",
+    "standard": "^7.1.2"
   },
   "dependencies": {
     "pidusage": "^1.0.4",

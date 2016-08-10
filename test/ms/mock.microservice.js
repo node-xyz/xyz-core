@@ -9,6 +9,7 @@ class MockMicroservice {
     let serviceConfiguration = {
       "name": name,
       "net": {
+        "host": "http://localhost",
         "port": port
       }
     };

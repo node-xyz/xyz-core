@@ -1,8 +1,10 @@
 {
-  "privatekey": "/Users/Kian/Desktop/NodeXYZ/manualTest/math/key.pem",
   "name": "mathMs",
   "net":{
     "host": "http://localhost",
-    "port": 5000
+    "port": 4443
+  },
+  "debug": {
+    "port": 3333
   }
 }
