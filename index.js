@@ -30,8 +30,6 @@ class NodeXYZ {
     _CONFIG.setServiceConf(configuration.serviceConf);
     _CONFIG.setSystemConf(configuration.systemConf);
 
-    console.log(argParser.get('--xyzport'));
-
     global._serviceName = _CONFIG.getServiceConf().name
 
     this.serviceRepository = new ServiceRepository();

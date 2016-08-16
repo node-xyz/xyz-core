@@ -83,16 +83,15 @@ program
   .description('run one instace of each ms locally')
   .action(() => {
     let xyz = require(`${process.cwd()}/xyz.json`);
-    let cmd = ``;
     for (let ms of xyz.microservices) {
-      let msProcess = spawn('node', [`${ms.name}/${ms.name}.js`, '--dev'])
+      let msProcess = spawn('node', [`${ms.name}/${ms.name}.js`, '--xyzport', ms.port, '--xyzhost', 'http://0.0.0.0', '--xyzdev'])
 
       msProcess.stdout.on('data', function (data) { // register one or more handlers
         process.stdout.write(data.toString());
       });
 
       msProcess.stderr.on('data', function (data) {
-        console.log('stderr: ' + data);
+        process.stdout.write(data);
       });
 
       msProcess.on(`exit`, function (code) {

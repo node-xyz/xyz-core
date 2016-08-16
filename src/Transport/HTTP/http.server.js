@@ -13,7 +13,6 @@ class HTTPServer extends EventEmitter {
     super();
     this.port = _CONFIGURATION.getServiceConf().port;
 
-    logger.warn(_CONFIGURATION.getServiceConf().port)
 
     this.callReceiveMiddlewareStack = new GenericMiddlewareHandler();
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'));

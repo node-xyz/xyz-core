@@ -10,7 +10,13 @@ function get(argName) {
   return CONSTANTS.commandline[argName.slice(2)];
 }
 
+function has(argName) {
+  let args = process.argv;
+  return args.indexOf(argName) > -1;
+}
+
 
 module.exports = {
-  get: get
+  get: get,
+  has: has
 };

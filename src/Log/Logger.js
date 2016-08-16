@@ -35,7 +35,7 @@ var logger = new winston.Logger({
       },
       formatter: function (options) {
         // Return string will be passed to logger.
-        return `${wrapper('underline', wrapper('bold', global._serviceName))} :: ${levelColor(options.level)}  ${options.message}`
+        return `${levelColor(options.level)} :: ${options.message} \t\t ${wrapper('underline', wrapper('bold', global._serviceName))} `
       }
     })
   ],
