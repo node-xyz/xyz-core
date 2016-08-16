@@ -19,6 +19,7 @@ class ServiceRepository {
 
     this.services = {};
     this.foreignServices = {};
+    this.foreignServicesTimeout = {};
 
     this.transportServer.on(CONSTANTS.events.REQUEST, (rcvPacket, response) => {
       for (var serviceName in this.services) {
@@ -64,8 +65,15 @@ class ServiceRepository {
         if (err) {
           logger.error(`Ping Error :: ${JSON.stringify(err)}`);
         } else {
-          logger.silly(`PING success :: foreignServices = ${JSON.stringify(this.foreignServices)}`)
+          logger.verbose(`PING success :: foreignServices = ${JSON.stringify(this.foreignServices)}`)
           this.foreignServices[`${node.host}:${node.port}`] = body;
+          if (this.foreignServicesTimeout[`${node.host}:${node.port}`]) {
+            clearTimeout(this.foreignServicesTimeout[`${node.host}:${node.port}`]);
+          } else {
+            this.foreignServicesTimeout[`${node.host}:${node.port}`] = setTimeout(() => {
+              logger.info(`Node ${node.host}:${node.port} Not responded to a ping. removing`);
+            }, CONSTANTS.intervals.nodeleave)
+          }
         }
       });
     }

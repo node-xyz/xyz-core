@@ -13,7 +13,8 @@ module.exports = {
   },
   intervals: {
     threshold: 1000,
-    ping: 5000
+    ping: 5000,
+    nodeleave: 10 * 1000
   },
   environmet: {
     dev: "dev",

@@ -14,6 +14,22 @@ var program = require('commander');
 var util = require('./commands/util');
 const spawn = require('child_process').spawn;
 
+
+let spawnMicroservice = function (ms) {
+  let msProcess = spawn('node', [`${ms.name}/${ms.name}.js`, '--xyzport', ms.port, '--xyzhost', 'http://0.0.0.0', '--xyzdev'])
+
+  msProcess.stdout.on('data', function (data) { // register one or more handlers
+    process.stdout.write(data.toString());
+  });
+
+  msProcess.stderr.on('data', function (data) {
+    process.stdout.write(data);
+  });
+
+  msProcess.on(`exit`, function (code) {
+    console.log(`child process for ${ms.name} exited with code` + code);
+  });
+}
 program
   .command('init')
   .description('create new node xyz system')
@@ -80,24 +96,25 @@ program
 
 program
   .command('dev')
+  .option('-s, --single <ms>', 'run a single ms instance in dev mood')
   .description('run one instace of each ms locally')
-  .action(() => {
-    let xyz = require(`${process.cwd()}/xyz.json`);
-    for (let ms of xyz.microservices) {
-      let msProcess = spawn('node', [`${ms.name}/${ms.name}.js`, '--xyzport', ms.port, '--xyzhost', 'http://0.0.0.0', '--xyzdev'])
+  .action((env, options) => {
 
-      msProcess.stdout.on('data', function (data) { // register one or more handlers
-        process.stdout.write(data.toString());
-      });
-
-      msProcess.stderr.on('data', function (data) {
-        process.stdout.write(data);
-      });
-
-      msProcess.on(`exit`, function (code) {
-        console.log(`child process for ${ms.name} exited with code` + code);
-      });
-
+    if (env.single) {
+      let xyz = require(`${process.cwd()}/xyz.json`);
+      for (let ms of xyz.microservices) {
+        if (ms.name == env.single) {
+          spawnMicroservice(ms);
+          return;
+        }
+      }
+      console.log("No microservices with such name found.");
+      process.exit()
+    } else {
+      let xyz = require(`${process.cwd()}/xyz.json`);
+      for (let ms of xyz.microservices) {
+        spawnMicroservice(ms);
+      }
     }
   })
 
