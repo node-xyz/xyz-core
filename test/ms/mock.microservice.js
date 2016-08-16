@@ -8,10 +8,8 @@ class MockMicroservice {
   constructor(name, port, cwd) {
     let serviceConfiguration = {
       "name": name,
-      "net": {
-        "host": "http://localhost",
-        "port": port
-      }
+      "host": "http://localhost",
+      "port": port
     };
 
     fs.writeFileSync(`${cwd}/${name}.json`, JSON.stringify(serviceConfiguration));

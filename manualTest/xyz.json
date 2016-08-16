@@ -1,29 +1,16 @@
 {
-  "microservices": [
-    {
-      "name": "mathMs",
-      "host": "http://localhost",
-      "port": "3333"
-    },
-    {
-      "host": "http://localhost",
-      "name": "stringMs",
-      "port": "6000"
-    }
+  "microservices":
+  [
+    {"name":"mathMs","host":"http://localhost","port":"3333"},
+    {"host":"http://localhost","name":"stringMs","port":"6000"},
+    {"name":"express","port":6767}
   ],
-
-  "dev": {
-    "microservices": [
-      {
-        "name": "mathMs",
-        "host": "http://0.0.0.0",
-        "port": "3333"
-      },
-      {
-        "host": "http://0.0.0.0",
-        "name": "stringMs",
-        "port": "6000"
-      }
-    ]
-  }
+    "dev":{
+      "microservices":
+      [
+        {"name":"mathMs_dev","host":"http://0.0.0.0","port":"3333"},
+        {"name":"stringMs_dev","host":"http://0.0.0.0","port":"6000"},
+        {"name":"express_dev","port":6767}
+      ]
+    }
 }

@@ -2,6 +2,7 @@ const ServiceRepository = require('./src/Service/service.repository');
 let _CONFIG = require('./src/Config/config.global');
 let _RSA = require('./src/Config/rsa.global')
 let logger = require('./src/Log/Logger');
+let argParser = require('./src/Util/commandline.parser');
 
 /*
 Todo see if using stream instead of events is better
@@ -26,10 +27,12 @@ TODO clean the cunstroctor and add a bootstrap()
 class NodeXYZ {
   constructor(configuration) {
 
-    global._serviceName = configuration.serviceConf.name; // JUST for log
-
     _CONFIG.setServiceConf(configuration.serviceConf);
     _CONFIG.setSystemConf(configuration.systemConf);
+
+    console.log(argParser.get('--xyzport'));
+
+    global._serviceName = _CONFIG.getServiceConf().name
 
     this.serviceRepository = new ServiceRepository();
   }

@@ -11,7 +11,7 @@ let machineReport = require('./../Util/machine.reporter');
 class ServiceRepository {
   constructor() {
 
-    this.transportServer = new HTTP.Server(_CONFIGURATIONS.getServiceConf().net.port);
+    this.transportServer = new HTTP.Server();
     this.transportClient = new HTTP.Client();
 
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler();

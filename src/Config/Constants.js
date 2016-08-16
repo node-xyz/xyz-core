@@ -1,7 +1,6 @@
 module.exports = {
-  http: {
-    port: 3333,
-    host: "0.0.0.0"
+  commandline: {
+    xyzport: 3000
   },
   events: {
     REQUEST: 'request',

@@ -18,10 +18,9 @@
     "standard": "^7.1.2"
   },
   "dependencies": {
+    "chai": "^3.5.0",
     "pidusage": "^1.0.4",
     "request": "^2.72.0",
-    "ursa": "^0.9.4",
-    "winston": "^2.2.0",
-    "chai": "^3.5.0"
+    "winston": "^2.2.0"
   }
 }

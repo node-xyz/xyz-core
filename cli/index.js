@@ -62,11 +62,13 @@ program
             `{"name": "${name}", "dev": {"${name}_dev","net":{"host": "http://0.0.0.0","port": ${args.devPort}}}}`
           );
 
+          fs.writeFileSync(`${process.cwd()}/${name}.js`, '');
+
           let xyz = require(`${process.cwd()}/xyz.json`);
           xyz.microservices.push({ name: name, net: { port: args.devPort } })
           xyz.dev.microservices.push({ name: `${name}_dev`, net: { port: args.devPort } })
           console.log(xyz);
-          fs.writeFileSync(`${process.cwd()}/xyz.json`, JSON.stringify(xyz));
+          fs.writeFileSync(`${process.cwd()}/xyz.json`, JSON.stringify(xyz, null, 4));
         });
 
       }
@@ -83,10 +85,10 @@ program
     let xyz = require(`${process.cwd()}/xyz.json`);
     let cmd = ``;
     for (let ms of xyz.microservices) {
-      let msProcess = spawn('node', [`${ms.name}/${ms.name}.js`, '--dev', '&', 'echo', '$!', '>>', 'dev.pid'])
+      let msProcess = spawn('node', [`${ms.name}/${ms.name}.js`, '--dev'])
 
       msProcess.stdout.on('data', function (data) { // register one or more handlers
-        console.log(data.toString());
+        process.stdout.write(data.toString());
       });
 
       msProcess.stderr.on('data', function (data) {

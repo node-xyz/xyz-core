@@ -40,7 +40,7 @@ class HTTPClient {
     let requestConfig = {
       method: "POST",
       uri: `${node.host}:${node.port}/${this.pingPrefix}`,
-      json: { sender: `${_CONFIGURATIONS.getServiceConf().net.host}:${_CONFIGURATIONS.getServiceConf().net.port}` }
+      json: { sender: `${_CONFIGURATIONS.getServiceConf().host}:${_CONFIGURATIONS.getServiceConf().port}` }
     }
     this.pingDispatchMiddlewareStack.apply([requestConfig, pingResponseCallback], 0);
   }

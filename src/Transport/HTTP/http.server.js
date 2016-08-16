@@ -9,9 +9,11 @@ const machineReport = require('./../../Util/machine.reporter');
 const _CONFIGURATION = require('./../../Config/config.global');
 
 class HTTPServer extends EventEmitter {
-  constructor(port) {
+  constructor() {
     super();
-    this.port = _CONFIGURATION.getServiceConf().net.port;
+    this.port = _CONFIGURATION.getServiceConf().port;
+
+    logger.warn(_CONFIGURATION.getServiceConf().port)
 
     this.callReceiveMiddlewareStack = new GenericMiddlewareHandler();
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'));
