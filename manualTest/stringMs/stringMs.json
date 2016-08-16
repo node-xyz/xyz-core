@@ -1,10 +1,11 @@
 {
   "name": "stringMs",
+
   "dev": {
     "name": "stringMs_dev",
     "net": {
       "port": 6000,
-      "host": "http://localhost"
+      "host": "0.0.0.0"
     }
   }
 }

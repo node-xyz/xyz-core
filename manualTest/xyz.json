@@ -1,24 +1,28 @@
 {
   "microservices": [
     {
+      "name": "mathMs",
       "host": "http://localhost",
       "port": "3333"
     },
     {
       "host": "http://localhost",
-      "port": "5000"
+      "name": "stringMs",
+      "port": "6000"
     }
   ],
 
   "dev": {
     "microservices": [
       {
-        "host": "http://localhost",
+        "name": "mathMs",
+        "host": "http://0.0.0.0",
         "port": "3333"
       },
       {
-        "host": "http://localhost",
-        "port": "5000"
+        "host": "http://0.0.0.0",
+        "name": "stringMs",
+        "port": "6000"
       }
     ]
   }

@@ -6,11 +6,12 @@ const CONSTANTS = require('../../Config/Constants');
 const logger = require('./../../Log/Logger');
 const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler');
 const machineReport = require('./../../Util/machine.reporter');
+const _CONFIGURATION = require('./../../Config/config.global');
 
 class HTTPServer extends EventEmitter {
   constructor(port) {
     super();
-    this.port = port || CONSTANTS.http.port;
+    this.port = _CONFIGURATION.getServiceConf().net.port;
 
     this.callReceiveMiddlewareStack = new GenericMiddlewareHandler();
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'));
@@ -25,7 +26,7 @@ class HTTPServer extends EventEmitter {
 
     this.server = http.createServer()
       .listen(this.port, () => {
-        logger.verbose(`Server listening on: http://localhost:${this.port}`);
+        logger.info(`Server listening on port :${this.port}`);
       }).on('request', (req, resp) => {
         var body = [];
         req

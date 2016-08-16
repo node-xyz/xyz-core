@@ -1,12 +1,11 @@
 {
   "name": "mathMs",
 
-
   "dev": {
     "name": "mathMs_dev",
     "net": {
       "port": 3333,
-      "host": "http://localhost"
+      "host": "0.0.0.0"
     }
   }
 }
