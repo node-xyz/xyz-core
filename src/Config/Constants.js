@@ -1,3 +1,6 @@
+/**
+ * a set of constant variables. used as fallback for configurations filled by the user.
+ */
 module.exports = {
   commandline: {
     xyzport: 3000
@@ -20,4 +23,4 @@ module.exports = {
     dev: "dev",
     production: "prod"
   }
-};
+};;

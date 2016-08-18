@@ -14,16 +14,10 @@ TODO start documention
 TODO think about ways to remote deploy this ( +docker )
 TODO implement any auth for call
 TODO implement rsa auth for ping / call
-
-
 TODO clean the cunstroctor and add a bootstrap()
  */
 
-/*
- * @param something .
- * Class description ..
- *
- */
+
 class NodeXYZ {
   constructor(configuration) {
 

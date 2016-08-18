@@ -13,6 +13,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "esdoc": "^0.4.8",
+    "jsdoc": "^3.4.0",
     "jshint": "^2.9.2",
     "mocha": "^2.5.3",
     "standard": "^7.1.2"
