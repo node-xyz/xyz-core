@@ -15,12 +15,11 @@ class GenericMiddlewareHandler {
     this.middlewareIndex = 0;
   }
 
+  /**
+   * Registering a new middleware.
+   * @param  {Number} index - index to insert the middleware at. if -1, middleware will be pushed to the end.
+   */
   register(index, fn) {
-    /**
-     * Registering a new middleware.
-     * @param  {Number} index - index to insert the middleware at. if -1, middleware will be pushed to the end.
-     */
-
     logger.silly(`Registering middleware at ${index} : ${fn.name}`);
     if (index === -1) {
       this.middlewares.push(fn);
@@ -29,12 +28,12 @@ class GenericMiddlewareHandler {
     }
   }
 
+  /**
+   * apply a specific function from middleware array over a set of arguments
+   * @param  {array} params - Array of parameters passed to the handler
+   * @param {Number} index - current index inside the middleware array to be applied
+   */
   apply(params, index) {
-    /**
-     * [silly description]
-     * @param  {array} params - Array of parameters passed to the handler
-     * @param {Number} index - current index inside the middleware array to be applied
-     */
     logger.silly(`applying middleware ${index}`);
     this.middlewares[index](params,
       (_params) => { //next
@@ -48,6 +47,10 @@ class GenericMiddlewareHandler {
       })
   }
 
+  /**
+   * Return an array of middlewares registered so far.
+   * @return {Array} array of middlewares
+   */
   getMiddlewares() {
     return this.middlewares;
   }

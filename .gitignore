@@ -87,3 +87,4 @@ esdoc/*
 .DS_Store
 /test/tests/*.json
 cli/test/*
+out/
