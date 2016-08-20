@@ -1,13 +1,13 @@
-const fs = require('fs');
+const fs = require('fs')
 
 class MockSystem {
   constructor(cwd) {
-    this.microservices = [];
-    this.cwd = cwd;
+    this.microservices = []
+    this.cwd = cwd
   }
 
   addMicroservice(ms) {
-    this.microservices.push(ms);
+    this.microservices.push(ms)
   }
 
   write() {
@@ -17,4 +17,4 @@ class MockSystem {
   }
 }
 
-module.exports = MockSystem;
+module.exports = MockSystem

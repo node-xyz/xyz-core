@@ -1,61 +1,61 @@
-const http = require('http');
-const url = require('url');
-const request = require('request');
-const EventEmitter = require('events');
-const CONSTANTS = require('../../Config/Constants');
-const logger = require('./../../Log/Logger');
-const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler');
-const machineReport = require('./../../Util/machine.reporter');
-const _CONFIGURATION = require('./../../Config/config.global');
+const http = require('http')
+const url = require('url')
+const request = require('request')
+const EventEmitter = require('events')
+const CONSTANTS = require('../../Config/Constants')
+const logger = require('./../../Log/Logger')
+const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
+const machineReport = require('./../../Util/machine.reporter')
+const _CONFIGURATION = require('./../../Config/config.global')
 
 class HTTPServer extends EventEmitter {
   constructor() {
-    super();
-    this.port = _CONFIGURATION.getServiceConf().port;
+    super()
+    http.globalAgent.maxSockets = Infinity
+    this.port = _CONFIGURATION.getServiceConf().port
 
 
-    this.callReceiveMiddlewareStack = new GenericMiddlewareHandler();
-    this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'));
-    this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'));
+    this.callReceiveMiddlewareStack = new GenericMiddlewareHandler()
+    this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'))
+    this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
 
-    this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler();
-    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'));
-    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.auth.basic.middleware'));
-    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'));
+    this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler()
+    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'))
+    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.auth.basic.middleware'))
+    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
 
 
 
     this.server = http.createServer()
       .listen(this.port, () => {
-        logger.info(`Server listening on port :${this.port}`);
+        logger.info(`Server listening on port :${this.port}`)
       }).on('request', (req, resp) => {
-        var body = [];
+        var body = []
         req
           .on('data', (chuck) => {
-            body.push(chuck);
+            body.push(chuck)
           })
           .on('end', () => {
-            let parsedUrl = url.parse(req.url);
-            let self = this; // TODO fix this
-
+            let parsedUrl = url.parse(req.url)
+            let self = this // TODO fix this
             if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
               if (parsedUrl.query.split('&').length > 1) {
-                req.destroy();
+                req.destroy()
               } else {
-                this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0);
+                this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
               }
             } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
-              this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0);
+              this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
             } else {
-              req.destroy();
+              req.destroy()
             }
-          });
-      });
+          })
+      })
   }
 
   close() {
-    this.server.close();
+    this.server.close()
   }
 }
 
-module.exports = HTTPServer;
+module.exports = HTTPServer

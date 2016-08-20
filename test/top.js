@@ -1,19 +1,23 @@
-describe("basic", function () {
-  require('./tests/basic');
-});
+describe.skip("basic", function () {
+  require('./tests/basic')
+})
 
-describe('data Types', function () {
-  require('./tests/dataTypes');
-});
+describe.skip('data Types', function () {
+  require('./tests/dataTypes')
+})
 
-describe('transport middlewares', function () {
-  require('./tests/middleware.transport');
-});
+describe.skip('transport middlewares', function () {
+  require('./tests/middleware.transport')
+})
 
-describe('service middlewares', function () {
-  require('./tests/middleware.service');
-});
+describe.skip('service middlewares', function () {
+  require('./tests/middleware.service')
+})
 
-describe('transport authentication miidlewares', function () {
-  require('./tests/auth');
+describe.skip('transport authentication midlewares', function () {
+  require('./tests/auth')
+})
+
+describe('events publish and subscribe', function () {
+  require('./tests/events')
 })

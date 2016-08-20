@@ -6,19 +6,19 @@ module.exports = {
     xResponse.send(payload.x + payload.y)
   },
   up: function (payload, xResponse) {
-    xResponse.send(payload.toUpperCase());
+    xResponse.send(payload.toUpperCase())
   },
   down: function (payload, xResponse) {
-    xResponse.send(payload.toLowerCase());
+    xResponse.send(payload.toLowerCase())
   },
   neg: function (payload, xResponse) {
-    xResponse.send(!Boolean(payload));
+    xResponse.send(!Boolean(payload))
   },
   rev: function (payload, xResponse) {
     xResponse.send(payload.reverse())
   },
   finger: function (payload, xResponse) {
-    payload['test'] = 'test';
-    xResponse.send(payload);
+    payload['test'] = 'test'
+    xResponse.send(payload)
   }
-};
+}

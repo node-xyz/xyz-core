@@ -1,10 +1,10 @@
-const logger = require('./../../../Log/Logger');
+const logger = require('./../../../Log/Logger')
 
 let callDispatchLogger = function (params, next, end) {
-  let requestConfig = params[0];
-  let responseCallback = params[1];
-  logger.debug(`CALL :: Sendign request to ${requestConfig.uri}`);
-  next();
-};
+  let requestConfig = params[0]
+  let responseCallback = params[1]
+  logger.debug(`CALL :: Sendign request to ${requestConfig.uri}`)
+  next()
+}
 
-module.exports = callDispatchLogger;
+module.exports = callDispatchLogger

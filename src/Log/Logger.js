@@ -1,5 +1,5 @@
-let winston = require('winston');
-const wrapper = require('./../Util/ansi.colors').wrapper;
+let winston = require('winston')
+const wrapper = require('./../Util/ansi.colors').wrapper
 
 function levelColor(level) {
   if (level === "silly") {
@@ -31,7 +31,7 @@ var logger = new winston.Logger({
       colorize: true,
       level: 'verbose',
       timestamp: function () {
-        return Date.now();
+        return Date.now()
       },
       formatter: function (options) {
         // Return string will be passed to logger.
@@ -40,6 +40,6 @@ var logger = new winston.Logger({
     })
   ],
   exitOnError: false
-});
+})
 
-module.exports = logger;
+module.exports = logger

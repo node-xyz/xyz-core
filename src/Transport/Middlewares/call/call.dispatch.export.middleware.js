@@ -1,13 +1,13 @@
-const logger = require('./../../../Log/Logger');
-let request = require('request');
+const logger = require('./../../../Log/Logger')
+let request = require('request')
 
 let callDispatchExport = function (params, next, end) {
-  let requestConfig = params[0];
-  let responseCallback = params[1];
+  let requestConfig = params[0]
+  let responseCallback = params[1]
   request.post(requestConfig, (err, response, body) => {
-    responseCallback(err, response, body);
-  });
-  end();
-};
+    responseCallback(err, response, body)
+  })
+  end()
+}
 
-module.exports = callDispatchExport;
+module.exports = callDispatchExport

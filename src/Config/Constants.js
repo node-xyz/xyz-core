@@ -8,19 +8,19 @@ module.exports = {
   events: {
     REQUEST: 'request',
     SERVICE_CALL: 'serviceCall',
-    PING: "ping"
+    PING: "ping",
+    EVENT_PREFIX: "_"
   },
   url: {
     CALL: 'call',
     PING: 'ping'
   },
   intervals: {
-    threshold: 1000,
-    ping: 5000,
-    nodeleave: 10 * 1000
+    threshold: 5000,
+    ping: 10000,
   },
   environmet: {
     dev: "dev",
     production: "prod"
   }
-};;
+}

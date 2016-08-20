@@ -30,4 +30,4 @@ function wrapper(style, str) {
 module.exports = {
   colors: colors,
   wrapper: wrapper
-};
+}
