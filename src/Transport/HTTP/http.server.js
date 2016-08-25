@@ -8,12 +8,14 @@ const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.
 const machineReport = require('./../../Util/machine.reporter')
 const _CONFIGURATION = require('./../../Config/config.global')
 
+const StringDecoder = require('string_decoder').StringDecoder;
+const decoder = new StringDecoder('utf-8');
+
 class HTTPServer extends EventEmitter {
   constructor() {
     super()
     http.globalAgent.maxSockets = Infinity
     this.port = _CONFIGURATION.getServiceConf().port
-
 
     this.callReceiveMiddlewareStack = new GenericMiddlewareHandler()
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'))
@@ -36,7 +38,7 @@ class HTTPServer extends EventEmitter {
             body.push(chuck)
           })
           .on('end', () => {
-            let parsedUrl = url.parse(req.url)
+            let parsedUrl = url.parse(req.url);
             let self = this // TODO fix this
             if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
               if (parsedUrl.query.split('&').length > 1) {

@@ -37,6 +37,12 @@ class HTTPClient {
   }
 
   ping(node, pingResponseCallback) {
+    var options = {
+      hostname: `${node.host}`,
+      port: node.port,
+      path: `/${this.pingPrefix}`,
+      method: 'POST',
+    };
     let requestConfig = {
       method: "POST",
       uri: `${node.host}:${node.port}/${this.pingPrefix}`,

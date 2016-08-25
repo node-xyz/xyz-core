@@ -89,7 +89,7 @@ class NodeXYZ {
    * @param  {Function} handler   handler function when this event happens
    */
   subscribe(eventName, handler) {
-
+    this.serviceRepository.subscribe(eventName, handler);
   }
 
   /**

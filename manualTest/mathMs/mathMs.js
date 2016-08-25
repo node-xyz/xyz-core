@@ -9,3 +9,7 @@ var mathMs = new XYZ({
 
 mathMs.register('mul', fn.mul)
 mathMs.register('neg', fn.neg)
+
+mathMs.register(':whassssaaaap', function (userPayload, response) {
+  console.log(userPayload, response);
+})

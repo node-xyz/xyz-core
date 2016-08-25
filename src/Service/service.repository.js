@@ -23,6 +23,7 @@ class ServiceRepository {
     this.transportServer.on(CONSTANTS.events.REQUEST, (rcvPacket, response) => {
       for (var serviceName in this.services) {
         if (serviceName === rcvPacket.serviceName) {
+          logger.debug(`ServiceRepository matched service ${serviceName}`)
           this.services[serviceName].fn(rcvPacket.userPayload, new XResponse(response))
           return
         }
@@ -52,13 +53,14 @@ class ServiceRepository {
   emit(eventName, userPayload) {
     let nodes = _CONFIGURATIONS.getSystemConf().microservices
     for (let node of nodes) {
-      this.transportClient.send({ uri: `${node.host}:${node.port}`, serviceName: eventName }, userPayload, () => {})
+      this.transportClient.send({ uri: `${node.host}:${node.port}`, serviceName: eventName }, userPayload, null);
     }
   }
 
   ping() {
     let nodes = _CONFIGURATIONS.getSystemConf().microservices
     for (let node of nodes) {
+
       this.transportClient.ping(node, (err, response, body) => {
         if (err) {
           logger.error(`Ping Error :: ${JSON.stringify(err)}`)

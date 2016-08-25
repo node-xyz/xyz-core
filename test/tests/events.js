@@ -43,20 +43,22 @@ before(function (done) {
   rcv.register('mul', mockFunctions.mul)
   rcv.register('up', mockFunctions.up)
 
-  setTimeout(done, 500)
+  setTimeout(done, 500);
+
 })
 
 
 it('whassssaaaap', function (done) {
-  snd.register(":hello", (payload, XResponse) => {
+  rcv.register("_hello", (payload, XResponse) => {
     console.log("!!!!!!!!!!!!!!!!!!!!!!!!")
     console.log(payload, XResponse)
+    XResponse.send('wwwwhaaat')
     done()
-  })
 
-  rcv.emit(':hello', 'whassssaaaap')
-
-
+  });
+  setTimeout(function () {
+    snd.emit('_hello', 'whassssaaaap')
+  }, 200)
 
 })
 
