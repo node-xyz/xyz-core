@@ -3,18 +3,18 @@
   [
     {"name":
       "mathMs",
-      "host": "http://8.8.8.8",
+      "host": "127.0.0.1",
       "port":4000
     },
     {
-      "host": "http://8.8.8.8",
+      "host": "127.0.0.1",
       "name":"stringMs",
       "port":4001
     },
     {
       "name":"expressMs",
       "port":4002,
-      "host": "http://8.8.8.8"
+      "host": "127.0.0.1"
     }
   ]
 }

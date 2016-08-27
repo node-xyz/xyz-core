@@ -1,6 +1,6 @@
 const logger = require('./../../../Log/Logger')
 
-function requestLogger(params, next) {
+function requestLogger (params, next) {
   let request = params[0]
   let response = params[1]
   let body = params[2]

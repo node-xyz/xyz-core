@@ -1,4 +1,4 @@
-describe.skip("basic", function () {
+describe('basic', function () {
   require('./tests/basic')
 })
 

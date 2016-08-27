@@ -8,11 +8,11 @@ const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.
 const machineReport = require('./../../Util/machine.reporter')
 const _CONFIGURATION = require('./../../Config/config.global')
 
-const StringDecoder = require('string_decoder').StringDecoder;
-const decoder = new StringDecoder('utf-8');
+const StringDecoder = require('string_decoder').StringDecoder
+const decoder = new StringDecoder('utf-8')
 
 class HTTPServer extends EventEmitter {
-  constructor() {
+  constructor () {
     super()
     http.globalAgent.maxSockets = Infinity
     this.port = _CONFIGURATION.getServiceConf().port
@@ -26,36 +26,34 @@ class HTTPServer extends EventEmitter {
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.auth.basic.middleware'))
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
 
-
-
     this.server = http.createServer()
       .listen(this.port, () => {
         logger.info(`Server listening on port :${this.port}`)
       }).on('request', (req, resp) => {
-        var body = []
-        req
-          .on('data', (chuck) => {
-            body.push(chuck)
-          })
-          .on('end', () => {
-            let parsedUrl = url.parse(req.url);
-            let self = this // TODO fix this
-            if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
-              if (parsedUrl.query.split('&').length > 1) {
-                req.destroy()
-              } else {
-                this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
-              }
-            } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
-              this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
-            } else {
+      var body = []
+      req
+        .on('data', (chuck) => {
+          body.push(chuck)
+        })
+        .on('end', () => {
+          let parsedUrl = url.parse(req.url)
+          let self = this // TODO fix this
+          if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
+            if (!parsedUrl.query || parsedUrl.query.split('&').length !== 1) {
               req.destroy()
+            } else {
+              this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
             }
-          })
-      })
+          } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
+            this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
+          } else {
+            req.destroy()
+          }
+        })
+    })
   }
 
-  close() {
+  close () {
     this.server.close()
   }
 }

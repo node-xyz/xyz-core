@@ -17,17 +17,17 @@ before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
   system.addMicroservice({
-    host: "http://localhost",
+    host: 'localhost',
     port: 3333
   })
   system.addMicroservice({
-    host: "http://localhost",
+    host: 'localhost',
     port: 3334
   })
 
   // for (let i = 0 ; i < 10 ; i++) {
   //   system.addMicroservice({
-  //     host: "http://localhost",
+  //     host: "localhost",
   //     port: 3335 + i
   //   })
   // }
@@ -43,23 +43,20 @@ before(function (done) {
   rcv.register('mul', mockFunctions.mul)
   rcv.register('up', mockFunctions.up)
 
-  setTimeout(done, 500);
-
+  setTimeout(done, 500)
 })
 
-
 it('whassssaaaap', function (done) {
-  rcv.register("_hello", (payload, XResponse) => {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!")
-    console.log(payload, XResponse)
-    XResponse.send('wwwwhaaat')
+  rcv.register('_hello', (payload, res) => {
+    console.log(payload)
+    expect(payload).to.equal('whassssaaaap')
+    res.send('???what now?')
+    console.log(res)
     done()
-
-  });
+  })
   setTimeout(function () {
     snd.emit('_hello', 'whassssaaaap')
   }, 200)
-
 })
 
 after(function () {

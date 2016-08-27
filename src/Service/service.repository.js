@@ -9,8 +9,7 @@ const Util = require('./../Util/Util')
 let machineReport = require('./../Util/machine.reporter')
 
 class ServiceRepository {
-  constructor() {
-
+  constructor () {
     this.transportServer = new HTTP.Server()
     this.transportClient = new HTTP.Client()
 
@@ -30,7 +29,7 @@ class ServiceRepository {
       }
       // this will be barely reached . most of the time callDisplatchfind middleware will find this.
       response.writeHead(404, {})
-      response.end(http.STATUS_CODES[404])
+      response.end(JSON.stringify({'err': http.STATUS_CODES[404]}))
     })
 
     this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
@@ -39,48 +38,46 @@ class ServiceRepository {
 
     this.ping()
     setInterval(() => this.ping(), (CONSTANTS.intervals.ping + Util.Random(CONSTANTS.intervals.threshold)))
-
   }
 
-  register(name, fn) {
+  register (name, fn) {
     this.services[name] = { fn: fn }
   }
 
-  call(serviceName, userPayload, responseCallback) {
+  call (serviceName, userPayload, responseCallback) {
     this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignServices, this.transportClient, responseCallback], 0)
   }
 
-  emit(eventName, userPayload) {
+  emit (eventName, userPayload) {
     let nodes = _CONFIGURATIONS.getSystemConf().microservices
     for (let node of nodes) {
-      this.transportClient.send({ uri: `${node.host}:${node.port}`, serviceName: eventName }, userPayload, null);
+      this.transportClient.send(eventName, `${node.host}:${node.port}`, userPayload, null)
     }
   }
 
-  ping() {
+  ping () {
     let nodes = _CONFIGURATIONS.getSystemConf().microservices
     for (let node of nodes) {
-
-      this.transportClient.ping(node, (err, response, body) => {
-        if (err) {
-          logger.error(`Ping Error :: ${JSON.stringify(err)}`)
-          delete this.foreignServices[`${node.host}:${node.port}`]
-        } else {
-          logger.debug(`PING success :: foreignServices = ${JSON.stringify(this.foreignServices)}`)
+      this.transportClient.ping(node, (body , res) => {
+        if (res.statusCode === 200) {
           this.foreignServices[`${node.host}:${node.port}`] = body
+          logger.debug(`PING success :: foreignServices = ${JSON.stringify(this.foreignServices)}`)
+        } else {
+          delete this.foreignServices[`${node.host}:${node.port}`]
+          logger.error(`Ping Error :: ${JSON.stringify(err)}`)
         }
       })
     }
   }
 
-  getTransportLayer() {
+  getTransportLayer () {
     return {
       Server: this.transportServer,
       Client: this.transportClient
     }
   }
 
-  terminate() {
+  terminate () {
     this.transportServer.close()
   }
 }

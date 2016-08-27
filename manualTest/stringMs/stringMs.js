@@ -10,10 +10,9 @@ stringMs.register('up', fn.up)
 stringMs.register('finger', fn.finger)
 
 setInterval(() => {
-  // stringMs.call('mul', { x: new Date().getTime(), y: new Date().getTime() }, (err, response, body) => {
-  //   console.log(err, body)
+  // stringMs.call('mul', { x: new Date().getTime(), y: new Date().getTime() }, (body, res) => {
+  //   console.log('response of mul', body, res.statusCode)
   // })
 
-  stringMs.emit(':whassssaaaap', { x: new Date().getTime(), y: new Date().getTime() });
-
+  stringMs.emit('_whassssaaaap', 'whassssaaaap')
 }, 1000)

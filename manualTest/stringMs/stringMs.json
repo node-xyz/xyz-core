@@ -5,7 +5,7 @@
     "name": "stringMs_dev",
     "net": {
       "port": 6000,
-      "host": "0.0.0.0"
+      "host": "http://127.0.0.1"
     }
   }
 }

@@ -1,15 +1,15 @@
 const XYZ = require('./../../index')
 const fs = require('fs')
 const logger = require('./../../src/Log/Logger')
-  /**
-   * A Wrapper class around microservice interface
-   */
+/**
+ * A Wrapper class around microservice interface
+ */
 class MockMicroservice {
-  constructor(name, port, cwd) {
+  constructor (name, port, cwd) {
     let serviceConfiguration = {
-      "name": name,
-      "host": "http://localhost",
-      "port": port
+      'name': name,
+      'host': 'localhost',
+      'port': port
     }
 
     fs.writeFileSync(`${cwd}/${name}.json`, JSON.stringify(serviceConfiguration))
@@ -19,27 +19,27 @@ class MockMicroservice {
     })
   }
 
-  register(name, fn) {
+  register (name, fn) {
     this.xyz.register(name, fn)
   }
 
-  call(name, data, callback) {
+  call (name, data, callback) {
     this.xyz.call(name, data, callback)
   }
 
-  emit(eventName, userPayload) {
+  emit (eventName, userPayload) {
     this.xyz.emit(eventName, userPayload)
   }
 
-  subscribe(eventName) {
+  subscribe (eventName) {
     this.xyz.subscribe(eventName)
   }
 
-  middlewares() {
+  middlewares () {
     return this.xyz.middlewares()
   }
 
-  stop() {
+  stop () {
     logger.debug('service stopped')
     this.xyz.terminate()
   }

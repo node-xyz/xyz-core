@@ -5,7 +5,6 @@ let logger = require('./../Log/Logger')
 let systemConf
 let serviceConf = {}
 
-
 let configuration = {
   setServiceConf: (aConf) => {
     if (aConf) {
@@ -22,14 +21,14 @@ let configuration = {
     systemConf = aConf
     if (argParser.has('--xyzdev')) {
       systemConf.microservices = systemConf.microservices.map((ms) => {
-        ms.host = "http://0.0.0.0"
+        ms.host = '127.0.0.1'
         return ms
       })
     }
   },
 
   getSystemConf: () => systemConf,
-  getServiceConf: () => serviceConf,
+  getServiceConf: () => serviceConf
 }
 
 module.exports = configuration

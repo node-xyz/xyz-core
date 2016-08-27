@@ -1,4 +1,4 @@
-const request = require('request')
+const querystring = require('querystring')
 const CONSTANTS = require('../../Config/Constants')
 const _RSA = require('./../../Config/rsa.global')
 const logger = require('./../../Log/Logger')
@@ -7,7 +7,7 @@ const _CONFIGURATIONS = require('./../../Config/config.global')
 let GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
 
 class HTTPClient {
-  constructor() {
+  constructor () {
     this.callPostfix = CONSTANTS.url.CALL
     this.pingPrefix = CONSTANTS.url.PING
 
@@ -19,39 +19,31 @@ class HTTPClient {
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/global.dispatch.logger.middleware'))
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/global.dispatch.auth.basic.middleware'))
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
-
   }
 
-  send(config, userPayload, callResponseCallback) {
-    let options = {
-      uri: `${config.uri}/${this.callPostfix}`,
+  send (serviceName, node, userPayload, callResponseCallback) {
+    let requestConfig = {
+      hostname: `${node.split(':')[0]}`,
+      port: node.split(':')[1],
+      path: `/${this.callPostfix}?${querystring.stringify({service: serviceName})}`,
       method: 'POST',
-      qs: {
-        'service': config.serviceName
-      },
-      json: {
-        userPayload: userPayload
-      }
+      json: { userPayload: userPayload }
     }
-    this.callDispatchMidllewareStack.apply([options, callResponseCallback], 0)
+    this.callDispatchMidllewareStack.apply([requestConfig, callResponseCallback], 0)
   }
 
-  ping(node, pingResponseCallback) {
-    var options = {
+  ping (node, pingResponseCallback) {
+    let requestConfig = {
       hostname: `${node.host}`,
       port: node.port,
       path: `/${this.pingPrefix}`,
       method: 'POST',
-    };
-    let requestConfig = {
-      method: "POST",
-      uri: `${node.host}:${node.port}/${this.pingPrefix}`,
       json: { sender: `${_CONFIGURATIONS.getServiceConf().host}:${_CONFIGURATIONS.getServiceConf().port}` }
     }
     this.pingDispatchMiddlewareStack.apply([requestConfig, pingResponseCallback], 0)
   }
 
-  emit(node, userPayload) {
+  emit (node, userPayload) {
     let requestConfig = {
       method: 'POST',
       uri: `${node.host}/`

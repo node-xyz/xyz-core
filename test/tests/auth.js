@@ -16,11 +16,11 @@ before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
   system.addMicroservice({
-    host: "http://localhost",
+    host: "localhost",
     port: 3333
   })
   system.addMicroservice({
-    host: "http://localhost",
+    host: "localhost",
     port: 3334
   })
   system.write()

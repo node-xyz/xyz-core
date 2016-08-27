@@ -13,11 +13,11 @@ before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
   system.addMicroservice({
-    host: "http://localhost",
+    host: 'localhost',
     port: 3333
   })
   system.addMicroservice({
-    host: "http://localhost",
+    host: 'localhost',
     port: 3334
   })
   system.write()
@@ -28,29 +28,37 @@ before(function (done) {
   setTimeout(done, 500)
 })
 
-it("hello world", function (done) {
+it('hello world', function (done) {
   snd.call('mul', {
     x: 2,
     y: 3
-  }, (err, response1, body1) => {
+  }, (err1, body1, response1) => {
     expect(body1).to.equal(6)
-    snd.call('up', 'hello', (err, response2, body2) => {
+    expect(err1).to.equal(null)
+    expect(response1.statusCode).to.equal(200)
+    snd.call('up', 'hello', (err2, body2, response2) => {
       expect(body2).to.equal('HELLO')
+      expect(err2).to.equal(null)
+      expect(response2.statusCode).to.equal(200)
       done()
     })
   })
-
 })
 
-it("not found", function (done) {
+it('local not found', function (done) {
   snd.call('mullll', {
     x: 2,
     y: 3
-  }, (err, response, body) => {
-    expect(err).to.equal(http.STATUS_CODES[404])
+  }, (err, body, resp) => {
+    console.log(err, body, resp)
     expect(body).to.equal(null)
+    expect(err).to.equal(http.STATUS_CODES[404])
     done()
   })
+})
+
+it('global not found', function (done) {
+  done()
 })
 
 after(function () {

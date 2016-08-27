@@ -1,27 +1,27 @@
 let winston = require('winston')
 const wrapper = require('./../Util/ansi.colors').wrapper
 
-function levelColor(level) {
-  if (level === "silly") {
+function levelColor (level) {
+  if (level === 'silly') {
     return wrapper('magenta', level)
   }
-  if (level === "debug") {
+  if (level === 'debug') {
     return wrapper('cyan', level)
   }
-  if (level === "verbose") {
+  if (level === 'verbose') {
     return wrapper('blue', level)
   }
-  if (level === "info") {
+  if (level === 'info') {
     return wrapper('green', level)
   }
-  if (level === "warn") {
+  if (level === 'warn') {
     return wrapper('yellow', level)
   }
-  if (level === "error") {
+  if (level === 'error') {
     return wrapper('red', level)
   }
 }
-//{ error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
+// { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
 
 var logger = new winston.Logger({
   transports: [
@@ -29,13 +29,13 @@ var logger = new winston.Logger({
       handleExceptions: false,
       prettyPrint: true,
       colorize: true,
-      level: 'verbose',
+      level: 'debug',
       timestamp: function () {
         return Date.now()
       },
       formatter: function (options) {
         // Return string will be passed to logger.
-        return `${levelColor(options.level)} :: ${options.message} \t\t ${wrapper('underline', wrapper('bold', global._serviceName))} `
+        return `${levelColor(options.level)} :: ${options.message} 		 ${wrapper('underline', wrapper('bold', global._serviceName))} `
       }
     })
   ],

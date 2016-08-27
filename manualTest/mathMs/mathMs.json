@@ -5,7 +5,7 @@
     "name": "mathMs_dev",
     "net": {
       "port": 3333,
-      "host": "0.0.0.0"
+      "host": "http://127.0.0.1"
     }
   }
 }

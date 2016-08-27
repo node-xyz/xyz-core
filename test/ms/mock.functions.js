@@ -1,8 +1,8 @@
 module.exports = {
-  mul: function mul(payload, xResponse) {
+  mul: function mul (payload, xResponse) {
     xResponse.send(payload.x * payload.y)
   },
-  add: function add(payload, xResponse) {
+  add: function add (payload, xResponse) {
     xResponse.send(payload.x + payload.y)
   },
   up: function (payload, xResponse) {
