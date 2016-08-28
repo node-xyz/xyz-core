@@ -48,10 +48,8 @@ before(function (done) {
 
 it('whassssaaaap', function (done) {
   rcv.register('_hello', (payload, res) => {
-    console.log(payload)
     expect(payload).to.equal('whassssaaaap')
-    res.send('???what now?')
-    console.log(res)
+    // res.send('???what now?')
     done()
   })
   setTimeout(function () {

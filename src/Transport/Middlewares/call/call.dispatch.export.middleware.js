@@ -20,14 +20,17 @@ let callDispatchExport = function (params, next, end) {
 
       res.on('end', () => {
         let err = (res.statusCode === 200 ? null : http.STATUS_CODES[res.statusCode])
-        responseCallback(err, JSON.parse(body), res)
+        responseCallback(err, JSON.parse(body).userPayload, res)
       })
     })
-  }else {
+  } else {
     var req = http.request(requestConfig)
   }
 
   req.on('error', (e) => {
+    if (responseCallback) {
+      responseCallback(e, null, null)
+    }
     logger.error(`problem with CALL beign sent :: ${e}`)
   })
 

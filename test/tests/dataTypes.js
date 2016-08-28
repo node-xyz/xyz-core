@@ -10,11 +10,11 @@ before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
   system.addMicroservice({
-    host: "localhost",
+    host: 'localhost',
     port: 3333
   })
   system.addMicroservice({
-    host: "localhost",
+    host: 'localhost',
     port: 3334
   })
   system.write()
@@ -26,7 +26,7 @@ before(function (done) {
   setTimeout(done, 500)
 })
 it('bool', function (done) {
-  snd.call('neg', false, (err, response, body) => {
+  snd.call('neg', false, (err, body, response) => {
     expect(body).to.equal(true)
     done()
   })
@@ -34,13 +34,13 @@ it('bool', function (done) {
 it('obj', function (done) {
   snd.call('finger', {
     data: 'data'
-  }, (err, response, body) => {
+  }, (err, body, response) => {
     expect(body['test']).to.equal('test')
     done()
   })
 })
 it('arr', function (done) {
-  snd.call('rev', [1, 2, 3], (err, response, body) => {
+  snd.call('rev', [1, 2, 3], (err, body, response) => {
     expect(body).to.eql([3, 2, 1])
     done()
   })

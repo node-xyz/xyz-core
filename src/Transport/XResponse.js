@@ -1,10 +1,10 @@
 module.exports =
   class XResponse {
-    constructor(response) {
+    constructor (response) {
       this.response = response
     }
 
-    send(payload) {
-      this.response.end(JSON.stringify(payload))
+    send (payload) {
+      this.response.end(JSON.stringify({userPayload: payload}))
     }
-  }
+}

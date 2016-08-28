@@ -16,11 +16,11 @@ before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
   system.addMicroservice({
-    host: "localhost",
+    host: 'localhost',
     port: 3333
   })
   system.addMicroservice({
-    host: "localhost",
+    host: 'localhost',
     port: 3334
   })
   system.write()
@@ -32,12 +32,11 @@ before(function (done) {
   setTimeout(done, 500)
 })
 
-
 it('Add auth on the fly', function (done) {
   snd.middlewares().transport.client.callDispatch.register(1, require('./../../src/Transport/Middlewares/global.dispatch.auth.basic.middleware'))
   rcv.middlewares().transport.server.callReceive.register(1, require('./../../src/Transport/Middlewares/global.receive.auth.basic.middleware'))
 
-  snd.call('mul', { x: 2, y: 10 }, (err, response, body) => {
+  snd.call('mul', { x: 2, y: 10 }, (err, body, response) => {
     expect(body).to.equal(20)
     done()
   })
@@ -46,13 +45,15 @@ it('Add auth on the fly', function (done) {
 it('wrong auth', function (done) {
   snd.middlewares().transport.client.callDispatch.register(1, (params, next, done) => {
     let requestConfig = params[0]
-    requestConfig.json.auth = "123wrong"
+    requestConfig.json.auth = '123wrong'
     next()
   })
   rcv.middlewares().transport.server.callReceive.register(1, require('./../../src/Transport/Middlewares/global.receive.auth.basic.middleware'))
 
-  snd.call('mul', { x: 2, y: 10 }, (err, response, body) => {
-    expect(body).to.equal(undefined)
+  snd.call('mul', { x: 2, y: 10 }, (err, body, response) => {
+    console.log(err)
+    expect(body).to.equal(null)
+    expect(typeof (err)).to.equal('object')
     done()
   })
 })

@@ -16,11 +16,11 @@ before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
   system.addMicroservice({
-    host: "localhost",
+    host: 'localhost',
     port: 3333
   })
   system.addMicroservice({
-    host: "localhost",
+    host: 'localhost',
     port: 3334
   })
   system.write()
@@ -32,9 +32,8 @@ before(function (done) {
   setTimeout(done, 500)
 })
 
-
 it('False servicrDiscovery', function (done) {
-  function wrongServicediscoveryMiddleware(params, next, end) {
+  function wrongServicediscoveryMiddleware (params, next, end) {
     let serviceName = params[0],
       userPayload = params[1],
       foreignServices = params[2],
@@ -45,9 +44,8 @@ it('False servicrDiscovery', function (done) {
       let index = foreignServices[node].indexOf(serviceName)
       if (index === -1) {
         logger.info(`WRONG DISCOVERY :: determined ${node} for ${serviceName}`)
-        let config = { serviceName: serviceName, uri: node }
-        transportClient.send(config, userPayload, (err, response, body) => {
-          responseCallback(err, response, body)
+        transportClient.send(serviceName, node , userPayload, (err, body, response) => {
+          responseCallback(err, body, response)
         })
         return
       }
@@ -57,8 +55,8 @@ it('False servicrDiscovery', function (done) {
 
   snd.middlewares().serviceRepository.callDispatch.remove(-1)
   snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware)
-  snd.call('up', 'what the hell', (err, response, body) => {
-    //this is exacly end of request event on serviceRepository
+  snd.call('up', 'what the hell', (err, body, response) => {
+    // this is exacly end of request event on serviceRepository
     expect(response.statusCode).to.equal(404)
     expect(body).to.equal(http.STATUS_CODES[404])
     snd.middlewares().serviceRepository.callDispatch.remove(0)
@@ -68,7 +66,7 @@ it('False servicrDiscovery', function (done) {
 })
 
 it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
-  function wrongServicediscoveryMiddleware(params, next, end) {
+  function wrongServicediscoveryMiddleware (params, next, end) {
     let serviceName = params[0],
       userPayload = params[1],
       foreignServices = params[2],
@@ -79,9 +77,8 @@ it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
       let index = foreignServices[node].indexOf(serviceName)
       if (index === -1) {
         logger.info(`WRONG DISCOVERY :: determined ${node} for ${serviceName}`)
-        let config = { serviceName: serviceName, uri: node }
-        transportClient.send(config, userPayload, (err, response, body) => {
-          responseCallback(err, response, body)
+        transportClient.send(serviceName, node, userPayload, (err, body, response) => {
+          responseCallback(err, body, response)
         })
         return
       }
@@ -89,11 +86,11 @@ it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
     responseCallback(http.STATUS_CODES[404], null)
   }
 
-  snd.call('up', 'will be ok', (err, response, body) => {
+  snd.call('up', 'will be ok', (err, body, response) => {
     expect(body).to.equal('WILL BE OK')
     snd.middlewares().serviceRepository.callDispatch.remove(-1)
     snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware)
-    snd.call('up', 'will be not OK', (err, response, body) => {
+    snd.call('up', 'will be not OK', (err, body, response) => {
       expect(body).to.equal(http.STATUS_CODES[404])
       snd.middlewares().serviceRepository.callDispatch.remove(0)
       done()

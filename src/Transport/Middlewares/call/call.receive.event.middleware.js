@@ -2,7 +2,7 @@ const logger = require('./../../../Log/Logger')
 const CONSTANTS = require('./../../../Config/Constants')
 const url = require('url')
 
-function passToRepo(params, next, end) {
+function passToRepo (params, next, end) {
   let request = params[0]
   let response = params[1]
   let body = params[2]

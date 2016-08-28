@@ -28,8 +28,9 @@ class ServiceRepository {
         }
       }
       // this will be barely reached . most of the time callDisplatchfind middleware will find this.
+      // Same problem as explained in TEST/Transport.middleware => early response
       response.writeHead(404, {})
-      response.end(JSON.stringify({'err': http.STATUS_CODES[404]}))
+      response.end(JSON.stringify({userPayload: http.STATUS_CODES[404]}))
     })
 
     this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
