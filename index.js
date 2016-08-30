@@ -17,14 +17,13 @@ TODO implement rsa auth for ping / call
 TODO clean the cunstroctor and add a bootstrap()
  */
 
-
 class NodeXYZ {
   /**
    * Create new XYZ object. all user APIs and method will be ported from this object
    * @param  {Object} configuration - an Object with format
    * - systemConf : file instance of system Configuration aka xyz.json
    */
-  constructor(configuration) {
+  constructor (configuration) {
     _CONFIG.setServiceConf(configuration.serviceConf)
     _CONFIG.setSystemConf(configuration.systemConf)
 
@@ -37,7 +36,7 @@ class NodeXYZ {
    * Stop XYZ system. will stop all ping and communication requests.
    * Should onle be used with tests.
    */
-  terminate() {
+  terminate () {
     this.serviceRepository.terminate()
   }
 
@@ -46,7 +45,7 @@ class NodeXYZ {
    * @param  {String}   serviceName       Unique name for this service.
    * @param  {Function} fn                Handler function for this service
    */
-  register(serviceName, fn) {
+  register (serviceName, fn) {
     this.serviceRepository.register(serviceName, fn)
   }
 
@@ -58,7 +57,7 @@ class NodeXYZ {
    * @param  {Object|String|Number} userPayload      Data to pass to receiver
    * @param  {Function} responseCallback Callback to manage the response
    */
-  call(serviceName, userPayload, responseCallback) {
+  call (serviceName, userPayload, responseCallback) {
     this.serviceRepository.call(serviceName, userPayload, responseCallback)
   }
 
@@ -66,7 +65,7 @@ class NodeXYZ {
    * bootstrap function. the main goal is the lower the weight of the cunstroctor
    * Not implemented yet
    */
-  bootstrap(configuration) {}
+  bootstrap (configuration) {}
 
   /**
    * emit a message to all other services who listen on this event with .on()
@@ -78,18 +77,8 @@ class NodeXYZ {
    * @param  {String} eventName   name of the event. MUST start with ':'
    * @param  {Object|String|Number|Array} userPayload Data to be received by others.
    */
-  emit(eventName, userPayload) {
-    this.serviceRepository.emit(eventName, userPayload)
-  }
-
-  /**
-   * subscribe to an event
-   * [option] WILL USE .register for simplicity
-   * @param  {String} eventName name of the event. MUST start with ':'
-   * @param  {Function} handler   handler function when this event happens
-   */
-  subscribe(eventName, handler) {
-    this.serviceRepository.subscribe(eventName, handler);
+  emit (eventName, userPayload, responseCallback) {
+    this.serviceRepository.emit(eventName, userPayload, responseCallback)
   }
 
   /**
@@ -97,7 +86,7 @@ class NodeXYZ {
    * bootstraping or at runtime. See Middleware section for more details.
    * @return {Object} an Object of middleware handlers.
    */
-  middlewares() {
+  middlewares () {
     return {
       transport: {
         server: {

@@ -16,7 +16,9 @@ function firstFind (params, next, done) {
       return
     }
   }
-  responseCallback(http.STATUS_CODES[404], null, null)
+  if (responseCallback) {
+    responseCallback(http.STATUS_CODES[404], null, null)
+  }
 }
 
 module.exports = firstFind

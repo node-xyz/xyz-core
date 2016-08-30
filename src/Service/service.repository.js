@@ -9,6 +9,11 @@ const Util = require('./../Util/Util')
 let machineReport = require('./../Util/machine.reporter')
 
 class ServiceRepository {
+  /**
+   * Create a service repository object
+   * Transport client and server will be composed by ServiceRepository
+   */
+
   constructor () {
     this.transportServer = new HTTP.Server()
     this.transportClient = new HTTP.Client()
@@ -49,10 +54,10 @@ class ServiceRepository {
     this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignServices, this.transportClient, responseCallback], 0)
   }
 
-  emit (eventName, userPayload) {
+  emit (eventName, userPayload, responseCallback) {
     let nodes = _CONFIGURATIONS.getSystemConf().microservices
     for (let node of nodes) {
-      this.transportClient.send(eventName, `${node.host}:${node.port}`, userPayload, null)
+      this.transportClient.send(eventName, `${node.host}:${node.port}`, userPayload, responseCallback)
     }
   }
 

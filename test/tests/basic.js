@@ -50,15 +50,10 @@ it('local not found', function (done) {
     x: 2,
     y: 3
   }, (err, body, resp) => {
-    console.log(err, body, resp)
     expect(body).to.equal(null)
     expect(err).to.equal(http.STATUS_CODES[404])
     done()
   })
-})
-
-it('global not found', function (done) {
-  done()
 })
 
 after(function () {
