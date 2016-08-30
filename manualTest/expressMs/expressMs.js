@@ -3,9 +3,8 @@ var app = express()
 var XYZ = require('./../../index')
 
 var expressMs = new XYZ({
-  systemConf: require('./../xyz'),
-  debug: true,
-  loglevel: 'info'
+  serviceConf: require('./express.json'),
+  systemConf: require('./../xyz')
 })
 
 app.get('/', function (req, res) {

@@ -1,11 +1,5 @@
 {
   "name": "mathMs",
-
-  "dev": {
-    "name": "mathMs_dev",
-    "net": {
-      "port": 3333,
-      "host": "http://127.0.0.1"
-    }
-  }
+  "port": 4000,
+  "host": "127.0.0.1"
 }

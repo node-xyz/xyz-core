@@ -25,19 +25,19 @@ before(function (done) {
     port: 3334
   })
 
-  // for (let i = 0; i < 10; i++) {
-  //   system.addMicroservice({
-  //     host: 'localhost',
-  //     port: 3335 + i
-  //   })
-  // }
+  for (let i = 0; i < 10; i++) {
+    system.addMicroservice({
+      host: 'localhost',
+      port: 3335 + i
+    })
+  }
 
   system.write()
 
-  // for (let i = 0; i < 10; i++) {
-  //   let mock = new mockMicroservice(`mock_${i}`, 3335 + i, cwd)
-  //   mocks.push(mock)
-  // }
+  for (let i = 0; i < 10; i++) {
+    let mock = new mockMicroservice(`mock_${i}`, 3335 + i, cwd)
+    mocks.push(mock)
+  }
   snd = new mockMicroservice('snd', 3334, cwd)
   rcv = new mockMicroservice('rcv', 3333, cwd)
   rcv.register('mul', mockFunctions.mul)
@@ -57,7 +57,7 @@ it('no Callback for sender call', function (done) {
 })
 
 it('event with callback', function (done) {
-  snd.emit('mul', 'whassssaaaap', (err , payload, res) => {
+  snd.emit('mul', {x: 2,y: 3}, (err , payload, res) => {
     logger.debug('payload of event response' , payload)
     expect(payload).to.equal('whassssaaaap' + '+')
   })

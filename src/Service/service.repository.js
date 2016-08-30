@@ -14,6 +14,10 @@ class ServiceRepository {
    * Transport client and server will be composed by ServiceRepository
    */
 
+  /**
+   * Creates a new ServiceRepository
+   * Request ( call ) and Ping Events are bounded to this object
+   */
   constructor () {
     this.transportServer = new HTTP.Server()
     this.transportClient = new HTTP.Client()
@@ -46,14 +50,34 @@ class ServiceRepository {
     setInterval(() => this.ping(), (CONSTANTS.intervals.ping + Util.Random(CONSTANTS.intervals.threshold)))
   }
 
+  /**
+   * Register a new service. The new service will be stored inside an object
+   * @param  {String}   name name of the service. the call request must have the same nam
+   * @param  {Function} fn   function to be called when a request to this service arrives
+   * ## Note the format of this funciton is changing at the current stages of development
+   */
   register (name, fn) {
     this.services[name] = { fn: fn }
   }
 
+  /**
+   * Call a service. A middleware will be called with aproppiate arguments to find the receiving service etc.
+   * @param  {String} serviceName      name of the service
+   * @param  {Object|String|Number|Array} userPayload      payload to be passed to the receiving service
+   * @param  {Function} responseCallback              Optional callback to handle the response
+   */
   call (serviceName, userPayload, responseCallback) {
     this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignServices, this.transportClient, responseCallback], 0)
   }
 
+  /**
+   * Jsut a syntactic sugar for sending a request to all of the services
+   * Important note is that the find Middleware stack will not be used
+
+   * @param  {String} eventName        name of the service
+   * @param  {Any} userPayload      payload to be passed to the receiver
+   * @param  {Function} responseCallback Optional callback to handle the response
+   */
   emit (eventName, userPayload, responseCallback) {
     let nodes = _CONFIGURATIONS.getSystemConf().microservices
     for (let node of nodes) {

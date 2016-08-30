@@ -2,9 +2,8 @@ var fn = require('./../../test/ms/mock.functions')
 var XYZ = require('./../../index')
 
 var mathMs = new XYZ({
-  systemConf: require('./../xyz'),
-  debug: true,
-  loglevel: 'info'
+  serviceConf: require('./mathMs.json'),
+  systemConf: require('./../xyz')
 })
 
 mathMs.register('mul', fn.mul)

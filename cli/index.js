@@ -14,7 +14,6 @@ var program = require('commander')
 var util = require('./commands/util')
 const spawn = require('child_process').spawn
 
-
 let spawnMicroservice = function (ms) {
   let msProcess = spawn('node', [`${ms.name}/${ms.name}.js`, '--xyzport', ms.port, '--xyzhost', 'http://0.0.0.0', '--xyzdev'])
 
@@ -41,11 +40,10 @@ program
       process.exit()
     } else {
       fs.writeFileSync(`${process.cwd()}/xyz.json`,
-        `{"microservices": [], "dev": {"microservices" : []}}`
+        `{"microservices": []}`
       )
     }
   })
-
 
 program
   .command('ms <name>')
@@ -56,43 +54,46 @@ program
         console.log(chalk.red('Microservice with this name already exists'))
         process.exit()
       } else {
-
-        var questions = [{
-          type: 'input',
-          name: 'devPort',
-          message: 'A debug port for local debug',
-          default: 6767,
-          validate: function (value) {
-            if (!isNaN(value)) {
-              return true
-            } else {
-              return 'Please enter a number as the port'
+        var questions = [
+          {
+            type: 'input',
+            name: 'port',
+            message: 'Service port. used for both local and deploy',
+            default: 6767,
+            validate: function (value) {
+              if (!isNaN(value)) {
+                return true
+              } else {
+                return 'Please enter a number as the port'
+              }
             }
+          },
+          {
+            type: 'input',
+            name: 'host',
+            message: "An ip for service to be deployed on. use --xyzdev flag to override all ip's tp localhost",
+            default: '127.0.0.1'
           }
-        }]
+
+        ]
 
         inquirer.prompt(questions).then(function (args) {
-          console.log(args)
           fs.mkdir(`${process.cwd()}/${name}`)
           fs.writeFileSync(`${process.cwd()}/${name}/${name}.json`,
-            `{"name": "${name}", "dev": {"${name}_dev","net":{"host": "http://0.0.0.0","port": ${args.devPort}}}}`
+            `{"name": "${name}", "port" : ${args.port}, host: ${args.host}}`
           )
 
-          fs.writeFileSync(`${process.cwd()}/${name}.js`, '')
+          fs.writeFileSync(`${process.cwd()}/${name}/${name}.js`, '')
 
           let xyz = require(`${process.cwd()}/xyz.json`)
-          xyz.microservices.push({ name: name, net: { port: args.devPort } })
-          xyz.dev.microservices.push({ name: `${name}_dev`, net: { port: args.devPort } })
-          console.log(xyz)
+          xyz.microservices.push({ name: name, port: args.port, host: args.host })
           fs.writeFileSync(`${process.cwd()}/xyz.json`, JSON.stringify(xyz, null, 4))
         })
-
       }
     } else {
       console.log(chalk.red('XYZ root direcotry not detected. run $ xyz init '))
     }
   })
-
 
 program
   .command('dev')
@@ -108,7 +109,7 @@ program
           return
         }
       }
-      console.log("No microservices with such name found.")
+      console.log('No microservices with such name found.')
       process.exit()
     } else {
       let xyz = require(`${process.cwd()}/xyz.json`)
