@@ -28,11 +28,11 @@ class ServiceRepository {
     this.services = {}
     this.foreignServices = {}
 
-    this.transportServer.on(CONSTANTS.events.REQUEST, (rcvPacket, response) => {
+    this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
       for (var serviceName in this.services) {
-        if (serviceName === rcvPacket.serviceName) {
+        if (serviceName === body.serviceName) {
           logger.debug(`ServiceRepository matched service ${serviceName}`)
-          this.services[serviceName].fn(rcvPacket.userPayload, new XResponse(response))
+          this.services[serviceName].fn(body.userPayload, new XResponse(response))
           return
         }
       }
