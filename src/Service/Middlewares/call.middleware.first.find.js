@@ -9,7 +9,7 @@ function firstFind (params, next, done) {
   responseCallback = params[4]
 
   for (let microservice in foreignMicroservices) {
-    let index = foreignServices[microservice].indexOf(serviceName)
+    let index = foreignMicroservices[microservice].indexOf(serviceName)
     if (index > -1) {
       logger.silly(`determined target microservice by first find strategy ${microservice}`)
       transportClient.send(serviceName, microservice , userPayload, responseCallback)
