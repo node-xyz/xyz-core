@@ -36,15 +36,15 @@ it('False servicrDiscovery', function (done) {
   function wrongServicediscoveryMiddleware (params, next, end) {
     let serviceName = params[0],
       userPayload = params[1],
-      foreignServices = params[2],
+      foreignMicroservices = params[2],
       transportClient = params[3]
     responseCallback = params[4]
 
-    for (let node in foreignServices) {
-      let index = foreignServices[node].indexOf(serviceName)
-      if (index === -1) {
-        logger.info(`WRONG DISCOVERY :: determined ${node} for ${serviceName}`)
-        transportClient.send(serviceName, node , userPayload, (err, body, response) => {
+    for (let microservice in foreignMicroservices) {
+      let index = foreignServices[microservice].indexOf(serviceName)
+      if (index === -1) { // WRONG
+        logger.info(`WRONG DISCOVERY :: determined ${microservice} for ${serviceName}`)
+        transportClient.send(serviceName, microservice , userPayload, (err, body, response) => {
           responseCallback(err, body, response)
         })
         return

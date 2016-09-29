@@ -26,7 +26,7 @@ class ServiceRepository {
     this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.middleware.first.find'))
 
     this.services = {}
-    this.foreignServices = {}
+    this.foreignMicroservices = {}
 
     this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
       for (var serviceName in this.services) {
@@ -67,7 +67,7 @@ class ServiceRepository {
    * @param  {Function} responseCallback              Optional callback to handle the response
    */
   call (serviceName, userPayload, responseCallback) {
-    this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignServices, this.transportClient, responseCallback], 0)
+    this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignMicroservices, this.transportClient, responseCallback], 0)
   }
 
   /**
@@ -79,21 +79,21 @@ class ServiceRepository {
    * @param  {Function} responseCallback Optional callback to handle the response
    */
   emit (eventName, userPayload, responseCallback) {
-    let nodes = _CONFIGURATIONS.getSystemConf().microservices
-    for (let node of nodes) {
-      this.transportClient.send(eventName, `${node.host}:${node.port}`, userPayload, responseCallback)
+    let microservices = _CONFIGURATIONS.getSystemConf().microservices
+    for (let microservice of microservices) {
+      this.transportClient.send(eventName, `${microservice.host}:${microservice.port}`, userPayload, responseCallback)
     }
   }
 
   ping () {
-    let nodes = _CONFIGURATIONS.getSystemConf().microservices
-    for (let node of nodes) {
-      this.transportClient.ping(node, (body , res) => {
+    let microservices = _CONFIGURATIONS.getSystemConf().microservices
+    for (let microservice of microservices) {
+      this.transportClient.ping(microservice, (body , res) => {
         if (res.statusCode === 200) {
-          this.foreignServices[`${node.host}:${node.port}`] = body
-          logger.debug(`PING success :: foreignServices = ${JSON.stringify(this.foreignServices)}`)
+          this.foreignMicroservices[`${microservice.host}:${microservice.port}`] = body
+          logger.debug(`PING success :: foreignMicroservices = ${JSON.stringify(this.foreignMicroservices)}`)
         } else {
-          delete this.foreignServices[`${node.host}:${node.port}`]
+          delete this.foreignMicroservices[`${microservice.host}:${microservice.port}`]
           logger.error(`Ping Error :: ${JSON.stringify(err)}`)
         }
       })

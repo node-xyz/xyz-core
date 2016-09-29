@@ -21,10 +21,10 @@ class HTTPClient {
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
   }
 
-  send (serviceName, node, userPayload, callResponseCallback) {
+  send (serviceName, microservice, userPayload, callResponseCallback) {
     let requestConfig = {
-      hostname: `${node.split(':')[0]}`,
-      port: node.split(':')[1],
+      hostname: `${microservice.split(':')[0]}`,
+      port: microservice.split(':')[1],
       path: `/${this.callPostfix}?${querystring.stringify({service: serviceName})}`,
       method: 'POST',
       json: { userPayload: userPayload }
@@ -32,22 +32,15 @@ class HTTPClient {
     this.callDispatchMidllewareStack.apply([requestConfig, callResponseCallback], 0)
   }
 
-  ping (node, pingResponseCallback) {
+  ping (microservice, pingResponseCallback) {
     let requestConfig = {
-      hostname: `${node.host}`,
-      port: node.port,
+      hostname: `${microservice.host}`,
+      port: microservice.port,
       path: `/${this.pingPrefix}`,
       method: 'POST',
       json: { sender: `${_CONFIGURATIONS.getServiceConf().host}:${_CONFIGURATIONS.getServiceConf().port}` }
     }
     this.pingDispatchMiddlewareStack.apply([requestConfig, pingResponseCallback], 0)
-  }
-
-  emit (node, userPayload) {
-    let requestConfig = {
-      method: 'POST',
-      uri: `${node.host}/`
-    }
   }
 
 }

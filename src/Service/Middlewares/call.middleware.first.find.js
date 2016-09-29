@@ -4,15 +4,15 @@ const logger = require('./../../Log/Logger')
 function firstFind (params, next, done) {
   let serviceName = params[0],
     userPayload = params[1],
-    foreignServices = params[2],
+    foreignMicroservices = params[2],
     transportClient = params[3]
   responseCallback = params[4]
 
-  for (let node in foreignServices) {
-    let index = foreignServices[node].indexOf(serviceName)
+  for (let microservice in foreignMicroservices) {
+    let index = foreignServices[microservice].indexOf(serviceName)
     if (index > -1) {
-      logger.silly(`determined node by first find strategy ${node}`)
-      transportClient.send(serviceName, node , userPayload, responseCallback)
+      logger.silly(`determined target microservice by first find strategy ${microservice}`)
+      transportClient.send(serviceName, microservice , userPayload, responseCallback)
       return
     }
   }
