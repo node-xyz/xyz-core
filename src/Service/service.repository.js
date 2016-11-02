@@ -70,21 +70,6 @@ class ServiceRepository {
     this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignMicroservices, this.transportClient, responseCallback], 0)
   }
 
-  /**
-   * Jsut a syntactic sugar for sending a request to all of the services
-   * Important note is that the find Middleware stack will not be used
-
-   * @param  {String} eventName        name of the service
-   * @param  {Any} userPayload      payload to be passed to the receiver
-   * @param  {Function} responseCallback Optional callback to handle the response
-   */
-  emit (eventName, userPayload, responseCallback) {
-    let microservices = _CONFIGURATIONS.getSystemConf().microservices
-    for (let microservice of microservices) {
-      this.transportClient.send(eventName, `${microservice.host}:${microservice.port}`, userPayload, responseCallback)
-    }
-  }
-
   ping () {
     let microservices = _CONFIGURATIONS.getSystemConf().microservices
     for (let microservice of microservices) {

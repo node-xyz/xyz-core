@@ -68,20 +68,6 @@ class NodeXYZ {
   bootstrap (configuration) {}
 
   /**
-   * emit a message to all other services who listen on this event with .on()
-   * Note that no callback should be provided. events are one way abstraction above
-   * Calling.
-   * Also, note that with call() the system will search first and then the request will be sent
-   * to only one resulting system. emit will send a reqeust to all of the nodes and the receiving side
-   * will decide whether to pass this event to the application or not.
-   * @param  {String} eventName   name of the event. MUST start with ':'
-   * @param  {Object|String|Number|Array} userPayload Data to be received by others.
-   */
-  emit (eventName, userPayload, responseCallback) {
-    this.serviceRepository.emit(eventName, userPayload, responseCallback)
-  }
-
-  /**
    * Return an object of all middleware handlers available in the system. Each can be modified while
    * bootstraping or at runtime. See Middleware section for more details.
    * @return {Object} an Object of middleware handlers.
