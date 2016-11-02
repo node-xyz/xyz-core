@@ -7,6 +7,7 @@ const XResponse = require('../Transport/XResponse')
 const logger = require('./../Log/Logger')
 const Util = require('./../Util/Util')
 let machineReport = require('./../Util/machine.reporter')
+const PathTree = require('./path.tree')
 
 class ServiceRepository {
   /**
@@ -25,7 +26,7 @@ class ServiceRepository {
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler()
     this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.middleware.first.find'))
 
-    this.services = {}
+    this.services = new PathTree()
     this.foreignMicroservices = {}
 
     this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
@@ -43,7 +44,8 @@ class ServiceRepository {
     })
 
     this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
-      response.end(JSON.stringify(Object.keys(this.services)))
+      logger.debug(`Responding a PING message with ${JSON.stringify(this.services.serializedTree)}`)
+      response.end(JSON.stringify(this.services.serializedTree))
     })
 
     this.ping()
@@ -52,12 +54,12 @@ class ServiceRepository {
 
   /**
    * Register a new service. The new service will be stored inside an object
-   * @param  {String}   name name of the service. the call request must have the same nam
+   * @param  {String}   path path of the service. the call request must have the same path. path should strat with a /
    * @param  {Function} fn   function to be called when a request to this service arrives
    * ## Note the format of this funciton is changing at the current stages of development
    */
-  register (name, fn) {
-    this.services[name] = { fn: fn }
+  register (path, fn) {
+    this.services.createPathSubtree(path, fn)
   }
 
   /**

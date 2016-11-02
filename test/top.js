@@ -21,3 +21,7 @@ describe('transport authentication midlewares', function () {
 describe('events publish and subscribe', function () {
   require('./tests/events')
 })
+
+describe('Path Handling', function () {
+  require('./tests/path')
+})

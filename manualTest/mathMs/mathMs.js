@@ -8,8 +8,6 @@ var mathMs = new XYZ({
 
 mathMs.register('mul', fn.mul)
 mathMs.register('neg', fn.neg)
-
 mathMs.register('whassssaaaap', function (payload, XResponse) {
-  console.log(payload)
   XResponse.send('ok whassssaaaap')
 })
