@@ -31,7 +31,7 @@ it('path validation', function (done) {
 it('adjunct to path tree', function (done) {
   let pt = new PathTree()
   let dummy = function () { console.log('dummy')}
-  pt.adjunct('/math/add', dummy)
+  pt.createPathSubtree('/math/add', dummy)
   console.log(pt.tree)
 
   done()

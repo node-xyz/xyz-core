@@ -8,6 +8,7 @@ const logger = require('./../Log/Logger')
 const Util = require('./../Util/Util')
 let machineReport = require('./../Util/machine.reporter')
 const PathTree = require('./path.tree')
+const Path = require('./path')
 
 class ServiceRepository {
   /**
@@ -27,7 +28,7 @@ class ServiceRepository {
     this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.middleware.first.find'))
 
     this.services = new PathTree()
-    this.foreignMicroservices = {}
+    this.foreignNodes = {}
 
     this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
       for (var serviceName in this.services) {
@@ -68,8 +69,8 @@ class ServiceRepository {
    * @param  {Object|String|Number|Array} userPayload      payload to be passed to the receiving service
    * @param  {Function} responseCallback              Optional callback to handle the response
    */
-  call (serviceName, userPayload, responseCallback) {
-    this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignMicroservices, this.transportClient, responseCallback], 0)
+  call (servicePath, userPayload, responseCallback) {
+    this.callDispatchMiddlewareStack.apply([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], 0)
   }
 
   ping () {
@@ -77,16 +78,17 @@ class ServiceRepository {
     for (let microservice of microservices) {
       this.transportClient.ping(microservice, (body , res) => {
         if (res.statusCode === 200) {
-          this.foreignMicroservices[`${microservice.host}:${microservice.port}`] = body
-          logger.debug(`PING success :: foreignMicroservices = ${JSON.stringify(this.foreignMicroservices)}`)
+          this.foreignNodes[`${microservice.host}:${microservice.port}`] = body
+          logger.debug(`PING success :: foreignNodes = ${JSON.stringify(this.foreignNodes)}`)
         } else {
-          delete this.foreignMicroservices[`${microservice.host}:${microservice.port}`]
+          delete this.foreignNodes[`${microservice.host}:${microservice.port}`]
           logger.error(`Ping Error :: ${JSON.stringify(err)}`)
         }
       })
     }
   }
 
+  // TODO redundant
   getTransportLayer () {
     return {
       Server: this.transportServer,

@@ -6,8 +6,18 @@ var mathMs = new XYZ({
   systemConf: require('./../xyz')
 })
 
-mathMs.register('mul', fn.mul)
-mathMs.register('neg', fn.neg)
-mathMs.register('whassssaaaap', function (payload, XResponse) {
+mathMs.register('decimal/mul', fn.mul)
+mathMs.register('decimal/neg', fn.neg)
+mathMs.register('float/neg', function (payload, XResponse) {
   XResponse.send('ok whassssaaaap')
 })
+
+setTimeout(function () {
+  mathMs.call('hello', (response) => {
+    console.log(response)
+  })
+
+  mathMs.call('decimal/mul', (response) => {
+    console.log(response)
+  })
+}, 1000)
