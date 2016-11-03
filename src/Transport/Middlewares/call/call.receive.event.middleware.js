@@ -12,7 +12,7 @@ function passToRepo (params, next, end) {
   _transport.emit(
     CONSTANTS.events.REQUEST, {
       userPayload: body.userPayload,
-      serviceName: url.parse(request.url).query.split('=')[1]
+      serviceName: body.service
     },
     response)
   next()

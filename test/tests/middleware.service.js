@@ -12,6 +12,41 @@ let system
 let cwd
 let str = 'manipulated'
 
+function wrongServicediscoveryMiddleware (params, next, end) {
+  let servicePath = params[0],
+    userPayload = params[1],
+    foreignNodes = params[2],
+    transportClient = params[3]
+  responseCallback = params[4]
+
+  let serviceTokens = servicePath.split('/')
+
+  for (let node in foreignNodes) {
+    let servicePathIndex = 0
+    let pathTree = foreignNodes[node]
+    let match = false
+    while (Object.keys(pathTree).length) {
+      console.log(node, pathTree)
+      if (pathTree[serviceTokens[servicePathIndex]]) {
+        pathTree = pathTree[serviceTokens[servicePathIndex]]
+        servicePathIndex += 1
+        if (servicePathIndex === serviceTokens.length) {
+          match = true
+        }
+      } else {
+        break
+      }
+    }
+    if (! match) {
+      logger.info(`WRONG DISCOVERY :: determined ${node} for ${servicePath}`)
+      transportClient.send(servicePath, node, userPayload, (err, body, response) => {
+        responseCallback(err, body, response)
+      })
+      return
+    }
+  }
+}
+
 before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
@@ -33,26 +68,6 @@ before(function (done) {
 })
 
 it('False servicrDiscovery', function (done) {
-  function wrongServicediscoveryMiddleware (params, next, end) {
-    let serviceName = params[0],
-      userPayload = params[1],
-      foreignMicroservices = params[2],
-      transportClient = params[3]
-    responseCallback = params[4]
-
-    for (let microservice in foreignMicroservices) {
-      let index = foreignMicroservices[microservice].indexOf(serviceName)
-      if (index === -1) { // WRONG
-        logger.info(`WRONG DISCOVERY :: determined ${microservice} for ${serviceName}`)
-        transportClient.send(serviceName, microservice , userPayload, (err, body, response) => {
-          responseCallback(err, body, response)
-        })
-        return
-      }
-    }
-    responseCallback(http.STATUS_CODES[404], null, null)
-  }
-
   snd.middlewares().serviceRepository.callDispatch.remove(-1)
   snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware)
   snd.call('up', 'what the hell', (err, body, response) => {
@@ -66,26 +81,6 @@ it('False servicrDiscovery', function (done) {
 })
 
 it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
-  function wrongServicediscoveryMiddleware (params, next, end) {
-    let serviceName = params[0],
-      userPayload = params[1],
-      foreignMicroservices = params[2],
-      transportClient = params[3]
-    responseCallback = params[4]
-
-    for (let node in foreignMicroservices) {
-      let index = foreignMicroservices[node].indexOf(serviceName)
-      if (index === -1) {
-        logger.info(`WRONG DISCOVERY :: determined ${node} for ${serviceName}`)
-        transportClient.send(serviceName, node, userPayload, (err, body, response) => {
-          responseCallback(err, body, response)
-        })
-        return
-      }
-    }
-    responseCallback(http.STATUS_CODES[404], null)
-  }
-
   snd.call('up', 'will be ok', (err, body, response) => {
     expect(body).to.equal('WILL BE OK')
     snd.middlewares().serviceRepository.callDispatch.remove(-1)

@@ -46,22 +46,8 @@ before(function (done) {
   setTimeout(done, 500)
 })
 
-it('whassssaaaap', function (done) {
-  snd.emit('mul', {x: 2, y: 20})
-  done()
-})
-
 it('no Callback for sender call', function (done) {
   snd.call('mul', {x: 2,y: 3})
-  done()
-})
-
-it('event with callback', function (done) {
-  snd.emit('mul', {x: 2,y: 3}, (err , payload, res) => {
-    logger.debug('payload of event response' , payload)
-    expect(payload).to.equal('whassssaaaap' + '+')
-  })
-
   done()
 })
 

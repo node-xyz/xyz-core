@@ -23,20 +23,20 @@ before(function (done) {
   system.write()
   snd = new mockMicroservice('snd', 3334, cwd)
   rcv = new mockMicroservice('rcv', 3333, cwd)
-  rcv.register('mul', mockFunctions.mul)
-  rcv.register('up', mockFunctions.up)
+  rcv.register('/mul', mockFunctions.mul)
+  rcv.register('/up', mockFunctions.up)
   setTimeout(done, 500)
 })
 
 it('hello world', function (done) {
-  snd.call('mul', {
+  snd.call('/mul', {
     x: 2,
     y: 3
   }, (err1, body1, response1) => {
     expect(body1).to.equal(6)
     expect(err1).to.equal(null)
     expect(response1.statusCode).to.equal(200)
-    snd.call('up', 'hello', (err2, body2, response2) => {
+    snd.call('/up', 'hello', (err2, body2, response2) => {
       expect(body2).to.equal('HELLO')
       expect(err2).to.equal(null)
       expect(response2.statusCode).to.equal(200)
@@ -46,7 +46,7 @@ it('hello world', function (done) {
 })
 
 it('local not found', function (done) {
-  snd.call('mullll', {
+  snd.call('/mullll', {
     x: 2,
     y: 3
   }, (err, body, resp) => {

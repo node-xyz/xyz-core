@@ -7,6 +7,8 @@ const XResponse = require('../Transport/XResponse')
 const logger = require('./../Log/Logger')
 const Util = require('./../Util/Util')
 let machineReport = require('./../Util/machine.reporter')
+const PathTree = require('./path.tree')
+const Path = require('./path')
 
 class ServiceRepository {
   /**
@@ -25,25 +27,26 @@ class ServiceRepository {
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler()
     this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.middleware.first.find'))
 
-    this.services = {}
-    this.foreignMicroservices = {}
+    this.services = new PathTree()
+    this.foreignNodes = {}
 
     this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
-      for (var serviceName in this.services) {
-        if (serviceName === body.serviceName) {
-          logger.debug(`ServiceRepository matched service ${serviceName}`)
-          this.services[serviceName].fn(body.userPayload, new XResponse(response))
-          return
-        }
+      let fn = this.services.getPathFunction(body.serviceName)
+      if (fn) {
+        logger.debug(`ServiceRepository received service call ${body.serviceName}`)
+        fn(body.userPayload, new XResponse(response))
+        return
+      }else {
+        // this will be rarely reached . most of the time callDisplatchfind middleware will find this.
+        // Same problem as explained in TEST/Transport.middleware => early response
+        response.writeHead(404, {})
+        response.end(JSON.stringify({userPayload: http.STATUS_CODES[404]}))
       }
-      // this will be barely reached . most of the time callDisplatchfind middleware will find this.
-      // Same problem as explained in TEST/Transport.middleware => early response
-      response.writeHead(404, {})
-      response.end(JSON.stringify({userPayload: http.STATUS_CODES[404]}))
     })
 
     this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
-      response.end(JSON.stringify(Object.keys(this.services)))
+      logger.debug(`Responding a PING message with ${JSON.stringify(this.services.serializedTree)}`)
+      response.end(JSON.stringify(this.services.serializedTree))
     })
 
     this.ping()
@@ -52,12 +55,12 @@ class ServiceRepository {
 
   /**
    * Register a new service. The new service will be stored inside an object
-   * @param  {String}   name name of the service. the call request must have the same nam
+   * @param  {String}   path path of the service. the call request must have the same path. path should strat with a /
    * @param  {Function} fn   function to be called when a request to this service arrives
    * ## Note the format of this funciton is changing at the current stages of development
    */
-  register (name, fn) {
-    this.services[name] = { fn: fn }
+  register (path, fn) {
+    this.services.createPathSubtree(path, fn)
   }
 
   /**
@@ -66,23 +69,8 @@ class ServiceRepository {
    * @param  {Object|String|Number|Array} userPayload      payload to be passed to the receiving service
    * @param  {Function} responseCallback              Optional callback to handle the response
    */
-  call (serviceName, userPayload, responseCallback) {
-    this.callDispatchMiddlewareStack.apply([serviceName, userPayload, this.foreignMicroservices, this.transportClient, responseCallback], 0)
-  }
-
-  /**
-   * Jsut a syntactic sugar for sending a request to all of the services
-   * Important note is that the find Middleware stack will not be used
-
-   * @param  {String} eventName        name of the service
-   * @param  {Any} userPayload      payload to be passed to the receiver
-   * @param  {Function} responseCallback Optional callback to handle the response
-   */
-  emit (eventName, userPayload, responseCallback) {
-    let microservices = _CONFIGURATIONS.getSystemConf().microservices
-    for (let microservice of microservices) {
-      this.transportClient.send(eventName, `${microservice.host}:${microservice.port}`, userPayload, responseCallback)
-    }
+  call (servicePath, userPayload, responseCallback) {
+    this.callDispatchMiddlewareStack.apply([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], 0)
   }
 
   ping () {
@@ -90,16 +78,17 @@ class ServiceRepository {
     for (let microservice of microservices) {
       this.transportClient.ping(microservice, (body , res) => {
         if (res.statusCode === 200) {
-          this.foreignMicroservices[`${microservice.host}:${microservice.port}`] = body
-          logger.debug(`PING success :: foreignMicroservices = ${JSON.stringify(this.foreignMicroservices)}`)
+          this.foreignNodes[`${microservice.host}:${microservice.port}`] = body
+          logger.debug(`PING success :: foreignNodes = ${JSON.stringify(this.foreignNodes)}`)
         } else {
-          delete this.foreignMicroservices[`${microservice.host}:${microservice.port}`]
+          delete this.foreignNodes[`${microservice.host}:${microservice.port}`]
           logger.error(`Ping Error :: ${JSON.stringify(err)}`)
         }
       })
     }
   }
 
+  // TODO redundant
   getTransportLayer () {
     return {
       Server: this.transportServer,

@@ -34,9 +34,7 @@ before(function (done) {
 
 it('manipulator', function (done) {
   function manipulatorMiddleware (params, next, end) {
-    params[2] = {
-      userPayload: str
-    }
+    params[2].userPayload = str
     next()
   }
   rcv.middlewares().transport.server.callReceive.register(0, manipulatorMiddleware)

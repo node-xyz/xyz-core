@@ -36,7 +36,7 @@ it('Add auth on the fly', function (done) {
   snd.middlewares().transport.client.callDispatch.register(1, require('./../../src/Transport/Middlewares/global.dispatch.auth.basic.middleware'))
   rcv.middlewares().transport.server.callReceive.register(1, require('./../../src/Transport/Middlewares/global.receive.auth.basic.middleware'))
 
-  snd.call('mul', { x: 2, y: 10 }, (err, body, response) => {
+  snd.call('/mul', { x: 2, y: 10 }, (err, body, response) => {
     expect(body).to.equal(20)
     done()
   })
@@ -50,8 +50,7 @@ it('wrong auth', function (done) {
   })
   rcv.middlewares().transport.server.callReceive.register(1, require('./../../src/Transport/Middlewares/global.receive.auth.basic.middleware'))
 
-  snd.call('mul', { x: 2, y: 10 }, (err, body, response) => {
-    console.log(err)
+  snd.call('/mul', { x: 2, y: 10 }, (err, body, response) => {
     expect(body).to.equal(null)
     expect(typeof (err)).to.equal('object')
     done()

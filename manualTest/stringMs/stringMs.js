@@ -6,15 +6,12 @@ var stringMs = new XYZ({
   systemConf: require('./../xyz')
 })
 
-stringMs.register('down', fn.down)
-stringMs.register('up', fn.up)
-stringMs.register('finger', fn.finger)
+stringMs.register('/string/down', fn.down)
+stringMs.register('/string/up', fn.up)
+stringMs.register('/finger', fn.finger)
 
 setInterval(() => {
-  // stringMs.call('mul', { x: new Date().getTime(), y: new Date().getTime() }, (err, body, res) => {
-  //   console.log('response of mul', body)
-  // })
-  stringMs.emit('mul', { x: new Date().getTime(), y: new Date().getTime()} , (err, body, res) => {
+  stringMs.call('/decimal/mul', { x: new Date().getTime(), y: new Date().getTime() }, (err, body, res) => {
     console.log('response of mul', body)
   })
 }, 1000)

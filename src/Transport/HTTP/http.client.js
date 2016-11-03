@@ -21,13 +21,13 @@ class HTTPClient {
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
   }
 
-  send (serviceName, microservice, userPayload, callResponseCallback) {
+  send (servicePath, microservice, userPayload, callResponseCallback) {
     let requestConfig = {
       hostname: `${microservice.split(':')[0]}`,
       port: microservice.split(':')[1],
-      path: `/${this.callPostfix}?${querystring.stringify({service: serviceName})}`,
+      path: `/${this.callPostfix}`,
       method: 'POST',
-      json: { userPayload: userPayload }
+      json: { userPayload: userPayload, service: servicePath}
     }
     this.callDispatchMidllewareStack.apply([requestConfig, callResponseCallback], 0)
   }
