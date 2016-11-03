@@ -20,19 +20,19 @@ before(function (done) {
   system.write()
   snd = new mockMicroservice('snd', 3334, cwd)
   rcv = new mockMicroservice('rcv', 3333, cwd)
-  rcv.register('rev', mockFunctions.rev)
-  rcv.register('neg', mockFunctions.neg)
-  rcv.register('finger', mockFunctions.finger)
+  rcv.register('/rev', mockFunctions.rev)
+  rcv.register('/neg', mockFunctions.neg)
+  rcv.register('/finger', mockFunctions.finger)
   setTimeout(done, 500)
 })
 it('bool', function (done) {
-  snd.call('neg', false, (err, body, response) => {
+  snd.call('/neg', false, (err, body, response) => {
     expect(body).to.equal(true)
     done()
   })
 })
 it('obj', function (done) {
-  snd.call('finger', {
+  snd.call('/finger', {
     data: 'data'
   }, (err, body, response) => {
     expect(body['test']).to.equal('test')
@@ -40,7 +40,7 @@ it('obj', function (done) {
   })
 })
 it('arr', function (done) {
-  snd.call('rev', [1, 2, 3], (err, body, response) => {
+  snd.call('/rev', [1, 2, 3], (err, body, response) => {
     expect(body).to.eql([3, 2, 1])
     done()
   })

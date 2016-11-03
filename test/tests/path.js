@@ -32,7 +32,5 @@ it('adjunct to path tree', function (done) {
   let pt = new PathTree()
   let dummy = function () { console.log('dummy')}
   pt.createPathSubtree('/math/add', dummy)
-  console.log(pt.tree)
-
   done()
 })
