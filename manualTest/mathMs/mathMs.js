@@ -13,11 +13,13 @@ mathMs.register('float/neg', function (payload, XResponse) {
 })
 
 setTimeout(function () {
-  mathMs.call('hello', (response) => {
-    console.log(response)
+  mathMs.call('hello', {}, (err, body, response) => {
+    console.log('hello:')
+    console.log(body)
   })
 
-  mathMs.call('decimal/mul', (response) => {
-    console.log(response)
+  mathMs.call('decimal/mul' , {x: 2,  y: 6}, (err, body, response) => {
+    console.log('mul: ')
+    console.log(body)
   })
 }, 1000)

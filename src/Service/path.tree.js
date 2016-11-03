@@ -41,6 +41,22 @@ class PathTree {
     return tree
   }
 
+  getPathFunction (path) {
+    let pathTokens = path.split('/')
+    let tree = this.tree
+    for (let token of pathTokens) {
+      if (tree[token]) {
+        if (token === pathTokens[pathTokens.length - 1]) {
+          return tree[token].fn
+        } else {
+          tree = tree[token].subtree
+        }
+      }else {
+        return false
+      }
+    }
+  }
+
 }
 
 module.exports = PathTree

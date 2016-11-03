@@ -17,19 +17,21 @@ function firstFind (params, next, done) {
       if (pathTree[serviceTokens[servicePathIndex]]) {
         pathTree = pathTree[serviceTokens[servicePathIndex]]
         servicePathIndex += 1
+        if (servicePathIndex === serviceTokens.length) {
+          logger.debug(`determined node for service ${servicePath} by first find strategy ${node}`)
+          transportClient.send(servicePath, node , userPayload, responseCallback)
+          return
+        }
       } else {
         break
       }
-      if (servicePathIndex === serviceTokens.length) {
-        logger.silly(`determined node by first find strategy ${node}`)
-        transportClient.send(servicePath, node , userPayload, responseCallback)
-        return
-      }
     }
-    // if no node matched
-    if (responseCallback) {
-      responseCallback(http.STATUS_CODES[404], null, null)
-    }
+  }
+
+  // if no node matched
+  logger.warn(`Sending a message to ${servicePath} from first find strategy failed (Local Response)`)
+  if (responseCallback) {
+    responseCallback(http.STATUS_CODES[404], null, null)
   }
 }
 

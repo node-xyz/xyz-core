@@ -39,7 +39,7 @@ class HTTPServer extends EventEmitter {
           let parsedUrl = url.parse(req.url)
           let self = this // TODO fix this
           if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
-            if (!parsedUrl.query || parsedUrl.query.split('&').length !== 1) {
+            if (parsedUrl.query) {
               req.destroy()
             } else {
               this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)

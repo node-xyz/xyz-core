@@ -15,6 +15,7 @@ TODO think about ways to remote deploy this ( +docker )
 TODO implement any auth for call
 TODO implement rsa auth for ping / call
 TODO clean the cunstroctor and add a bootstrap()
+TODO Permanent Fix for HTTP encoding , or just use the body 
  */
 
 class NodeXYZ {

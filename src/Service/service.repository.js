@@ -31,17 +31,17 @@ class ServiceRepository {
     this.foreignNodes = {}
 
     this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
-      for (var serviceName in this.services) {
-        if (serviceName === body.serviceName) {
-          logger.debug(`ServiceRepository matched service ${serviceName}`)
-          this.services[serviceName].fn(body.userPayload, new XResponse(response))
-          return
-        }
+      let fn = this.services.getPathFunction(body.serviceName)
+      if (fn) {
+        logger.debug(`ServiceRepository received service call ${body.serviceName}`)
+        fn(body.userPayload, new XResponse(response))
+        return
+      }else {
+        // this will be rarely reached . most of the time callDisplatchfind middleware will find this.
+        // Same problem as explained in TEST/Transport.middleware => early response
+        response.writeHead(404, {})
+        response.end(JSON.stringify({userPayload: http.STATUS_CODES[404]}))
       }
-      // this will be barely reached . most of the time callDisplatchfind middleware will find this.
-      // Same problem as explained in TEST/Transport.middleware => early response
-      response.writeHead(404, {})
-      response.end(JSON.stringify({userPayload: http.STATUS_CODES[404]}))
     })
 
     this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
