@@ -5,7 +5,7 @@ let Path = {
     if (path === '/') {
       return true
     }
-    return /^(\/([a-zA-Z]|[1-9])+)*$/.test(path)
+    return /^(\/([a-zA-Z]|[1-9]|\*)+)*$/.test(path)
   },
 
   format: function (path) {
