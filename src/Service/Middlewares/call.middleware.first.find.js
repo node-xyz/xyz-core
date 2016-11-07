@@ -13,6 +13,7 @@ function firstFind (params, next, done) {
   for (let node in foreignNodes) {
     let servicePathIndex = 0
     let pathTree = foreignNodes[node]
+    console.log(pathTree)
     while (Object.keys(pathTree).length) {
       if (pathTree[serviceTokens[servicePathIndex]]) {
         pathTree = pathTree[serviceTokens[servicePathIndex]]

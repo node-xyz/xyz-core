@@ -1,5 +1,5 @@
-var fn = require('./../../test/ms/mock.functions')
-var XYZ = require('./../../index')
+var fn = require('./../../../test/ms/mock.functions')
+var XYZ = require('./../../../index')
 
 var mathMs = new XYZ({
   serviceConf: require('./mathMs.json'),
