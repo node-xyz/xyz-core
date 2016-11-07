@@ -62,7 +62,8 @@ it('adjunct to path tree', function (done) {
 })
 
 it('path mathcing' , function (done) {
-  pt = new PathTree()
+  let pt = new PathTree()
+
   let dummy = function () { console.log('dummy')}
   pt.createPathSubtree('/math/add/decimal', dummy)
   pt.createPathSubtree('/math/add/float', dummy)
@@ -72,14 +73,15 @@ it('path mathcing' , function (done) {
   pt.createPathSubtree('/foo/bar1/buzz1/duck/go', dummy)
   pt.createPathSubtree('/foo/bar1/buzz1/duck/g1', dummy)
 
-  console.log(pt.getMatches('/math/add/float'))
-  console.log(pt.getMatches('/foo/*/*/duck/go'))
-  console.log(pt.getMatches('/math/add/*'))
-  console.log(pt.getMatches('/math/*'))
-  console.log(pt.getMatches('/math'))
-  console.log(pt.getMatches('/math/add/wrong'))
-  console.log(pt.getMatches('/math/add/decimal/extra'))
-  console.log(pt.getMatches('/foo/*/*/duck/go'))
+  expect(Path.match('/math/add/float', pt.serializedTree).length).to.equal(1)
+  expect(Path.match('/math/add/wrong', pt.serializedTree).length).to.equal(0)
+  expect(Path.match('/math/add/decimal/extra', pt.serializedTree).length).to.equal(0)
+  expect(Path.match('/math', pt.serializedTree).length).to.equal(1)
+  expect(Path.match('/math/add/*', pt.serializedTree).length).to.equal(2)
+  expect(Path.match('/math/*', pt.serializedTree).length).to.equal(2)
+  expect(Path.match('/foo/*/*/duck/go', pt.serializedTree).length).to.equal(2)
+  expect(Path.match('/foo/*/*/duck/*', pt.serializedTree).length).to.equal(3)
+
   done()
 })
 

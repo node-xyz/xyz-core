@@ -84,24 +84,3 @@ let Path = {
 }
 
 module.exports = Path
-
-let PathTree = require('./path.tree')
-let pt = new PathTree()
-
-let dummy = function () { console.log('dummy')}
-pt.createPathSubtree('/math/add/decimal', dummy)
-pt.createPathSubtree('/math/add/float', dummy)
-pt.createPathSubtree('/math/sub/decimal', dummy)
-pt.createPathSubtree('/math/sub/float', dummy)
-pt.createPathSubtree('/foo/bar/buzz/duck/go', dummy)
-pt.createPathSubtree('/foo/bar1/buzz1/duck/go', dummy)
-pt.createPathSubtree('/foo/bar1/buzz1/duck/g1', dummy)
-
-console.log(Path.match('/math/add/float', pt.serializedTree))
-console.log(Path.match('/math/add/wrong', pt.serializedTree))
-console.log(Path.match('/math/add/decimal/extra', pt.serializedTree))
-console.log(Path.match('/math', pt.serializedTree))
-console.log(Path.match('/foo/*/*/duck/go', pt.serializedTree))
-console.log(Path.match('/math/add/*', pt.serializedTree))
-console.log(Path.match('/math/*', pt.serializedTree))
-console.log(Path.match('/foo/*/*/duck/go', pt.serializedTree))

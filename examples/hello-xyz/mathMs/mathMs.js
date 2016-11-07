@@ -6,9 +6,10 @@ var mathMs = new XYZ({
   systemConf: require('./../xyz')
 })
 
-mathMs.register('decimal/mul', fn.mul)
-mathMs.register('decimal/neg', fn.neg)
-mathMs.register('float/neg', function (payload, XResponse) {
+mathMs.register('/decimal/mul', fn.mul)
+mathMs.register('/decimal/neg', fn.neg)
+mathMs.register('/decimal', fn.mul)
+mathMs.register('/float/neg', function (payload, XResponse) {
   XResponse.send('ok whassssaaaap')
 })
 

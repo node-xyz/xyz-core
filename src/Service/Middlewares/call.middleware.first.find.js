@@ -1,6 +1,6 @@
 let http = require('http')
 const logger = require('./../../Log/Logger')
-
+const Path = require('./../path')
 function firstFind (params, next, done) {
   let servicePath = params[0],
     userPayload = params[1],
@@ -11,21 +11,11 @@ function firstFind (params, next, done) {
   let serviceTokens = servicePath.split('/')
 
   for (let node in foreignNodes) {
-    let servicePathIndex = 0
-    let pathTree = foreignNodes[node]
-    console.log(pathTree)
-    while (Object.keys(pathTree).length) {
-      if (pathTree[serviceTokens[servicePathIndex]]) {
-        pathTree = pathTree[serviceTokens[servicePathIndex]]
-        servicePathIndex += 1
-        if (servicePathIndex === serviceTokens.length) {
-          logger.debug(`determined node for service ${servicePath} by first find strategy ${node}`)
-          transportClient.send(servicePath, node , userPayload, responseCallback)
-          return
-        }
-      } else {
-        break
-      }
+    matches = Path.match(servicePath, foreignNodes[node])
+    if (matches.length) {
+      logger.debug(`FIRST FIND :: determined node for service ${servicePath} by first find strategy ${node}`)
+      transportClient.send(servicePath, node , userPayload, responseCallback)
+      return
     }
   }
 
