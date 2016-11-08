@@ -11,11 +11,7 @@ stringMs.register('/string/up', fn.up)
 stringMs.register('/finger', fn.finger)
 
 setInterval(() => {
-  stringMs.call('/decimal/mul', { x: new Date().getTime(), y: new Date().getTime() }, (err, body, res) => {
-    console.log('response of mul', body)
-  })
-
-  stringMs.call('/decimal', { x: new Date().getTime(), y: new Date().getTime() }, (err, body, res) => {
-    console.log('response of decimal', body)
+  stringMs.call('/math/decimal/*', { x: new Date().getTime(), y: new Date().getTime() }, (err, body, res) => {
+    console.log('response of decimal/*', body)
   })
 }, 1000)

@@ -75,7 +75,8 @@ let Path = {
         break
       }
     }
-    return matches
+    // TODO Fix this
+    return matches.map((el) => el.replace('//', '/'))
   },
 
   getTokes: function (path) {
