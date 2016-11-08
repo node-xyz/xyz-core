@@ -19,9 +19,7 @@ let Path = {
   },
 
   merge: function (src, dest, prefix, child) {
-    // console.log(`merging ${src} && ${dest} $$ ${prefix} $$ ${child}`)
     return src.concat(dest.map((obj) => {
-      // console.log(obj)
       return `${prefix.slice(1)}/${child}/${obj}`
     })
     )
@@ -33,17 +31,12 @@ let Path = {
     let pathIndex = 0
     let pathTree = serializedTree
     let computedPath = ''
-    // console.log(`calling with ${path} , ${JSON.stringify(serializedTree)}`)
     while (Object.keys(pathTree).length) {
-      // console.log(computedPath , pathTree, pathIndex)
       // wildcard is seen
-      // console.log(`curretn search ${pathToken[pathIndex]}` , pathIndex , pathToken, pathTree)
       if (pathToken[pathIndex] === '*') {
-        // console.log(1, pathToken , pathTree)
         // last token // TODO redundant
         if (pathIndex === pathToken.length - 1) {
           for ( let child in pathTree) {
-            // console.log(`## go inside ${child}`)
             matches = this.merge(matches, this.match(`${child}` , pathTree), computedPath, '')
           }
           break
@@ -51,9 +44,7 @@ let Path = {
         // intermediate token
         else {
           for ( let child in pathTree) {
-            // console.log(`go inside ${child}`)
             matches = this.merge(matches, this.match(`${pathToken.slice(pathIndex+1).join('/')}` , pathTree[child]), computedPath, child)
-          // console.log(matches)
           }
           break
         }
@@ -62,7 +53,6 @@ let Path = {
         if (pathTree[pathToken[pathIndex]]) {
           computedPath = computedPath + '/' + pathToken[pathIndex]
           if (pathIndex === pathToken.length - 1) {
-            // console.log(`found ${computedPath} , ${pathTree}`)
             matches.push(computedPath.slice(1))
             break
           }

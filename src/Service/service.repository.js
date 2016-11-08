@@ -2,13 +2,14 @@ let http = require('http')
 let HTTP = require('../Transport/Transport').HTTP
 let CONSTANTS = require('../Config/Constants')
 let GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
-let _CONFIGURATIONS = require('./../Config/config.global')
+let CONFIG = require('./../Config/config.global')
 const XResponse = require('../Transport/XResponse')
 const logger = require('./../Log/Logger')
 const Util = require('./../Util/Util')
 let machineReport = require('./../Util/machine.reporter')
 const PathTree = require('./path.tree')
 const Path = require('./path')
+const wrapper = require('./../Util/ansi.colors').wrapper
 
 class ServiceRepository {
   /**
@@ -31,6 +32,29 @@ class ServiceRepository {
     this.services = new PathTree()
     this.foreignNodes = {}
 
+    // Bind events
+    this.bindTransportEvents()
+
+    // Seed if possible
+    if (CONFIG.getSelfConf().seed) {
+      this.contactSeed(0)
+    }
+    // Ping Init
+    this.ping()
+    setInterval(() => this.ping(), (CONSTANTS.intervals.ping + Util.Random(CONSTANTS.intervals.threshold)))
+  }
+
+  /**
+   * Register a new service. The new service will be stored inside an object
+   * @param  {String}   path path of the service. the call request must have the same path. path should strat with a /
+   * @param  {Function} fn   function to be called when a request to this service arrives
+   * ## Note the format of this funciton is changing at the current stages of development
+   */
+  register (path, fn) {
+    this.services.createPathSubtree(path, fn)
+  }
+
+  bindTransportEvents () {
     this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
       let fn = this.services.getPathFunction(body.serviceName)
       if (fn) {
@@ -50,18 +74,10 @@ class ServiceRepository {
       response.end(JSON.stringify(this.services.serializedTree))
     })
 
-    this.ping()
-    setInterval(() => this.ping(), (CONSTANTS.intervals.ping + Util.Random(CONSTANTS.intervals.threshold)))
-  }
-
-  /**
-   * Register a new service. The new service will be stored inside an object
-   * @param  {String}   path path of the service. the call request must have the same path. path should strat with a /
-   * @param  {Function} fn   function to be called when a request to this service arrives
-   * ## Note the format of this funciton is changing at the current stages of development
-   */
-  register (path, fn) {
-    this.services.createPathSubtree(path, fn)
+    this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
+      CONFIG.joinNode({host: body.sender.split(':')[0], port: body.sender.split(':')[1]})
+      response.end(JSON.stringify(CONFIG.getSystemConf()))
+    })
   }
 
   /**
@@ -75,7 +91,7 @@ class ServiceRepository {
   }
 
   ping () {
-    let microservices = _CONFIGURATIONS.getSystemConf().microservices
+    let microservices = CONFIG.getSystemConf().microservices
     for (let microservice of microservices) {
       this.transportClient.ping(microservice, (body , res) => {
         if (res.statusCode === 200) {
@@ -87,6 +103,25 @@ class ServiceRepository {
         }
       })
     }
+  }
+
+  contactSeed (idx) {
+    let seeds = CONFIG.getSelfConf().seed
+    this.transportClient.contactSeed(seeds[idx], (body, res) => {
+      if (!body) {
+        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , 1000)
+      }else {
+        if (res.statusCode === 200) {
+          for (let node of body.microservices) {
+            CONFIG.joinNode(node)
+          }
+          logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
+          console.log(CONFIG.getSystemConf())
+        }else {
+          setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , 1000)
+        }
+      }
+    })
   }
 
   // TODO redundant

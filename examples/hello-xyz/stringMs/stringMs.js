@@ -2,8 +2,20 @@ var fn = require('./../../../test/ms/mock.functions')
 var XYZ = require('./../../../index')
 
 var stringMs = new XYZ({
-  serviceConf: require('./stringMs.json'),
-  systemConf: require('./../xyz')
+  selfConf: {
+    seed: [
+      {
+        host: '127.0.0.1',
+        port: 3333
+      }
+    ],
+    name: 'stringMs',
+    host: '127.0.0.1',
+    port: 3334
+  },
+  systemConf: {
+    microservices: []
+  }
 })
 
 stringMs.register('/string/down', fn.down)

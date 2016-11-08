@@ -8,19 +8,20 @@ module.exports = {
   events: {
     REQUEST: 'request',
     SERVICE_CALL: 'serviceCall',
-    PING: "ping",
-    EVENT_PREFIX: "_"
+    PING: 'ping',
+    JOIN: 'join'
   },
   url: {
     CALL: 'call',
-    PING: 'ping'
+    PING: 'ping',
+    JOIN: 'join'
   },
   intervals: {
     threshold: 5000,
-    ping: 10000,
+    ping: 10000
   },
   environmet: {
-    dev: "dev",
-    production: "prod"
+    dev: 'dev',
+    production: 'prod'
   }
 }

@@ -19,12 +19,16 @@ class HTTPClient {
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/global.dispatch.logger.middleware'))
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/global.dispatch.auth.basic.middleware'))
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
+
+    this.joinDispatchMiddlewareStack = new GenericMiddlewareHandler()
+    this.joinDispatchMiddlewareStack.register(-1, require('./../Middlewares/global.dispatch.logger.middleware'))
+    this.joinDispatchMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.export'))
   }
 
-  send (servicePath, microservice, userPayload, callResponseCallback) {
+  send (servicePath, node, userPayload, callResponseCallback) {
     let requestConfig = {
-      hostname: `${microservice.split(':')[0]}`,
-      port: microservice.split(':')[1],
+      hostname: `${node.split(':')[0]}`,
+      port: node.split(':')[1],
       path: `/${this.callPostfix}`,
       method: 'POST',
       json: { userPayload: userPayload, service: servicePath}
@@ -32,15 +36,26 @@ class HTTPClient {
     this.callDispatchMidllewareStack.apply([requestConfig, callResponseCallback], 0)
   }
 
-  ping (microservice, pingResponseCallback) {
+  ping (node, pingResponseCallback) {
     let requestConfig = {
-      hostname: `${microservice.host}`,
-      port: microservice.port,
+      hostname: `${node.host}`,
+      port: node.port,
       path: `/${this.pingPrefix}`,
       method: 'POST',
-      json: { sender: `${_CONFIGURATIONS.getServiceConf().host}:${_CONFIGURATIONS.getServiceConf().port}` }
+      json: { sender: `${_CONFIGURATIONS.getSelfConf().host}:${_CONFIGURATIONS.getSelfConf().port}` }
     }
     this.pingDispatchMiddlewareStack.apply([requestConfig, pingResponseCallback], 0)
+  }
+
+  contactSeed (node, joinResponseCallback) {
+    let requestConfig = {
+      hostname: node.host,
+      port: node.port,
+      path: `/${CONSTANTS.url.JOIN}`,
+      method: 'POST',
+      json: { sender: `${_CONFIGURATIONS.getSelfConf().host}:${_CONFIGURATIONS.getSelfConf().port}` }
+    }
+    this.joinDispatchMiddlewareStack.apply([requestConfig, joinResponseCallback], 0)
   }
 
 }

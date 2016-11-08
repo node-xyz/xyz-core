@@ -3,7 +3,7 @@ var app = express()
 var XYZ = require('./../../index')
 
 var expressMs = new XYZ({
-  serviceConf: require('./express.json'),
+  selfConf: require('./express.json'),
   systemConf: require('./../xyz')
 })
 

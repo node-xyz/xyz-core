@@ -6,15 +6,15 @@ const logger = require('./../../src/Log/Logger')
  */
 class MockMicroservice {
   constructor (name, port, cwd) {
-    let serviceConfiguration = {
+    let selfConfiguration = {
       'name': name,
       'host': 'localhost',
       'port': port
     }
 
-    fs.writeFileSync(`${cwd}/${name}.json`, JSON.stringify(serviceConfiguration))
+    fs.writeFileSync(`${cwd}/${name}.json`, JSON.stringify(selfConfiguration))
     this.xyz = new XYZ({
-      serviceConf: require(`./../tests/${name}.json`),
+      selfConf: require(`./../tests/${name}.json`),
       systemConf: require(`./../tests/xyzTest.json`)
     })
   }

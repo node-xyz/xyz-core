@@ -15,7 +15,7 @@ class HTTPServer extends EventEmitter {
   constructor () {
     super()
     http.globalAgent.maxSockets = Infinity
-    this.port = _CONFIGURATION.getServiceConf().port
+    this.port = _CONFIGURATION.getSelfConf().port
 
     this.callReceiveMiddlewareStack = new GenericMiddlewareHandler()
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.logger.middleware'))
@@ -26,9 +26,12 @@ class HTTPServer extends EventEmitter {
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.auth.basic.middleware'))
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
 
+    this.joinReceiveMiddlewareStack = new GenericMiddlewareHandler()
+    this.joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
+
     this.server = http.createServer()
       .listen(this.port, () => {
-        logger.info(`Server listening on port :${this.port}`)
+        logger.info(`Server listening on port : ${this.port}`)
       }).on('request', (req, resp) => {
       var body = []
       req
@@ -44,7 +47,12 @@ class HTTPServer extends EventEmitter {
             } else {
               this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
             }
-          } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
+          } else if (parsedUrl.pathname === `/${CONSTANTS.url.JOIN}`) {
+            if (_CONFIGURATION.getSelfConf().allowJoin) {
+              this.joinReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
+            }else { req.destroy() }
+          }
+          else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
             this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
           } else {
             req.destroy()

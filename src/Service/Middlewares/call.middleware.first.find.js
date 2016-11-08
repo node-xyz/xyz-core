@@ -15,7 +15,7 @@ function firstFind (params, next, done) {
     if (matches.length) {
       logger.debug(`FIRST FIND :: determined node for service ${servicePath} by first find strategy ${node}`)
       transportClient.send(servicePath, node , userPayload, responseCallback)
-      return
+      done()
     }
   }
 
@@ -23,6 +23,7 @@ function firstFind (params, next, done) {
   logger.warn(`Sending a message to ${servicePath} from first find strategy failed (Local Response)`)
   if (responseCallback) {
     responseCallback(http.STATUS_CODES[404], null, null)
+    done()
   }
 }
 

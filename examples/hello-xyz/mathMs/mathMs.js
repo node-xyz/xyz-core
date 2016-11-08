@@ -2,15 +2,27 @@ var fn = require('./../../../test/ms/mock.functions')
 var XYZ = require('./../../../index')
 
 var mathMs = new XYZ({
-  serviceConf: require('./mathMs.json'),
-  systemConf: require('./../xyz')
+  selfConf: {
+    allowJoin: true,
+    name: 'MathMs',
+    host: '127.0.0.1',
+    port: 3333
+  },
+  systemConf: {
+    microservices: [
+      {
+        host: '127.0.0.1',
+        port: 3333
+      }
+    ]
+  }
 })
 
 mathMs.register('/math/decimal/mul', fn.mul)
 mathMs.register('/math/decimal/neg', fn.neg)
 mathMs.register('/math/decimal/sub', fn.sub)
 
-mathMs.register('/float/neg', function (payload, XResponse) {
+mathMs.register('/math/float/neg', function (payload, XResponse) {
   XResponse.send('ok whassssaaaap')
 })
 

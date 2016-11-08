@@ -15,7 +15,7 @@ TODO think about ways to remote deploy this ( +docker )
 TODO implement any auth for call
 TODO implement rsa auth for ping / call
 TODO clean the cunstroctor and add a bootstrap()
-TODO Permanent Fix for HTTP encoding , or just use the body 
+TODO Permanent Fix for HTTP encoding , or just use the body
  */
 
 class NodeXYZ {
@@ -25,10 +25,10 @@ class NodeXYZ {
    * - systemConf : file instance of system Configuration aka xyz.json
    */
   constructor (configuration) {
-    _CONFIG.setServiceConf(configuration.serviceConf)
+    _CONFIG.setSelfConf(configuration.selfConf)
     _CONFIG.setSystemConf(configuration.systemConf)
 
-    global._serviceName = _CONFIG.getServiceConf().name
+    global._serviceName = _CONFIG.getSelfConf().name
 
     this.serviceRepository = new ServiceRepository()
   }
