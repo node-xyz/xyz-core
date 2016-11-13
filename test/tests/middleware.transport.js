@@ -13,21 +13,11 @@ let cwd
 let str = 'manipulated'
 
 before(function (done) {
-  cwd = __filename.slice(0, __filename.lastIndexOf('/'))
-  system = new mockSystem(cwd)
-  system.addMicroservice({
-    host: 'localhost',
-    port: 3333
-  })
-  system.addMicroservice({
-    host: 'localhost',
-    port: 3334
-  })
-  system.write()
-  snd = new mockMicroservice('snd', 3334, cwd)
-  rcv = new mockMicroservice('rcv', 3333, cwd)
-  rcv.register('mul', mockFunctions.mul)
-  rcv.register('up', mockFunctions.up)
+  let testSystem = common.init()
+  snd = testSystem.snd
+  rcv = testSystem.rcv
+  system = testSystem.system
+  cwd = testSystem.cwd
 
   setTimeout(done, 500)
 })

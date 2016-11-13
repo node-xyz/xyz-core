@@ -25,13 +25,18 @@ function sendToAll (params, next, done) {
   for (let call of calls) {
     logger.debug(`SEND TO ALL :: determined node for service ${call.match} by first find strategy ${call.node}`)
     // TODO fix this with arrow function / bind
-    transportClient.send(call.match, call.node , userPayload, function (_call, err, body, response) {
-      responses[`${_call.node}:${_call.match}`] = [err, body]
-      wait += 1
-      if (wait === calls.length) {
-        responseCallback(null, responses)
-      }
-    }.bind(null, call))
+
+    if (responseCallback) {
+      transportClient.send(call.match, call.node , userPayload, function (_call, err, body, response) {
+        responses[`${_call.node}:${_call.match}`] = [err, body]
+        wait += 1
+        if (wait === calls.length) {
+          responseCallback(null, responses)
+        }
+      }.bind(null, call))
+    }else {
+      transportClient.send(call.match, call.node , userPayload)
+    }
   }
 
   // if no node matched

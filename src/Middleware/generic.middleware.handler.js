@@ -10,7 +10,7 @@ class GenericMiddlewareHandler {
    * Sice the .apply method is indipendent of the state.
    */
 
-  constructor() {
+  constructor () {
     this.middlewares = []
     this.middlewareIndex = 0
   }
@@ -19,7 +19,7 @@ class GenericMiddlewareHandler {
    * Registering a new middleware.
    * @param  {Number} index - index to insert the middleware at. if -1, middleware will be pushed to the end.
    */
-  register(index, fn) {
+  register (index, fn) {
     logger.silly(`Registering middleware at ${index} : ${fn.name}`)
     if (index === -1) {
       this.middlewares.push(fn)
@@ -35,10 +35,10 @@ class GenericMiddlewareHandler {
    * @param  {array} params - Array of parameters passed to the handler
    * @param {Number} index - current index inside the middleware array to be applied
    */
-  apply(params, index) {
+  apply (params, index) {
     logger.silly(`applying middleware ${index}`)
     this.middlewares[index](params,
-      (_params) => { //next
+      (_params) => { // next
         if ((index + 1) < this.middlewares.length) {
           this.apply(params, index + 1)
         } else {
@@ -53,11 +53,11 @@ class GenericMiddlewareHandler {
    * Return an array of middlewares registered so far.
    * @return {Array} array of middlewares
    */
-  getMiddlewares() {
+  getMiddlewares () {
     return this.middlewares
   }
 
-  remove(idx) {
+  remove (idx) {
     logger.silly(`removing middleware ${this.middlewareIndex}`)
     if (idx == -1) {
       this.middlewares = []

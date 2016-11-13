@@ -10,29 +10,21 @@ let rcv
 let system
 let cwd
 before(function (done) {
-  cwd = __filename.slice(0, __filename.lastIndexOf('/'))
-  system = new mockSystem(cwd)
-  system.addMicroservice({
-    host: 'localhost',
-    port: 3333
-  })
-  system.addMicroservice({
-    host: 'localhost',
-    port: 3334
-  })
-  system.write()
-  snd = new mockMicroservice('snd', 3334, cwd)
-  rcv = new mockMicroservice('rcv', 3333, cwd)
-  rcv.register('/mul', mockFunctions.mul)
-  rcv.register('/up', mockFunctions.up)
-  setTimeout(done, 500)
+  let testSystem = common.init()
+  snd = testSystem.snd
+  rcv = testSystem.rcv
+  system = testSystem.system
+  cwd = testSystem.cwd
+  setTimeout(done, 1000)
 })
 
 it('hello world', function (done) {
+  console.log('############ Sratring TEST 1')
   snd.call('/mul', {
     x: 2,
     y: 3
   }, (err1, body1, response1) => {
+    console.log(body1)
     expect(body1).to.equal(6)
     expect(err1).to.equal(null)
     expect(response1.statusCode).to.equal(200)

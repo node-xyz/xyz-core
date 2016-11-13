@@ -16,6 +16,7 @@ function firstFind (params, next, done) {
       logger.debug(`FIRST FIND :: determined node for service ${servicePath} by first find strategy ${node}`)
       transportClient.send(servicePath, node , userPayload, responseCallback)
       done()
+      return
     }
   }
 
@@ -24,6 +25,7 @@ function firstFind (params, next, done) {
   if (responseCallback) {
     responseCallback(http.STATUS_CODES[404], null, null)
     done()
+    return
   }
 }
 

@@ -17,6 +17,8 @@ class MockMicroservice {
       selfConf: require(`./../tests/${name}.json`),
       systemConf: require(`./../tests/xyzTest.json`)
     })
+
+  // all tests will be with first find by default.
   }
 
   register (name, fn) {
