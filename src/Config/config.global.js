@@ -33,6 +33,20 @@ let configuration = {
     }
   },
 
+  ensureSelf: () => {
+    for (let node of systemConf.microservices) {
+      if (node.host === selfConf.host && node.port === selfConf.port) {
+        logger.info(`Self node exists in systemConf. passing`)
+        return
+      }
+    }
+    systemConf.microservices.push({
+      host: selfConf.host,
+      port: selfConf.port
+    })
+    logger.info(`Adding self to systemConf by default`)
+  },
+
   getSystemConf: () => systemConf,
   getSelfConf: () => selfConf
 }

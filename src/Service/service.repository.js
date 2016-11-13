@@ -39,6 +39,10 @@ class ServiceRepository {
     if (CONFIG.getSelfConf().seed) {
       this.contactSeed(0)
     }
+
+    // add yourself
+    CONFIG.ensureSelf()
+
     // Ping Init
     this.ping()
     setInterval(() => this.ping(), (CONSTANTS.intervals.ping + Util.Random(CONSTANTS.intervals.threshold)))
