@@ -18,7 +18,8 @@ module.exports = {
   },
   intervals: {
     threshold: 5000,
-    ping: 10000
+    ping: 10000,
+    reconnect: 2500
   },
   environmet: {
     dev: 'dev',

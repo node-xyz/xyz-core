@@ -3,8 +3,20 @@ var app = express()
 var XYZ = require('./../../../index')
 
 var expressMs = new XYZ({
-  selfConf: require('./express.json'),
-  systemConf: require('./../xyz')
+  selfConf: {
+    seed: [
+      {
+        host: '127.0.0.1',
+        port: 3333
+      }
+    ],
+    name: 'expressMs',
+    host: '127.0.0.1',
+    port: 6000
+  },
+  systemConf: {
+    microservices: []
+  }
 })
 
 app.get('/', function (req, res) {

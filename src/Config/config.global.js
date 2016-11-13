@@ -34,6 +34,7 @@ let configuration = {
   },
 
   ensureSelf: () => {
+    console.log(systemConf)
     for (let node of systemConf.microservices) {
       if (node.host === selfConf.host && node.port === selfConf.port) {
         logger.info(`Self node exists in systemConf. passing`)

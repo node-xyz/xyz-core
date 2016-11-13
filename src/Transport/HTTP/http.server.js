@@ -8,9 +8,6 @@ const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.
 const machineReport = require('./../../Util/machine.reporter')
 const _CONFIGURATION = require('./../../Config/config.global')
 
-const StringDecoder = require('string_decoder').StringDecoder
-const decoder = new StringDecoder('utf-8')
-
 class HTTPServer extends EventEmitter {
   constructor () {
     super()

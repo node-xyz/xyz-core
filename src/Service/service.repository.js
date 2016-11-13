@@ -74,7 +74,11 @@ class ServiceRepository {
     })
 
     this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
-      logger.debug(`Responding a PING message with ${JSON.stringify(this.services.serializedTree)}`)
+      logger.debug(`Responding a PING message from ${body.sender}`)
+      if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
+        logger.warn(`new node is pinging me. adding to foreignNodes list. address : ${body.sender}`)
+        this.foreignNodes[body.sender] = {}
+      }
       response.end(JSON.stringify(this.services.serializedTree))
     })
 
@@ -100,7 +104,7 @@ class ServiceRepository {
       this.transportClient.ping(microservice, (body , res) => {
         if (res.statusCode === 200) {
           this.foreignNodes[`${microservice.host}:${microservice.port}`] = body
-          logger.debug(`PING success :: foreignNodes = ${JSON.stringify(this.foreignNodes)}`)
+          logger.debug(`${wrapper('bold', 'PING')} success :: foreignNodes = ${JSON.stringify(this.foreignNodes)}`)
         } else {
           delete this.foreignNodes[`${microservice.host}:${microservice.port}`]
           logger.error(`Ping Error :: ${JSON.stringify(err)}`)
@@ -113,16 +117,15 @@ class ServiceRepository {
     let seeds = CONFIG.getSelfConf().seed
     this.transportClient.contactSeed(seeds[idx], (body, res) => {
       if (!body) {
-        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , 1000)
+        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
       }else {
         if (res.statusCode === 200) {
           for (let node of body.microservices) {
             CONFIG.joinNode(node)
           }
           logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
-          console.log(CONFIG.getSystemConf())
         }else {
-          setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , 1000)
+          setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
         }
       }
     })
