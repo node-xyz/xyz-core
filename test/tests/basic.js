@@ -19,12 +19,10 @@ before(function (done) {
 })
 
 it('hello world', function (done) {
-  console.log('############ Sratring TEST 1')
   snd.call('/mul', {
     x: 2,
     y: 3
   }, (err1, body1, response1) => {
-    console.log(body1)
     expect(body1).to.equal(6)
     expect(err1).to.equal(null)
     expect(response1.statusCode).to.equal(200)
@@ -46,6 +44,11 @@ it('local not found', function (done) {
     expect(err).to.equal(http.STATUS_CODES[404])
     done()
   })
+})
+
+it('no Callback for sender call', function (done) {
+  snd.call('mul', {x: 2,y: 3})
+  done()
 })
 
 after(function () {
