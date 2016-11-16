@@ -26,8 +26,8 @@ class ServiceRepository {
     this.transportClient = new HTTP.Client()
 
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler()
-    // this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.middleware.first.find'))
-    this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.send.to.all'))
+    this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.middleware.first.find'))
+    // this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.send.to.all'))
 
     this.services = new PathTree()
     this.foreignNodes = {}
@@ -124,6 +124,7 @@ class ServiceRepository {
             CONFIG.joinNode(node)
           }
           logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
+          this.ping()
         }else {
           setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
         }

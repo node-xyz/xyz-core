@@ -1,5 +1,5 @@
 {
-  "name": "nodexyz",
+  "name": "xyz-core",
   "version": "0.0.1",
   "description": "Microservice platform wrapper for node js ",
   "main": "index.js",
@@ -17,9 +17,6 @@
     "mocha": "^2.5.3"
   },
   "dependencies": {
-    "chai": "^3.5.0",
-    "pidusage": "^1.0.4",
-    "request": "^2.72.0",
     "winston": "^2.2.0"
   }
 }
