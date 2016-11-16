@@ -73,7 +73,6 @@ class NodeXYZ {
 
   setSendStrategy (fn) {
     // for now, only one middleware should be added to this. no more.
-    console.log(this.serviceRepository)
     this.serviceRepository.callDispatchMiddlewareStack.middlewares = []
     this.serviceRepository.callDispatchMiddlewareStack.register(0, fn)
   }
