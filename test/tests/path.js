@@ -22,15 +22,6 @@ before(function (done) {
   snd = new mockMicroservice('snd', 3334, cwd)
   rcv = new mockMicroservice('rcv', 3333, cwd)
 
-  snd.xyz.serviceRepository.callDispatchMiddlewareStack.remove(0)
-  snd.xyz.serviceRepository.callDispatchMiddlewareStack.register(0,
-    require('./../../src/Service/Middlewares/call.middleware.first.find')
-  )
-  rcv.xyz.serviceRepository.callDispatchMiddlewareStack.remove(0)
-  rcv.xyz.serviceRepository.callDispatchMiddlewareStack.register(0,
-    require('./../../src/Service/Middlewares/call.middleware.first.find')
-  )
-
   rcv.register('/math/decimal/mul', mockFunctions.mul)
   rcv.register('/math/decimal/add', mockFunctions.add)
   rcv.register('/math/decimal/sub', mockFunctions.sub)

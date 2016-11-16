@@ -65,7 +65,7 @@ it('False servicrDiscovery', function (done) {
     expect(response.statusCode).to.equal(404)
     expect(body).to.equal(http.STATUS_CODES[404])
     snd.middlewares().serviceRepository.callDispatch.remove(0)
-    snd.middlewares().serviceRepository.callDispatch.register(-1, require('./../../src/Service/Middlewares/call.middleware.first.find'))
+    snd.middlewares().serviceRepository.callDispatch.register(-1, common.firstfind)
     done()
   })
 })

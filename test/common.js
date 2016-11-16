@@ -25,15 +25,6 @@ exports.init = () => {
   rcv.register('/neg', mockFunctions.neg)
   rcv.register('/finger', mockFunctions.finger)
 
-  snd.xyz.serviceRepository.callDispatchMiddlewareStack.remove(0)
-  snd.xyz.serviceRepository.callDispatchMiddlewareStack.register(0,
-    require('./../src/Service/Middlewares/call.middleware.first.find')
-  )
-  rcv.xyz.serviceRepository.callDispatchMiddlewareStack.remove(0)
-  rcv.xyz.serviceRepository.callDispatchMiddlewareStack.register(0,
-    require('./../src/Service/Middlewares/call.middleware.first.find')
-  )
-
   return {
     snd: snd,
     rcv: rcv,
@@ -45,3 +36,5 @@ exports.expect = expect
 exports.mockMicroService = mockMicroservice
 exports.mockFunctions = mockFunctions
 exports.mockSystem = mockSystem
+exports.firstfind = require('./../../xyz-first-find/call.middleware.first.find')
+exports.sendtoall = require('./../../xyz-send-to-all/call.send.to.all')

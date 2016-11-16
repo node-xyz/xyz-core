@@ -1,6 +1,6 @@
-const XYZ = require('./../../index')
+const XYZ = require('./../../index').xyz
 const fs = require('fs')
-const logger = require('./../../src/Log/Logger')
+const logger = require('./../../index').logger
 /**
  * A Wrapper class around microservice interface
  */

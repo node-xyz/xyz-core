@@ -26,8 +26,6 @@ class ServiceRepository {
     this.transportClient = new HTTP.Client()
 
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler()
-    this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.middleware.first.find'))
-    // this.callDispatchMiddlewareStack.register(0, require('./Middlewares/call.send.to.all'))
 
     this.services = new PathTree()
     this.foreignNodes = {}
