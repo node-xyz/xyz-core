@@ -1,6 +1,6 @@
 var express = require('express')
 var app = express()
-var XYZ = require('./../../../index')
+var XYZ = require('./../../index').xyz
 
 var expressMs = new XYZ({
   selfConf: {

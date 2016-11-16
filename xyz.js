@@ -1,6 +1,5 @@
 const ServiceRepository = require('./src/Service/service.repository')
 let _CONFIG = require('./src/Config/config.global')
-let _RSA = require('./src/Config/rsa.global')
 let logger = require('./src/Log/Logger')
 let argParser = require('./src/Util/commandline.parser')
 
@@ -25,15 +24,16 @@ class NodeXYZ {
    * - systemConf : file instance of system Configuration aka xyz.json
    */
   constructor (
-    configuration, defaultSendStrategy = require('./../xyz-first-find/call.middleware.first.find') , logLevel = 'info') {
+    configuration, logLevel = 'info' , defaultSendStrategy = require('xyz-first-find')) {
     _CONFIG.setSelfConf(configuration.selfConf)
     _CONFIG.setSystemConf(configuration.systemConf)
     global._serviceName = _CONFIG.getSelfConf().name
 
     logger.transports.console.level = logLevel
+    logger.info(`log level set to ${logLevel}`)
 
     this.serviceRepository = new ServiceRepository()
-    this.serviceRepository.callDispatchMiddlewareStack.register(0, defaultSendStrategy)
+    this.setSendStrategy(defaultSendStrategy)
   }
 
   /**
@@ -70,6 +70,13 @@ class NodeXYZ {
    * Not implemented yet
    */
   bootstrap (configuration) {}
+
+  setSendStrategy (fn) {
+    // for now, only one middleware should be added to this. no more.
+    console.log(this.serviceRepository)
+    this.serviceRepository.callDispatchMiddlewareStack.middlewares = []
+    this.serviceRepository.callDispatchMiddlewareStack.register(0, fn)
+  }
 
   /**
    * Return an object of all middleware handlers available in the system. Each can be modified while

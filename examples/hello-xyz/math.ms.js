@@ -1,5 +1,5 @@
-var fn = require('./../../../test/ms/mock.functions')
-var XYZ = require('./../../../index')
+var fn = require('./../../test/ms/mock.functions')
+var XYZ = require('./../../index').xyz
 
 var mathMs = new XYZ({
   selfConf: {

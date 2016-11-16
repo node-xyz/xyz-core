@@ -1,6 +1,5 @@
 const querystring = require('querystring')
 const CONSTANTS = require('../../Config/Constants')
-const _RSA = require('./../../Config/rsa.global')
 const logger = require('./../../Log/Logger')
 const machineReport = require('./../../Util/machine.reporter')
 const _CONFIGURATIONS = require('./../../Config/config.global')
