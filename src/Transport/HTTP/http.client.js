@@ -16,7 +16,7 @@ class HTTPClient {
 
     this.pingDispatchMiddlewareStack = new GenericMiddlewareHandler()
     this.pingDispatchMiddlewareStack.register(-1, require('xyz.transport.global.send.logger'))
-    this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/global.dispatch.auth.basic.middleware'))
+    this.pingDispatchMiddlewareStack.register(-1, require('xyz.transport.auth.basic.send'))
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
 
     this.joinDispatchMiddlewareStack = new GenericMiddlewareHandler()
