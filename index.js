@@ -5,5 +5,6 @@ let path = require('./src/Service/path')
 module.exports = {
   xyz: xyz,
   logger: logger,
-  path: path
+  path: path,
+  logUtils: require('./src/Util/ansi.colors')
 }

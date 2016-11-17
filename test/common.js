@@ -36,5 +36,5 @@ exports.expect = expect
 exports.mockMicroService = mockMicroservice
 exports.mockFunctions = mockFunctions
 exports.mockSystem = mockSystem
-exports.firstfind = require('./../../xyz-first-find/call.middleware.first.find')
-exports.sendtoall = require('./../../xyz-send-to-all/call.send.to.all')
+exports.firstfind = require('xyz.service.send.first.find')
+exports.sendtoall = require('xyz.service.send.to.all')

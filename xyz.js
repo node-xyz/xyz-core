@@ -9,12 +9,9 @@ Todo Support local clustering[Must hack with it first]
 TODO add some sort of checking before waiting for body data
 TODO integrate the flow of body/response/XResponse params on middlewares
 TODO what happens when we early response using params[1].destory() but meanwhile call the next() ??
-TODO start documention
 TODO think about ways to remote deploy this ( +docker )
 TODO implement any auth for call
-TODO implement rsa auth for ping / call
 TODO clean the cunstroctor and add a bootstrap()
-TODO Permanent Fix for HTTP encoding , or just use the body
  */
 
 class NodeXYZ {
@@ -23,17 +20,16 @@ class NodeXYZ {
    * @param  {Object} configuration - an Object with format
    * - systemConf : file instance of system Configuration aka xyz.json
    */
-  constructor (
-    configuration, logLevel = 'info' , defaultSendStrategy = require('xyz-first-find')) {
+  constructor (configuration) {
     _CONFIG.setSelfConf(configuration.selfConf)
     _CONFIG.setSystemConf(configuration.systemConf)
     global._serviceName = _CONFIG.getSelfConf().name
 
-    logger.transports.console.level = logLevel
-    logger.info(`log level set to ${logLevel}`)
+    logger.transports.console.level = configuration.logLevel || 'info'
+    logger.info(`log level set to ${configuration.logLevel}`)
 
     this.serviceRepository = new ServiceRepository()
-    this.setSendStrategy(defaultSendStrategy)
+    this.setSendStrategy(configuration.defaultSendStrategy || require('xyz.service.send.first.find'))
   }
 
   /**

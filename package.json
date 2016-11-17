@@ -17,6 +17,7 @@
     "mocha": "^2.5.3"
   },
   "dependencies": {
-    "winston": "^2.2.0"
+    "winston": "^2.2.0",
+    "xyz-first-find": "*"
   }
 }
