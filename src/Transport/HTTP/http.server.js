@@ -20,7 +20,7 @@ class HTTPServer extends EventEmitter {
 
     this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler()
     this.pingReceiveMiddlewareStack.register(-1, require('xyz.transport.global.receive.logger'))
-    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/global.receive.auth.basic.middleware'))
+    this.pingReceiveMiddlewareStack.register(-1, require('xyz.transport.auth.basic.receive'))
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
 
     this.joinReceiveMiddlewareStack = new GenericMiddlewareHandler()
