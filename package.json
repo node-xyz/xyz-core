@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "docs": "jsdoc -c jsdoc.json -r",
+    "docs": "jsdoc -c jsdoc.json -r -d ./../node-xyz.github.io/apidoc",
     "lint": "./node_modules/jshint/bin/jshint src --config ./jshintrc"
   },
   "author": "Kian.peymani@gmail.com",

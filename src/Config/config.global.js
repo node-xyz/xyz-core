@@ -22,6 +22,11 @@ let configuration = {
     if (argParser.has('--xyzport')) selfConf.port = argParser.get('--xyzport')
     if (argParser.has('--xyzhost')) selfConf.host = argParser.get('--xyzhost')
     if (argParser.has('--xyzname')) selfConf.name = process.argv[1].slice(process.argv[1].lastIndexOf('/') + 1)
+    if (argParser.has('--xyzseed')) {
+      let seed = argParser.get('--xyzseed').split(':')
+      selfConf.seed = [{host: seed[0], port: seed[1]}
+      ]}
+    console.log(selfConf)
   },
   setSystemConf: (aConf) => {
     systemConf = aConf

@@ -76,6 +76,7 @@ class ServiceRepository {
       if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
         logger.warn(`new node is pinging me. adding to foreignNodes list. address : ${body.sender}`)
         this.foreignNodes[body.sender] = {}
+        CONFIG.joinNode({host: body.sender.split(':')[0], port: body.sender.split(':')[1]})
       }
       response.end(JSON.stringify(this.services.serializedTree))
     })

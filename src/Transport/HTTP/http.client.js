@@ -11,16 +11,16 @@ class HTTPClient {
     this.pingPrefix = CONSTANTS.url.PING
 
     this.callDispatchMidllewareStack = new GenericMiddlewareHandler()
-    this.callDispatchMidllewareStack.register(-1, require('xyz.transport.global.send.logger'))
+    // this.callDispatchMidllewareStack.register(-1, require('xyz.transport.global.send.logger'))
     this.callDispatchMidllewareStack.register(-1, require('./../Middlewares/call/call.dispatch.export.middleware'))
 
     this.pingDispatchMiddlewareStack = new GenericMiddlewareHandler()
-    this.pingDispatchMiddlewareStack.register(-1, require('xyz.transport.global.send.logger'))
-    this.pingDispatchMiddlewareStack.register(-1, require('xyz.transport.auth.basic.send'))
+    // this.pingDispatchMiddlewareStack.register(-1, require('xyz.transport.global.send.logger'))
+    // this.pingDispatchMiddlewareStack.register(-1, require('xyz.transport.auth.basic.send'))
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
 
     this.joinDispatchMiddlewareStack = new GenericMiddlewareHandler()
-    this.joinDispatchMiddlewareStack.register(-1, require('xyz.transport.global.send.logger'))
+    // this.joinDispatchMiddlewareStack.register(-1, require('xyz.transport.global.send.logger'))
     this.joinDispatchMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.export'))
   }
 
