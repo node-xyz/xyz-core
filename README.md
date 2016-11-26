@@ -16,9 +16,9 @@ Install xyz-core system
 
 include it in your code, initialize a system and expose a service. Read more on:
 
-- [Website](node-xyz.github.io)
-- [Getting Started](node-xyz.github.io/getting-started) 
-- [API Doc](node-xyz.github.io/apidoc) [in progress] 
+- [Website](https://node-xyz.github.io)
+- [Getting Started](https://node-xyz.github.io/getting-started) 
+- [API Doc](https://node-xyz.github.io/apidoc) [in progress] 
 
 
 ## MVP Feature List
