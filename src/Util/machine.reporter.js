@@ -1,4 +1,4 @@
-var pusage = require('pidusage')
+/*var pusage = require('pidusage')
 
 function getMachineusage(cb) {
   pusage.stat(process.pid, (err, stat) => {
@@ -7,3 +7,4 @@ function getMachineusage(cb) {
 
 }
 module.exports = getMachineusage
+*/
