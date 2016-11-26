@@ -1,6 +1,5 @@
 const http = require('http')
 const url = require('url')
-const request = require('request')
 const EventEmitter = require('events')
 const CONSTANTS = require('../../Config/Constants')
 const logger = require('./../../Log/Logger')

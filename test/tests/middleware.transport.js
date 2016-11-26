@@ -27,11 +27,11 @@ it('manipulator', function (done) {
     params[2].userPayload = str
     next()
   }
-  rcv.middlewares().transport.server.callReceive.register(0, manipulatorMiddleware)
+  rcv.middlewares().transport.callReceive.register(0, manipulatorMiddleware)
 
   snd.call('up', 'hello', (err, body, response) => {
     expect(body).to.equal(str.toUpperCase())
-    rcv.middlewares().transport.server.callReceive.remove(0)
+    rcv.middlewares().transport.callReceive.remove(0)
     done()
   })
 })
@@ -44,11 +44,11 @@ it('early response', function (done) {
     end()
   }
 
-  rcv.middlewares().transport.server.callReceive.register(0, earlyResponseMiddleware)
+  rcv.middlewares().transport.callReceive.register(0, earlyResponseMiddleware)
 
   snd.call('up', 'hello', (err, body, response) => {
     expect(body).to.equal('This is early temination. note that this must be a json and then stringified')
-    rcv.middlewares().transport.server.callReceive.remove(0)
+    rcv.middlewares().transport.callReceive.remove(0)
     done()
   })
 })
@@ -59,12 +59,12 @@ it('early termination', function (done) {
     end()
   }
 
-  rcv.middlewares().transport.server.callReceive.register(0, terminatorMiddleware)
+  rcv.middlewares().transport.callReceive.register(0, terminatorMiddleware)
 
   snd.call('up', 'hello', (err, body, response) => {
     expect(body).to.equal(null)
     expect(response).to.equal(null)
-    rcv.middlewares().transport.server.callReceive.remove(0)
+    rcv.middlewares().transport.callReceive.remove(0)
     done()
   })
 })

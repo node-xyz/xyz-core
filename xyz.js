@@ -83,12 +83,8 @@ class NodeXYZ {
   middlewares () {
     return {
       transport: {
-        server: {
-          callReceive: this.serviceRepository.getTransportLayer().Server.callReceiveMiddlewareStack
-        },
-        client: {
-          callDispatch: this.serviceRepository.getTransportLayer().Client.callDispatchMidllewareStack
-        }
+        callReceive: this.serviceRepository.getTransportLayer().Server.callReceiveMiddlewareStack,
+        callDispatch: this.serviceRepository.getTransportLayer().Client.callDispatchMidllewareStack
       },
       serviceRepository: {
         callDispatch: this.serviceRepository.callDispatchMiddlewareStack
