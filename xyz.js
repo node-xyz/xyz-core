@@ -27,7 +27,7 @@ class NodeXYZ {
     _CONFIG.setSelfConf(configuration.selfConf)
     _CONFIG.setSystemConf(configuration.systemConf)
 
-    logger.transports.console.level = configuration.logLevel || 'debug'
+    logger.transports.console.level = configuration.logLevel || 'info'
     logger.info(`log level set to ${logger.transports.console.level}`)
 
     this.serviceRepository = new ServiceRepository()
