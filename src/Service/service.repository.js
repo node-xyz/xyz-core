@@ -99,6 +99,7 @@ class ServiceRepository {
 
   ping () {
     let microservices = CONFIG.getSystemConf().microservices
+    console.log(microservices)
     for (let microservice of microservices) {
       this.transportClient.ping(microservice, (body , res) => {
         if (res.statusCode === 200) {
@@ -123,6 +124,7 @@ class ServiceRepository {
             CONFIG.joinNode(node)
           }
           logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
+          logger.info(`Response nodes are ${body.microservices}`)
           this.ping()
         }else {
           setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))

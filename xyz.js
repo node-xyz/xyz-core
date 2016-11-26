@@ -21,12 +21,14 @@ class NodeXYZ {
    * - systemConf : file instance of system Configuration aka xyz.json
    */
   constructor (configuration) {
+    // just for logging convention
+    global._serviceName = configuration.selfConf.name
+
     _CONFIG.setSelfConf(configuration.selfConf)
     _CONFIG.setSystemConf(configuration.systemConf)
-    global._serviceName = _CONFIG.getSelfConf().name
 
-    logger.transports.console.level = configuration.logLevel || 'info'
-    logger.info(`log level set to ${configuration.logLevel}`)
+    logger.transports.console.level = configuration.logLevel || 'debug'
+    logger.info(`log level set to ${logger.transports.console.level}`)
 
     this.serviceRepository = new ServiceRepository()
     this.setSendStrategy(configuration.defaultSendStrategy || require('xyz.service.send.first.find'))

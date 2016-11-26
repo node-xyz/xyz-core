@@ -7,9 +7,11 @@ let selfConf = {}
 
 let configuration = {
   joinNode: (aNode) => {
+    logger.debug(`Joining node ${JSON.stringify(aNode)}`)
     for (let node of systemConf.microservices) {
       if (`${node.host}:${node.port}` === `${aNode.host}:${aNode.port}`) {
         logger.error(`node already exists. Not adding ${JSON.stringify(aNode)}`)
+        return
       }
     }
     systemConf.microservices.push({host: aNode.host, port: aNode.port})
@@ -26,7 +28,6 @@ let configuration = {
       let seed = argParser.get('--xyzseed').split(':')
       selfConf.seed = [{host: seed[0], port: seed[1]}
       ]}
-    console.log(selfConf)
   },
   setSystemConf: (aConf) => {
     systemConf = aConf
