@@ -20,11 +20,13 @@ class GenericMiddlewareHandler {
    * @param  {Number} index - index to insert the middleware at. if -1, middleware will be pushed to the end.
    */
   register (index, fn) {
-    logger.silly(`Registering middleware at ${index} : ${fn.name}`)
+    logger.debug(`Registering middleware at ${index} : ${fn.name}`)
     if (index === -1) {
       this.middlewares.push(fn)
-    } else {
-      this.middlewares.splice(0, index, fn)
+    } else if (index == 0) {
+      this.middlewares.unshift(fn)
+    }  else {
+      this.middlewares.splice(index, 0 , fn)
     }
   }
 
@@ -57,6 +59,10 @@ class GenericMiddlewareHandler {
     return this.middlewares
   }
 
+  /**
+   * Remove a middleware form the stack
+   * @param  {Number} idx index to remove the middleware from.
+   */
   remove (idx) {
     logger.silly(`removing middleware ${this.middlewareIndex}`)
     if (idx == -1) {

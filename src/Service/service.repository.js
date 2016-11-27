@@ -99,7 +99,6 @@ class ServiceRepository {
 
   ping () {
     let microservices = CONFIG.getSystemConf().microservices
-    console.log(microservices)
     for (let microservice of microservices) {
       this.transportClient.ping(microservice, (body , res) => {
         if (res.statusCode === 200) {

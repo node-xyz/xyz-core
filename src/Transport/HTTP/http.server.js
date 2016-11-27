@@ -14,12 +14,9 @@ class HTTPServer extends EventEmitter {
     this.port = _CONFIGURATION.getSelfConf().port
 
     this.callReceiveMiddlewareStack = new GenericMiddlewareHandler()
-    // this.callReceiveMiddlewareStack.register(-1, require('xyz.transport.global.receive.logger'))
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
 
     this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler()
-    // this.pingReceiveMiddlewareStack.register(-1, require('xyz.transport.global.receive.logger'))
-    // this.pingReceiveMiddlewareStack.register(-1, require('xyz.transport.auth.basic.receive'))
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
 
     this.joinReceiveMiddlewareStack = new GenericMiddlewareHandler()
