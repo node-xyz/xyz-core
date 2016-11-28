@@ -7,14 +7,18 @@ let selfConf = {}
 
 let configuration = {
   joinNode: (aNode) => {
-    logger.debug(`Joining node ${JSON.stringify(aNode)}`)
     for (let node of systemConf.microservices) {
-      if (`${node.host}:${node.port}` === `${aNode.host}:${aNode.port}`) {
+      if (node === aNode) {
         logger.error(`node already exists. Not adding ${JSON.stringify(aNode)}`)
         return
       }
     }
-    systemConf.microservices.push({host: aNode.host, port: aNode.port})
+    systemConf.microservices.push(aNode)
+  },
+
+  removeNode: (aNode) => {
+    systemConf.microservices.splice(systemConf.microservices.indexOf(aNode), 1)
+    console.log(systemConf.microservices)
   },
 
   setSelfConf: (aConf) => {
@@ -46,40 +50,24 @@ let configuration = {
     }
 
     logger.transports.console.level = selfConf.logLevel || 'info'
-
     logger.info(`log level set to ${logger.transports.console.level}`)
 
     logger.debug('final configurations for selfConf is:')
     console.log(selfConf)
-  // if (argParser.has('--xyzport')) selfConf.port = argParser.get('--xyzport')
-  // if (argParser.has('--xyzhost')) selfConf.host = argParser.get('--xyzhost')
-  // if (argParser.has('--xyzname')) selfConf.name = process.argv[1].slice(process.argv[1].lastIndexOf('/') + 1)
-  // if (argParser.has('--xyzseed')) {
-  //   let seed = argParser.get('--xyzseed').split(':')
-  //   selfConf.seed = [{host: seed[0], port: seed[1]}
-  //   ]}
   },
+
   setSystemConf: (aConf) => {
     systemConf = aConf
-    if (argParser.has('--xyzdev')) {
-      systemConf.microservices = systemConf.microservices.map((ms) => {
-        ms.host = '127.0.0.1'
-        return ms
-      })
-    }
   },
 
   ensureSelf: () => {
     for (let node of systemConf.microservices) {
-      if (node.host === selfConf.host && node.port === selfConf.port) {
+      if (node === `${selfConf.host}:${selfConf.port}`) {
         logger.info(`Self node exists in systemConf. passing`)
         return
       }
     }
-    systemConf.microservices.push({
-      host: selfConf.host,
-      port: selfConf.port
-    })
+    systemConf.microservices.push(`${selfConf.host}:${selfConf.port}`)
     logger.info(`Adding self to systemConf by default`)
   },
 

@@ -10,14 +10,8 @@ const PathTree = require('./../../src/Service/path.tree')
 before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
-  system.addMicroservice({
-    host: 'localhost',
-    port: 3333
-  })
-  system.addMicroservice({
-    host: 'localhost',
-    port: 3334
-  })
+  system.addMicroservice('localhost:3333')
+  system.addMicroservice('localhost:3334')
   system.write()
   snd = new mockMicroservice('snd', 3334, cwd)
   rcv = new mockMicroservice('rcv', 3333, cwd)

@@ -10,12 +10,7 @@ var mathMs = new XYZ({
     port: 3333
   },
   systemConf: {
-    microservices: [
-      {
-        host: '127.0.0.1',
-        port: 3333
-      }
-    ]
+    microservices: ['127.0.0:13333']
   }
 })
 
@@ -27,14 +22,14 @@ mathMs.register('/math/float/neg', function (payload, XResponse) {
   XResponse.send('ok whassssaaaap')
 })
 
-// setTimeout(function () {
-//   mathMs.call('hello', {}, (err, body, response) => {
-//     console.log('hello:')
-//     console.log(body)
-//   })
-//
-//   mathMs.call('decimal/mul' , {x: 2,  y: 6}, (err, body, response) => {
-//     console.log('mul: ')
-//     console.log(err, body)
-//   })
-// }, 1000)
+setInterval(function () {
+  mathMs.call('hello', {}, (err, body, response) => {
+    console.log('hello:')
+    console.log(body)
+  })
+
+  mathMs.call('decimal/mul' , {x: 2,  y: 6}, (err, body, response) => {
+    console.log('mul: ')
+    console.log(err, body)
+  })
+}, 1000)

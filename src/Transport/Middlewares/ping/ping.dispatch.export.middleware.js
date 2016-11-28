@@ -19,12 +19,12 @@ let pingDispatchExport = function (params, next, end) {
     })
 
     res.on('end' , () => {
-      pingResponseCallback(JSON.parse(body), res)
+      pingResponseCallback(null, JSON.parse(body), res)
     })
   })
 
   req.on('error', (e) => {
-    logger.error(`problem with PING beign sent :: ${e}`)
+    pingResponseCallback(e, null, null)
   })
 
   req.write(JSON.stringify(postData))

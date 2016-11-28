@@ -76,13 +76,13 @@ class ServiceRepository {
       if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
         logger.warn(`new node is pinging me. adding to foreignNodes list. address : ${body.sender}`)
         this.foreignNodes[body.sender] = {}
-        CONFIG.joinNode({host: body.sender.split(':')[0], port: body.sender.split(':')[1]})
+        CONFIG.joinNode(body.sender)
       }
       response.end(JSON.stringify(this.services.serializedTree))
     })
 
     this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
-      CONFIG.joinNode({host: body.sender.split(':')[0], port: body.sender.split(':')[1]})
+      CONFIG.joinNode(body.sender)
       response.end(JSON.stringify(CONFIG.getSystemConf()))
     })
   }
@@ -100,13 +100,15 @@ class ServiceRepository {
   ping () {
     let microservices = CONFIG.getSystemConf().microservices
     for (let microservice of microservices) {
-      this.transportClient.ping(microservice, (body , res) => {
-        if (res.statusCode === 200) {
-          this.foreignNodes[`${microservice.host}:${microservice.port}`] = body
+      this.transportClient.ping(Util.nodeStringToObject(microservice), (err, body , res) => {
+        if (err == null) {
+          this.foreignNodes[microservice] = body
           logger.verbose(`${wrapper('bold', 'PING')} success :: foreignNodes = ${JSON.stringify(this.foreignNodes)}`)
         } else {
-          delete this.foreignNodes[`${microservice.host}:${microservice.port}`]
+          delete this.foreignNodes[microservices]
           logger.error(`Ping Error :: ${JSON.stringify(err)}`)
+          logger.error(`removing node from foreignNodes and microservices list`)
+          CONFIG.removeNode(microservice)
         }
       })
     }
@@ -114,8 +116,7 @@ class ServiceRepository {
 
   contactSeed (idx) {
     let seeds = CONFIG.getSelfConf().seed
-    let node = {host: seeds[idx].split(':')[0], port: seeds[idx].split(':')[1]}
-    this.transportClient.contactSeed(node, (body, res) => {
+    this.transportClient.contactSeed(Util.nodeStringToObject(seeds[i]), (body, res) => {
       if (!body) {
         setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
       }else {

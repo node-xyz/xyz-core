@@ -17,14 +17,8 @@ before(function (done) {
   system = new mockSystem(cwd)
 
   // the system is consisted of snd and rcv only
-  system.addMicroservice({
-    host: 'localhost',
-    port: 3333
-  })
-  system.addMicroservice({
-    host: 'localhost',
-    port: 3334
-  })
+  system.addMicroservice('localhost:3333')
+  system.addMicroservice('localhost:3334')
   system.write()
 
   snd = new mockMicroservice('snd', 3334, cwd)

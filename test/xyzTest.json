@@ -1,1 +1,1 @@
-{"microservices":[{"host":"localhost","port":3333},{"host":"localhost","port":3334}]}
+{"microservices":["localhost:3333","localhost:3334"]}
