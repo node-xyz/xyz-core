@@ -3,7 +3,6 @@ function Random (time) {
 }
 
 function nodeStringToObject (str) {
-  console.log(str)
   return {host: str.split(':')[0], port: str.split(':')[1]}
 }
 

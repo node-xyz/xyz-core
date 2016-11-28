@@ -29,6 +29,7 @@ class ServiceRepository {
 
     this.services = new PathTree()
     this.foreignNodes = {}
+    this.outOfReachNodes = {}
 
     // Bind events
     this.bindTransportEvents()
@@ -105,10 +106,20 @@ class ServiceRepository {
           this.foreignNodes[microservice] = body
           logger.verbose(`${wrapper('bold', 'PING')} success :: foreignNodes = ${JSON.stringify(this.foreignNodes)}`)
         } else {
-          delete this.foreignNodes[microservices]
-          logger.error(`Ping Error :: ${JSON.stringify(err)}`)
-          logger.error(`removing node from foreignNodes and microservices list`)
-          CONFIG.removeNode(microservice)
+          if (this.outOfReachNodes[microservice]) {
+            this.outOfReachNodes[microservice] += 1
+            if (this.outOfReachNodes[microservice] > (CONFIG.selfConf.kick || CONSTANTS.intervals.KICK)) {
+              delete this.foreignNodes[microservices]
+              delete this.outOfReachNodes[microservice]
+              logger.error(`removing node from foreignNodes and microservices list`)
+              CONFIG.removeNode(microservice)
+            }
+          }else {
+            this.outOfReachNodes[microservice] = 0
+          }
+
+          logger.error(`Ping Error :: ${microservice} has been out of reach for
+             ${this.outOfReachNodes[microservice]} pings ::  ${JSON.stringify(err)}`)
         }
       })
     }
@@ -116,7 +127,7 @@ class ServiceRepository {
 
   contactSeed (idx) {
     let seeds = CONFIG.getSelfConf().seed
-    this.transportClient.contactSeed(Util.nodeStringToObject(seeds[i]), (body, res) => {
+    this.transportClient.contactSeed(Util.nodeStringToObject(seeds[idx]), (body, res) => {
       if (!body) {
         setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
       }else {

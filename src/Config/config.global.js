@@ -22,7 +22,7 @@ let configuration = {
   },
 
   setSelfConf: (aConf) => {
-    logger.info('Setting default config')
+    logger.info('Setting default selfConf')
     selfConf = CONSTANTS.defaultConfig.selfConf
     logger.info('Reading system Conf from user')
     selfConf = aConf
@@ -57,6 +57,9 @@ let configuration = {
   },
 
   setSystemConf: (aConf) => {
+    logger.info('Setting default systemConf')
+    systemConf = CONSTANTS.defaultConfig.systemConf
+    logger.info('reading systemConf from user')
     systemConf = aConf
   },
 

@@ -19,7 +19,8 @@ module.exports = {
   intervals: {
     threshold: 5000,
     ping: 10000,
-    reconnect: 2500
+    reconnect: 2500,
+    KICK: 5
   },
   environmet: {
     dev: 'dev',
@@ -31,6 +32,9 @@ module.exports = {
       seed: [],
       port: 3333,
       host: '127.0.0.1'
+    },
+    systemConf: {
+      microservices: []
     }
   }
 }
