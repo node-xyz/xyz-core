@@ -46,6 +46,7 @@ let configuration = {
     }
 
     logger.transports.console.level = selfConf.logLevel || 'info'
+
     logger.info(`log level set to ${logger.transports.console.level}`)
 
     logger.debug('final configurations for selfConf is:')
