@@ -4,8 +4,7 @@ let mockMicroservice = common.mockMicroService
 let mockFunctions = common.mockFunctions
 let mockSystem = common.mockSystem
 
-var snd
-var rcv
+let cwd, system, snd, rcv
 before(function (done) {
   let testSystem = common.init()
   snd = testSystem.snd

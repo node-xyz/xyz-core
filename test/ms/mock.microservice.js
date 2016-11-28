@@ -5,21 +5,18 @@ const logger = require('./../../index').logger
  * A Wrapper class around microservice interface
  */
 class MockMicroservice {
-  constructor (name, port, cwd) {
+  constructor (name, port, cwd, systemConf) {
     let selfConfiguration = {
-      'logLevel': 'debug',
+      'logLevel': 'verbose',
       'name': name,
       'host': 'localhost',
       'port': port
     }
 
-    fs.writeFileSync(`${cwd}/${name}.json`, JSON.stringify(selfConfiguration))
     this.xyz = new XYZ({
-      selfConf: require(`./../tests/${name}.json`),
-      systemConf: require(`./../tests/xyzTest.json`)
+      selfConf: selfConfiguration,
+      systemConf: systemConf
     })
-
-  // all tests will be with first find by default.
   }
 
   register (name, fn) {

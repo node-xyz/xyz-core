@@ -1,19 +1,19 @@
 const fs = require('fs')
 
 class MockSystem {
-  constructor(cwd) {
+  constructor (cwd) {
     this.microservices = []
     this.cwd = cwd
   }
 
-  addMicroservice(ms) {
+  addMicroservice (ms) {
     this.microservices.push(ms)
   }
 
-  write() {
-    fs.writeFileSync(`${this.cwd}/xyzTest.json`, JSON.stringify({
+  getSystemConf () {
+    return {
       microservices: this.microservices
-    }))
+    }
   }
 }
 

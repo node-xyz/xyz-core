@@ -9,10 +9,8 @@ exports.init = () => {
   system = new mockSystem(cwd)
   system.addMicroservice('localhost:3333')
   system.addMicroservice('localhost:3334')
-  system.write()
-  snd = new mockMicroservice('snd', 3334, cwd)
-
-  rcv = new mockMicroservice('rcv', 3333, cwd)
+  snd = new mockMicroservice('snd', 3334, cwd, system.getSystemConf())
+  rcv = new mockMicroservice('rcv', 3333, cwd, system.getSystemConf())
   rcv.register('/mul', mockFunctions.mul)
   rcv.register('/up', mockFunctions.up)
   rcv.register('/rev', mockFunctions.rev)

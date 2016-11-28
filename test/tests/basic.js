@@ -5,10 +5,7 @@ const mockSystem = common.mockSystem
 const mockFunctions = common.mockFunctions
 const http = require('http')
 
-let snd
-let rcv
-let system
-let cwd
+let cwd, system, snd, rcv
 before(function (done) {
   let testSystem = common.init()
   snd = testSystem.snd

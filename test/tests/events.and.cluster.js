@@ -6,12 +6,8 @@ const mockSystem = common.mockSystem
 const mockFunctions = common.mockFunctions
 const http = require('http')
 
-let snd
-let rcv
+let cwd, system, snd, rcv
 let mocks = []
-let system
-let cwd
-
 before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
@@ -19,15 +15,14 @@ before(function (done) {
   // the system is consisted of snd and rcv only
   system.addMicroservice('localhost:3333')
   system.addMicroservice('localhost:3334')
-  system.write()
 
-  snd = new mockMicroservice('snd', 3334, cwd)
-  rcv = new mockMicroservice('rcv', 3333, cwd)
+  snd = new mockMicroservice('snd', 3334, cwd, system.getSystemConf())
+  rcv = new mockMicroservice('rcv', 3333, cwd, system.getSystemConf())
   rcv.register('mul', mockFunctions.mul)
   rcv.register('up', mockFunctions.up)
 
   for (let i = 0; i < 10; i++) {
-    let mock = new mockMicroservice(`mock_${i}`, 3335 + i, cwd)
+    let mock = new mockMicroservice(`mock_${i}`, 3335 + i, cwd, system.getSystemConf())
     mocks.push(mock)
   }
 

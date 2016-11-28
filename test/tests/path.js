@@ -7,14 +7,14 @@ const mockSystem = common.mockSystem
 const mockFunctions = common.mockFunctions
 const PathTree = require('./../../src/Service/path.tree')
 
+let cwd, system, snd, rcv
 before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
   system.addMicroservice('localhost:3333')
   system.addMicroservice('localhost:3334')
-  system.write()
-  snd = new mockMicroservice('snd', 3334, cwd)
-  rcv = new mockMicroservice('rcv', 3333, cwd)
+  snd = new mockMicroservice('snd', 3334, cwd, system.getSystemConf())
+  rcv = new mockMicroservice('rcv', 3333, cwd, system.getSystemConf())
 
   rcv.register('/math/decimal/mul', mockFunctions.mul)
   rcv.register('/math/decimal/add', mockFunctions.add)

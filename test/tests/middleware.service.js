@@ -6,10 +6,7 @@ const mockSystem = common.mockSystem
 const mockFunctions = common.mockFunctions
 const http = require('http')
 
-let snd
-let rcv
-let system
-let cwd
+let cwd, system, snd, rcv
 let str = 'manipulated'
 
 function wrongServicediscoveryMiddleware (params, next, end) {
