@@ -7,6 +7,7 @@ const logger = require('./../../index').logger
 class MockMicroservice {
   constructor (name, port, cwd) {
     let selfConfiguration = {
+      'logLevel': 'debug',
       'name': name,
       'host': 'localhost',
       'port': port
@@ -27,14 +28,6 @@ class MockMicroservice {
 
   call (name, data, callback) {
     this.xyz.call(name, data, callback)
-  }
-
-  emit (eventName, userPayload) {
-    this.xyz.emit(eventName, userPayload)
-  }
-
-  subscribe (eventName) {
-    this.xyz.subscribe(eventName)
   }
 
   middlewares () {

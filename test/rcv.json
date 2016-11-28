@@ -1,1 +1,1 @@
-{"name":"rcv","host":"localhost","port":3333}
+{"logLevel":"debug","name":"rcv","host":"localhost","port":3333}
