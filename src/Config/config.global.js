@@ -18,14 +18,19 @@ let configuration = {
   },
 
   setSelfConf: (aConf) => {
-    logger.info('Reading system Conf from json file')
+    logger.info('Setting default config')
+    selfConf = CONSTANTS.defaultConfig.selfConf
+    logger.info('Reading system Conf from user')
     selfConf = aConf
     logger.info('Reading system Conf from command line')
     let args = argParser.xyzGeneric()
     for (let arg in args) {
       let keys = arg.split('.')
       if (keys.length === 1) {
-        selfConf[keys[0]] = args[arg]
+        if (keys[0] === 'seed')
+          selfConf[keys[0]].push(args[arg])
+        else
+          selfConf[keys[0]] = args[arg]
       }
       else if (keys.length === 2) {
         if (! selfConf[keys[0]]) selfConf[keys[0]] = {}
@@ -35,8 +40,13 @@ let configuration = {
         if (! selfConf[keys[0]]) selfConf[keys[0]] = {}
         if (! selfConf[keys[1]]) selfConf[keys[1]] = {}
         selfConf[keys[0]][keys[1]][keys[2]] = args[arg]
+      }else {
+        logger.error('command line arguments with more than three sub-keys are not allowed. passing')
       }
     }
+
+    logger.debug('final configurations for selfConf is:')
+    console.log(selfConf)
   // if (argParser.has('--xyzport')) selfConf.port = argParser.get('--xyzport')
   // if (argParser.has('--xyzhost')) selfConf.host = argParser.get('--xyzhost')
   // if (argParser.has('--xyzname')) selfConf.name = process.argv[1].slice(process.argv[1].lastIndexOf('/') + 1)

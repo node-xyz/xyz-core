@@ -2,13 +2,9 @@ var fn = require('./../../test/ms/mock.functions')
 var XYZ = require('./../../index').xyz
 
 var stringMs = new XYZ({
+  logLevel: 'debug',
   selfConf: {
-    seed: [
-      {
-        host: '127.0.0.1',
-        port: 3333
-      }
-    ],
+    seed: ['127.0.0.1:3333'],
     name: 'stringMs',
     host: '127.0.0.1',
     port: 3334

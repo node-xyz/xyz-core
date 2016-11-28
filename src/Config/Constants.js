@@ -24,5 +24,13 @@ module.exports = {
   environmet: {
     dev: 'dev',
     production: 'prod'
+  },
+  defaultConfig: {
+    selfConf: {
+      name: 'node-xyz-init',
+      seed: [],
+      port: 3333,
+      host: '127.0.0.1'
+    }
   }
 }

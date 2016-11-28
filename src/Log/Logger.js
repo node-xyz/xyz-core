@@ -21,13 +21,20 @@ function levelColor (level) {
     return wrapper('red', level)
   }
 }
+
+function getFormattedDate () {
+  var date = new Date()
+  var str = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+
+  return str
+}
 // { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
 
 var logger = new winston.Logger({
   transports: [
     new winston.transports.Console({
       handleExceptions: false,
-      prettyPrint: true,
+      prettyPrint: false,
       colorize: true,
       level: 'debug',
       timestamp: function () {
@@ -35,7 +42,7 @@ var logger = new winston.Logger({
       },
       formatter: function (options) {
         // Return string will be passed to logger.
-        return `${levelColor(options.level)} :: ${options.message} 		 ${wrapper('underline', wrapper('bold', global._serviceName))} `
+        return `[${getFormattedDate()}] ${wrapper('bold', levelColor(options.level))} :: ${options.message} `
       }
     })
   ],

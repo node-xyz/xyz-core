@@ -60,7 +60,7 @@ class ServiceRepository {
     this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
       let fn = this.services.getPathFunction(body.serviceName)
       if (fn) {
-        logger.debug(`ServiceRepository received service call ${body.serviceName}`)
+        logger.verbose(`ServiceRepository received service call ${wrapper('bold', body.serviceName)}`)
         fn(body.userPayload, new XResponse(response))
         return
       }else {
@@ -103,7 +103,7 @@ class ServiceRepository {
       this.transportClient.ping(microservice, (body , res) => {
         if (res.statusCode === 200) {
           this.foreignNodes[`${microservice.host}:${microservice.port}`] = body
-          logger.debug(`${wrapper('bold', 'PING')} success :: foreignNodes = ${JSON.stringify(this.foreignNodes)}`)
+          logger.verbose(`${wrapper('bold', 'PING')} success :: foreignNodes = ${JSON.stringify(this.foreignNodes)}`)
         } else {
           delete this.foreignNodes[`${microservice.host}:${microservice.port}`]
           logger.error(`Ping Error :: ${JSON.stringify(err)}`)
@@ -114,7 +114,8 @@ class ServiceRepository {
 
   contactSeed (idx) {
     let seeds = CONFIG.getSelfConf().seed
-    this.transportClient.contactSeed(seeds[idx], (body, res) => {
+    let node = {host: seeds[idx].split(':')[0], port: seeds[idx].split(':')[1]}
+    this.transportClient.contactSeed(node, (body, res) => {
       if (!body) {
         setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
       }else {
@@ -123,7 +124,8 @@ class ServiceRepository {
             CONFIG.joinNode(node)
           }
           logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
-          logger.info(`Response nodes are ${body.microservices}`)
+          logger.info(`Response nodes are`)
+          console.log(body.microservices)
           this.ping()
         }else {
           setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))

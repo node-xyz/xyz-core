@@ -2,6 +2,7 @@ var fn = require('./../../test/ms/mock.functions')
 var XYZ = require('./../../index').xyz
 
 var mathMs = new XYZ({
+  logLevel: 'debug',
   selfConf: {
     allowJoin: true,
     name: 'MathMs',
