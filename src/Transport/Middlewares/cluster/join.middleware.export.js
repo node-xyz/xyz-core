@@ -19,15 +19,13 @@ let joinExport = function (params, next, end) {
     })
 
     res.on('end' , () => {
-      joinResponseCallback(JSON.parse(body), res)
+      // console.log(res)
+      joinResponseCallback(null, JSON.parse(body), res)
     })
   })
 
   req.on('error', (e) => {
-    logger.error(`problem with JOIN request beign sent :: ${e}`)
-    // TODO this missing pattern should also be added to ping and call callback
-    // the callback is missong
-    joinResponseCallback(null, null)
+    joinResponseCallback(e, null, null)
   })
 
   req.write(JSON.stringify(postData))

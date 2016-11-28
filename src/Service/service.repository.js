@@ -29,18 +29,16 @@ class ServiceRepository {
 
     this.services = new PathTree()
     this.foreignNodes = {}
+    this.foreignNodes[`${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`] = {}
     this.outOfReachNodes = {}
 
     // Bind events
     this.bindTransportEvents()
 
     // Seed if possible
-    if (CONFIG.getSelfConf().seed) {
+    if (CONFIG.getSelfConf().seed.length) {
       this.contactSeed(0)
     }
-
-    // add yourself
-    CONFIG.ensureSelf()
 
     // Ping Init
     this.ping()
@@ -73,18 +71,17 @@ class ServiceRepository {
     })
 
     this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
-      logger.debug(`Responding a PING message from ${body.sender}`)
       if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
-        logger.warn(`new node is pinging me. adding to foreignNodes list. address : ${body.sender}`)
-        this.foreignNodes[body.sender] = {}
-        CONFIG.joinNode(body.sender)
+        logger.warn(`new node is pinging me. adding to lists. address : ${body.sender}`)
+        this.joinNode(body.sender)
       }
+      logger.debug(`Responding a PING message from ${body.sender}`)
       response.end(JSON.stringify(this.services.serializedTree))
     })
 
     this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
-      CONFIG.joinNode(body.sender)
       response.end(JSON.stringify(CONFIG.getSystemConf()))
+      console.log(CONFIG.getSystemConf())
     })
   }
 
@@ -104,46 +101,55 @@ class ServiceRepository {
       this.transportClient.ping(Util.nodeStringToObject(microservice), (err, body , res) => {
         if (err == null) {
           this.foreignNodes[microservice] = body
-          logger.verbose(`${wrapper('bold', 'PING')} success :: foreignNodes = ${JSON.stringify(this.foreignNodes)}`)
+          this.outOfReachNodes[microservice] = 0
+          logger.verbose(`${wrapper('bold', 'PING')} success :: foreignNodes = ${JSON.stringify(Object.keys(this.foreignNodes))}`)
         } else {
           if (this.outOfReachNodes[microservice]) {
             this.outOfReachNodes[microservice] += 1
-            if (this.outOfReachNodes[microservice] > (CONFIG.selfConf.kick || CONSTANTS.intervals.KICK)) {
-              delete this.foreignNodes[microservices]
-              delete this.outOfReachNodes[microservice]
+            if (this.outOfReachNodes[microservice] > (CONSTANTS.intervals.KICK)) {
               logger.error(`removing node from foreignNodes and microservices list`)
-              CONFIG.removeNode(microservice)
+              this.kickNode(microservice)
+              return
             }
           }else {
-            this.outOfReachNodes[microservice] = 0
+            this.outOfReachNodes[microservice] = 1
           }
 
-          logger.error(`Ping Error :: ${microservice} has been out of reach for
-             ${this.outOfReachNodes[microservice]} pings ::  ${JSON.stringify(err)}`)
+          logger.error(`Ping Error :: ${microservice} has been out of reach for ${this.outOfReachNodes[microservice]} pings ::  ${JSON.stringify(err)}`)
         }
       })
     }
   }
 
   contactSeed (idx) {
+    // error. check the vlaidity of casse where 404 or no 200 is the Response
     let seeds = CONFIG.getSelfConf().seed
-    this.transportClient.contactSeed(Util.nodeStringToObject(seeds[idx]), (body, res) => {
-      if (!body) {
-        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
-      }else {
-        if (res.statusCode === 200) {
-          for (let node of body.microservices) {
-            CONFIG.joinNode(node)
-          }
-          logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
-          logger.info(`Response nodes are`)
-          console.log(body.microservices)
-          this.ping()
-        }else {
-          setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
+    this.transportClient.contactSeed(Util.nodeStringToObject(seeds[idx]), (err, body, res) => {
+      if (! err) {
+        logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
+        logger.info(`Response nodes are`)
+        console.log(body.microservices)
+        for (let node of body.microservices) {
+          this.joinNode(node)
         }
+        this.ping()
+      } else {
+        logger.error(`${wrapper('bold', 'JOIN FAILED')} :: a seed node ${seeds[idx]} rejected with `)
+        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
       }
     })
+  }
+
+  joinNode (aNode) {
+    this.foreignNodes[aNode] = {}
+    this.outOfReachNodes[aNode] = 0
+    CONFIG.joinNode(aNode)
+  }
+
+  kickNode (aNode) {
+    delete this.foreignNodes[aNode]
+    delete this.outOfReachNodes[aNode]
+    CONFIG.kickNode(aNode)
   }
 
   // TODO redundant

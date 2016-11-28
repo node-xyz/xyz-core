@@ -5,28 +5,45 @@ let logger = require('./../Log/Logger')
 let systemConf
 let selfConf = {}
 
+function MergeRecursive (obj1, obj2) {
+  for (var p in obj2) {
+    try {
+      if (obj2[p].constructor == Object) {
+        obj1[p] = MergeRecursive(obj1[p], obj2[p])
+      } else {
+        obj1[p] = obj2[p]
+      }
+    } catch(e) {
+      obj1[p] = obj2[p]
+    }
+  }
+  return obj1
+}
+
 let configuration = {
   joinNode: (aNode) => {
-    for (let node of systemConf.microservices) {
-      if (node === aNode) {
-        logger.error(`node already exists. Not adding ${JSON.stringify(aNode)}`)
-        return
-      }
+    if (systemConf.microservices.indexOf(aNode) > -1) {
+      logger.error(`Node ${aNode} already in systemConf. Passing.`)
     }
     systemConf.microservices.push(aNode)
   },
 
-  removeNode: (aNode) => {
-    systemConf.microservices.splice(systemConf.microservices.indexOf(aNode), 1)
-    console.log(systemConf.microservices)
+  kickNode: (aNode) => {
+    let index = systemConf.microservices.indexOf(aNode)
+    if (index > -1)
+      systemConf.microservices.splice(systemConf.microservices.indexOf(aNode), 1)
+    else
+      logger.warn(`Attempting to remove ${aNode} which does not exist`)
   },
 
   setSelfConf: (aConf) => {
     logger.info('Setting default selfConf')
     selfConf = CONSTANTS.defaultConfig.selfConf
-    logger.info('Reading system Conf from user')
-    selfConf = aConf
-    logger.info('Reading system Conf from command line')
+    logger.info('Reading selfConf from user')
+    // TODO this is wrong. we should not replcae this, we should recursively update it
+    selfConf = MergeRecursive(selfConf, aConf)
+    logger.info('Reading selfConf from command line')
+    // TODO use MergeRecursive function to get rid of this shitty code
     let args = argParser.xyzGeneric()
     for (let arg in args) {
       let keys = arg.split('.')
@@ -61,17 +78,13 @@ let configuration = {
     systemConf = CONSTANTS.defaultConfig.systemConf
     logger.info('reading systemConf from user')
     systemConf = aConf
-  },
 
-  ensureSelf: () => {
-    for (let node of systemConf.microservices) {
-      if (node === `${selfConf.host}:${selfConf.port}`) {
-        logger.info(`Self node exists in systemConf. passing`)
-        return
-      }
+    logger.debug(`Adding self to systemConf by default`)
+    if (systemConf.microservices.indexOf(`${selfConf.host}:${selfConf.port}`) === -1) {
+      logger.info('final configurations for systemConf is:')
+      systemConf.microservices.push(`${selfConf.host}:${selfConf.port}`)
     }
-    systemConf.microservices.push(`${selfConf.host}:${selfConf.port}`)
-    logger.info(`Adding self to systemConf by default`)
+    console.log(systemConf)
   },
 
   getSystemConf: () => systemConf,

@@ -18,7 +18,7 @@ module.exports = {
   },
   intervals: {
     threshold: 5000,
-    ping: 10000,
+    ping: 3000,
     reconnect: 2500,
     KICK: 5
   },
