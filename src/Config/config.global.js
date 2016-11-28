@@ -21,13 +21,29 @@ let configuration = {
     logger.info('Reading system Conf from json file')
     selfConf = aConf
     logger.info('Reading system Conf from command line')
-    if (argParser.has('--xyzport')) selfConf.port = argParser.get('--xyzport')
-    if (argParser.has('--xyzhost')) selfConf.host = argParser.get('--xyzhost')
-    if (argParser.has('--xyzname')) selfConf.name = process.argv[1].slice(process.argv[1].lastIndexOf('/') + 1)
-    if (argParser.has('--xyzseed')) {
-      let seed = argParser.get('--xyzseed').split(':')
-      selfConf.seed = [{host: seed[0], port: seed[1]}
-      ]}
+    let args = argParser.xyzGeneric()
+    for (let arg in args) {
+      let keys = arg.split('.')
+      if (keys.length === 1) {
+        selfConf[keys[0]] = args[arg]
+      }
+      else if (keys.length === 2) {
+        if (! selfConf[keys[0]]) selfConf[keys[0]] = {}
+        selfConf[keys[0]][keys[1]] = args[arg]
+      }
+      else if (keys.length === 3) {
+        if (! selfConf[keys[0]]) selfConf[keys[0]] = {}
+        if (! selfConf[keys[1]]) selfConf[keys[1]] = {}
+        selfConf[keys[0]][keys[1]][keys[2]] = args[arg]
+      }
+    }
+  // if (argParser.has('--xyzport')) selfConf.port = argParser.get('--xyzport')
+  // if (argParser.has('--xyzhost')) selfConf.host = argParser.get('--xyzhost')
+  // if (argParser.has('--xyzname')) selfConf.name = process.argv[1].slice(process.argv[1].lastIndexOf('/') + 1)
+  // if (argParser.has('--xyzseed')) {
+  //   let seed = argParser.get('--xyzseed').split(':')
+  //   selfConf.seed = [{host: seed[0], port: seed[1]}
+  //   ]}
   },
   setSystemConf: (aConf) => {
     systemConf = aConf
