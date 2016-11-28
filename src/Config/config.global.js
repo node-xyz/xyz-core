@@ -40,10 +40,13 @@ let configuration = {
         if (! selfConf[keys[0]]) selfConf[keys[0]] = {}
         if (! selfConf[keys[1]]) selfConf[keys[1]] = {}
         selfConf[keys[0]][keys[1]][keys[2]] = args[arg]
-      }else {
+      } else {
         logger.error('command line arguments with more than three sub-keys are not allowed. passing')
       }
     }
+
+    logger.transports.console.level = selfConf.logLevel || 'info'
+    logger.info(`log level set to ${logger.transports.console.level}`)
 
     logger.debug('final configurations for selfConf is:')
     console.log(selfConf)

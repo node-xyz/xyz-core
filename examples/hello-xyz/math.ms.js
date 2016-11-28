@@ -2,8 +2,8 @@ var fn = require('./../../test/ms/mock.functions')
 var XYZ = require('./../../index').xyz
 
 var mathMs = new XYZ({
-  logLevel: 'debug',
   selfConf: {
+    logLevel: 'debug',
     allowJoin: true,
     name: 'MathMs',
     host: '127.0.0.1',

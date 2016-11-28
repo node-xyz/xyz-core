@@ -24,9 +24,6 @@ class NodeXYZ {
     _CONFIG.setSelfConf(configuration.selfConf)
     _CONFIG.setSystemConf(configuration.systemConf)
 
-    logger.transports.console.level = configuration.logLevel || 'info'
-    logger.info(`log level set to ${logger.transports.console.level}`)
-
     // just for logging convention
     global._serviceName = _CONFIG.getSelfConf().name
 
