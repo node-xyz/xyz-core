@@ -46,6 +46,7 @@ let configuration = {
     // TODO use MergeRecursive function to get rid of this shitty code
     let args = argParser.xyzGeneric()
     for (let arg in args) {
+      logger.verbose(`overriding ${arg} from command line`)
       let keys = arg.split('.')
       if (keys.length === 1) {
         if (keys[0] === 'seed')
@@ -66,7 +67,7 @@ let configuration = {
       }
     }
 
-    logger.transports.console.level = selfConf.logLevel || 'info'
+    logger.transports.console.level = selfConf.logLevel
     logger.info(`log level set to ${logger.transports.console.level}`)
 
     logger.debug('final configurations for selfConf is:')

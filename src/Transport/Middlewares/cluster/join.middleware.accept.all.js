@@ -7,7 +7,7 @@ function joinAcceptAll (params, next, end) {
   let body = params[2]
   let _transport = params[3]
 
-  logger.info(`${wrapper('bold', 'JOIN REQUEST RECEIVED | TRANSPORT')} ::passsign join request from ${body} to service reportory layer)`)
+  logger.info(`${wrapper('bold', 'JOIN REQUEST RECEIVED | TRANSPORT')} ::passsign join request from ${JSON.stringify(body)} to service reportory layer)`)
 
   _transport.emit(CONSTANTS.events.JOIN, body, response)
 

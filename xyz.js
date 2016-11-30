@@ -25,7 +25,7 @@ class NodeXYZ {
     _CONFIG.setSystemConf(configuration.systemConf)
 
     // just for logging convention
-    global._serviceName = _CONFIG.getSelfConf().name
+    global._serviceName = `${_CONFIG.getSelfConf().name}@${_CONFIG.getSelfConf().host}:${_CONFIG.getSelfConf().port}`
 
     this.serviceRepository = new ServiceRepository()
     this.setSendStrategy(configuration.defaultSendStrategy || require('xyz.service.send.first.find'))
