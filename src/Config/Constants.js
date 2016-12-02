@@ -29,6 +29,7 @@ module.exports = {
   defaultConfig: {
     selfConf: {
       name: 'node-xyz-init',
+      allowJoin: false,
       seed: [],
       port: 3333,
       host: '127.0.0.1'

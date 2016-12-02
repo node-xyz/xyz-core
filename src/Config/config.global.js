@@ -51,6 +51,13 @@ let configuration = {
       if (keys.length === 1) {
         if (keys[0] === 'seed')
           selfConf[keys[0]].push(args[arg])
+        else if (keys[0] == 'allowJoin') {
+          if (args[arg] === '0' || args[arg] === 'false') {
+            selfConf[keys[0]] = false
+          }else {
+            selfConf[keys[0]] = true
+          }
+        }
         else
           selfConf[keys[0]] = args[arg]
       }
