@@ -16,12 +16,6 @@ module.exports = {
     PING: 'ping',
     JOIN: 'join'
   },
-  intervals: {
-    threshold: 5000,
-    ping: 3000,
-    reconnect: 2500,
-    KICK: 5
-  },
   environmet: {
     dev: 'dev',
     production: 'prod'
@@ -30,9 +24,16 @@ module.exports = {
     selfConf: {
       name: 'node-xyz-init',
       allowJoin: false,
+      logLevel: 'info',
       seed: [],
       port: 3333,
-      host: '127.0.0.1'
+      host: '127.0.0.1',
+      intervals: {
+        threshold: 5000,
+        ping: 3000,
+        reconnect: 2500,
+        kick: 5
+      }
     },
     systemConf: {
       microservices: []

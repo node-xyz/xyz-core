@@ -32,6 +32,8 @@ class ServiceRepository {
     this.foreignNodes[`${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`] = {}
     this.outOfReachNodes = {}
 
+    this.INTERVALS = CONFIG.getSelfConf().intervals
+
     // Bind events
     this.bindTransportEvents()
 
@@ -42,7 +44,7 @@ class ServiceRepository {
 
     // Ping Init
     this.ping()
-    setInterval(() => this.ping(), (CONSTANTS.intervals.ping + Util.Random(CONSTANTS.intervals.threshold)))
+    setInterval(() => this.ping(), (this.INTERVALS.ping + Util.Random(this.INTERVALS.threshold)))
   }
 
   /**
@@ -106,7 +108,7 @@ class ServiceRepository {
         } else {
           if (this.outOfReachNodes[microservice]) {
             this.outOfReachNodes[microservice] += 1
-            if (this.outOfReachNodes[microservice] > (CONSTANTS.intervals.KICK)) {
+            if (this.outOfReachNodes[microservice] > (this.INTERVALS.kick)) {
               logger.error(`removing node from foreignNodes and microservices list`)
               this.kickNode(microservice)
               return
@@ -135,7 +137,7 @@ class ServiceRepository {
         this.ping()
       } else {
         logger.error(`${wrapper('bold', 'JOIN FAILED')} :: a seed node ${seeds[idx]} rejected with `)
-        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (CONSTANTS.intervals.reconnect + Util.Random(CONSTANTS.intervals.threshold)))
+        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (this.INTERVALS.reconnect + Util.Random(this.INTERVALS.threshold)))
       }
     })
   }

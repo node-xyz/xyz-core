@@ -38,7 +38,7 @@ it('is anybody there ?', function (done) {
     }
     done()
   }, 1000)
-  this.timeout(5000)
+  this.timeout(10000)
 })
 after(function () {
   snd.stop()
