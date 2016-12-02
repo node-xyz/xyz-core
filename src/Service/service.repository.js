@@ -27,6 +27,15 @@ class ServiceRepository {
 
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler()
 
+    let sendStategy = Util._require(CONFIG.getSelfConf().defaultSendStrategy)
+    if (sendStategy) {
+      this.callDispatchMiddlewareStack.register(0, sendStategy)
+    }else {
+      logger.error(`defaultSendStrategy passed to config [${sendStategy}] not found. setting the default value`)
+      this.callDispatchMiddlewareStack.register(0, require('xyz.service.send.first.find'))
+    }
+    logger.info(`default sendStategy set to ${this.callDispatchMiddlewareStack.middlewares[0].name}`)
+
     this.services = new PathTree()
     this.foreignNodes = {}
     this.foreignNodes[`${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`] = {}

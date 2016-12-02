@@ -63,7 +63,7 @@ let configuration = {
       }
       else if (keys.length === 2) {
         if (! selfConf[keys[0]]) selfConf[keys[0]] = {}
-        selfConf[keys[0]][keys[1]] = args[arg]
+        selfConf[keys[0]][keys[1]] = eval(args[arg])
       }
       else if (keys.length === 3) {
         if (! selfConf[keys[0]]) selfConf[keys[0]] = {}

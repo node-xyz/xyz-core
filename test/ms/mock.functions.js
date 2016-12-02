@@ -5,6 +5,9 @@ module.exports = {
   add: function add (payload, xResponse) {
     xResponse.send(payload.x + payload.y)
   },
+  sub: function add (payload, xResponse) {
+    xResponse.send(payload.x - payload.y)
+  },
   up: function (payload, xResponse) {
     xResponse.send(payload.toUpperCase())
   },

@@ -23,6 +23,7 @@ module.exports = {
   defaultConfig: {
     selfConf: {
       name: 'node-xyz-init',
+      defaultSendStrategy: 'xyz.service.send.first.find',
       allowJoin: false,
       logLevel: 'info',
       seed: [],

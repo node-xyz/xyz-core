@@ -3,11 +3,10 @@ var XYZ = require('./../../index').xyz
 
 var mathMs = new XYZ({
   selfConf: {
-    // logLevel: 'debug',
-    // allowJoin: true,
-    // name: 'MathMs',
-    // host: '127.0.0.1',
-    // port: 3333
+    defaultSendStrategy: require('xyz.service.send.to.all'),
+    name: 'MathMs',
+    host: '127.0.0.1',
+    port: 3333
   },
   systemConf: { microservices: []}
 })
