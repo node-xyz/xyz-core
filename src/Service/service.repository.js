@@ -122,7 +122,7 @@ class ServiceRepository {
               this.kickNode(microservice)
               return
             }
-          }else {
+          } else {
             this.outOfReachNodes[microservice] = 1
           }
 

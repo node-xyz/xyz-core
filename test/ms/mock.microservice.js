@@ -7,7 +7,8 @@ const logger = require('./../../index').logger
 class MockMicroservice {
   constructor (name, port, cwd, systemConf) {
     let selfConfiguration = {
-      'logLevel': 'verbose',
+      'logLevel': 'info',
+      intervals: {ping: 1000, threshold: 500},
       'name': name,
       'host': 'localhost',
       'port': port
