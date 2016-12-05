@@ -11,7 +11,7 @@ var mathMs = new XYZ({
   systemConf: { microservices: []}
 })
 
-mathMs.register('/math/decimal/mul', fn.mul)
+mathMs.register('/math/decimal/mul', function (payload, response) {})
 mathMs.register('/math/decimal/neg', fn.neg)
 mathMs.register('/math/decimal/sub', fn.sub)
 
