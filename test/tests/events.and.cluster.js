@@ -8,6 +8,7 @@ const http = require('http')
 
 let cwd, system, snd, rcv
 let mocks = []
+let mocks_count = 2
 before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
@@ -21,7 +22,7 @@ before(function (done) {
   rcv.register('mul', mockFunctions.mul)
   rcv.register('up', mockFunctions.up)
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < mocks_count; i++) {
     let mock = new mockMicroservice(`mock_${i}`, 3335 + i, cwd, system.getSystemConf())
     mocks.push(mock)
   }
@@ -31,15 +32,29 @@ before(function (done) {
 
 it('is anybody there ?', function (done) {
   setTimeout(() => {
-    expect(Object.keys(snd.xyz.serviceRepository.foreignNodes).length).to.equal(12)
-    expect(Object.keys(rcv.xyz.serviceRepository.foreignNodes).length).to.equal(12)
-    for ( let i = 0; i < 10; i++) {
-      expect(Object.keys(mocks[i].xyz.serviceRepository.foreignNodes).length).to.equal(12)
+    expect(Object.keys(snd.xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count + 2)
+    expect(Object.keys(rcv.xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count + 2)
+    for ( let i = 0; i < mocks_count; i++) {
+      expect(Object.keys(mocks[i].xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count + 2)
     }
     done()
   }, 1000)
   this.timeout(10000)
 })
+
+it('what goes up must come down ?', function (done) {
+  mocks[0].stop()
+  mocks[1].stop()
+
+  setTimeout(() => {
+    console.log(snd.xyz.serviceRepository)
+    expect(Object.keys(snd.xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count)
+    expect(Object.keys(rcv.xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count)
+    done()
+  }, 10000)
+  this.timeout(200000)
+})
+
 after(function () {
   snd.stop()
   rcv.stop()

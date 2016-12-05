@@ -28,7 +28,6 @@ class NodeXYZ {
     global._serviceName = `${_CONFIG.getSelfConf().name}@${_CONFIG.getSelfConf().host}:${_CONFIG.getSelfConf().port}`
 
     this.serviceRepository = new ServiceRepository()
-  // this.setSendStrategy(configuration.defaultSendStrategy || require('xyz.service.send.first.find'))
   }
 
   /**
