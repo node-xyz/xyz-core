@@ -20,6 +20,6 @@ stringMs.register('/finger', fn.finger)
 
 setInterval(() => {
   stringMs.call('/math/decimal/*', { x: 1000000,  y: new Date().getTime() }, (err, body, res) => {
-    console.log('response of decimal/*', body)
+    console.error('response of decimal/*', body)
   })
 }, 1000)

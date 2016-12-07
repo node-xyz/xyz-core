@@ -23,8 +23,9 @@ function MergeRecursive (obj1, obj2) {
 let configuration = {
   joinNode: (aNode) => {
     if (systemConf.microservices.indexOf(aNode) > -1) {
-      logger.error(`Node ${aNode} already in systemConf. Passing.`)
+      logger.warn(`Node ${aNode} already in systemConf. Passing.`)
     }
+    logger.info(`A new node {${aNode}} added to systemConf`)
     systemConf.microservices.push(aNode)
   },
 
@@ -34,6 +35,20 @@ let configuration = {
       systemConf.microservices.splice(systemConf.microservices.indexOf(aNode), 1)
     else
       logger.warn(`Attempting to remove ${aNode} which does not exist`)
+  },
+
+  /**
+   * a Duplicate function to joinNode. The inly difference is logging and the fact
+   * that this one takes an array of nodes
+   * @param  {String} someNodes a list of nodes
+   */
+  ensureNodes: (someNodes) => {
+    for (let aNode of someNodes) {
+      if (systemConf.microservices.indexOf(aNode) === -1) {
+        logger.info(`A new node {${aNode}} added to systemConf`)
+        systemConf.microservices.push(aNode)
+      }
+    }
   },
 
   setSelfConf: (aConf) => {
@@ -89,9 +104,9 @@ let configuration = {
 
     logger.debug(`Adding self to systemConf by default`)
     if (systemConf.microservices.indexOf(`${selfConf.host}:${selfConf.port}`) === -1) {
-      logger.info('final configurations for systemConf is:')
       systemConf.microservices.push(`${selfConf.host}:${selfConf.port}`)
     }
+    logger.info('final configurations for systemConf is:')
     console.log(systemConf)
   },
 

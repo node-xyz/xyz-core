@@ -8,9 +8,15 @@
     },
     {
       "name": "math.ms.js",
-      "instance": 4,
+      "instance": 1,
       "port": 4000,
-      "params": "--xyz-logLevel --xyz-intervals.ping 2000 info --xyz-allowJoin true --xyz-name mathMS"
+      "params": "--xyz-logLevel info --xyz-allowJoin true --xyz-name math.ms.master"
+    },
+    {
+      "name": "math.ms.js",
+      "instance": 4,
+      "port": 6000,
+      "params": "--xyz-logLevel info --xyz-seed 127.0.0.1:4000 --xyz-name math.ms.slave"
     }
   ]
 }

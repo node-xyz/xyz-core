@@ -87,12 +87,11 @@ class ServiceRepository {
         this.joinNode(body.sender)
       }
       logger.debug(`Responding a PING message from ${body.sender}`)
-      response.end(JSON.stringify(this.services.serializedTree))
+      response.end(JSON.stringify({services: this.services.serializedTree, nodes: CONFIG.getSystemConf().microservices }))
     })
 
     this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
       response.end(JSON.stringify(CONFIG.getSystemConf()))
-      console.log(CONFIG.getSystemConf())
     })
   }
 
@@ -111,9 +110,10 @@ class ServiceRepository {
     for (let microservice of microservices) {
       this.transportClient.ping(Util.nodeStringToObject(microservice), (err, body , res) => {
         if (err == null) {
-          this.foreignNodes[microservice] = body
+          this.foreignNodes[microservice] = body.services
+          CONFIG.ensureNodes(body.nodes)
           this.outOfReachNodes[microservice] = 0
-          logger.verbose(`${wrapper('bold', 'PING')} success :: foreignNodes = ${JSON.stringify(Object.keys(this.foreignNodes))}`)
+          logger.verbose(`${wrapper('bold', 'PING')} success :: response = ${JSON.stringify(body)}`)
         } else {
           if (this.outOfReachNodes[microservice]) {
             this.outOfReachNodes[microservice] += 1
