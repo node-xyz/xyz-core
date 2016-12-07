@@ -1,0 +1,16 @@
+{
+  "nodes": [
+    {
+      "name": "string.ms.js",
+      "instance": 1,
+      "port": 5000,
+      "params": "--xyz-logLevel debug --xyz-seed 127.0.0.1:4000 --xyz-defaultSendStrategy xyz.service.send.to.all"
+    },
+    {
+      "name": "math.ms.js",
+      "instance": 4,
+      "port": 4000,
+      "params": "--xyz-logLevel --xyz-intervals.ping 2000 info --xyz-allowJoin true --xyz-name mathMS"
+    }
+  ]
+}
