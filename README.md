@@ -9,22 +9,16 @@ Node XYZ is a NodeJS toolkit for creating microservice based distributed applica
   - **Deployment and Development**:
     XYZ provides a handy command line interface, using which you can easily test your microservices locally, deploy them and monitor them.
 
-  - **Infinite Scalability: Configurations** are the last key component to ensure that *XYZ will commensurate with whatever requirements your system might have*. That is to say, XYZ will not enforce any application dependent configuration, instead, it will provide only a default behavior (as a fallback) for it and enables you to easily override this default behavior. 
-  
+  - **Infinite Scalability: Configurations** are the last key component to ensure that *XYZ will commensurate with whatever requirements your system might have*. That is to say, XYZ will not enforce any application dependent configuration, instead, it will provide only a default behavior (as a fallback) for it and enables you to easily override this default behavior.
+
 [![XYZ introduction demo](https://img.youtube.com/vi/tFBvnUHnmAk/0.jpg)](https://www.youtube.com/watch?v=tFBvnUHnmAk)
 
-## Hello World
-
-Install xyz-core system
-
-    npm install xyz-core
-
-include it in your code, initialize a system and expose a service. Read more on:
+## Getting Started with Node XYZ
 
 - [Website](https://node-xyz.github.io)
-- [Getting Started](https://node-xyz.github.io/getting-started)
+- [Getting Started](https://node-xyz.github.io/documentations)
 - [API Doc](https://node-xyz.github.io/apidoc) [in progress]
-
+- [Wiki](https://github.com/node-xyz/xyz-core/wiki)
 
 ## MVP Feature List
 
