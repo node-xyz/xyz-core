@@ -103,7 +103,7 @@ class ServiceRepository {
    */
   call (servicePath, userPayload, responseCallback, sendStrategy) {
     if (sendStrategy) {
-      sendStrategy([Path.format(servicePath), userPayload], this.foreignNodes, this.transportClient, responseCallback])
+      sendStrategy([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback])
     }else {
       this.callDispatchMiddlewareStack.apply([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], 0)
     }

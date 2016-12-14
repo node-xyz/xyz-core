@@ -56,7 +56,7 @@ class NodeXYZ {
    * @param  {Function} responseCallback Callback to manage the response
    */
   call (serviceName, userPayload, responseCallback, sendStrategy) {
-    this.serviceRepository.call(serviceName, userPayload, responseCallback)
+    this.serviceRepository.call(serviceName, userPayload, responseCallback, sendStrategy)
   }
 
   /**
