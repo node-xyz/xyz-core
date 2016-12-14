@@ -53,7 +53,7 @@ class ServiceRepository {
 
     // Ping Init
     this.ping()
-    setInterval(() => this.ping(), (this.INTERVALS.ping + Util.Random(this.INTERVALS.threshold)))
+    this.pingInterval = setInterval(() => this.ping(), (this.INTERVALS.ping + Util.Random(this.INTERVALS.threshold)))
   }
 
   /**
@@ -87,7 +87,7 @@ class ServiceRepository {
         this.joinNode(body.sender)
       }
       logger.debug(`Responding a PING message from ${body.sender}`)
-      response.end(JSON.stringify({services: this.services.serializedTree, nodes: CONFIG.getSystemConf().microservices }))
+      response.end(JSON.stringify({services: this.services.serializedTree, nodes: CONFIG.getSystemConf().nodes }))
     })
 
     this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
@@ -106,27 +106,27 @@ class ServiceRepository {
   }
 
   ping () {
-    let microservices = CONFIG.getSystemConf().microservices
-    for (let microservice of microservices) {
-      this.transportClient.ping(Util.nodeStringToObject(microservice), (err, body , res) => {
+    let nodes = CONFIG.getSystemConf().nodes
+    for (let node of nodes) {
+      this.transportClient.ping(Util.nodeStringToObject(node), (err, body , res) => {
         if (err == null) {
-          this.foreignNodes[microservice] = body.services
+          this.foreignNodes[node] = body.services
           CONFIG.ensureNodes(body.nodes)
-          this.outOfReachNodes[microservice] = 0
+          this.outOfReachNodes[node] = 0
           logger.verbose(`${wrapper('bold', 'PING')} success :: response = ${JSON.stringify(body)}`)
         } else {
-          if (this.outOfReachNodes[microservice]) {
-            this.outOfReachNodes[microservice] += 1
-            if (this.outOfReachNodes[microservice] > (this.INTERVALS.kick)) {
-              logger.error(`removing node from foreignNodes and microservices list`)
-              this.kickNode(microservice)
+          if (this.outOfReachNodes[node]) {
+            this.outOfReachNodes[node] += 1
+            if (this.outOfReachNodes[node] > (this.INTERVALS.kick)) {
+              logger.error(`removing node from foreignNodes and nodes list`)
+              this.kickNode(node)
               return
             }
           } else {
-            this.outOfReachNodes[microservice] = 1
+            this.outOfReachNodes[node] = 1
           }
 
-          logger.error(`Ping Error :: ${microservice} has been out of reach for ${this.outOfReachNodes[microservice]} pings ::  ${JSON.stringify(err)}`)
+          logger.error(`Ping Error :: ${node} has been out of reach for ${this.outOfReachNodes[node]} pings ::  ${JSON.stringify(err)}`)
         }
       })
     }
@@ -139,8 +139,8 @@ class ServiceRepository {
       if (! err) {
         logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
         logger.info(`Response nodes are`)
-        console.log(body.microservices)
-        for (let node of body.microservices) {
+        console.log(body.nodes)
+        for (let node of body.nodes) {
           this.joinNode(node)
         }
         this.ping()
@@ -173,6 +173,7 @@ class ServiceRepository {
 
   terminate () {
     this.transportServer.close()
+    clearInterval(this.pingInterval)
   }
 }
 

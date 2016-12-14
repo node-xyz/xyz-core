@@ -15,7 +15,7 @@ var expressMs = new XYZ({
     port: 6000
   },
   systemConf: {
-    microservices: []
+    nodes: []
   }
 })
 

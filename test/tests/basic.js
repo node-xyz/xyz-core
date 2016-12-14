@@ -1,6 +1,6 @@
 const common = require('../common')
 const expect = common.expect
-const mockMicroservice = common.mockMicroService
+const mockNode = common.mockNode
 const mockSystem = common.mockSystem
 const mockFunctions = common.mockFunctions
 const http = require('http')

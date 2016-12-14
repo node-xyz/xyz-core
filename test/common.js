@@ -1,5 +1,5 @@
 let expect = require('chai').expect
-let mockMicroservice = require('./ms/mock.microservice').MockMicroservice
+let mockNode = require('./ms/mock.node').mockNode
 let mockFunctions = require('./ms/mock.functions')
 let mockSystem = require('./ms/mock.system')
 
@@ -7,10 +7,10 @@ exports.init = () => {
   let cwd, snd, rcv, system
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
-  system.addMicroservice('localhost:3333')
-  system.addMicroservice('localhost:3334')
-  snd = new mockMicroservice('snd', 3334, cwd, system.getSystemConf())
-  rcv = new mockMicroservice('rcv', 3333, cwd, system.getSystemConf())
+  system.addNode('localhost:3333')
+  system.addNode('localhost:3334')
+  snd = new mockNode('snd', 3334, cwd, system.getSystemConf())
+  rcv = new mockNode('rcv', 3333, cwd, system.getSystemConf())
   rcv.register('/mul', mockFunctions.mul)
   rcv.register('/up', mockFunctions.up)
   rcv.register('/rev', mockFunctions.rev)
@@ -25,7 +25,7 @@ exports.init = () => {
   }
 }
 exports.expect = expect
-exports.mockMicroService = mockMicroservice
+exports.mockNode = mockNode
 exports.mockFunctions = mockFunctions
 exports.mockSystem = mockSystem
 exports.firstfind = require('xyz.service.send.first.find')

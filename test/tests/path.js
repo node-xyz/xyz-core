@@ -2,7 +2,7 @@ var Path = require('./../../src/Service/path')
 const common = require('../common')
 let logger = require('./../../src/Log/Logger')
 const expect = common.expect
-const mockMicroservice = common.mockMicroService
+const mockNode = common.mockNode
 const mockSystem = common.mockSystem
 const mockFunctions = common.mockFunctions
 const PathTree = require('./../../src/Service/path.tree')
@@ -11,10 +11,10 @@ let cwd, system, snd, rcv
 before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
-  system.addMicroservice('localhost:3333')
-  system.addMicroservice('localhost:3334')
-  snd = new mockMicroservice('snd', 3334, cwd, system.getSystemConf())
-  rcv = new mockMicroservice('rcv', 3333, cwd, system.getSystemConf())
+  system.addNode('localhost:3333')
+  system.addNode('localhost:3334')
+  snd = new mockNode('snd', 3334, cwd, system.getSystemConf())
+  rcv = new mockNode('rcv', 3333, cwd, system.getSystemConf())
 
   rcv.register('/math/decimal/mul', mockFunctions.mul)
   rcv.register('/math/decimal/add', mockFunctions.add)

@@ -4,7 +4,7 @@ const logger = require('./../../index').logger
 /**
  * A Wrapper class around microservice interface
  */
-class MockMicroservice {
+class mockNode {
   constructor (name, port, cwd, systemConf) {
     let selfConfiguration = {
       'logLevel': 'info',
@@ -33,11 +33,11 @@ class MockMicroservice {
   }
 
   stop () {
-    logger.debug('service stopped')
+    logger.warn('service stopped')
     this.xyz.terminate()
   }
 }
 
 module.exports = {
-  MockMicroservice: MockMicroservice
+  mockNode: mockNode
 }

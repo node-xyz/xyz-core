@@ -2,17 +2,17 @@ const fs = require('fs')
 
 class MockSystem {
   constructor (cwd) {
-    this.microservices = []
+    this.nodes = []
     this.cwd = cwd
   }
 
-  addMicroservice (ms) {
-    this.microservices.push(ms)
+  addNode (ms) {
+    this.nodes.push(ms)
   }
 
   getSystemConf () {
     return {
-      microservices: this.microservices
+      nodes: this.nodes
     }
   }
 }

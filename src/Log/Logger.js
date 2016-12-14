@@ -1,5 +1,6 @@
 let winston = require('winston')
 const wrapper = require('./../Util/ansi.colors').wrapper
+const CONSTANTS = require('./../../src/Config/Constants')
 
 function levelColor (level) {
   if (level === 'silly') {

@@ -1,6 +1,6 @@
 const common = require('../common')
 let expect = common.expect
-let mockMicroservice = common.mockMicroService
+let mockNode = common.mockNode
 let mockFunctions = common.mockFunctions
 let mockSystem = common.mockSystem
 

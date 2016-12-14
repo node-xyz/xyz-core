@@ -22,17 +22,17 @@ function MergeRecursive (obj1, obj2) {
 
 let configuration = {
   joinNode: (aNode) => {
-    if (systemConf.microservices.indexOf(aNode) > -1) {
+    if (systemConf.nodes.indexOf(aNode) > -1) {
       logger.warn(`Node ${aNode} already in systemConf. Passing.`)
     }
     logger.info(`A new node {${aNode}} added to systemConf`)
-    systemConf.microservices.push(aNode)
+    systemConf.nodes.push(aNode)
   },
 
   kickNode: (aNode) => {
-    let index = systemConf.microservices.indexOf(aNode)
+    let index = systemConf.nodes.indexOf(aNode)
     if (index > -1)
-      systemConf.microservices.splice(systemConf.microservices.indexOf(aNode), 1)
+      systemConf.nodes.splice(systemConf.nodes.indexOf(aNode), 1)
     else
       logger.warn(`Attempting to remove ${aNode} which does not exist`)
   },
@@ -44,9 +44,9 @@ let configuration = {
    */
   ensureNodes: (someNodes) => {
     for (let aNode of someNodes) {
-      if (systemConf.microservices.indexOf(aNode) === -1) {
+      if (systemConf.nodes.indexOf(aNode) === -1) {
         logger.info(`A new node {${aNode}} added to systemConf`)
-        systemConf.microservices.push(aNode)
+        systemConf.nodes.push(aNode)
       }
     }
   },
@@ -94,6 +94,8 @@ let configuration = {
 
     logger.debug('final configurations for selfConf is:')
     console.log(selfConf)
+
+  // TODO : fix this. this is temporarly to improve our test case
   },
 
   setSystemConf: (aConf) => {
@@ -103,8 +105,8 @@ let configuration = {
     systemConf = aConf
 
     logger.debug(`Adding self to systemConf by default`)
-    if (systemConf.microservices.indexOf(`${selfConf.host}:${selfConf.port}`) === -1) {
-      systemConf.microservices.push(`${selfConf.host}:${selfConf.port}`)
+    if (systemConf.nodes.indexOf(`${selfConf.host}:${selfConf.port}`) === -1) {
+      systemConf.nodes.push(`${selfConf.host}:${selfConf.port}`)
     }
     logger.info('final configurations for systemConf is:')
     console.log(systemConf)

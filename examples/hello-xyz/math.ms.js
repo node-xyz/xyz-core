@@ -8,7 +8,7 @@ var mathMs = new XYZ({
     host: '127.0.0.1',
     port: 3333
   },
-  systemConf: { microservices: []}
+  systemConf: { nodes: []}
 })
 
 mathMs.register('/math/decimal/mul', fn.mul)

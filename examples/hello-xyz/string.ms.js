@@ -10,7 +10,7 @@ var stringMs = new XYZ({
     port: 3334
   },
   systemConf: {
-    microservices: []
+    nodes: []
   }
 }, 'debug')
 
