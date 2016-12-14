@@ -55,7 +55,7 @@ class NodeXYZ {
    * @param  {Object|String|Number} userPayload      Data to pass to receiver
    * @param  {Function} responseCallback Callback to manage the response
    */
-  call (serviceName, userPayload, responseCallback) {
+  call (serviceName, userPayload, responseCallback, sendStrategy) {
     this.serviceRepository.call(serviceName, userPayload, responseCallback)
   }
 

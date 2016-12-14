@@ -55,7 +55,6 @@ let configuration = {
     logger.info('Setting default selfConf')
     selfConf = CONSTANTS.defaultConfig.selfConf
     logger.info('Reading selfConf from user')
-    // TODO this is wrong. we should not replcae this, we should recursively update it
     selfConf = MergeRecursive(selfConf, aConf)
     logger.info('Reading selfConf from command line')
     // TODO use MergeRecursive function to get rid of this shitty code
@@ -94,8 +93,6 @@ let configuration = {
 
     logger.debug('final configurations for selfConf is:')
     console.log(selfConf)
-
-  // TODO : fix this. this is temporarly to improve our test case
   },
 
   setSystemConf: (aConf) => {

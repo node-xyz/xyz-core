@@ -101,8 +101,12 @@ class ServiceRepository {
    * @param  {Object|String|Number|Array} userPayload      payload to be passed to the receiving service
    * @param  {Function} responseCallback              Optional callback to handle the response
    */
-  call (servicePath, userPayload, responseCallback) {
-    this.callDispatchMiddlewareStack.apply([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], 0)
+  call (servicePath, userPayload, responseCallback, sendStrategy) {
+    if (sendStrategy) {
+      sendStrategy([Path.format(servicePath), userPayload], this.foreignNodes, this.transportClient, responseCallback])
+    }else {
+      this.callDispatchMiddlewareStack.apply([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], 0)
+    }
   }
 
   ping () {
