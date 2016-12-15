@@ -30,11 +30,12 @@ module.exports = {
       port: 3333,
       host: '127.0.0.1',
       intervals: {
-        threshold: 5000,
-        ping: 3000,
-        reconnect: 2500,
-        kick: 5
-      }
+        // threshold: 5000,
+        // ping: 3000,
+        // kick: 5,
+        reconnect: 2500
+      },
+      defaultBootstrap: true
     },
     systemConf: {
       nodes: []

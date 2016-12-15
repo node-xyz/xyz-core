@@ -3,8 +3,8 @@ function clusterListener (xyz) {
     console.log(`joined cluster from event listener`)
   })
 
-  xyz.serviceRepository.on('requests:receive', (data) => {
-    console.console.log('request received with' , data)
+  xyz.serviceRepository.on('request:receive', (data) => {
+    console.log('request received with' , data)
   })
 }
 

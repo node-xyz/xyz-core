@@ -30,7 +30,9 @@ class NodeXYZ {
 
     this.serviceRepository = new ServiceRepository()
 
-    this._bootstrap()
+    if (CONFIG.getSelfConf().defaultBootstrap) {
+      this.bootstrap()
+    }
   }
 
   /**
@@ -66,7 +68,7 @@ class NodeXYZ {
    * bootstrap function. the main goal is the lower the weight of the cunstroctor
    * Not implemented yet
    */
-  _bootstrap () {
+  bootstrap () {
     pingBoostrap(this)
   }
 

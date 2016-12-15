@@ -30,7 +30,7 @@ let pingBoostraper = (xyz) => {
           } else {
             SR.outOfReachNodes[node] = 1
           }
-          logger.error(`Ping Error :: ${node} has been out of reach for ${this.outOfReachNodes[node]} pings ::  ${JSON.stringify(err)}`)
+          logger.error(`Ping Error :: ${node} has been out of reach for ${SR.outOfReachNodes[node]} pings ::  ${JSON.stringify(err)}`)
         }
       })
     }
