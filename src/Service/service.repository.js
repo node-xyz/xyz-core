@@ -6,12 +6,12 @@ let CONFIG = require('./../Config/config.global')
 const XResponse = require('../Transport/XResponse')
 const logger = require('./../Log/Logger')
 const Util = require('./../Util/Util')
-let machineReport = require('./../Util/machine.reporter')
 const PathTree = require('./path.tree')
 const Path = require('./path')
 const wrapper = require('./../Util/ansi.colors').wrapper
+const EventEmitter = require('events')
 
-class ServiceRepository {
+class ServiceRepository extends EventEmitter {
   /**
    * Create a service repository object
    * Transport client and server will be composed by ServiceRepository
@@ -22,6 +22,8 @@ class ServiceRepository {
    * Request ( call ) and Ping Events are bounded to this object
    */
   constructor () {
+    super()
+
     this.transportServer = new HTTP.Server()
     this.transportClient = new HTTP.Client()
 
@@ -68,6 +70,7 @@ class ServiceRepository {
 
   bindTransportEvents () {
     this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
+      this.emit('request:receive', {body: body})
       let fn = this.services.getPathFunction(body.serviceName)
       if (fn) {
         logger.verbose(`ServiceRepository received service call ${wrapper('bold', body.serviceName)}`)
@@ -140,9 +143,9 @@ class ServiceRepository {
     let seeds = CONFIG.getSelfConf().seed
     this.transportClient.contactSeed(Util.nodeStringToObject(seeds[idx]), (err, body, res) => {
       if (! err) {
+        this.emit('cluster:join')
         logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
-        logger.info(`Response nodes are`)
-        console.log(body.nodes)
+        logger.debug(`Response nodes are ${body.nodes}`)
         for (let node of body.nodes) {
           this.joinNode(node)
         }
