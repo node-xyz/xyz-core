@@ -110,6 +110,7 @@ let configuration = {
   },
 
   getSystemConf: () => systemConf,
+
   getSelfConf: () => selfConf
 }
 

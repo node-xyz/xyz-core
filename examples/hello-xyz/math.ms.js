@@ -1,5 +1,6 @@
-var fn = require('./../../test/ms/mock.functions')
-var XYZ = require('./../../index').xyz
+let fn = require('./../../test/ms/mock.functions')
+let XYZ = require('./../../index').xyz
+let defaultPingBootstra = require('./../../src/Bootstrap/ping.default')
 
 var mathMs = new XYZ({
   selfConf: {

@@ -51,9 +51,9 @@ class ServiceRepository {
       this.contactSeed(0)
     }
 
-    // Ping Init
-    this.ping()
-    this.pingInterval = setInterval(() => this.ping(), (this.INTERVALS.ping + Util.Random(this.INTERVALS.threshold)))
+  // Ping Init
+  // this.ping()
+  // this.pingInterval = setInterval(() => this.ping(), (this.INTERVALS.ping + Util.Random(this.INTERVALS.threshold)))
   }
 
   /**
@@ -129,7 +129,6 @@ class ServiceRepository {
           } else {
             this.outOfReachNodes[node] = 1
           }
-
           logger.error(`Ping Error :: ${node} has been out of reach for ${this.outOfReachNodes[node]} pings ::  ${JSON.stringify(err)}`)
         }
       })

@@ -1,7 +1,8 @@
 const ServiceRepository = require('./src/Service/service.repository')
-let _CONFIG = require('./src/Config/config.global')
+let CONFIG = require('./src/Config/config.global')
 let logger = require('./src/Log/Logger')
 let argParser = require('./src/Util/commandline.parser')
+let pingBoostrap = require('./src/Bootstrap/ping.default')
 
 /*
 Todo see if using stream instead of events is better
@@ -21,13 +22,15 @@ class NodeXYZ {
    * - systemConf : file instance of system Configuration aka xyz.json
    */
   constructor (configuration) {
-    _CONFIG.setSelfConf(configuration.selfConf)
-    _CONFIG.setSystemConf(configuration.systemConf)
+    CONFIG.setSelfConf(configuration.selfConf)
+    CONFIG.setSystemConf(configuration.systemConf)
 
     // just for logging convention
-    global._serviceName = `${_CONFIG.getSelfConf().name}@${_CONFIG.getSelfConf().host}:${_CONFIG.getSelfConf().port}`
+    global._serviceName = `${CONFIG.getSelfConf().name}@${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`
 
     this.serviceRepository = new ServiceRepository()
+
+    this._bootstrap()
   }
 
   /**
@@ -63,7 +66,9 @@ class NodeXYZ {
    * bootstrap function. the main goal is the lower the weight of the cunstroctor
    * Not implemented yet
    */
-  bootstrap (configuration) {}
+  _bootstrap () {
+    pingBoostrap(this)
+  }
 
   setSendStrategy (fn) {
     // for now, only one middleware should be added to this. no more.
