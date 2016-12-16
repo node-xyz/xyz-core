@@ -152,7 +152,7 @@ class ServiceRepository extends EventEmitter {
         this.ping()
       } else {
         logger.error(`${wrapper('bold', 'JOIN FAILED')} :: a seed node ${seeds[idx]} rejected with `)
-        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , (this.INTERVALS.reconnect + Util.Random(this.INTERVALS.threshold)))
+        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , this.INTERVALS.reconnect)
       }
     })
   }
