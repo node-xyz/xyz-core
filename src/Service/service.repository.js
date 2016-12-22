@@ -88,14 +88,15 @@ class ServiceRepository extends EventEmitter {
       }
     })
 
-    this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
-      if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
-        logger.warn(`new node is pinging me. adding to lists. address : ${body.sender}`)
-        this.joinNode(body.sender)
-      }
-      logger.debug(`Responding a PING message from ${body.sender}`)
-      response.end(JSON.stringify({services: this.services.serializedTree, nodes: CONFIG.getSystemConf().nodes }))
-    })
+    // DEPRACATED 
+    // this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
+    //   if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
+    //     logger.warn(`new node is pinging me. adding to lists. address : ${body.sender}`)
+    //     this.joinNode(body.sender)
+    //   }
+    //   logger.debug(`Responding a PING message from ${body.sender}`)
+    //   response.end(JSON.stringify({services: this.services.serializedTree, nodes: CONFIG.getSystemConf().nodes }))
+    // })
 
     this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
       response.end(JSON.stringify(CONFIG.getSystemConf()))
@@ -112,6 +113,8 @@ class ServiceRepository extends EventEmitter {
     }
   }
 
+  // this is DEPRECATED and a bootstrap function is used instead.
+  // We're gonna keep the code for now
   ping () {
     let nodes = CONFIG.getSystemConf().nodes
     for (let node of nodes) {
