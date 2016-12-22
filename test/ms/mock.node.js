@@ -8,7 +8,6 @@ class mockNode {
   constructor (name, port, cwd, systemConf) {
     let selfConfiguration = {
       'logLevel': 'info',
-      intervals: {ping: 1000, threshold: 500},
       'name': name,
       'host': 'localhost',
       'port': port
