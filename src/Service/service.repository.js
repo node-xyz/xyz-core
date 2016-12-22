@@ -16,7 +16,7 @@ const logger = require('./../Log/Logger')
 const Util = require('./../Util/Util')
 const PathTree = require('./path.tree')
 const Path = require('./path')
-const wrapper = require('./../Util/ansi.colors').wrapper
+const wrapper = require('./../Util/Util').wrapper
 const EventEmitter = require('events')
 
 class ServiceRepository extends EventEmitter {

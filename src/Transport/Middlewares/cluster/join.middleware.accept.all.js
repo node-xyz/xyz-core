@@ -1,5 +1,5 @@
 const logger = require('./../../../Log/Logger')
-const wrapper = require('./../../../Util/ansi.colors').wrapper
+const wrapper = require('./../../../Util/Util').wrapper
 const CONSTANTS = require('./../../../Config/Constants')
 function joinAcceptAll (params, next, end) {
   let request = params[0]

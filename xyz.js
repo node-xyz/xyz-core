@@ -20,6 +20,11 @@ class NodeXYZ {
 
     this.serviceRepository = new ServiceRepository()
 
+    /*
+    Global exported functions and modules
+     */
+    this.CONFIG = CONFIG
+
     if (CONFIG.getSelfConf().defaultBootstrap) {
       this.bootstrap()
     }

@@ -5,7 +5,7 @@
     },
     "source": {
         "include": ["./src" , "./index.js"],
-	"exclude": ["./src/Util/ansi.colors.js"],
+	"exclude": ["./src/Util/Util.js"],
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "plugins": [],

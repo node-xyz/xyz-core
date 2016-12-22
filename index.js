@@ -8,8 +8,6 @@ module.exports = {
   xyz: xyz,
   logger: logger,
   path: path,
-  CONFIG: CONFIG,
   CONSTANTS: CONSTANTS,
-  Util: require('./src/Util/Util'),
-  logUtils: require('./src/Util/ansi.colors')
+  Util: require('./src/Util/Util')
 }
