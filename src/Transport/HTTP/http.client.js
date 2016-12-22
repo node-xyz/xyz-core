@@ -6,17 +6,18 @@ const _CONFIGURATIONS = require('./../../Config/config.global')
 let GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
 
 class HTTPClient {
-  constructor () {
+  constructor (xyz) {
     this.callPostfix = CONSTANTS.url.CALL
     this.pingPrefix = CONSTANTS.url.PING
+    this.xyz = xyz
 
-    this.callDispatchMidllewareStack = new GenericMiddlewareHandler()
+    this.callDispatchMidllewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMidllewareStack')
     this.callDispatchMidllewareStack.register(-1, require('./../Middlewares/call/call.dispatch.export.middleware'))
 
-    this.pingDispatchMiddlewareStack = new GenericMiddlewareHandler()
+    this.pingDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'pingDispatchMiddlewareStack')
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
 
-    this.joinDispatchMiddlewareStack = new GenericMiddlewareHandler()
+    this.joinDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'joinDispatchMiddlewareStack')
     this.joinDispatchMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.export'))
   }
 

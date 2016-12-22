@@ -21,11 +21,12 @@ const logger = require('./../Log/Logger')
 class GenericMiddlewareHandler {
   // Generic middleware handler. it manages an array of functions and applies each of them on a target.
   // Note that one instance of this handler can work on multiple object at the same time
-  // Sice the .apply method is indipendent of the state.
-
-  constructor () {
+  // Sice the `.apply` method is indipendent of the state.
+  constructor (xyz, name) {
     this.middlewares = []
     this.middlewareIndex = 0
+    this.xyz = xyz
+    this.name = name
   }
 
   // Registering a new middleware.<br>
@@ -34,7 +35,7 @@ class GenericMiddlewareHandler {
   // **0** will prepend the function by default and -1 will append it
   // You'll use 0 most of the time
   register (index, fn) {
-    logger.debug(`Registering middleware at ${index} : ${fn.name}`)
+    logger.debug(`Registering middleware at ${this.name}[${index}] : ${fn.name}`)
     if (index === -1) {
       this.middlewares.push(fn)
     } else if (index == 0) {
@@ -58,17 +59,19 @@ class GenericMiddlewareHandler {
   //
   // **@param** {Number} index - current index inside the middleware array to be applied
   apply (params, index) {
-    logger.silly(`applying middleware ${index}`)
+    logger.silly(`applying middleware ${this.name}[${index}]`)
+
+    let self = this
     this.middlewares[index](params,
       (_params) => { // next
         if ((index + 1) < this.middlewares.length) {
-          this.apply(params, index + 1)
+          this.apply(params, index + 1, this.xyz)
         } else {
-          logger.silly(`middleware Stack for ${params[0].url} finished`)
+          logger.silly(`middleware Stack for ${this.name} finished`)
         }
       }, () => { // end
-        logger.silly(`middleware Stack for ${params[0].uri} terminated by calling end()`)
-      })
+        logger.silly(`middleware Stack for ${this.name} terminated by calling end()`)
+      }, this.xyz)
   }
 
   //  Return an array of middlewares registered so far.
@@ -78,7 +81,7 @@ class GenericMiddlewareHandler {
 
   // Remove a middleware form the stack
   remove (idx) {
-    logger.silly(`removing middleware ${this.middlewareIndex}`)
+    logger.silly(`removing middleware ${this.name}[${this.middlewareIndex}]`)
     if (idx == -1) {
       this.middlewares = []
       this.middlewareIndex = 0

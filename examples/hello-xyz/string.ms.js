@@ -1,5 +1,5 @@
 var fn = require('./../../test/ms/mock.functions')
-var XYZ = require('./../../index').xyz
+var XYZ = require('./../../index')
 let sndToAll = require('xyz.service.send.to.all')
 
 var stringMs = new XYZ({

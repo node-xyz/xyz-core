@@ -18,12 +18,16 @@ class NodeXYZ {
      */
     global._serviceName = `${CONFIG.getSelfConf().name}@${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`
 
-    this.serviceRepository = new ServiceRepository()
-
     /*
     Global exported functions and modules
      */
     this.CONFIG = CONFIG
+    this.logger = logger
+    this.path = require('./src/Service/path')
+    this.CONSTANTS = require('./src/Config/Constants')
+    this.Util = require('./src/Util/Util')
+
+    this.serviceRepository = new ServiceRepository(this)
 
     if (CONFIG.getSelfConf().defaultBootstrap) {
       this.bootstrap()

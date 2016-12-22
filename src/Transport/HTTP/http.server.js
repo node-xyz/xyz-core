@@ -8,18 +8,18 @@ const machineReport = require('./../../Util/machine.reporter')
 const _CONFIGURATION = require('./../../Config/config.global')
 
 class HTTPServer extends EventEmitter {
-  constructor () {
+  constructor (xyz) {
     super()
     http.globalAgent.maxSockets = Infinity
     this.port = _CONFIGURATION.getSelfConf().port
 
-    this.callReceiveMiddlewareStack = new GenericMiddlewareHandler()
+    this.callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz)
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
 
-    this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler()
+    this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz)
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
 
-    this.joinReceiveMiddlewareStack = new GenericMiddlewareHandler()
+    this.joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz)
     this.joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
 
     this.server = http.createServer()

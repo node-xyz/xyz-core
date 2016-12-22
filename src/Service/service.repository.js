@@ -24,13 +24,13 @@ class ServiceRepository extends EventEmitter {
   //  Creates a new ServiceRepository
   //  Request ( call ) and Ping Events are bounded to this object
   //  Transport client and server will be composed by ServiceRepository
-  constructor () {
+  constructor (xyz) {
     super()
 
-    this.transportServer = new HTTP.Server()
-    this.transportClient = new HTTP.Client()
+    this.transportServer = new HTTP.Server(xyz)
+    this.transportClient = new HTTP.Client(xyz)
 
-    this.callDispatchMiddlewareStack = new GenericMiddlewareHandler()
+    this.callDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callDispatchMiddlewareStack')
 
     let sendStategy = Util._require(CONFIG.getSelfConf().defaultSendStrategy)
     if (sendStategy) {
@@ -45,6 +45,7 @@ class ServiceRepository extends EventEmitter {
     this.foreignNodes = {}
     this.foreignNodes[`${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`] = {}
     this.outOfReachNodes = {}
+    this.xyz = xyz
 
     this.INTERVALS = CONFIG.getSelfConf().intervals
 
@@ -88,7 +89,7 @@ class ServiceRepository extends EventEmitter {
       }
     })
 
-    // DEPRACATED 
+    // DEPRACATED
     // this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
     //   if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
     //     logger.warn(`new node is pinging me. adding to lists. address : ${body.sender}`)
@@ -107,7 +108,8 @@ class ServiceRepository extends EventEmitter {
   // Details about the arguments in <a href="xyz.html"> xyz.js </a>
   call (servicePath, userPayload, responseCallback, sendStrategy) {
     if (sendStrategy) {
-      sendStrategy([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback])
+      // this is trying to imitate the middleware signiture 
+      sendStrategy([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], null, null, this.xyz)
     }else {
       this.callDispatchMiddlewareStack.apply([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], 0)
     }

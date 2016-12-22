@@ -1,4 +1,4 @@
-let XYZ = require('./../../index').xyz
+let XYZ = require('./../../index')
 let clusterListenerBootstrap = require('./../../src/Bootstrap/clsuter.listener')
 let fn = require('./../../test/ms/mock.functions')
 
