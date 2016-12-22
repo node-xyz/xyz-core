@@ -16,10 +16,11 @@
     "jsdoc": "^3.4.0",
     "jshint": "^2.9.2",
     "mocha": "^2.5.3",
-    "docoo": "latest"
+    "docco": "latest"
   },
   "dependencies": {
     "winston": "^2.2.0",
-    "xyz.service.send.first.find": "*"
+    "xyz.service.send.first.find": "latest",
+    "xyz.ping.default.bootstrap": "latest"
   }
 }

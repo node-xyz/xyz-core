@@ -2,7 +2,7 @@ const ServiceRepository = require('./src/Service/service.repository')
 let CONFIG = require('./src/Config/config.global')
 let logger = require('./src/Log/Logger')
 let argParser = require('./src/Util/commandline.parser')
-let pingBoostrap = require('./src/Bootstrap/ping.default')
+let pingBoostrap = require('xyz.ping.default.bootstrap')
 
 // Detail about system Conf keys
 // TODO

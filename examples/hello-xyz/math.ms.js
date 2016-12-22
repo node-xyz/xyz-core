@@ -1,6 +1,4 @@
-let fn = require('./../../test/ms/mock.functions')
 let XYZ = require('./../../index').xyz
-let defaultPingBootstra = require('./../../src/Bootstrap/ping.default')
 let clusterListenerBootstrap = require('./../../src/Bootstrap/clsuter.listener')
 let fn = require('./../../test/ms/mock.functions')
 
