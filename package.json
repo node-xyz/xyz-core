@@ -19,8 +19,8 @@
     "docco": "latest"
   },
   "dependencies": {
-    "winston": "^2.2.0",
-    "xyz.service.send.first.find": "latest",
-    "xyz.ping.default.bootstrap": "latest"
+    "winston": "^2.2.0"
+    /*"xyz.service.send.first.find": "latest",*/
+    /*"xyz.ping.default.bootstrap": "latest"*/
   }
 }

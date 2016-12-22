@@ -1,6 +1,6 @@
-const XYZ = require('./../../index').xyz
+const XYZ = require('./../../index')
 const fs = require('fs')
-const logger = require('./../../index').logger
+let logger
 /**
  * A Wrapper class around microservice interface
  */
@@ -18,6 +18,8 @@ class mockNode {
       selfConf: selfConfiguration,
       systemConf: systemConf
     })
+
+    logger = this.xyz.logger
   }
 
   register (name, fn) {
