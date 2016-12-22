@@ -4,28 +4,18 @@ let logger = require('./src/Log/Logger')
 let argParser = require('./src/Util/commandline.parser')
 let pingBoostrap = require('./src/Bootstrap/ping.default')
 
-/*
-Todo see if using stream instead of events is better
-Todo Support local clustering[Must hack with it first]
-TODO add some sort of checking before waiting for body data
-TODO integrate the flow of body/response/XResponse params on middlewares
-TODO what happens when we early response using params[1].destory() but meanwhile call the next() ??
-TODO think about ways to remote deploy this ( +docker )
-TODO implement any auth for call
-TODO clean the cunstroctor and add a bootstrap()
- */
-
+// Detail about system Conf keys
+// TODO
 class NodeXYZ {
-  /**
-   * Create new XYZ object. all user APIs and method will be ported from this object
-   * @param  {Object} configuration - an Object with format
-   * - systemConf : file instance of system Configuration aka xyz.json
-   */
+  // an example of the configuration requried can be found in CONSTANTS.js file.
+  // Note that if you do not set a value, they'll be replaced.
   constructor (configuration) {
     CONFIG.setSelfConf(configuration.selfConf)
     CONFIG.setSystemConf(configuration.systemConf)
 
-    // just for logging convention
+    /*
+    just for logging convention
+     */
     global._serviceName = `${CONFIG.getSelfConf().name}@${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`
 
     this.serviceRepository = new ServiceRepository()
@@ -35,39 +25,32 @@ class NodeXYZ {
     }
   }
 
-  /**
-   * Stop XYZ system. will stop all ping and communication requests.
-   * Should onle be used with tests.
-   */
+  //  Stop XYZ system. will stop all ping and communication requests.
+  //  Should onle be used with tests.
   terminate () {
     this.serviceRepository.terminate()
   }
 
-  /**
-   * Register a new function to be exported.
-   * @param  {String}   serviceName       Unique name for this service.
-   * @param  {Function} fn                Handler function for this service
-   */
+  //  Register a new function to be exported.
+  //  @param  {String}   serviceName       Unique name for this service.
+  //  @param  {Function} fn                Handler function for this service
   register (serviceName, fn) {
     this.serviceRepository.register(serviceName, fn)
   }
 
-  /**
-   * Call a service by name in the entire system .
-   * Note that this service will be searched over the entire system and the searching and choosing strategy can be over
-   * written using Middleware
-   * @param  {String} serviceName      Name of the sarvice to be called.
-   * @param  {Object|String|Number} userPayload      Data to pass to receiver
-   * @param  {Function} responseCallback Callback to manage the response
-   */
+  // Call a service
+  //
+  // Parameters : <br>
+  // `servicePath` should be a valid funciton path on a remote or local host <br>
+  // `userPayload` can be any premetive type <br>
+  // `responseCallback` should be the function passed by the used
+  // `sendStrategy` is optional and can be anything like send to all or first find.
   call (serviceName, userPayload, responseCallback, sendStrategy) {
     this.serviceRepository.call(serviceName, userPayload, responseCallback, sendStrategy)
   }
 
-  /**
-   * bootstrap function. the main goal is the lower the weight of the cunstroctor
-   * Not implemented yet
-   */
+  // default bootstrap function is xyz core. This function will be called
+  // if `defaultBootstrap` key in selfConf is set to true
   bootstrap () {
     pingBoostrap(this)
   }
@@ -78,11 +61,9 @@ class NodeXYZ {
     this.serviceRepository.callDispatchMiddlewareStack.register(0, fn)
   }
 
-  /**
-   * Return an object of all middleware handlers available in the system. Each can be modified while
-   * bootstraping or at runtime. See Middleware section for more details.
-   * @return {Object} an Object of middleware handlers.
-   */
+  //  Return an object of all middleware handlers available in the system. Each can be modified while
+  //  bootstraping or at runtime. See Middleware section for more details. <br>
+  //  returns an Object of middleware handlers.
   middlewares () {
     return {
       transport: {

@@ -10,7 +10,7 @@ let pingBoostraper = (xyz) => {
   let wrapper = XYZ.logUtils.wrapper
   let SR = xyz.serviceRepository
 
-  let pingInterval = setInterval(() => {
+  function _ping () {
     let nodes = CONFIG.getSystemConf().nodes
     for (let node of nodes) {
       SR.transportClient.ping(Util.nodeStringToObject(node), (err, body , res) => {
@@ -34,7 +34,11 @@ let pingBoostraper = (xyz) => {
         }
       })
     }
-  }, interval + Util.Random(threshold))
+
+    let pingInterval = setInterval(_ping, interval + Util.Random(threshold))
+  }
+
+  _ping()
   logger.info(`ping bootstraped for approx. every ${interval} ms`)
 }
 

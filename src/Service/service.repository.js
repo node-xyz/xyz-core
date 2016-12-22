@@ -1,3 +1,11 @@
+// Service Repository
+//
+// This module handles service dependant tasks such as managing list of other services
+// and their functions, keeping track of other nodes, performing ping etc.
+//
+// Note that any code and function regarding the calls should be inside undelying transportClient and
+// transportServer
+
 let http = require('http')
 let HTTP = require('../Transport/Transport').HTTP
 let CONSTANTS = require('../Config/Constants')
@@ -12,15 +20,10 @@ const wrapper = require('./../Util/ansi.colors').wrapper
 const EventEmitter = require('events')
 
 class ServiceRepository extends EventEmitter {
-  /**
-   * Create a service repository object
-   * Transport client and server will be composed by ServiceRepository
-   */
 
-  /**
-   * Creates a new ServiceRepository
-   * Request ( call ) and Ping Events are bounded to this object
-   */
+  //  Creates a new ServiceRepository
+  //  Request ( call ) and Ping Events are bounded to this object
+  //  Transport client and server will be composed by ServiceRepository
   constructor () {
     super()
 
@@ -53,21 +56,22 @@ class ServiceRepository extends EventEmitter {
       this.contactSeed(0)
     }
 
-  // Ping Init
-  // this.ping()
-  // this.pingInterval = setInterval(() => this.ping(), (this.INTERVALS.ping + Util.Random(this.INTERVALS.threshold)))
+  /*
+  Ping Init
+  this.ping()
+  this.pingInterval = setInterval(() => this.ping(), (this.INTERVALS.ping + Util.Random(this.INTERVALS.threshold)))
+  */
   }
 
-  /**
-   * Register a new service. The new service will be stored inside an object
-   * @param  {String}   path path of the service. the call request must have the same path. path should strat with a /
-   * @param  {Function} fn   function to be called when a request to this service arrives
-   * ## Note the format of this funciton is changing at the current stages of development
-   */
+  //  Register a new service at a given path.
+  //
+  //  The first parameter `path` will indicate the path of the service. Note that this path must be valid.
   register (path, fn) {
     this.services.createPathSubtree(path, fn)
   }
 
+  // Bind all of the events fromm the transport client.
+  // All of these should happen as the module loads.
   bindTransportEvents () {
     this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
       this.emit('request:receive', {body: body})
@@ -98,12 +102,8 @@ class ServiceRepository extends EventEmitter {
     })
   }
 
-  /**
-   * Call a service. A middleware will be called with aproppiate arguments to find the receiving service etc.
-   * @param  {String} serviceName      name of the service
-   * @param  {Object|String|Number|Array} userPayload      payload to be passed to the receiving service
-   * @param  {Function} responseCallback              Optional callback to handle the response
-   */
+  // Call a service. A middleware will be called with aproppiate arguments to find the receiving service etc.
+  // Details about the arguments in <a href="xyz.html"> xyz.js </a>
   call (servicePath, userPayload, responseCallback, sendStrategy) {
     if (sendStrategy) {
       sendStrategy([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback])
