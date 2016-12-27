@@ -18,6 +18,10 @@ mathMs.register('/math/decimal/mul', fn.mul)
 mathMs.register('/math/decimal/neg', fn.neg)
 mathMs.register('/math/decimal/sub', fn.sub)
 
+mathMs.serviceRepository.transportServer.callReceiveMiddlewareStack.register(0, require('xyz.transport.auth.basic.receive'))
+
 mathMs.register('/math/float/neg', function (payload, XResponse) {
   XResponse.send('ok whassssaaaap')
 })
+
+console.log(mathMs)

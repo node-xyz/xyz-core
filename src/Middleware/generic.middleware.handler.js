@@ -17,6 +17,7 @@
 // ```
 
 const logger = require('./../Log/Logger')
+const wrapper = require('./../Util/Util').wrapper
 
 class GenericMiddlewareHandler {
   // Generic middleware handler. it manages an array of functions and applies each of them on a target.
@@ -27,6 +28,21 @@ class GenericMiddlewareHandler {
     this.middlewareIndex = 0
     this.xyz = xyz
     this.name = name
+  }
+
+  // print function
+  _inspect () {
+    let str = `${this.name} || `
+
+    for (let i = 0; i < this.middlewares.length; i++) {
+      if (i === this.middlewares.length - 1) {
+        str += `${this.middlewares[i].name}[${i}]`
+      }else {
+        str += `${this.middlewares[i].name}[${i}] -> `
+      }
+    }
+
+    return str
   }
 
   // Registering a new middleware.<br>

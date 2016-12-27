@@ -9,6 +9,7 @@ class PathTree {
       }
     }
     this.serializedTree = { '': {} }
+    this.plainTree = []
   }
 
   createPathSubtree (path, fn) {
@@ -38,6 +39,7 @@ class PathTree {
     if (fn) {
       tree.fn = fn
     }
+    this.plainTree.push({ path: path, name: fn.name || 'anonymousFN'})
     return tree
   }
 

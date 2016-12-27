@@ -4,6 +4,7 @@ const logger = require('./../../Log/Logger')
 const machineReport = require('./../../Util/machine.reporter')
 const _CONFIGURATIONS = require('./../../Config/config.global')
 let GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
+let wrapper = require('./../../Util/Util').wrapper
 
 class HTTPClient {
   constructor (xyz) {
@@ -19,6 +20,14 @@ class HTTPClient {
 
     this.joinDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'joinDispatchMiddlewareStack')
     this.joinDispatchMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.export'))
+  }
+
+  _inspect () {
+    return `${wrapper('green', wrapper('bold', 'Middlewares'))}:
+  ${this.callDispatchMidllewareStack._inspect()}
+  ${this.pingDispatchMiddlewareStack._inspect()}
+  ${this.joinDispatchMiddlewareStack._inspect()}
+  `
   }
 
   send (servicePath, node, userPayload, callResponseCallback) {

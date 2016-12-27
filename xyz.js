@@ -3,6 +3,7 @@ let CONFIG = require('./src/Config/config.global')
 let logger = require('./src/Log/Logger')
 let argParser = require('./src/Util/commandline.parser')
 let pingBoostrap = require('xyz.ping.default.bootstrap')
+let wrapper = require('./src/Util/Util').wrapper
 
 // Detail about system Conf keys
 // TODO
@@ -32,6 +33,29 @@ class NodeXYZ {
     if (CONFIG.getSelfConf().defaultBootstrap) {
       this.bootstrap()
     }
+  }
+
+  inspect () {
+    let pref = `
+____________________  GLOBAL ____________________
+${wrapper('bold', wrapper('blue', 'selfConfig'))}:
+  ${JSON.stringify(CONFIG.getSelfConf(), null, 2)}
+${wrapper('bold', wrapper('blue', 'systemConf'))}:
+  ${JSON.stringify(CONFIG.getSystemConf(), null, 2)}
+____________________  SERVICE REPOSITORY ____________________
+${this.serviceRepository._inspect()}
+____________________  TRANSPORT LAYER ____________________
+${wrapper('bold', wrapper('blue', 'Transport Client'))}:
+  ${this.serviceRepository.transportClient._inspect()}
+${wrapper('bold', wrapper('blue', 'Transport Server'))}:
+  ${this.serviceRepository.transportServer._inspect()}
+`
+
+    // for (let mw of this.serviceRepository.callDispatchMiddlewareStack.middlewares) {
+    //   pref += `          ${mw.name}`
+    // }
+
+    return pref
   }
 
   //  Stop XYZ system. will stop all ping and communication requests.

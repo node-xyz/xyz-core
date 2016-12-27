@@ -63,19 +63,28 @@ class ServiceRepository extends EventEmitter {
     if (CONFIG.getSelfConf().seed.length) {
       this.contactSeed(0)
     }
-
-  /*
-  Ping Init
-  this.ping()
-  this.pingInterval = setInterval(() => this.ping(), (this.INTERVALS.ping + Util.Random(this.INTERVALS.threshold)))
-  */
   }
 
   //  Register a new service at a given path.
-  //
   //  The first parameter `path` will indicate the path of the service. Note that this path must be valid.
   register (path, fn) {
     this.services.createPathSubtree(path, fn)
+  }
+
+  _inspect () {
+    let str = `
+${wrapper('green', wrapper('bold', 'Middlewares'))}:
+  ${this.callDispatchMiddlewareStack._inspect()}
+${wrapper('green', wrapper('bold', 'Services'))}:
+`
+
+    for (let s of this.services.plainTree) {
+      str += `  ${s.name} @ ${s.path}
+`
+    }
+
+    str += JSON.stringify(this.foreignNodes)
+    return str
   }
 
   // Bind all of the events fromm the transport client.

@@ -6,6 +6,7 @@ const logger = require('./../../Log/Logger')
 const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
 const machineReport = require('./../../Util/machine.reporter')
 const _CONFIGURATION = require('./../../Config/config.global')
+let wrapper = require('./../../Util/Util').wrapper
 
 class HTTPServer extends EventEmitter {
   constructor (xyz) {
@@ -13,13 +14,13 @@ class HTTPServer extends EventEmitter {
     http.globalAgent.maxSockets = Infinity
     this.port = _CONFIGURATION.getSelfConf().port
 
-    this.callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz)
+    this.callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack')
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
 
-    this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz)
+    this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'pingReceiveMiddlewareStack')
     this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
 
-    this.joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz)
+    this.joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack')
     this.joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
 
     this.server = http.createServer()
@@ -52,6 +53,14 @@ class HTTPServer extends EventEmitter {
           }
         })
     })
+  }
+
+  _inspect () {
+    return `${wrapper('green', wrapper('bold', 'Middlewares'))}:
+  ${this.callReceiveMiddlewareStack._inspect()}
+  ${this.pingReceiveMiddlewareStack._inspect()}
+  ${this.joinReceiveMiddlewareStack._inspect()}
+  `
   }
 
   close () {
