@@ -20,6 +20,9 @@ module.exports = {
     dev: 'dev',
     production: 'prod'
   },
+
+  // the default configuration. the will be merged recursively with
+  // the object passed by the user.
   defaultConfig: {
     selfConf: {
       name: 'node-xyz-init',
@@ -30,9 +33,6 @@ module.exports = {
       port: 3333,
       host: '127.0.0.1',
       intervals: {
-        // threshold: 5000,
-        // ping: 3000,
-        // kick: 5,
         reconnect: 2500
       },
       defaultBootstrap: true

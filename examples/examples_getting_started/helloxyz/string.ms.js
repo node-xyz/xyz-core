@@ -1,4 +1,4 @@
-let xyz = require('xyz-core').xyz
+let xyz = require('xyz-core')
 let stringMS = new xyz({
   selfConf: {
     name: 'stringMS',
@@ -6,11 +6,7 @@ let stringMS = new xyz({
     port: 3334
   },
   systemConf: {
-    microservices: [
-      {
-        host: '127.0.0.1', port: 3333
-      }
-    ]
+    nodes: ['127.0.0.1:3333']
   }
 })
 stringMS.register('up', (payload, response) => {

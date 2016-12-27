@@ -27,11 +27,15 @@ class ServiceRepository extends EventEmitter {
   constructor (xyz) {
     super()
 
+    // note that a ref. to xyz will be passed all the way down. this is to ensure that
+    // every middleware will have access to it and
+    // there will be no circular dependency
     this.transportServer = new HTTP.Server(xyz)
     this.transportClient = new HTTP.Client(xyz)
 
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callDispatchMiddlewareStack')
 
+    // note that this can be either string or `require`
     let sendStategy = Util._require(CONFIG.getSelfConf().defaultSendStrategy)
     if (sendStategy) {
       this.callDispatchMiddlewareStack.register(0, sendStategy)
@@ -41,7 +45,10 @@ class ServiceRepository extends EventEmitter {
     }
     logger.info(`default sendStategy set to ${this.callDispatchMiddlewareStack.middlewares[0].name}`)
 
+    // list of current services
     this.services = new PathTree()
+
+    // list of foreign nodes and services respectively
     this.foreignNodes = {}
     this.foreignNodes[`${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`] = {}
     this.outOfReachNodes = {}
@@ -89,15 +96,15 @@ class ServiceRepository extends EventEmitter {
       }
     })
 
-    // DEPRACATED
-    // this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
-    //   if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
-    //     logger.warn(`new node is pinging me. adding to lists. address : ${body.sender}`)
-    //     this.joinNode(body.sender)
-    //   }
-    //   logger.debug(`Responding a PING message from ${body.sender}`)
-    //   response.end(JSON.stringify({services: this.services.serializedTree, nodes: CONFIG.getSystemConf().nodes }))
-    // })
+    /*DEPRACATED
+    this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
+      if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
+        logger.warn(`new node is pinging me. adding to lists. address : ${body.sender}`)
+        this.joinNode(body.sender)
+      }
+      logger.debug(`Responding a PING message from ${body.sender}`)
+      response.end(JSON.stringify({services: this.services.serializedTree, nodes: CONFIG.getSystemConf().nodes }))
+    })*/
 
     this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
       response.end(JSON.stringify(CONFIG.getSystemConf()))
@@ -108,7 +115,7 @@ class ServiceRepository extends EventEmitter {
   // Details about the arguments in <a href="xyz.html"> xyz.js </a>
   call (servicePath, userPayload, responseCallback, sendStrategy) {
     if (sendStrategy) {
-      // this is trying to imitate the middleware signiture 
+      // this is trying to imitate the middleware signiture
       sendStrategy([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], null, null, this.xyz)
     }else {
       this.callDispatchMiddlewareStack.apply([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], 0)

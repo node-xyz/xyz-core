@@ -1,16 +1,16 @@
-let xyz = require('xyz-core').xyz
+let xyz = require('xyz-core')
 let sendToAll = require('xyz.service.send.to.all')
 
 let stringMS = new xyz({
-  defaultSendStrategy: sendToAll,
   selfConf: {
     name: 'stringMS',
+    defaultSendStrategy: require('xyz.service.send.to.all'),
     host: '127.0.0.1',
     port: 3334,
-    seed: [{host: '127.0.0.1', port: 3333}]
+    seed: ['127.0.0.1:3333']
   },
   systemConf: {
-    microservices: []
+    nodes: []
   }
 })
 stringMS.register('up', (payload, response) => {

@@ -1,4 +1,4 @@
-let xyz = require('xyz-core').xyz
+let xyz = require('xyz-core')
 let sendToAll = require('xyz.service.send.to.all')
 
 let stringMS = new xyz({
@@ -7,15 +7,18 @@ let stringMS = new xyz({
     name: 'stringMS',
     host: '127.0.0.1',
     port: 3334,
-    seed: [{host: '127.0.0.1', port: 3333}]
+    seed: ['127.0.0.1:3333']
   },
   systemConf: {
-    microservices: []
+    nodes: []
   }
 })
 
 stringMS.middlewares().transport.callDispatch.register(0, require('./auth.send'))
 stringMS.middlewares().transport.callReceive.register(0, require('./auth.receive'))
+//
+
+// stringMS.middlewares().transport.callDispatch.register(0, require('./dummy.logger'))
 
 stringMS.register('up', (payload, response) => {
   response.send(payload.toUpperCase())

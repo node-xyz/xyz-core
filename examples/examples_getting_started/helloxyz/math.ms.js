@@ -1,4 +1,4 @@
-let xyz = require('xyz-core').xyz
+let xyz = require('xyz-core')
 let mathMS = new xyz({
   selfConf: {
     name: 'MathMS',
@@ -6,10 +6,7 @@ let mathMS = new xyz({
     port: 3333
   },
   systemConf: {
-    microservices: [{
-      host: '127.0.0.1',
-      port: 3334
-    }]
+    nodes: ['127.0.0.1:3334']
   }
 })
 

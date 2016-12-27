@@ -8,7 +8,7 @@ function nodeStringToObject (str) {
 
 function _require (name) {
   // if the user has passed a require object to the XYZ()
-  if (typeof (name) === 'object')
+  if (typeof (name) === 'object' || typeof(name) === 'function')
     return name
 
   let ret
