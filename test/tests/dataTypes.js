@@ -20,6 +20,12 @@ it('bool', function (done) {
     done()
   })
 })
+it('nothing', function (done) {
+  snd.call('/finger', (err, body, response) => {
+    expect(body).to.equal('nothing')
+    done()
+  })
+})
 it('obj', function (done) {
   snd.call('/finger', {
     data: 'data'

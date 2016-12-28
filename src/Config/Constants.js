@@ -35,7 +35,8 @@ module.exports = {
       intervals: {
         reconnect: 2500
       },
-      defaultBootstrap: true
+      defaultBootstrap: true,
+      cli: false
     },
     systemConf: {
       nodes: []

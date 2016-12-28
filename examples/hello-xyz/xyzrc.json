@@ -2,7 +2,7 @@
   "nodes": [
     {
       "name": "string.ms.js",
-      "instance": 1,
+      "instance": 10,
       "port": 5000,
       "params": "--xyz-logLevel debug --xyz-seed 127.0.0.1:4000 --xyz-defaultSendStrategy xyz.service.send.to.all"
     },

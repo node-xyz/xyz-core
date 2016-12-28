@@ -35,6 +35,10 @@ class HTTPServer extends EventEmitter {
         .on('end', () => {
           let parsedUrl = url.parse(req.url)
           let self = this // TODO fix this
+          // TODO missing validation.
+          // call to /call must have a body. otherwise this would crash
+
+          // TODO are checking that its a post or not?
           if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
             if (parsedUrl.query) {
               req.destroy()

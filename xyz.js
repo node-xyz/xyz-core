@@ -33,6 +33,11 @@ class NodeXYZ {
     if (CONFIG.getSelfConf().defaultBootstrap) {
       this.bootstrap()
     }
+
+    if (CONFIG.getSelfConf().cli) {
+      logger.verbose(`sending config info for possible xyz listener instance`)
+      process.send(`${CONFIG.getSelfConf().name}@${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`)
+    }
   }
 
   inspect () {
@@ -78,7 +83,10 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   // `userPayload` can be any premetive type <br>
   // `responseCallback` should be the function passed by the used
   // `sendStrategy` is optional and can be anything like send to all or first find.
-  call (serviceName, userPayload, responseCallback, sendStrategy) {
+  call (serviceName, userPayload, responseCallback , sendStrategy) {
+    if (userPayload === undefined) {
+      userPayload = null
+    }
     this.serviceRepository.call(serviceName, userPayload, responseCallback, sendStrategy)
   }
 
@@ -101,7 +109,7 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     return {
       transport: {
         callReceive: this.serviceRepository.getTransportLayer().Server.callReceiveMiddlewareStack,
-        callDispatch: this.serviceRepository.getTransportLayer().Client.callDispatchMidllewareStack
+        callDispatch: this.serviceRepository.getTransportLayer().Client.callDispatchMiddlewareStack
       },
       serviceRepository: {
         callDispatch: this.serviceRepository.callDispatchMiddlewareStack

@@ -23,7 +23,6 @@ function wrongServicediscoveryMiddleware (params, next, end) {
     let pathTree = foreignNodes[node]
     let match = false
     while (Object.keys(pathTree).length) {
-      console.log(node, pathTree)
       if (pathTree[serviceTokens[servicePathIndex]]) {
         pathTree = pathTree[serviceTokens[servicePathIndex]]
         servicePathIndex += 1

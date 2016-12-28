@@ -12,8 +12,8 @@ class HTTPClient {
     this.pingPrefix = CONSTANTS.url.PING
     this.xyz = xyz
 
-    this.callDispatchMidllewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMidllewareStack')
-    this.callDispatchMidllewareStack.register(-1, require('./../Middlewares/call/call.dispatch.export.middleware'))
+    this.callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMiddlewareStack')
+    this.callDispatchMiddlewareStack.register(-1, require('./../Middlewares/call/call.dispatch.export.middleware'))
 
     this.pingDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'pingDispatchMiddlewareStack')
     this.pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
@@ -24,7 +24,7 @@ class HTTPClient {
 
   _inspect () {
     return `${wrapper('green', wrapper('bold', 'Middlewares'))}:
-  ${this.callDispatchMidllewareStack._inspect()}
+  ${this.callDispatchMiddlewareStack._inspect()}
   ${this.pingDispatchMiddlewareStack._inspect()}
   ${this.joinDispatchMiddlewareStack._inspect()}
   `
@@ -38,7 +38,7 @@ class HTTPClient {
       method: 'POST',
       json: { userPayload: userPayload, service: servicePath}
     }
-    this.callDispatchMidllewareStack.apply([requestConfig, callResponseCallback], 0)
+    this.callDispatchMiddlewareStack.apply([requestConfig, callResponseCallback], 0)
   }
 
   ping (node, pingResponseCallback) {

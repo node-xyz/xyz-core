@@ -66,11 +66,17 @@ let configuration = {
         if (keys[0] === 'seed')
           selfConf[keys[0]].push(args[arg])
         else if (keys[0] == 'allowJoin') {
+          /*
+          could also use eval here
+           */
           if (args[arg] === '0' || args[arg] === 'false') {
             selfConf[keys[0]] = false
           }else {
             selfConf[keys[0]] = true
           }
+        }
+        else if (keys[0] == 'cli') {
+          selfConf[keys[0]] = eval(args[arg])
         }
         else
           selfConf[keys[0]] = args[arg]
@@ -89,10 +95,7 @@ let configuration = {
     }
 
     logger.transports.console.level = selfConf.logLevel
-    logger.info(`log level set to ${logger.transports.console.level}`)
-
-    logger.debug('final configurations for selfConf is:')
-    console.log(selfConf)
+    logger.debug(`log level set to ${logger.transports.console.level}`)
   },
 
   setSystemConf: (aConf) => {
@@ -105,8 +108,6 @@ let configuration = {
     if (systemConf.nodes.indexOf(`${selfConf.host}:${selfConf.port}`) === -1) {
       systemConf.nodes.push(`${selfConf.host}:${selfConf.port}`)
     }
-    logger.info('final configurations for systemConf is:')
-    console.log(systemConf)
   },
 
   getSystemConf: () => systemConf,
