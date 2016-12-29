@@ -79,6 +79,15 @@ it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
   })
 })
 
+it('change sendStrategy per call', function (done) {
+  snd.call({servicePath: '/math/*', payload: {x: 2,y: 2}, sendStrategy: require('xyz.service.send.to.all')}, (err, body, response) => {
+    expect(err).to.equal(null)
+    // expecting three results
+    expect(Object.keys(body).length).to.equal(3)
+    done()
+  })
+})
+
 after(function () {
   snd.stop()
   rcv.stop()

@@ -4,7 +4,7 @@ let fn = require('./../../test/ms/mock.functions')
 
 var mathMs = new XYZ({
   selfConf: {
-    // allowJoin: true,
+    allowJoin: true,
     name: 'MathMs',
     host: '127.0.0.1',
     port: 3333

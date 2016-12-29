@@ -20,13 +20,13 @@ stringMs.register('/string/up', fn.up)
 stringMs.register('/finger', fn.finger)
 
 setInterval(() => {
-  stringMs.call('/math/decimal/*', { x: 1000000,  y: new Date().getTime() }, (err, body, res) => {
+  stringMs.call({servicePath: '/math/decimal/*', payload: { x: 1000000,  y: new Date().getTime() }}, (err, body, res) => {
     console.error('response of decimal/*', body)
   })
 }, 3000)
 
 setInterval(() => {
-  stringMs.call('/math/decimal/mul', {x: 2, y: 3} , (err, body, res) => {
+  stringMs.call({servicePath: '/math/decimal/mul', payload: {x: 2, y: 3}, sendStategy: sendToAll} , (err, body, res) => {
     console.log(err, body)
-  }, sndToAll)
+  })
 }, 1000)

@@ -11,12 +11,17 @@ exports.init = () => {
   system.addNode('localhost:3334')
   snd = new mockNode('snd', 3334, cwd, system.getSystemConf())
   rcv = new mockNode('rcv', 3333, cwd, system.getSystemConf())
+
   rcv.register('/mul', mockFunctions.mul)
   rcv.register('/up', mockFunctions.up)
   rcv.register('/rev', mockFunctions.rev)
   rcv.register('/neg', mockFunctions.neg)
   rcv.register('/finger', mockFunctions.finger)
   rcv.register('/blank', mockFunctions.blank)
+
+  rcv.register('/math/mul', mockFunctions.mul)
+  rcv.register('/math/add', mockFunctions.add)
+  rcv.register('/math/neg', mockFunctions.neg)
 
   return {
     snd: snd,

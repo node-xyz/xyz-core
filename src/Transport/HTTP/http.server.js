@@ -33,12 +33,13 @@ class HTTPServer extends EventEmitter {
           body.push(chuck)
         })
         .on('end', () => {
+          if (! this.validator(req, body)) {
+            req.destroy()
+            return
+          }
+
           let parsedUrl = url.parse(req.url)
           let self = this // TODO fix this
-          // TODO missing validation.
-          // call to /call must have a body. otherwise this would crash
-
-          // TODO are checking that its a post or not?
           if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
             if (parsedUrl.query) {
               req.destroy()
@@ -70,6 +71,19 @@ class HTTPServer extends EventEmitter {
   close () {
     this.server.close()
   }
+
+  validator (req, body) {
+    if (req.method !== 'POST') {
+      logger.warn(`a suspicous request was received.`)
+      return false
+    }
+    if (body.length === 0) {
+      logger.warn(`a suspicous request was received.`)
+      return false
+    }
+    return true
+  }
+
 }
 
 module.exports = HTTPServer
