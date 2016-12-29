@@ -122,12 +122,15 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
 
   // Call a service. A middleware will be called with aproppiate arguments to find the receiving service etc.
   // Details about the arguments in <a href="xyz.html"> xyz.js </a>
-  call (servicePath, userPayload, responseCallback, sendStrategy) {
-    if (sendStrategy) {
+  // TODO: in this case, unlike in config, sendStrategy MUST be a function
+  // better to allow string as well
+  call (opt, responseCallback) {
+    opt.payload = opt.payload || null
+    if (opt.sendStrategy) {
       // this is trying to imitate the middleware signiture
-      sendStrategy([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], null, null, this.xyz)
+      opt.sendStrategy([Path.format(opt.servicePath), opt.payload, this.foreignNodes, this.transportClient, responseCallback], null, null, this.xyz)
     }else {
-      this.callDispatchMiddlewareStack.apply([Path.format(servicePath), userPayload, this.foreignNodes, this.transportClient, responseCallback], 0)
+      this.callDispatchMiddlewareStack.apply([Path.format(opt.servicePath), opt.payload, this.foreignNodes, this.transportClient, responseCallback], 0)
     }
   }
 
@@ -141,7 +144,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
           this.foreignNodes[node] = body.services
           CONFIG.ensureNodes(body.nodes)
           this.outOfReachNodes[node] = 0
-          logger.verbose(`${wrapper('bold', 'PING')} success :: response = ${JSON.stringify(body)}`)
+          logger.debug(`${wrapper('bold', 'PING')} success :: response = ${JSON.stringify(body)}`)
         } else {
           if (this.outOfReachNodes[node]) {
             this.outOfReachNodes[node] += 1

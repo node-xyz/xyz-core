@@ -77,17 +77,20 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   }
 
   // Call a service
-  //
+  // DEPERECATED VERSION
   // Parameters : <br>
   // `servicePath` should be a valid funciton path on a remote or local host <br>
   // `userPayload` can be any premetive type <br>
   // `responseCallback` should be the function passed by the used
   // `sendStrategy` is optional and can be anything like send to all or first find.
-  call (serviceName, userPayload, responseCallback , sendStrategy) {
-    if (userPayload === undefined) {
-      userPayload = null
-    }
-    this.serviceRepository.call(serviceName, userPayload, responseCallback, sendStrategy)
+  // ---
+  // new version:
+  // opt is an object with keys like :
+  //   - servicePath: {String}
+  //   - sendStrategy: {function}
+  //   - payload: {Object|Number|Boolean}
+  call (opt, responseCallback) {
+    this.serviceRepository.call(opt, responseCallback)
   }
 
   // default bootstrap function is xyz core. This function will be called

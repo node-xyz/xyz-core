@@ -23,5 +23,9 @@ module.exports = {
   finger: function (payload, xResponse) {
     payload['test'] = 'test'
     xResponse.send(payload)
+  },
+  blank: function (payload, xResponse) {
+    console.log(payload)
+    xResponse.send('blank')
   }
 }

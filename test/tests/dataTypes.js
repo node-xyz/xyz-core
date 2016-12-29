@@ -15,27 +15,27 @@ before(function (done) {
   setTimeout(done, 500)
 })
 it('bool', function (done) {
-  snd.call('/neg', false, (err, body, response) => {
+  snd.call({servicePath: '/neg', payload: false}, (err, body, response) => {
     expect(body).to.equal(true)
     done()
   })
 })
 it('nothing', function (done) {
-  snd.call('/finger', (err, body, response) => {
-    expect(body).to.equal('nothing')
+  snd.call({servicePath: '/blank'}, (err, body, response) => {
+    expect(body).to.equal('blank')
     done()
   })
 })
 it('obj', function (done) {
-  snd.call('/finger', {
-    data: 'data'
-  }, (err, body, response) => {
+  snd.call({servicePath: '/finger', payload: {
+      data: 'data'
+  }}, (err, body, response) => {
     expect(body['test']).to.equal('test')
     done()
   })
 })
 it('arr', function (done) {
-  snd.call('/rev', [1, 2, 3], (err, body, response) => {
+  snd.call({servicePath: '/rev', payload: [1, 2, 3]}, (err, body, response) => {
     expect(body).to.eql([3, 2, 1])
     done()
   })

@@ -80,9 +80,9 @@ it('path mathcing' , function (done) {
 })
 
 it('first find scenarios', function (done) {
-  snd.call('/math/decimal/mul', {x: 2, y: 3} , (err, body, response) => {
+  snd.call({servicePath: '/math/decimal/mul', payload: {x: 2, y: 3}} , (err, body, response) => {
     expect(body).to.equal(6)
-    snd.call('/math/mul', {} , (err, body) => {
+    snd.call({servicePath: '/math/mul'} , (err, body) => {
       expect(err).to.equal('Not Found')
       done()
     })

@@ -16,6 +16,7 @@ exports.init = () => {
   rcv.register('/rev', mockFunctions.rev)
   rcv.register('/neg', mockFunctions.neg)
   rcv.register('/finger', mockFunctions.finger)
+  rcv.register('/blank', mockFunctions.blank)
 
   return {
     snd: snd,

@@ -56,7 +56,7 @@ before(function (done) {
 it('False servicrDiscovery', function (done) {
   snd.middlewares().serviceRepository.callDispatch.remove(-1)
   snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware)
-  snd.call('up', 'what the hell', (err, body, response) => {
+  snd.call({servicePath: 'up', payload: 'what the hell'}, (err, body, response) => {
     // this is exacly end of request event on serviceRepository
     expect(response.statusCode).to.equal(404)
     expect(body).to.equal(http.STATUS_CODES[404])
@@ -67,11 +67,11 @@ it('False servicrDiscovery', function (done) {
 })
 
 it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
-  snd.call('up', 'will be ok', (err, body, response) => {
+  snd.call({servicePath: 'up', payload: 'will be ok'}, (err, body, response) => {
     expect(body).to.equal('WILL BE OK')
     snd.middlewares().serviceRepository.callDispatch.remove(-1)
     snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware)
-    snd.call('up', 'will be not OK', (err, body, response) => {
+    snd.call({servicePath: 'up', payload: 'will be not OK'}, (err, body, response) => {
       expect(body).to.equal(http.STATUS_CODES[404])
       snd.middlewares().serviceRepository.callDispatch.remove(0)
       done()
