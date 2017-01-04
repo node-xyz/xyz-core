@@ -35,8 +35,8 @@ class NodeXYZ {
     }
 
     if (CONFIG.getSelfConf().cli) {
-      logger.verbose(`sending config info for possible xyz listener instance`)
-      process.send(`${CONFIG.getSelfConf().name}@${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`)
+      logger.verbose(`sending config info for possible xyz-cli listener instance`)
+      process.send(CONFIG.getSelfConf())
     }
   }
 
