@@ -9,12 +9,12 @@ const http = require('http')
 let cwd, system, snd, rcv
 let str = 'manipulated'
 
-function wrongServicediscoveryMiddleware (params, next, end) {
+function wrongServicediscoveryMiddleware (params, next, end, xyz) {
   let servicePath = params[0],
     userPayload = params[1],
-    foreignNodes = params[2],
-    transportClient = params[3]
-  responseCallback = params[4]
+    foreignNodes = xyz.serviceRepository.foreignNodes,
+    transportClient = xyz.serviceRepository.transportClient
+  responseCallback = params[2]
 
   let serviceTokens = servicePath.split('/')
 
