@@ -31,10 +31,10 @@ class NodeXYZ {
     this.serviceRepository = new ServiceRepository(this)
 
     if (CONFIG.getSelfConf().defaultBootstrap) {
-      this.bootstrap()
+      this.bootstrap(pingBoostrap)
     }
 
-    if (CONFIG.getSelfConf().cli) {
+    if (CONFIG.getSelfConf().cli.enable) {
       logger.verbose(`sending config info for possible xyz-cli listener instance`)
       process.send(CONFIG.getSelfConf())
     }
@@ -84,7 +84,7 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   // `responseCallback` should be the function passed by the used
   // `sendStrategy` is optional and can be anything like send to all or first find.
   // ---
-  // new version:
+  // NEW version:
   // opt is an object with keys like :
   //   - servicePath: {String}
   //   - sendStrategy: {function}
@@ -93,10 +93,9 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     this.serviceRepository.call(opt, responseCallback)
   }
 
-  // default bootstrap function is xyz core. This function will be called
-  // if `defaultBootstrap` key in selfConf is set to true
-  bootstrap () {
-    pingBoostrap(this)
+  // apply a bootstrap function to xyz
+  bootstrap (fn) {
+    fn(this)
   }
 
   setSendStrategy (fn) {

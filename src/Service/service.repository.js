@@ -82,8 +82,6 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
       str += `  ${s.name} @ ${s.path}
 `
     }
-
-    str += JSON.stringify(this.foreignNodes)
     return str
   }
 
@@ -128,9 +126,9 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
     opt.payload = opt.payload || null
     if (opt.sendStrategy) {
       // this is trying to imitate the middleware signiture
-      opt.sendStrategy([Path.format(opt.servicePath), opt.payload, this.foreignNodes, this.transportClient, responseCallback], null, null, this.xyz)
+      opt.sendStrategy([Path.format(opt.servicePath), opt.payload, responseCallback], null, null, this.xyz)
     }else {
-      this.callDispatchMiddlewareStack.apply([Path.format(opt.servicePath), opt.payload, this.foreignNodes, this.transportClient, responseCallback], 0)
+      this.callDispatchMiddlewareStack.apply([Path.format(opt.servicePath), opt.payload, responseCallback], 0)
     }
   }
 

@@ -75,15 +75,12 @@ let configuration = {
             selfConf[keys[0]] = true
           }
         }
-        else if (keys[0] == 'cli') {
-          selfConf[keys[0]] = eval(args[arg])
-        }
         else
           selfConf[keys[0]] = args[arg]
       }
       else if (keys.length === 2) {
         if (! selfConf[keys[0]]) selfConf[keys[0]] = {}
-        selfConf[keys[0]][keys[1]] = eval(args[arg])
+        selfConf[keys[0]][keys[1]] = keys[1] == 'enable' ? eval(args[arg]) : args[arg]
       }
       else if (keys.length === 3) {
         if (! selfConf[keys[0]]) selfConf[keys[0]] = {}

@@ -36,7 +36,10 @@ module.exports = {
         reconnect: 2500
       },
       defaultBootstrap: true,
-      cli: false
+      cli: {
+        enable: false,
+        stdio: 'console'
+      }
     },
     systemConf: {
       nodes: []
