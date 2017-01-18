@@ -36,7 +36,9 @@ class NodeXYZ {
 
     if (CONFIG.getSelfConf().cli.enable) {
       logger.verbose(`sending config info for possible xyz-cli listener instance`)
-      process.send(CONFIG.getSelfConf())
+      process.send({ title: 'init', body: CONFIG.getSelfConf()})
+
+      this.bindProcessEvents()
     }
   }
 
@@ -55,12 +57,21 @@ ${wrapper('bold', wrapper('blue', 'Transport Client'))}:
 ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   ${this.serviceRepository.transportServer._inspect()}
 `
-
-    // for (let mw of this.serviceRepository.callDispatchMiddlewareStack.middlewares) {
-    //   pref += `          ${mw.name}`
-    // }
-
     return pref
+  }
+
+  inspectJSON () {
+    return {
+      global: {
+        systemConf: CONFIG.getSystemConf(),
+        selfConf: CONFIG.getSelfConf()
+      },
+      ServiceRepository: {},
+      Transport: {
+        transportClient: {},
+        transportServer: {}
+      }
+    }
   }
 
   //  Stop XYZ system. will stop all ping and communication requests.
@@ -117,6 +128,16 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
         callDispatch: this.serviceRepository.callDispatchMiddlewareStack
       }
     }
+  }
+
+  bindProcessEvents () {
+    process.on('message', (data) => {
+      // inspect
+      // this process will responde with a json object containing basic info about the node
+      if (data.title === 'inspect') {
+        process.send({title: data.title, body: this.inspectJSON()})
+      }
+    })
   }
 }
 
