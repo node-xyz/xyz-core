@@ -66,7 +66,7 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
         systemConf: CONFIG.getSystemConf(),
         selfConf: CONFIG.getSelfConf()
       },
-      ServiceRepository: {},
+      ServiceRepository: this.serviceRepository.inspectJSON(),
       Transport: {
         transportClient: {},
         transportServer: {}
@@ -132,10 +132,14 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
 
   bindProcessEvents () {
     process.on('message', (data) => {
+      console.log('message passing', data)
       // inspect
       // this process will responde with a json object containing basic info about the node
-      if (data.title === 'inspect') {
+      if (data.title === 'inspectJSON') {
         process.send({title: data.title, body: this.inspectJSON()})
+      }
+      else if (data.title === 'inspect') {
+        process.send({title: data.title, body: this.inspect()})
       }
     })
   }

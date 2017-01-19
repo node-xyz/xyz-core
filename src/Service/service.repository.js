@@ -39,7 +39,7 @@ class ServiceRepository extends EventEmitter {
     let sendStategy = Util._require(CONFIG.getSelfConf().defaultSendStrategy)
     if (sendStategy) {
       this.callDispatchMiddlewareStack.register(0, sendStategy)
-    }else {
+    } else {
       logger.error(`defaultSendStrategy passed to config [${sendStategy}] not found. setting the default value`)
       this.callDispatchMiddlewareStack.register(0, require('xyz.service.send.first.find'))
     }
@@ -85,6 +85,13 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
     return str
   }
 
+  inspectJSON () {
+    return {
+      services: this.services.plainTree,
+      middlewares: [this.callDispatchMiddlewareStack.inspectJSON()]
+    }
+  }
+
   // Bind all of the events fromm the transport client.
   // All of these should happen as the module loads.
   bindTransportEvents () {
@@ -95,7 +102,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
         logger.verbose(`ServiceRepository received service call ${wrapper('bold', body.serviceName)}`)
         fn(body.userPayload, new XResponse(response))
         return
-      }else {
+      } else {
         // this will be rarely reached . most of the time callDisplatchfind middleware will find this.
         // Same problem as explained in TEST/Transport.middleware => early response
         response.writeHead(404, {})
@@ -103,7 +110,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
       }
     })
 
-    /*DEPRACATED
+    /* DEPRACATED
     this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
       if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
         logger.warn(`new node is pinging me. adding to lists. address : ${body.sender}`)
@@ -111,7 +118,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
       }
       logger.debug(`Responding a PING message from ${body.sender}`)
       response.end(JSON.stringify({services: this.services.serializedTree, nodes: CONFIG.getSystemConf().nodes }))
-    })*/
+    }) */
 
     this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
       response.end(JSON.stringify(CONFIG.getSystemConf()))
@@ -127,7 +134,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
     if (opt.sendStrategy) {
       // this is trying to imitate the middleware signiture
       opt.sendStrategy([Path.format(opt.servicePath), opt.payload, responseCallback], null, null, this.xyz)
-    }else {
+    } else {
       this.callDispatchMiddlewareStack.apply([Path.format(opt.servicePath), opt.payload, responseCallback], 0)
     }
   }
@@ -137,7 +144,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   ping () {
     let nodes = CONFIG.getSystemConf().nodes
     for (let node of nodes) {
-      this.transportClient.ping(Util.nodeStringToObject(node), (err, body , res) => {
+      this.transportClient.ping(Util.nodeStringToObject(node), (err, body, res) => {
         if (err == null) {
           this.foreignNodes[node] = body.services
           CONFIG.ensureNodes(body.nodes)
@@ -164,9 +171,9 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
     // error. check the vlaidity of casse where 404 or no 200 is the Response
     let seeds = CONFIG.getSelfConf().seed
     this.transportClient.contactSeed(Util.nodeStringToObject(seeds[idx]), (err, body, res) => {
-      if (! err) {
+      if (!err) {
         this.emit('cluster:join')
-        logger.info(`${wrapper('bold' , 'JOINED CLUSTER')}`)
+        logger.info(`${wrapper('bold', 'JOINED CLUSTER')}`)
         logger.debug(`Response nodes are ${body.nodes}`)
         for (let node of body.nodes) {
           this.joinNode(node)
@@ -174,7 +181,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
         this.ping()
       } else {
         logger.error(`${wrapper('bold', 'JOIN FAILED')} :: a seed node ${seeds[idx]} rejected with `)
-        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx) , this.INTERVALS.reconnect)
+        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx), this.INTERVALS.reconnect)
       }
     })
   }

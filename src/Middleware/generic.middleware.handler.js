@@ -37,12 +37,19 @@ class GenericMiddlewareHandler {
     for (let i = 0; i < this.middlewares.length; i++) {
       if (i === this.middlewares.length - 1) {
         str += `${this.middlewares[i].name}[${i}]`
-      }else {
+      } else {
         str += `${this.middlewares[i].name}[${i}] -> `
       }
     }
 
     return str
+  }
+
+  inspectJSON () {
+    return {
+      name: this.name,
+      Middlewares: this.middlewares
+    }
   }
 
   // Registering a new middleware.<br>
@@ -56,8 +63,8 @@ class GenericMiddlewareHandler {
       this.middlewares.push(fn)
     } else if (index == 0) {
       this.middlewares.unshift(fn)
-    }  else {
-      this.middlewares.splice(index, 0 , fn)
+    } else {
+      this.middlewares.splice(index, 0, fn)
     }
   }
 
