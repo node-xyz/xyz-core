@@ -67,15 +67,15 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
         systemConf: CONFIG.getSystemConf(),
         selfConf: CONFIG.getSelfConf(),
         machineReport: {
-          cpu: machineReport.getCPU(),
-          mem: machineReport.getMem(),
-          pid: machineReport.PID()
+          cpu: machineReporter.getCPU(),
+          mem: machineReporter.getMem(),
+          pid: machineReporter.PID()
         }
       },
       ServiceRepository: this.serviceRepository.inspectJSON(),
       Transport: {
-        transportClient: {},
-        transportServer: {}
+        transportClient: this.serviceRepository.transportClient._inspectJSON(),
+        transportServer: this.serviceRepository.transportServer._inspectJSON()
       }
     }
   }

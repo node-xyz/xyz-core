@@ -30,6 +30,14 @@ class HTTPClient {
   `
   }
 
+  _inspectJSON () {
+    return [
+      this.callDispatchMiddlewareStack._inspectJSON(),
+      this.pingDispatchMiddlewareStack._inspectJSON(),
+      this.joinDispatchMiddlewareStack._inspectJSON()
+    ]
+  }
+
   send (servicePath, node, userPayload, callResponseCallback) {
     let requestConfig = {
       hostname: `${node.split(':')[0]}`,

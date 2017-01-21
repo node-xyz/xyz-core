@@ -88,7 +88,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   inspectJSON () {
     return {
       services: this.services.plainTree,
-      middlewares: [this.callDispatchMiddlewareStack.inspectJSON()]
+      middlewares: [this.callDispatchMiddlewareStack._inspectJSON()]
     }
   }
 

@@ -27,13 +27,13 @@ class HTTPServer extends EventEmitter {
       .listen(this.port, () => {
         logger.info(`Server listening on port : ${this.port}`)
       }).on('request', (req, resp) => {
-      var body = []
-      req
+        var body = []
+        req
         .on('data', (chuck) => {
           body.push(chuck)
         })
         .on('end', () => {
-          if (! this.validator(req, body)) {
+          if (!this.validator(req, body)) {
             req.destroy()
             return
           }
@@ -49,15 +49,14 @@ class HTTPServer extends EventEmitter {
           } else if (parsedUrl.pathname === `/${CONSTANTS.url.JOIN}`) {
             if (_CONFIGURATION.getSelfConf().allowJoin) {
               this.joinReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
-            }else { req.destroy() }
-          }
-          else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
+            } else { req.destroy() }
+          } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
             this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
           } else {
             req.destroy()
           }
         })
-    })
+      })
   }
 
   _inspect () {
@@ -66,6 +65,14 @@ class HTTPServer extends EventEmitter {
   ${this.pingReceiveMiddlewareStack._inspect()}
   ${this.joinReceiveMiddlewareStack._inspect()}
   `
+  }
+
+  _inspectJSON () {
+    return [
+      this.callReceiveMiddlewareStack._inspectJSON(),
+      this.pingReceiveMiddlewareStack._inspectJSON(),
+      this.joinReceiveMiddlewareStack._inspectJSON()
+    ]
   }
 
   close () {

@@ -45,7 +45,7 @@ class GenericMiddlewareHandler {
     return str
   }
 
-  inspectJSON () {
+  _inspectJSON () {
     return {
       name: this.name,
       Middlewares: this.middlewares

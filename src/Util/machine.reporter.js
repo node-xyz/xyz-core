@@ -1,8 +1,8 @@
 
 let machineReporter = {
   getCPU: () => process.cpuUsage(),
-  getMem: () => process.getMemoryUsage()
+  getMem: () => process.memoryUsage(),
   PID: () => process.pid
 }
 
-module.exports = machineReporter;
+module.exports = machineReporter
