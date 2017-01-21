@@ -4,6 +4,7 @@ let logger = require('./src/Log/Logger')
 let argParser = require('./src/Util/commandline.parser')
 let pingBoostrap = require('xyz.ping.default.bootstrap')
 let wrapper = require('./src/Util/Util').wrapper
+let machineReporter = require('./src/Util/machine.reporter')
 
 // Detail about system Conf keys
 // TODO
@@ -64,7 +65,12 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     return {
       global: {
         systemConf: CONFIG.getSystemConf(),
-        selfConf: CONFIG.getSelfConf()
+        selfConf: CONFIG.getSelfConf(),
+        machineReport: {
+          cpu: machineReport.getCPU(),
+          mem: machineReport.getMem(),
+          pid: machineReport.PID()
+        }
       },
       ServiceRepository: this.serviceRepository.inspectJSON(),
       Transport: {
@@ -137,8 +143,7 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
       // this process will responde with a json object containing basic info about the node
       if (data.title === 'inspectJSON') {
         process.send({title: data.title, body: this.inspectJSON()})
-      }
-      else if (data.title === 'inspect') {
+      } else if (data.title === 'inspect') {
         process.send({title: data.title, body: this.inspect()})
       }
     })

@@ -1,10 +1,8 @@
-/*var pusage = require('pidusage')
 
-function getMachineusage(cb) {
-  pusage.stat(process.pid, (err, stat) => {
-    cb(err, stat)
-  })
-
+let machineReporter = {
+  getCPU: () => process.cpuUsage(),
+  getMem: () => process.getMemoryUsage()
+  PID: () => process.pid
 }
-module.exports = getMachineusage
-*/
+
+module.exports = machineReporter;
