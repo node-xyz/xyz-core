@@ -18,7 +18,7 @@ stringMS.register('down', (payload, response) => {
 })
 
 setInterval(() => {
-  stringMS.call('mul', {x: 2, y: 5}, (err, body, res) => {
-    console.log(`my fellow service responded with ${body}`)
+  stringMS.call({servicePath: 'mul', payload: {x: 2, y: 5}}, (err, body, res) => {
+    console.log(`my fellwo service reponded with ${body}`)
   })
 }, 2000)

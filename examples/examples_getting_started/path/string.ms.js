@@ -21,7 +21,7 @@ stringMS.register('down', (payload, response) => {
 })
 
 setInterval(() => {
-  stringMS.call('/decimal/*', {x: 2, y: 5}, (err, body, res) => {
+  stringMS.call({servicePath: '/decimal/*', payload: {x: 2, y: 5}}, (err, body, res) => {
     console.log(`my fellow service responded with ${JSON.stringify(body)}`)
   })
 }, 2000)

@@ -16,7 +16,6 @@ let stringMS = new xyz({
 
 stringMS.middlewares().transport.callDispatch.register(0, require('./auth.send'))
 stringMS.middlewares().transport.callReceive.register(0, require('./auth.receive'))
-//
 
 // stringMS.middlewares().transport.callDispatch.register(0, require('./dummy.logger'))
 
@@ -28,7 +27,9 @@ stringMS.register('down', (payload, response) => {
 })
 
 setInterval(() => {
-  stringMS.call('/*/mul', {x: 2, y: 5}, (err, body, res) => {
+  stringMS.call({servicePath: '/*/mul', payload: {x: 2, y: 5}}, (err, body, res) => {
     console.log(`my fellow service responded with ${JSON.stringify(body)}`)
   })
 }, 2000)
+
+console.log(stringMS)

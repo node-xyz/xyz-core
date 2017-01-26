@@ -30,3 +30,5 @@ mathMS.register('float/mul', (payload, response) => {
 mathMS.register('float/add', (payload, response) => {
   response.send(parseFloat(payload.x + payload.y))
 })
+
+console.log(mathMS)
