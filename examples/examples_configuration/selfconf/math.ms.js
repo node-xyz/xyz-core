@@ -1,13 +1,10 @@
 let xyz = require('xyz-core')
 let mathMS = new xyz({
   selfConf: {
-    name: 'MathMS',
-    host: '127.0.0.1',
-    port: 3333
+    port: 10000,
+    name: 'from-self-conf'
   },
-  systemConf: {
-    nodes: ['127.0.0.1:3334']
-  }
+  systemConf: {nodes: []}
 })
 
 mathMS.register('mul', (payload, response) => {
@@ -17,3 +14,5 @@ mathMS.register('mul', (payload, response) => {
 mathMS.register('add', (payload, response) => {
   response.send(payload.x + payload.y)
 })
+
+console.log(mathMS)

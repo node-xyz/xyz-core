@@ -6,7 +6,7 @@
     "scripts": {
         "test": "./node_modules/.bin/mocha --reporter spec",
         "docs": "jsdoc -c jsdoc.json -r -d ./../node-xyz.github.io/apidoc",
-        "docco": "find . -name '*.js' | grep -v node_modules | grep -v examples| xargs docco -o ./../node-xyz.github.io/apidoc",
+        "docco": "find . -name '*.js' | grep -v node_modules | grep -v examples| grep -v test | xargs docco -o ./../node-xyz.github.io/apidoc",
         "lint": "./node_modules/jshint/bin/jshint src --config ./jshintrc"
     },
     "author": "Kian.peymani@gmail.com",
