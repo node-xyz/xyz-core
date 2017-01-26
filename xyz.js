@@ -1,7 +1,6 @@
 const ServiceRepository = require('./src/Service/service.repository')
 let CONFIG = require('./src/Config/config.global')
 let logger = require('./src/Log/Logger')
-let argParser = require('./src/Util/commandline.parser')
 let pingBoostrap = require('xyz.ping.default.bootstrap')
 let wrapper = require('./src/Util/Util').wrapper
 let machineReporter = require('./src/Util/machine.reporter')
@@ -15,14 +14,10 @@ class NodeXYZ {
     CONFIG.setSelfConf(configuration.selfConf)
     CONFIG.setSystemConf(configuration.systemConf)
 
-    /*
-    just for logging convention
-     */
+    // just for logging convention
     global._serviceName = `${CONFIG.getSelfConf().name}@${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`
 
-    /*
-    Global exported functions and modules
-     */
+    // Global exported functions and modules
     this.CONFIG = CONFIG
     this.logger = logger
     this.path = require('./src/Service/path')
@@ -31,10 +26,14 @@ class NodeXYZ {
 
     this.serviceRepository = new ServiceRepository(this)
 
+    // lunch the default bootstrat.
+    // Note that if you ever decide to override defaultBootstrap, you MUST manually apply `pingBoostrap` in it
+    // otherwise the service discovery mechanism will not work
     if (CONFIG.getSelfConf().defaultBootstrap) {
       this.bootstrap(pingBoostrap)
     }
 
+    // send an inti message to the cli process
     if (CONFIG.getSelfConf().cli.enable) {
       logger.verbose(`sending config info for possible xyz-cli listener instance`)
       process.send({ title: 'init', body: CONFIG.getSelfConf()})
@@ -43,6 +42,7 @@ class NodeXYZ {
     }
   }
 
+  // override the default `console.log()` behavior
   inspect () {
     let pref = `
 ____________________  GLOBAL ____________________
@@ -93,15 +93,8 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     this.serviceRepository.register(serviceName, fn)
   }
 
-  // Call a service
-  // DEPERECATED VERSION
-  // Parameters : <br>
-  // `servicePath` should be a valid funciton path on a remote or local host <br>
-  // `userPayload` can be any premetive type <br>
-  // `responseCallback` should be the function passed by the used
-  // `sendStrategy` is optional and can be anything like send to all or first find.
-  // ---
-  // NEW version:
+  // call a service
+  //
   // opt is an object with keys like :
   //   - servicePath: {String}
   //   - sendStrategy: {function}
@@ -115,8 +108,8 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     fn(this)
   }
 
+  // for now, only one middleware should be added to this. no more.
   setSendStrategy (fn) {
-    // for now, only one middleware should be added to this. no more.
     this.serviceRepository.callDispatchMiddlewareStack.middlewares = []
     this.serviceRepository.callDispatchMiddlewareStack.register(0, fn)
   }
@@ -136,6 +129,9 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     }
   }
 
+  // bing some events for the cli communication. should be called only when
+  // cli : { enable : true }
+  // in selfConf
   bindProcessEvents () {
     process.on('message', (data) => {
       console.log('message passing', data)

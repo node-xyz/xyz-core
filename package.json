@@ -16,7 +16,8 @@
         "jsdoc": "^3.4.0",
         "jshint": "^2.9.2",
         "mocha": "^2.5.3",
-        "docco": "latest"
+        "docco": "latest",
+        "liberty-global-docco-theme": "latest"
     },
     "dependencies": {
         "winston": "^2.2.0",
