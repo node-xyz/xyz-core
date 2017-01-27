@@ -25,6 +25,7 @@ class NodeXYZ {
     this.Util = require('./src/Util/Util')
 
     this.serviceRepository = new ServiceRepository(this)
+    this.bootstrapFunctions = []
 
     // lunch the default bootstrat.
     // Note that if you ever decide to override defaultBootstrap, you MUST manually apply `pingBoostrap` in it
@@ -50,6 +51,8 @@ ${wrapper('bold', wrapper('blue', 'selfConfig'))}:
   ${JSON.stringify(CONFIG.getSelfConf(), null, 2)}
 ${wrapper('bold', wrapper('blue', 'systemConf'))}:
   ${JSON.stringify(CONFIG.getSystemConf(), null, 2)}
+${wrapper('bold', wrapper('blue', 'Bootstrap Functions'))}:
+  ${this.bootstrapFunctions}
 ____________________  SERVICE REPOSITORY ____________________
 ${this.serviceRepository._inspect()}
 ____________________  TRANSPORT LAYER ____________________
@@ -66,6 +69,7 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
       global: {
         systemConf: CONFIG.getSystemConf(),
         selfConf: CONFIG.getSelfConf(),
+        bootstrapFunctions: this.bootstrapFunctions,
         machineReport: {
           cpu: machineReporter.getCPU(),
           mem: machineReporter.getMem(),
@@ -104,8 +108,9 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   }
 
   // apply a bootstrap function to xyz
-  bootstrap (fn) {
-    fn(this)
+  bootstrap (fn, ...args) {
+    this.bootstrapFunctions.push(fn.name)
+    fn(this, ...args)
   }
 
   // for now, only one middleware should be added to this. no more.
