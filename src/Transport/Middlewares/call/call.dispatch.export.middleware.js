@@ -1,7 +1,7 @@
 const logger = require('./../../../Log/Logger')
 let http = require('http')
 
-let callDispatchExport = function (params, next, end) {
+let callDispatchExport = function (params, next, end, xyz) {
   let requestConfig = params[0]
   let responseCallback = params[1]
 

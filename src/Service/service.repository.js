@@ -110,17 +110,8 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
       }
     })
 
-    /* DEPRACATED
-    this.transportServer.on(CONSTANTS.events.PING, (body, response) => {
-      if (Object.keys(this.foreignNodes).indexOf(body.sender) === -1) {
-        logger.warn(`new node is pinging me. adding to lists. address : ${body.sender}`)
-        this.joinNode(body.sender)
-      }
-      logger.debug(`Responding a PING message from ${body.sender}`)
-      response.end(JSON.stringify({services: this.services.serializedTree, nodes: CONFIG.getSystemConf().nodes }))
-    }) */
-
     this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
+      this.emit('cluster:join', {body: body})
       response.end(JSON.stringify(CONFIG.getSystemConf()))
     })
   }
@@ -139,46 +130,16 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
     }
   }
 
-  // this is DEPRECATED and a bootstrap function is used instead.
-  // We're gonna keep the code for now
-  ping () {
-    let nodes = CONFIG.getSystemConf().nodes
-    for (let node of nodes) {
-      this.transportClient.ping(Util.nodeStringToObject(node), (err, body, res) => {
-        if (err == null) {
-          this.foreignNodes[node] = body.services
-          CONFIG.ensureNodes(body.nodes)
-          this.outOfReachNodes[node] = 0
-          logger.debug(`${wrapper('bold', 'PING')} success :: response = ${JSON.stringify(body)}`)
-        } else {
-          if (this.outOfReachNodes[node]) {
-            this.outOfReachNodes[node] += 1
-            if (this.outOfReachNodes[node] > (this.INTERVALS.kick)) {
-              logger.error(`removing node from foreignNodes and nodes list`)
-              this.kickNode(node)
-              return
-            }
-          } else {
-            this.outOfReachNodes[node] = 1
-          }
-          logger.error(`Ping Error :: ${node} has been out of reach for ${this.outOfReachNodes[node]} pings ::  ${JSON.stringify(err)}`)
-        }
-      })
-    }
-  }
-
   contactSeed (idx) {
     // error. check the vlaidity of casse where 404 or no 200 is the Response
     let seeds = CONFIG.getSelfConf().seed
     this.transportClient.contactSeed(Util.nodeStringToObject(seeds[idx]), (err, body, res) => {
       if (!err) {
-        this.emit('cluster:join')
         logger.info(`${wrapper('bold', 'JOINED CLUSTER')}`)
         logger.debug(`Response nodes are ${body.nodes}`)
         for (let node of body.nodes) {
           this.joinNode(node)
         }
-        this.ping()
       } else {
         logger.error(`${wrapper('bold', 'JOIN FAILED')} :: a seed node ${seeds[idx]} rejected with `)
         setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx), this.INTERVALS.reconnect)

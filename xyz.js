@@ -126,7 +126,14 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     return {
       transport: {
         callReceive: this.serviceRepository.getTransportLayer().Server.callReceiveMiddlewareStack,
-        callDispatch: this.serviceRepository.getTransportLayer().Client.callDispatchMiddlewareStack
+        callDispatch: this.serviceRepository.getTransportLayer().Client.callDispatchMiddlewareStack,
+
+        pingDispatch: this.serviceRepository.getTransportLayer().Client.pingDispatchMiddlewareStack,
+        pingReceive: this.serviceRepository.getTransportLayer().Client.pingReceiveMiddlewareStack,
+
+        joinReceive: this.serviceRepository.getTransportLayer().Client.joinReceiveMiddlewareStack,
+        joinDispatch: this.serviceRepository.getTransportLayer().Client.joinDispatchMiddlewareStack
+
       },
       serviceRepository: {
         callDispatch: this.serviceRepository.callDispatchMiddlewareStack

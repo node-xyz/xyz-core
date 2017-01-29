@@ -7,7 +7,7 @@ let pingDispatchExport = function (params, next, end) {
 
   let postData = requestConfig.json
   delete requestConfig.json
-  requestConfig['Content-Length'] = Buffer.byteLength(postData)
+  requestConfig['Content-Length'] = Buffer.byteLength(String(postData))
   requestConfig['Content-Type'] = 'application/json'
 
   var req = http.request(requestConfig, (res) => {
@@ -18,7 +18,7 @@ let pingDispatchExport = function (params, next, end) {
       body.push(chunck)
     })
 
-    res.on('end' , () => {
+    res.on('end', () => {
       pingResponseCallback(null, JSON.parse(body), res)
     })
   })

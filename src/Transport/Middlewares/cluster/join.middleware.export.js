@@ -1,7 +1,7 @@
 const http = require('http')
 const logger = require('./../../../Log/Logger')
 
-let joinExport = function (params, next, end) {
+let joinExport = function (params, next, end, xyz) {
   let requestConfig = params[0]
   let joinResponseCallback = params[1]
 
@@ -18,7 +18,7 @@ let joinExport = function (params, next, end) {
       body.push(chunck)
     })
 
-    res.on('end' , () => {
+    res.on('end', () => {
       // console.log(res)
       joinResponseCallback(null, JSON.parse(body), res)
     })

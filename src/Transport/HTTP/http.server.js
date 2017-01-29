@@ -13,6 +13,7 @@ class HTTPServer extends EventEmitter {
     super()
     http.globalAgent.maxSockets = Infinity
     this.port = _CONFIGURATION.getSelfConf().port
+    this.xyz = xyz
 
     this.callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack')
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
@@ -44,14 +45,14 @@ class HTTPServer extends EventEmitter {
             if (parsedUrl.query) {
               req.destroy()
             } else {
-              this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
+              this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
             }
           } else if (parsedUrl.pathname === `/${CONSTANTS.url.JOIN}`) {
             if (_CONFIGURATION.getSelfConf().allowJoin) {
-              this.joinReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
+              this.joinReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
             } else { req.destroy() }
           } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
-            this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body), self], 0)
+            this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
           } else {
             req.destroy()
           }

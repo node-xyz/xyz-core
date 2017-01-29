@@ -46,7 +46,7 @@ class HTTPClient {
       method: 'POST',
       json: { userPayload: userPayload, service: servicePath}
     }
-    this.callDispatchMiddlewareStack.apply([requestConfig, callResponseCallback], 0)
+    this.callDispatchMiddlewareStack.apply([requestConfig, callResponseCallback], 0, this.xyz)
   }
 
   ping (node, pingResponseCallback) {
@@ -57,7 +57,7 @@ class HTTPClient {
       method: 'POST',
       json: { sender: `${_CONFIGURATIONS.getSelfConf().host}:${_CONFIGURATIONS.getSelfConf().port}` }
     }
-    this.pingDispatchMiddlewareStack.apply([requestConfig, pingResponseCallback], 0)
+    this.pingDispatchMiddlewareStack.apply([requestConfig, pingResponseCallback], 0, this.xyz)
   }
 
   contactSeed (node, joinResponseCallback) {
@@ -68,7 +68,7 @@ class HTTPClient {
       method: 'POST',
       json: { sender: `${_CONFIGURATIONS.getSelfConf().host}:${_CONFIGURATIONS.getSelfConf().port}` }
     }
-    this.joinDispatchMiddlewareStack.apply([requestConfig, joinResponseCallback], 0)
+    this.joinDispatchMiddlewareStack.apply([requestConfig, joinResponseCallback], 0, this.xyz)
   }
 
 }
