@@ -22,19 +22,19 @@ class HTTPClient {
     this.joinDispatchMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.export'))
   }
 
-  _inspect () {
+  inspect () {
     return `${wrapper('green', wrapper('bold', 'Middlewares'))}:
-  ${this.callDispatchMiddlewareStack._inspect()}
-  ${this.pingDispatchMiddlewareStack._inspect()}
-  ${this.joinDispatchMiddlewareStack._inspect()}
+  ${this.callDispatchMiddlewareStack.inspect()}
+  ${this.pingDispatchMiddlewareStack.inspect()}
+  ${this.joinDispatchMiddlewareStack.inspect()}
   `
   }
 
-  _inspectJSON () {
+  inspectJSON () {
     return [
-      this.callDispatchMiddlewareStack._inspectJSON(),
-      this.pingDispatchMiddlewareStack._inspectJSON(),
-      this.joinDispatchMiddlewareStack._inspectJSON()
+      this.callDispatchMiddlewareStack.inspectJSON(),
+      this.pingDispatchMiddlewareStack.inspectJSON(),
+      this.joinDispatchMiddlewareStack.inspectJSON()
     ]
   }
 

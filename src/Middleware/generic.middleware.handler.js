@@ -31,7 +31,7 @@ class GenericMiddlewareHandler {
   }
 
   // print function
-  _inspect () {
+  inspect () {
     let str = `${this.name} || `
 
     for (let i = 0; i < this.middlewares.length; i++) {
@@ -45,10 +45,10 @@ class GenericMiddlewareHandler {
     return str
   }
 
-  _inspectJSON () {
+  inspectJSON () {
     return {
       name: this.name,
-      Middlewares: this.middlewares
+      middlewares: this.middlewares.map( (mw) => mw.name )
     }
   }
 

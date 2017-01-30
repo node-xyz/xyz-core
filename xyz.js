@@ -54,12 +54,12 @@ ${wrapper('bold', wrapper('blue', 'systemConf'))}:
 ${wrapper('bold', wrapper('blue', 'Bootstrap Functions'))}:
   ${this.bootstrapFunctions}
 ____________________  SERVICE REPOSITORY ____________________
-${this.serviceRepository._inspect()}
+${this.serviceRepository.inspect()}
 ____________________  TRANSPORT LAYER ____________________
 ${wrapper('bold', wrapper('blue', 'Transport Client'))}:
-  ${this.serviceRepository.transportClient._inspect()}
+  ${this.serviceRepository.transportClient.inspect()}
 ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
-  ${this.serviceRepository.transportServer._inspect()}
+  ${this.serviceRepository.transportServer.inspect()}
 `
     return pref
   }
@@ -78,8 +78,8 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
       },
       ServiceRepository: this.serviceRepository.inspectJSON(),
       Transport: {
-        transportClient: this.serviceRepository.transportClient._inspectJSON(),
-        transportServer: this.serviceRepository.transportServer._inspectJSON()
+        transportClient: this.serviceRepository.transportClient.inspectJSON(),
+        transportServer: this.serviceRepository.transportServer.inspectJSON()
       }
     }
   }

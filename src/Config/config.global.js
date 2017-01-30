@@ -24,8 +24,7 @@ let configuration = {
   joinNode: (aNode) => {
     if (systemConf.nodes.indexOf(aNode) > -1) {
       logger.warn(`Node ${aNode} already in systemConf. Passing.`)
-    }
-    else {
+    } else {
       logger.info(`A new node {${aNode}} added to systemConf`)
       systemConf.nodes.push(aNode)
     }

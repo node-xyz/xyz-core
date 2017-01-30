@@ -60,19 +60,19 @@ class HTTPServer extends EventEmitter {
       })
   }
 
-  _inspect () {
+  inspect () {
     return `${wrapper('green', wrapper('bold', 'Middlewares'))}:
-  ${this.callReceiveMiddlewareStack._inspect()}
-  ${this.pingReceiveMiddlewareStack._inspect()}
-  ${this.joinReceiveMiddlewareStack._inspect()}
+  ${this.callReceiveMiddlewareStack.inspect()}
+  ${this.pingReceiveMiddlewareStack.inspect()}
+  ${this.joinReceiveMiddlewareStack.inspect()}
   `
   }
 
-  _inspectJSON () {
+  inspectJSON () {
     return [
-      this.callReceiveMiddlewareStack._inspectJSON(),
-      this.pingReceiveMiddlewareStack._inspectJSON(),
-      this.joinReceiveMiddlewareStack._inspectJSON()
+      this.callReceiveMiddlewareStack.inspectJSON(),
+      this.pingReceiveMiddlewareStack.inspectJSON(),
+      this.joinReceiveMiddlewareStack.inspectJSON()
     ]
   }
 

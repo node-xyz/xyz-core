@@ -71,10 +71,10 @@ class ServiceRepository extends EventEmitter {
     this.services.createPathSubtree(path, fn)
   }
 
-  _inspect () {
+  inspect () {
     let str = `
 ${wrapper('green', wrapper('bold', 'Middlewares'))}:
-  ${this.callDispatchMiddlewareStack._inspect()}
+  ${this.callDispatchMiddlewareStack.inspect()}
 ${wrapper('green', wrapper('bold', 'Services'))}:
 `
 
@@ -88,7 +88,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   inspectJSON () {
     return {
       services: this.services.plainTree,
-      middlewares: [this.callDispatchMiddlewareStack._inspectJSON()]
+      middlewares: [this.callDispatchMiddlewareStack.inspectJSON()]
     }
   }
 
