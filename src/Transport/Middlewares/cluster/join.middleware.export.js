@@ -7,7 +7,7 @@ let joinExport = function (params, next, end, xyz) {
 
   let postData = requestConfig.json
   delete requestConfig.json
-  requestConfig['Content-Length'] = Buffer.byteLength(postData)
+  requestConfig['Content-Length'] = Buffer.byteLength(String(postData))
   requestConfig['Content-Type'] = 'application/json'
 
   var req = http.request(requestConfig, (res) => {

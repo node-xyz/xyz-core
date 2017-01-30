@@ -13,7 +13,7 @@ function MergeRecursive (obj1, obj2) {
       } else {
         obj1[p] = obj2[p]
       }
-    } catch(e) {
+    } catch (e) {
       obj1[p] = obj2[p]
     }
   }
@@ -25,20 +25,23 @@ let configuration = {
     if (systemConf.nodes.indexOf(aNode) > -1) {
       logger.warn(`Node ${aNode} already in systemConf. Passing.`)
     }
-    logger.info(`A new node {${aNode}} added to systemConf`)
-    systemConf.nodes.push(aNode)
+    else {
+      logger.info(`A new node {${aNode}} added to systemConf`)
+      systemConf.nodes.push(aNode)
+    }
   },
 
   kickNode: (aNode) => {
     let index = systemConf.nodes.indexOf(aNode)
-    if (index > -1)
+    if (index > -1) {
       systemConf.nodes.splice(systemConf.nodes.indexOf(aNode), 1)
-    else
+    } else {
       logger.warn(`Attempting to remove ${aNode} which does not exist`)
+    }
   },
 
   /**
-   * a Duplicate function to joinNode. The inly difference is logging and the fact
+   * a Duplicate function to joinNode. The only difference is logging and the fact
    * that this one takes an array of nodes
    * @param  {String} someNodes a list of nodes
    */
@@ -63,28 +66,24 @@ let configuration = {
       logger.verbose(`overriding ${arg} from command line`)
       let keys = arg.split('.')
       if (keys.length === 1) {
-        if (keys[0] === 'seed')
-          selfConf[keys[0]].push(args[arg])
-        else if (keys[0] == 'allowJoin') {
+        if (keys[0] === 'seed') { selfConf[keys[0]].push(args[arg]) } else if (keys[0] == 'allowJoin') {
           /*
           could also use eval here
            */
           if (args[arg] === '0' || args[arg] === 'false') {
             selfConf[keys[0]] = false
-          }else {
+          } else {
             selfConf[keys[0]] = true
           }
-        }
-        else
+        } else {
           selfConf[keys[0]] = args[arg]
-      }
-      else if (keys.length === 2) {
-        if (! selfConf[keys[0]]) selfConf[keys[0]] = {}
+        }
+      } else if (keys.length === 2) {
+        if (!selfConf[keys[0]]) selfConf[keys[0]] = {}
         selfConf[keys[0]][keys[1]] = keys[1] == 'enable' ? eval(args[arg]) : args[arg]
-      }
-      else if (keys.length === 3) {
-        if (! selfConf[keys[0]]) selfConf[keys[0]] = {}
-        if (! selfConf[keys[1]]) selfConf[keys[1]] = {}
+      } else if (keys.length === 3) {
+        if (!selfConf[keys[0]]) selfConf[keys[0]] = {}
+        if (!selfConf[keys[1]]) selfConf[keys[1]] = {}
         selfConf[keys[0]][keys[1]][keys[2]] = args[arg]
       } else {
         logger.error('command line arguments with more than three sub-keys are not allowed. passing')
@@ -99,7 +98,7 @@ let configuration = {
     logger.info('Setting default systemConf')
     systemConf = CONSTANTS.defaultConfig.systemConf
     logger.info('reading systemConf from user')
-    systemConf = aConf
+    systemConf = MergeRecursive(systemConf, aConf)
 
     logger.debug(`Adding self to systemConf by default`)
     if (systemConf.nodes.indexOf(`${selfConf.host}:${selfConf.port}`) === -1) {
