@@ -12,9 +12,12 @@ var mathMs = new XYZ({
   systemConf: { nodes: []}
 })
 
-clusterListenerBootstrap(mathMs)
+// clusterListenerBootstrap(mathMs)
 
-mathMs.register('/math/decimal/mul', fn.mul)
+mathMs.register('/math/decimal/mul', (payload, response) => {
+  console.log(payload)
+  response.send('ok', 201)
+})
 mathMs.register('/math/decimal/neg', fn.neg)
 mathMs.register('/math/decimal/sub', fn.sub)
 

@@ -15,7 +15,7 @@ module.exports = {
     xResponse.send(payload.toLowerCase())
   },
   neg: function (payload, xResponse) {
-    xResponse.send(!Boolean(payload))
+    xResponse.send(!payload)
   },
   rev: function (payload, xResponse) {
     xResponse.send(payload.reverse())
@@ -25,7 +25,6 @@ module.exports = {
     xResponse.send(payload)
   },
   blank: function (payload, xResponse) {
-    console.log(payload)
-    xResponse.send('blank')
+    xResponse.send('blank', 201)
   }
 }

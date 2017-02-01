@@ -18,7 +18,7 @@ before(function (done) {
 it('hello world', function (done) {
   snd.call({
     servicePath: '/mul',
-    payload: {x: 2,y: 3}
+    payload: {x: 2, y: 3}
   }, (err1, body1, response1) => {
     expect(body1).to.equal(6)
     expect(err1).to.equal(null)
@@ -34,8 +34,8 @@ it('hello world', function (done) {
 
 it('local not found', function (done) {
   snd.call({servicePath: '/mullll', payload: {
-      x: 2,
-      y: 3
+    x: 2,
+    y: 3
   }}, (err, body, resp) => {
     expect(body).to.equal(null)
     expect(err).to.equal(http.STATUS_CODES[404])
@@ -44,8 +44,18 @@ it('local not found', function (done) {
 })
 
 it('no Callback for sender call', function (done) {
-  snd.call({servicePath: 'mul', payload: {x: 2,y: 3}})
+  snd.call({servicePath: 'mul', payload: {x: 2, y: 3}})
   done()
+})
+
+it('HTTP statusCode', function (done) {
+  snd.call({
+    servicePath: '/blank',
+    payload: 'whatever'
+  }, (err, body, response) => {
+    expect(response.statusCode).to.equal(201)
+    done()
+  })
 })
 
 after(function () {

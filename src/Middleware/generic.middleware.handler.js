@@ -48,7 +48,7 @@ class GenericMiddlewareHandler {
   inspectJSON () {
     return {
       name: this.name,
-      middlewares: this.middlewares.map( (mw) => mw.name )
+      middlewares: this.middlewares.map((mw) => mw.name)
     }
   }
 

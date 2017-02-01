@@ -19,7 +19,7 @@ let callDispatchExport = function (params, next, end, xyz) {
       })
 
       res.on('end', () => {
-        let err = (res.statusCode === 200 ? null : http.STATUS_CODES[res.statusCode])
+        let err = (parseInt(res.statusCode / 100) === 2 ? null : http.STATUS_CODES[res.statusCode])
         responseCallback(err, JSON.parse(body).userPayload, res)
       })
     })
