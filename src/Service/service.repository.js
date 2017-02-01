@@ -121,6 +121,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   // TODO: in this case, unlike in config, sendStrategy MUST be a function
   // better to allow string as well
   call (opt, responseCallback) {
+    this.emit('request:send', {opt: opt})
     opt.payload = opt.payload || null
     if (opt.sendStrategy) {
       // this is trying to imitate the middleware signiture

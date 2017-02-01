@@ -4,7 +4,8 @@ let logger = require('./src/Log/Logger')
 let pingBoostrap = require('xyz.ping.default.bootstrap')
 let wrapper = require('./src/Util/Util').wrapper
 let machineReporter = require('./src/Util/machine.reporter')
-
+let inspectBootstrap = require('./src/Bootstrap/process.inspect.event')
+let networkMonitorBootstrap = require('./src/Bootstrap/process.network.event')
 // Detail about system Conf keys
 // TODO
 class NodeXYZ {
@@ -39,7 +40,11 @@ class NodeXYZ {
       logger.verbose(`sending config info for possible xyz-cli listener instance`)
       process.send({ title: 'init', body: CONFIG.getSelfConf()})
 
-      this.bindProcessEvents()
+      // note that not only that these two are used by cli's `top` command,
+      // they are actually no use when cli is not working
+      // since messaging is disabled
+      this.bootstrap(inspectBootstrap)
+      this.bootstrap(networkMonitorBootstrap)
     }
   }
 
@@ -139,22 +144,6 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
         callDispatch: this.serviceRepository.callDispatchMiddlewareStack
       }
     }
-  }
-
-  // bing some events for the cli communication. should be called only when
-  // cli : { enable : true }
-  // in selfConf
-  bindProcessEvents () {
-    process.on('message', (data) => {
-      console.log('message passing', data)
-      // inspect
-      // this process will responde with a json object containing basic info about the node
-      if (data.title === 'inspectJSON') {
-        process.send({title: data.title, body: this.inspectJSON()})
-      } else if (data.title === 'inspect') {
-        process.send({title: data.title, body: this.inspect()})
-      }
-    })
   }
 }
 
