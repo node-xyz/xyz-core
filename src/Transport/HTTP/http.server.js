@@ -15,6 +15,7 @@ class HTTPServer extends EventEmitter {
     this.port = _CONFIGURATION.getSelfConf().port
     this.xyz = xyz
 
+    // 3 default routes
     this.callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack')
     this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
 
@@ -23,6 +24,9 @@ class HTTPServer extends EventEmitter {
 
     this.joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack')
     this.joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
+
+    // user defined routes
+    this.miscCalls = {}
 
     this.server = http.createServer()
       .listen(this.port, () => {
@@ -54,18 +58,32 @@ class HTTPServer extends EventEmitter {
           } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
             this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
           } else {
-            req.destroy()
+            let dismissed = false
+            for (let route in this.miscCalls) {
+              if (parsedUrl.pathname === `/${route}`) {
+                this.miscCalls[route].apply([req, resp, JSON.parse(body)], 0, this.xyz)
+                dismissed = true
+                break
+              }
+            }
+            if (!dismissed) {
+              req.destroy()
+            }
           }
         })
       })
   }
 
   inspect () {
-    return `${wrapper('green', wrapper('bold', 'Middlewares'))}:
-  ${this.callReceiveMiddlewareStack.inspect()}
-  ${this.pingReceiveMiddlewareStack.inspect()}
-  ${this.joinReceiveMiddlewareStack.inspect()}
-  `
+    let ret = `${wrapper('green', wrapper('bold', 'Middlewares'))}:
+    ${this.callReceiveMiddlewareStack.inspect()}
+    ${this.pingReceiveMiddlewareStack.inspect()}
+    ${this.joinReceiveMiddlewareStack.inspect()}\n`
+
+    for (let route in this.miscCalls) {
+      ret += `    ${this.miscCalls[route].inspect()}\n`
+    }
+    return ret
   }
 
   inspectJSON () {
@@ -73,7 +91,7 @@ class HTTPServer extends EventEmitter {
       this.callReceiveMiddlewareStack.inspectJSON(),
       this.pingReceiveMiddlewareStack.inspectJSON(),
       this.joinReceiveMiddlewareStack.inspectJSON()
-    ]
+    ].concat(Object.values(this.miscCalls))
   }
 
   close () {
@@ -90,6 +108,21 @@ class HTTPServer extends EventEmitter {
       return false
     }
     return true
+  }
+
+  // will initialize a new route with one default middleware
+  // NOTE: this is experimental and there is no support to send sth directly to this
+  // from whithin xyz. this is designed mostly for users outside of the system to have
+  // a communication way
+  registerCallRoute (prefix) {
+    if (this.miscCalls[prefix]) {
+      logger.warn(`call middleware with prefix ${prefix} already exists`)
+      return -1
+    }
+    this.miscCalls[prefix] = new GenericMiddlewareHandler(this.xyz, `${prefix}MiddlewareHandler`)
+    this.miscCalls[prefix].register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
+    logger.info(`new call route ${wrapper('bold', prefix)} added`)
+    return 1
   }
 
 }

@@ -1,5 +1,4 @@
 let XYZ = require('./../../index')
-let clusterListenerBootstrap = require('./../../src/Bootstrap/clsuter.listener')
 let fn = require('./../../test/ms/mock.functions')
 
 var mathMs = new XYZ({
@@ -12,8 +11,6 @@ var mathMs = new XYZ({
   systemConf: { nodes: []}
 })
 
-// clusterListenerBootstrap(mathMs)
-
 mathMs.register('/math/decimal/mul', (payload, response) => {
   console.log(payload)
   response.send('ok', 201)
@@ -24,5 +21,7 @@ mathMs.register('/math/decimal/sub', fn.sub)
 mathMs.register('/math/float/neg', function (payload, XResponse) {
   XResponse.send('ok whassssaaaap')
 })
+
+mathMs.registerCallRoute('foo')
 
 console.log(mathMs)

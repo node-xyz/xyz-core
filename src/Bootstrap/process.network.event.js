@@ -15,7 +15,7 @@ function processNetworkEvent (xyz) {
 
   // answer to message
   process.on('message', (data) => {
-    console.log('core' , data);
+    console.log('core', data)
     if (data.title == 'network') {
       process.send({title: data.title, body: _load})
     }

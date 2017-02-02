@@ -42,7 +42,7 @@ class NodeXYZ {
 
       // note that not only that these two are used by cli's `top` command,
       // they are actually no use when cli is not working
-      // since messaging is disabled
+      // since messaging (IPC channel) is disabled
       this.bootstrap(inspectBootstrap)
       this.bootstrap(networkMonitorBootstrap)
     }
@@ -105,9 +105,9 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   // call a service
   //
   // opt is an object with keys like :
-  //   - servicePath: {String}
-  //   - sendStrategy: {function}
-  //   - payload: {Object|Number|Boolean}
+  //   - `servicePath`: {String}
+  //   - `sendStrategy`: {function}
+  //   - `payload`: {Object|Number|Boolean}
   call (opt, responseCallback) {
     this.serviceRepository.call(opt, responseCallback)
   }
@@ -130,20 +130,26 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   middlewares () {
     return {
       transport: {
-        callReceive: this.serviceRepository.getTransportLayer().Server.callReceiveMiddlewareStack,
-        callDispatch: this.serviceRepository.getTransportLayer().Client.callDispatchMiddlewareStack,
+        callReceive: this.serviceRepository.transportServer.callReceiveMiddlewareStack,
+        callDispatch: this.serviceRepository.transportClient.callDispatchMiddlewareStack,
 
-        pingDispatch: this.serviceRepository.getTransportLayer().Client.pingDispatchMiddlewareStack,
-        pingReceive: this.serviceRepository.getTransportLayer().Client.pingReceiveMiddlewareStack,
+        pingDispatch: this.serviceRepository.transportClient.pingDispatchMiddlewareStack,
+        pingReceive: this.serviceRepository.transportClient.pingReceiveMiddlewareStack,
 
-        joinReceive: this.serviceRepository.getTransportLayer().Client.joinReceiveMiddlewareStack,
-        joinDispatch: this.serviceRepository.getTransportLayer().Client.joinDispatchMiddlewareStack
+        joinReceive: this.serviceRepository.transportClient.joinReceiveMiddlewareStack,
+        joinDispatch: this.serviceRepository.transportClient.joinDispatchMiddlewareStack,
+
+        misc: this.serviceRepository.transportServer.miscCalls
 
       },
       serviceRepository: {
         callDispatch: this.serviceRepository.callDispatchMiddlewareStack
       }
     }
+  }
+
+  registerCallRoute (prefix) {
+    return this.serviceRepository.transportServer.registerCallRoute(prefix)
   }
 }
 

@@ -160,14 +160,6 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
     CONFIG.kickNode(aNode)
   }
 
-  // TODO redundant
-  getTransportLayer () {
-    return {
-      Server: this.transportServer,
-      Client: this.transportClient
-    }
-  }
-
   terminate () {
     this.transportServer.close()
     clearInterval(this.pingInterval)

@@ -66,6 +66,20 @@ it('early termination', function (done) {
   })
 })
 
+it('misc routes', function (done) {
+  rcv.xyz.registerCallRoute('testRoute')
+
+  const exec = require('child_process').exec
+  const child = exec(`curl -X POST -H "Content-Type: application/json" -d '{"service":"/neg","userPayload":"true"}'  -i "http://localhost:3333/call"`,
+      (error, stdout, stderr) => {
+        console.log(`stdout: ${stdout}`)
+        done()
+        if (error !== null) {
+          console.log(`exec error: ${error}`)
+        }
+      })
+})
+
 after(function () {
   snd.stop()
   rcv.stop()

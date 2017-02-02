@@ -32,7 +32,7 @@ class GenericMiddlewareHandler {
 
   // print function
   inspect () {
-    let str = `${this.name} || `
+    let str = `${wrapper('bold', this.name)} || `
 
     for (let i = 0; i < this.middlewares.length; i++) {
       if (i === this.middlewares.length - 1) {
