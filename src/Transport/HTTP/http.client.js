@@ -12,13 +12,13 @@ class HTTPClient {
     this.pingPrefix = CONSTANTS.url.PING
     this.xyz = xyz
 
-    let callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMiddlewareStack')
+    let callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMiddlewareStack', 'CALL')
     callDispatchMiddlewareStack.register(-1, require('./../Middlewares/call/call.dispatch.export.middleware'))
 
-    let pingDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'pingDispatchMiddlewareStack')
+    let pingDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'pingDispatchMiddlewareStack', 'PING')
     pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
 
-    let joinDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'joinDispatchMiddlewareStack')
+    let joinDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'joinDispatchMiddlewareStack', 'JOIN')
     joinDispatchMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.export'))
 
     this.routes = {}
@@ -45,14 +45,21 @@ class HTTPClient {
   }
 
   registerRoute (prefix, gmwh) {
+    logger.info(`HTTP Client:: new call route ${wrapper('bold', prefix)} added`)
     if (gmwh) {
       this.routes[prefix] = gmwh
     } else {
       this.routes[prefix] = new GenericMiddlewareHandler(this.xyz, `${prefix}-MiddlewareHandler`)
+      this.routes[prefix].register(-1, require('./../Middlewares/call/call.dispatch.export.middleware'))
     }
   }
 
-  _send (opt, responseCallback) {
+  // opt should have:
+  //   - node {string} address of destination,
+  //   - route {string} url of destination
+  //   - payload {object}. depending on `route` , it can have `userPayload`, `service` or `sender`
+  send (opt, responseCallback) {
+    logger.debug(`${wrapper('bold', 'HTTP Client')} :: sending request to ${opt.node}/${opt.route} through ${this.routes[opt.route].name}`)
     opt.route = opt.route || 'CALL'
     let requestConfig = {
       hostname: `${opt.node.split(':')[0]}`,
@@ -63,61 +70,6 @@ class HTTPClient {
     }
     this.routes[opt.route].apply([requestConfig, responseCallback], 0, this.xyz)
   }
-
-  send (servicePath, node, userPayload, callResponseCallback) {
-    this._send({
-      route: 'CALL',
-      node: node,
-      payload: { service: servicePath, userPayload: userPayload }
-    }, callResponseCallback)
-    return
-
-    let requestConfig = {
-      hostname: `${node.split(':')[0]}`,
-      port: node.split(':')[1],
-      path: `/${this.callPostfix}`,
-      method: 'POST',
-      json: { userPayload: userPayload, service: servicePath}
-    }
-    this.callDispatchMiddlewareStack.apply([requestConfig, callResponseCallback], 0, this.xyz)
-  }
-
-  ping (node, pingResponseCallback) {
-    this._send({
-      route: 'PING',
-      node: node,
-      payload: { sender: `${_CONFIGURATIONS.getSelfConf().host}:${_CONFIGURATIONS.getSelfConf().port}` }
-    }, pingResponseCallback)
-    return
-
-    let requestConfig = {
-      hostname: `${node.host}`,
-      port: node.port,
-      path: `/${this.pingPrefix}`,
-      method: 'POST',
-      json: { sender: `${_CONFIGURATIONS.getSelfConf().host}:${_CONFIGURATIONS.getSelfConf().port}` }
-    }
-    this.pingDispatchMiddlewareStack.apply([requestConfig, pingResponseCallback], 0, this.xyz)
-  }
-
-  contactSeed (node, joinResponseCallback) {
-    this._send({
-      route: 'JOIN',
-      node: node,
-      payload: { sender: `${_CONFIGURATIONS.getSelfConf().host}:${_CONFIGURATIONS.getSelfConf().port}` }
-    }, joinResponseCallback)
-    return
-
-    let requestConfig = {
-      hostname: node.host,
-      port: node.port,
-      path: `/${CONSTANTS.url.JOIN}`,
-      method: 'POST',
-      json: { sender: `${_CONFIGURATIONS.getSelfConf().host}:${_CONFIGURATIONS.getSelfConf().port}` }
-    }
-    this.joinDispatchMiddlewareStack.apply([requestConfig, joinResponseCallback], 0, this.xyz)
-  }
-
 }
 
 module.exports = HTTPClient

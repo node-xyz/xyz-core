@@ -47,6 +47,7 @@ class ServiceRepository extends EventEmitter {
 
     // list of current services
     this.services = new PathTree()
+    this._sender = CONFIG.getSelfConf().host + ':' + CONFIG.getSelfConf().port
 
     // list of foreign nodes and services respectively
     this.foreignNodes = {}
@@ -124,6 +125,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
     this.emit('request:send', {opt: opt})
     opt.payload = opt.payload || null
     opt.servicePath = Path.format(opt.servicePath)
+    opt.route = opt.route || 'CALL'
 
     if (opt.sendStrategy) {
       // this is trying to imitate the middleware signature
@@ -136,7 +138,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   contactSeed (idx) {
     // error. check the vlaidity of casse where 404 or no 200 is the Response
     let seeds = CONFIG.getSelfConf().seed
-    this.transportClient.contactSeed(seeds[idx], (err, body, res) => {
+    this.transportClient.send({node: seeds[idx], payload: {sender: this._sender}, route: 'JOIN'}, (err, body, res) => {
       if (!err) {
         logger.info(`${wrapper('bold', 'JOINED CLUSTER')}. cluster memebers : ${body.nodes}`)
         for (let node of body.nodes) {

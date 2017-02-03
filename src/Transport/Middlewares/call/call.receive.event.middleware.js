@@ -8,7 +8,7 @@ function passToRepo (params, next, end, xyz) {
   let body = params[2]
   let _transport = xyz.serviceRepository.transportServer
 
-  logger.debug(`CALL :: Passing request to ${request.url} up to service repo with ${body}`)
+  logger.debug(`CALL :: Passing request to ${request.url} up to service repo with ${JSON.stringify(body)}`)
   _transport.emit(
     CONSTANTS.events.REQUEST, {
       userPayload: body.userPayload,

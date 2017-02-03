@@ -35,7 +35,7 @@ function wrongServicediscoveryMiddleware (params, next, end, xyz) {
     }
     if (!match) {
       logger.info(`WRONG DISCOVERY :: determined ${node} for ${servicePath}`)
-      transportClient.send(servicePath, node, userPayload, (err, body, response) => {
+      transportClient.send({ node: node, route: 'CALL', payload: {userPayload: userPayload, service: servicePath}}, (err, body, response) => {
         responseCallback(err, body, response)
       })
       return

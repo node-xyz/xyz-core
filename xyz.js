@@ -144,7 +144,7 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   }
 
   registerClientRoute (prefix) {
-    return 0
+    return this.serviceRepository.transportClient.registerRoute(prefix)
   }
 }
 

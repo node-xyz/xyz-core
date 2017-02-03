@@ -19,7 +19,6 @@ let joinExport = function (params, next, end, xyz) {
     })
 
     res.on('end', () => {
-      // console.log(res)
       joinResponseCallback(null, JSON.parse(body), res)
     })
   })

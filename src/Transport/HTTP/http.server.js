@@ -16,13 +16,13 @@ class HTTPServer extends EventEmitter {
     this.xyz = xyz
 
     // 3 default routes
-    let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack')
+    let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack', 'CALL')
     callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
 
-    let pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'pingReceiveMiddlewareStack')
+    let pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'pingReceiveMiddlewareStack', 'PING')
     pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
 
-    let joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack')
+    let joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack', 'JOIN')
     joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
 
     // user defined routes
@@ -47,23 +47,6 @@ class HTTPServer extends EventEmitter {
             return
           }
           let parsedUrl = url.parse(req.url)
-
-          // if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
-          //   if (parsedUrl.query) {
-          //     req.destroy()
-          //   } else {
-          //     this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
-          //   }
-          // }
-          // else if (parsedUrl.pathname === `/${CONSTANTS.url.JOIN}`) {
-          //   if (_CONFIGURATION.getSelfConf().allowJoin) {
-          //     this.joinReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
-          //   } else { req.destroy() }
-          // }
-          // else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
-          //   this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
-          // }
-          // else {
           let dismissed = false
           for (let route in this.routes) {
             if (parsedUrl.pathname === `/${route}`) {
@@ -75,7 +58,6 @@ class HTTPServer extends EventEmitter {
           if (!dismissed) {
             req.destroy()
           }
-          // }
         })
       })
   }
@@ -90,7 +72,9 @@ class HTTPServer extends EventEmitter {
   }
 
   inspectJSON () {
-    return [].concat(Object.values(this.routes))
+    let ret = []
+    for (let route in this.routes) ret.push(this.routes[route])
+    ret
   }
 
   close () {
@@ -120,7 +104,7 @@ class HTTPServer extends EventEmitter {
     } else {
       gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}-MddlewareHandler`)
       this.routes[prefix] = gmwh
-      logger.info(`new call route ${wrapper('bold', prefix)} added`)
+      logger.info(`HTTP Server:: new call route ${wrapper('bold', prefix)} added`)
       return 1
     }
   }

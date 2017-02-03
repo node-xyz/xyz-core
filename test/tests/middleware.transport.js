@@ -67,17 +67,24 @@ it('early termination', function (done) {
 })
 
 it('misc routes', function (done) {
-  rcv.xyz.registerServerRoute('testRoute')
+  function earlyResponseMiddleware (params, next, end) {
+    params[1].end(JSON.stringify({userPayload: 'This is early temination. note that this must be a json and then stringified'}))
+    end()
+  }
 
-  const exec = require('child_process').exec
-  const child = exec(`curl -X POST -H "Content-Type: application/json" -d '{"service":"/neg","userPayload":"true"}'  -i "http://localhost:3333/CALL"`,
-      (error, stdout, stderr) => {
-        console.log(`stdout: ${stdout}`)
-        done()
-        if (error !== null) {
-          console.log(`exec error: ${error}`)
-        }
-      })
+  rcv.xyz.registerServerRoute('testRoute')
+  snd.xyz.registerClientRoute('testRoute')
+  rcv.xyz.middlewares().transport.server('testRoute').register(0, earlyResponseMiddleware)
+
+  snd.call({servicePath: 'up', payload: 'hello', route: 'testRoute'}, (err, body, response) => {
+    expect(body).to.equal('This is early temination. note that this must be a json and then stringified')
+
+    // TODO this must work in the future ... 
+    snd.call({servicePath: 'does not matter', payload: 'does not matter', route: 'PING'}, (err, body, response) => {
+      console.log(2, err, body)
+      done()
+    })
+  })
 })
 
 after(function () {

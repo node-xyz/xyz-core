@@ -23,16 +23,19 @@ class GenericMiddlewareHandler {
   // Generic middleware handler. it manages an array of functions and applies each of them on a target.
   // Note that one instance of this handler can work on multiple object at the same time
   // Sice the `.apply` method is indipendent of the state.
-  constructor (xyz, name) {
+  constructor (xyz, name, route) {
     this.middlewares = []
     this.middlewareIndex = 0
     this.xyz = xyz
     this.name = name
+    this.route = route
   }
 
   // print function
   inspect () {
-    let str = `${wrapper('bold', this.name)} || `
+    let str = this.route ?
+      `${wrapper('bold', this.name)} [/${wrapper('yellow', this.route)}] || ` :
+      `${wrapper('bold', this.name)} || `
 
     for (let i = 0; i < this.middlewares.length; i++) {
       if (i === this.middlewares.length - 1) {
