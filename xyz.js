@@ -130,17 +130,8 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   middlewares () {
     return {
       transport: {
-        callReceive: this.serviceRepository.transportServer.callReceiveMiddlewareStack,
-        callDispatch: this.serviceRepository.transportClient.callDispatchMiddlewareStack,
-
-        pingDispatch: this.serviceRepository.transportClient.pingDispatchMiddlewareStack,
-        pingReceive: this.serviceRepository.transportClient.pingReceiveMiddlewareStack,
-
-        joinReceive: this.serviceRepository.transportClient.joinReceiveMiddlewareStack,
-        joinDispatch: this.serviceRepository.transportClient.joinDispatchMiddlewareStack,
-
-        misc: this.serviceRepository.transportServer.miscCalls
-
+        client: (prefix) => this.serviceRepository.transportClient.routes[prefix],
+        server: (prefix) => this.serviceRepository.transportServer.routes[prefix]
       },
       serviceRepository: {
         callDispatch: this.serviceRepository.callDispatchMiddlewareStack

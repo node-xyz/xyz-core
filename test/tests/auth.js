@@ -23,8 +23,8 @@ before(function (done) {
 })
 
 it('Add auth on the fly', function (done) {
-  snd.middlewares().transport.callDispatch.register(0, require('xyz.transport.auth.basic.send'))
-  rcv.middlewares().transport.callReceive.register(0, require('xyz.transport.auth.basic.receive'))
+  snd.middlewares().transport.client('CALL').register(0, require('xyz.transport.auth.basic.send'))
+  rcv.middlewares().transport.server('CALL').register(0, require('xyz.transport.auth.basic.receive'))
 
   snd.call({servicePath: '/mul', payload: { x: 2, y: 10 }}, (err, body, response) => {
     expect(body).to.equal(20)
@@ -33,13 +33,13 @@ it('Add auth on the fly', function (done) {
 })
 
 it('wrong auth', function (done) {
-  snd.middlewares().transport.callDispatch.remove(0)
-  snd.middlewares().transport.callDispatch.register(0, (params, next, done) => {
+  snd.middlewares().transport.client('CALL').remove(0)
+  snd.middlewares().transport.client('CALL').register(0, (params, next, done) => {
     let requestConfig = params[0]
+    console.log(requestConfig)
     requestConfig.json.auth = '123wrong'
     next()
   })
-  rcv.middlewares().transport.callReceive.register(0, require('xyz.transport.auth.basic.receive'))
 
   snd.call({servicePath: '/mul', payload: { x: 2, y: 10 }}, (err, body, response) => {
     expect(body).to.equal(null)

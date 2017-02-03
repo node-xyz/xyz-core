@@ -10,11 +10,11 @@ let cwd, system, snd, rcv
 let str = 'manipulated'
 
 function wrongServicediscoveryMiddleware (params, next, end, xyz) {
-  let servicePath = params[0],
-    userPayload = params[1],
+  let servicePath = params[0].servicePath,
+    userPayload = params[0].payload,
     foreignNodes = xyz.serviceRepository.foreignNodes,
     transportClient = xyz.serviceRepository.transportClient
-  responseCallback = params[2]
+  responseCallback = params[1]
 
   let serviceTokens = servicePath.split('/')
 
@@ -33,7 +33,7 @@ function wrongServicediscoveryMiddleware (params, next, end, xyz) {
         break
       }
     }
-    if (! match) {
+    if (!match) {
       logger.info(`WRONG DISCOVERY :: determined ${node} for ${servicePath}`)
       transportClient.send(servicePath, node, userPayload, (err, body, response) => {
         responseCallback(err, body, response)
@@ -80,7 +80,7 @@ it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
 })
 
 it('change sendStrategy per call', function (done) {
-  snd.call({servicePath: '/math/*', payload: {x: 2,y: 2}, sendStrategy: require('xyz.service.send.to.all')}, (err, body, response) => {
+  snd.call({servicePath: '/math/*', payload: {x: 2, y: 2}, sendStrategy: require('xyz.service.send.to.all')}, (err, body, response) => {
     expect(err).to.equal(null)
     // expecting three results
     expect(Object.keys(body).length).to.equal(3)

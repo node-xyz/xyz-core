@@ -24,11 +24,11 @@ it('manipulator', function (done) {
     params[2].userPayload = str
     next()
   }
-  rcv.middlewares().transport.callReceive.register(0, manipulatorMiddleware)
+  rcv.middlewares().transport.server('CALL').register(0, manipulatorMiddleware)
 
   snd.call({servicePath: 'up', payload: 'hello'}, (err, body, response) => {
     expect(body).to.equal(str.toUpperCase())
-    rcv.middlewares().transport.callReceive.remove(0)
+    rcv.middlewares().transport.server('CALL').remove(0)
     done()
   })
 })
@@ -41,11 +41,11 @@ it('early response', function (done) {
     end()
   }
 
-  rcv.middlewares().transport.callReceive.register(0, earlyResponseMiddleware)
+  rcv.middlewares().transport.server('CALL').register(0, earlyResponseMiddleware)
 
   snd.call({servicePath: 'up', payload: 'hello'}, (err, body, response) => {
     expect(body).to.equal('This is early temination. note that this must be a json and then stringified')
-    rcv.middlewares().transport.callReceive.remove(0)
+    rcv.middlewares().transport.server('CALL').remove(0)
     done()
   })
 })
@@ -56,21 +56,21 @@ it('early termination', function (done) {
     end()
   }
 
-  rcv.middlewares().transport.callReceive.register(0, terminatorMiddleware)
+  rcv.middlewares().transport.server('CALL').register(0, terminatorMiddleware)
 
   snd.call({servicePath: 'up', payload: 'hello'}, (err, body, response) => {
     expect(body).to.equal(null)
     expect(response).to.equal(null)
-    rcv.middlewares().transport.callReceive.remove(0)
+    rcv.middlewares().transport.server('CALL').remove(0)
     done()
   })
 })
 
 it('misc routes', function (done) {
-  rcv.xyz.registerCallRoute('testRoute')
+  rcv.xyz.registerServerRoute('testRoute')
 
   const exec = require('child_process').exec
-  const child = exec(`curl -X POST -H "Content-Type: application/json" -d '{"service":"/neg","userPayload":"true"}'  -i "http://localhost:3333/call"`,
+  const child = exec(`curl -X POST -H "Content-Type: application/json" -d '{"service":"/neg","userPayload":"true"}'  -i "http://localhost:3333/CALL"`,
       (error, stdout, stderr) => {
         console.log(`stdout: ${stdout}`)
         done()
