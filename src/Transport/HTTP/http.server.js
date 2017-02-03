@@ -67,7 +67,6 @@ class HTTPServer extends EventEmitter {
           let dismissed = false
           for (let route in this.routes) {
             if (parsedUrl.pathname === `/${route}`) {
-              console.log(`router matched ${parsedUrl.pathname} to ${route}`, this.routes[route])
               this.routes[route].apply([req, resp, JSON.parse(body)], 0, this.xyz)
               dismissed = true
               break

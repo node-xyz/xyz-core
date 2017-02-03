@@ -32,27 +32,26 @@ before(function (done) {
 
 it('is anybody there ?', function (done) {
   setTimeout(() => {
-    expect(Object.keys(snd.xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count + 2)
-    expect(Object.keys(rcv.xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count + 2)
-    for ( let i = 0; i < mocks_count; i++) {
+    expect(snd.xyz.CONFIG.getSystemConf().nodes.length).to.equal(mocks_count + 2)
+    expect(rcv.xyz.CONFIG.getSystemConf().nodes.length).to.equal(mocks_count + 2)
+    for (let i = 0; i < mocks_count; i++) {
       expect(Object.keys(mocks[i].xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count + 2)
     }
     done()
-  }, 1000)
+  }, 5000)
   this.timeout(10000)
 })
 
-it.skip('what goes up must come down ?', function (done) {
-  console.log(mocks)
+it('what goes up must come down ?', function (done) {
   mocks[0].stop()
   mocks[1].stop()
   mocks[2].stop()
 
   setTimeout(() => {
-    expect(Object.keys(snd.xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count)
-    expect(Object.keys(rcv.xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count)
+    expect(snd.xyz.CONFIG.getSystemConf().nodes.length).to.equal(mocks_count + 2 - 3)
+    expect(rcv.xyz.CONFIG.getSystemConf().nodes.length).to.equal(mocks_count + 2 - 3)
     done()
-  }, 10000)
+  }, 15000)
   this.timeout(200000)
 })
 
