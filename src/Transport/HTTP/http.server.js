@@ -16,17 +16,21 @@ class HTTPServer extends EventEmitter {
     this.xyz = xyz
 
     // 3 default routes
-    this.callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack')
-    this.callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
+    let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack')
+    callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
 
-    this.pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'pingReceiveMiddlewareStack')
-    this.pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
+    let pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'pingReceiveMiddlewareStack')
+    pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
 
-    this.joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack')
-    this.joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
+    let joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack')
+    joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
 
     // user defined routes
-    this.miscCalls = {}
+    this.routes = {}
+
+    this.registerRoute('CALL', callReceiveMiddlewareStack)
+    this.registerRoute('PING', pingReceiveMiddlewareStack)
+    this.registerRoute('JOIN', joinReceiveMiddlewareStack)
 
     this.server = http.createServer()
       .listen(this.port, () => {
@@ -42,56 +46,52 @@ class HTTPServer extends EventEmitter {
             req.destroy()
             return
           }
-
           let parsedUrl = url.parse(req.url)
-          let self = this // TODO fix this
-          if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
-            if (parsedUrl.query) {
-              req.destroy()
-            } else {
-              this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
-            }
-          } else if (parsedUrl.pathname === `/${CONSTANTS.url.JOIN}`) {
-            if (_CONFIGURATION.getSelfConf().allowJoin) {
-              this.joinReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
-            } else { req.destroy() }
-          } else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
-            this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
-          } else {
-            let dismissed = false
-            for (let route in this.miscCalls) {
-              if (parsedUrl.pathname === `/${route}`) {
-                this.miscCalls[route].apply([req, resp, JSON.parse(body)], 0, this.xyz)
-                dismissed = true
-                break
-              }
-            }
-            if (!dismissed) {
-              req.destroy()
+
+          // if (parsedUrl.pathname === `/${CONSTANTS.url.CALL}`) {
+          //   if (parsedUrl.query) {
+          //     req.destroy()
+          //   } else {
+          //     this.callReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
+          //   }
+          // }
+          // else if (parsedUrl.pathname === `/${CONSTANTS.url.JOIN}`) {
+          //   if (_CONFIGURATION.getSelfConf().allowJoin) {
+          //     this.joinReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
+          //   } else { req.destroy() }
+          // }
+          // else if (parsedUrl.pathname === `/${CONSTANTS.url.PING}`) {
+          //   this.pingReceiveMiddlewareStack.apply([req, resp, JSON.parse(body)], 0, this.xyz)
+          // }
+          // else {
+          let dismissed = false
+          for (let route in this.routes) {
+            if (parsedUrl.pathname === `/${route}`) {
+              console.log(`router matched ${parsedUrl.pathname} to ${route}`, this.routes[route])
+              this.routes[route].apply([req, resp, JSON.parse(body)], 0, this.xyz)
+              dismissed = true
+              break
             }
           }
+          if (!dismissed) {
+            req.destroy()
+          }
+          // }
         })
       })
   }
 
   inspect () {
-    let ret = `${wrapper('green', wrapper('bold', 'Middlewares'))}:
-    ${this.callReceiveMiddlewareStack.inspect()}
-    ${this.pingReceiveMiddlewareStack.inspect()}
-    ${this.joinReceiveMiddlewareStack.inspect()}\n`
+    let ret = `${wrapper('green', wrapper('bold', 'Middlewares'))}:\n`
 
-    for (let route in this.miscCalls) {
-      ret += `    ${this.miscCalls[route].inspect()}\n`
+    for (let route in this.routes) {
+      ret += `    ${this.routes[route].inspect()}\n`
     }
     return ret
   }
 
   inspectJSON () {
-    return [
-      this.callReceiveMiddlewareStack.inspectJSON(),
-      this.pingReceiveMiddlewareStack.inspectJSON(),
-      this.joinReceiveMiddlewareStack.inspectJSON()
-    ].concat(Object.values(this.miscCalls))
+    return [].concat(Object.values(this.routes))
   }
 
   close () {
@@ -114,15 +114,16 @@ class HTTPServer extends EventEmitter {
   // NOTE: this is experimental and there is no support to send sth directly to this
   // from whithin xyz. this is designed mostly for users outside of the system to have
   // a communication way
-  registerCallRoute (prefix) {
-    if (this.miscCalls[prefix]) {
+  registerRoute (prefix, gmwh) {
+    if (this.routes[prefix]) {
       logger.warn(`call middleware with prefix ${prefix} already exists`)
       return -1
+    } else {
+      gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}-MddlewareHandler`)
+      this.routes[prefix] = gmwh
+      logger.info(`new call route ${wrapper('bold', prefix)} added`)
+      return 1
     }
-    this.miscCalls[prefix] = new GenericMiddlewareHandler(this.xyz, `${prefix}MiddlewareHandler`)
-    this.miscCalls[prefix].register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
-    logger.info(`new call route ${wrapper('bold', prefix)} added`)
-    return 1
   }
 
 }

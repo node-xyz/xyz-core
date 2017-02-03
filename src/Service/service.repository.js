@@ -123,21 +123,22 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   call (opt, responseCallback) {
     this.emit('request:send', {opt: opt})
     opt.payload = opt.payload || null
+    opt.servicePath = Path.format(opt.servicePath)
+
     if (opt.sendStrategy) {
-      // this is trying to imitate the middleware signiture
-      opt.sendStrategy([Path.format(opt.servicePath), opt.payload, responseCallback], null, null, this.xyz)
+      // this is trying to imitate the middleware signature
+      opt.sendStrategy([opt, responseCallback], null, null, this.xyz)
     } else {
-      this.callDispatchMiddlewareStack.apply([Path.format(opt.servicePath), opt.payload, responseCallback], 0)
+      this.callDispatchMiddlewareStack.apply([opt, responseCallback], 0)
     }
   }
 
   contactSeed (idx) {
     // error. check the vlaidity of casse where 404 or no 200 is the Response
     let seeds = CONFIG.getSelfConf().seed
-    this.transportClient.contactSeed(Util.nodeStringToObject(seeds[idx]), (err, body, res) => {
+    this.transportClient.contactSeed(seeds[idx], (err, body, res) => {
       if (!err) {
-        logger.info(`${wrapper('bold', 'JOINED CLUSTER')}`)
-        logger.debug(`Response nodes are ${body.nodes}`)
+        logger.info(`${wrapper('bold', 'JOINED CLUSTER')}. cluster memebers : ${body.nodes}`)
         for (let node of body.nodes) {
           this.joinNode(node)
         }
@@ -155,8 +156,8 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   }
 
   kickNode (aNode) {
+    // we will not assume that this node has any function anymore
     delete this.foreignNodes[aNode]
-    delete this.outOfReachNodes[aNode]
     CONFIG.kickNode(aNode)
   }
 

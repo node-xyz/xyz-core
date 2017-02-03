@@ -10,9 +10,9 @@ module.exports = {
     JOIN: 'join'
   },
   url: {
-    CALL: 'call',
-    PING: 'ping',
-    JOIN: 'join'
+    CALL: 'CALL',
+    PING: 'PING',
+    JOIN: 'JOIN'
   },
   environmet: {
     dev: 'dev',

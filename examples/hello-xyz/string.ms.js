@@ -25,3 +25,5 @@ setInterval(() => {
     if (res) { console.log(res.statusCode) }
   })
 }, 3000)
+
+console.log(stringMs)

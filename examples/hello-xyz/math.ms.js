@@ -22,6 +22,6 @@ mathMs.register('/math/float/neg', function (payload, XResponse) {
   XResponse.send('ok whassssaaaap')
 })
 
-mathMs.registerCallRoute('foo')
+mathMs.registerServerRoute('foo')
 
 console.log(mathMs)

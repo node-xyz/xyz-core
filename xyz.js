@@ -103,7 +103,7 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   }
 
   // call a service
-  //
+  // uses the default /call route
   // opt is an object with keys like :
   //   - `servicePath`: {String}
   //   - `sendStrategy`: {function}
@@ -148,8 +148,12 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     }
   }
 
-  registerCallRoute (prefix) {
-    return this.serviceRepository.transportServer.registerCallRoute(prefix)
+  registerServerRoute (prefix) {
+    return this.serviceRepository.transportServer.registerRoute(prefix)
+  }
+
+  registerClientRoute (prefix) {
+    return 0
   }
 }
 
