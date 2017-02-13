@@ -2,7 +2,7 @@ const logger = require('./../../../Log/Logger')
 const CONSTANTS = require('./../../../Config/Constants')
 const url = require('url')
 
-function passToRepo (params, next, end, xyz) {
+function _pingEvent (params, next, end, xyz) {
   let request = params[0]
   let response = params[1]
   let body = params[2]
@@ -13,4 +13,4 @@ function passToRepo (params, next, end, xyz) {
   next()
 }
 
-module.exports = passToRepo
+module.exports = _pingEvent

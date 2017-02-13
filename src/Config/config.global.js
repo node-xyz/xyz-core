@@ -53,14 +53,16 @@ let configuration = {
     }
   },
 
-  setSelfConf: (aConf) => {
+  setSelfConf: (aConf, cmdLineArgs) => {
     logger.info('Setting default selfConf')
     selfConf = CONSTANTS.defaultConfig.selfConf
     logger.info('Reading selfConf from user')
     selfConf = MergeRecursive(selfConf, aConf)
     logger.info('Reading selfConf from command line')
     // TODO use MergeRecursive function to get rid of this shitty code
-    let args = argParser.xyzGeneric()
+
+    // this is to allow cli admin to inject some args like commandline arguments
+    let args = cmdLineArgs ? cmdLineArgs : argParser.xyzGeneric()
     for (let arg in args) {
       logger.verbose(`overriding ${arg} from command line`)
       let keys = arg.split('.')

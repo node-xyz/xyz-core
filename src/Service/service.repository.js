@@ -165,7 +165,6 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
 
   terminate () {
     this.transportServer.close()
-    clearInterval(this.pingInterval)
   }
 }
 

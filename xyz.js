@@ -11,8 +11,8 @@ let networkMonitorBootstrap = require('./src/Bootstrap/process.network.event')
 class NodeXYZ {
   // an example of the configuration requried can be found in CONSTANTS.js file.
   // Note that if you do not set a value, they'll be replaced.
-  constructor (configuration) {
-    CONFIG.setSelfConf(configuration.selfConf)
+  constructor (configuration, cmdLineArgs) {
+    CONFIG.setSelfConf(configuration.selfConf, cmdLineArgs)
     CONFIG.setSystemConf(configuration.systemConf)
 
     // just for logging convention
@@ -32,7 +32,7 @@ class NodeXYZ {
     // Note that if you ever decide to override defaultBootstrap, you MUST manually apply `pingBoostrap` in it
     // otherwise the service discovery mechanism will not work
     if (CONFIG.getSelfConf().defaultBootstrap) {
-      this.bootstrap(pingBoostrap)
+      this.bootstrap(pingBoostrap, CONFIG.getSelfConf().cli.enable)
     }
 
     // send an inti message to the cli process

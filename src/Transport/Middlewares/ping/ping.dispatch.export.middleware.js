@@ -1,7 +1,7 @@
 const http = require('http')
 const logger = require('./../../../Log/Logger')
 
-let pingDispatchExport = function (params, next, end) {
+let pingDispatchExport = function (params, next, end, xyz) {
   let requestConfig = params[0]
   let pingResponseCallback = params[1]
 

@@ -79,7 +79,7 @@ it('misc routes', function (done) {
   snd.call({servicePath: 'up', payload: 'hello', route: 'testRoute'}, (err, body, response) => {
     expect(body).to.equal('This is early temination. note that this must be a json and then stringified')
 
-    // TODO this must work in the future ... 
+    // TODO this must work in the future ...
     snd.call({servicePath: 'does not matter', payload: 'does not matter', route: 'PING'}, (err, body, response) => {
       console.log(2, err, body)
       done()

@@ -13,13 +13,13 @@ class HTTPClient {
     this.xyz = xyz
 
     let callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMiddlewareStack', 'CALL')
-    callDispatchMiddlewareStack.register(-1, require('./../Middlewares/call/call.dispatch.export.middleware'))
+    callDispatchMiddlewareStack.register(-1, require('./../Middlewares/call/http.export.middleware'))
 
     let pingDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'pingDispatchMiddlewareStack', 'PING')
-    pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.dispatch.export.middleware'))
+    pingDispatchMiddlewareStack.register(-1, require('./../Middlewares/call/http.export.middleware'))
 
     let joinDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'joinDispatchMiddlewareStack', 'JOIN')
-    joinDispatchMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.export'))
+    joinDispatchMiddlewareStack.register(-1, require('./../Middlewares/call/http.export.middleware'))
 
     this.routes = {}
 
@@ -56,7 +56,7 @@ class HTTPClient {
 
   // opt should have:
   //   - node {string} address of destination,
-  //   - route {string} url of destination
+  //   - route {string} url of outgoing middleware stack
   //   - payload {object}. depending on `route` , it can have `userPayload`, `service` or `sender`
   send (opt, responseCallback) {
     logger.debug(`${wrapper('bold', 'HTTP Client')} :: sending request to ${opt.node}/${opt.route} through ${this.routes[opt.route].name}`)
@@ -68,7 +68,7 @@ class HTTPClient {
       method: `POST`,
       json: opt.payload
     }
-    this.routes[opt.route].apply([requestConfig, responseCallback], 0, this.xyz)
+    this.routes[opt.route].apply([requestConfig, responseCallback], 0)
   }
 }
 

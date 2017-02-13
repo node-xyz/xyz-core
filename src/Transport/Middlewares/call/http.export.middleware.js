@@ -1,7 +1,7 @@
+const http = require('http')
 const logger = require('./../../../Log/Logger')
-let http = require('http')
 
-let callDispatchExport = function (params, next, end, xyz) {
+let _httpExport = function (params, next, end, xyz) {
   let requestConfig = params[0]
   let responseCallback = params[1]
 
@@ -20,7 +20,7 @@ let callDispatchExport = function (params, next, end, xyz) {
 
       res.on('end', () => {
         let err = (parseInt(res.statusCode / 100) === 2 ? null : http.STATUS_CODES[res.statusCode])
-        responseCallback(err, JSON.parse(body).userPayload, res)
+        responseCallback(err, JSON.parse(body), res)
       })
     })
   } else {
@@ -31,7 +31,7 @@ let callDispatchExport = function (params, next, end, xyz) {
     if (responseCallback) {
       responseCallback(e, null, null)
     }
-    logger.error(`problem with CALL beign sent :: ${e}`)
+    logger.error(`problem with http request beign sent to ${requestConfig} :: ${e}`)
   })
 
   req.write(JSON.stringify(postData))
@@ -39,4 +39,4 @@ let callDispatchExport = function (params, next, end, xyz) {
   end()
 }
 
-module.exports = callDispatchExport
+module.exports = _httpExport
