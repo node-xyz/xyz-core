@@ -36,7 +36,6 @@ it('wrong auth', function (done) {
   snd.middlewares().transport.client('CALL').remove(0)
   snd.middlewares().transport.client('CALL').register(0, (params, next, done) => {
     let requestConfig = params[0]
-    console.log(requestConfig)
     requestConfig.json.auth = '123wrong'
     next()
   })

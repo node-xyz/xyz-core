@@ -1,30 +1,31 @@
 module.exports = {
   mul: function mul (payload, xResponse) {
-    xResponse.send(payload.x * payload.y)
+    xResponse.jsonify(payload.x * payload.y)
   },
   add: function add (payload, xResponse) {
-    xResponse.send(payload.x + payload.y)
+    xResponse.jsonify(payload.x + payload.y)
   },
   sub: function add (payload, xResponse) {
-    xResponse.send(payload.x - payload.y)
+    xResponse.jsonify(payload.x - payload.y)
   },
   up: function (payload, xResponse) {
-    xResponse.send(payload.toUpperCase())
+    xResponse.jsonify(payload.toUpperCase())
   },
   down: function (payload, xResponse) {
-    xResponse.send(payload.toLowerCase())
+    xResponse.jsonify(payload.toLowerCase())
   },
   neg: function (payload, xResponse) {
-    xResponse.send(!payload)
+    xResponse.jsonify(!payload)
   },
   rev: function (payload, xResponse) {
-    xResponse.send(payload.reverse())
+    xResponse.jsonify(payload.reverse())
   },
   finger: function (payload, xResponse) {
     payload['test'] = 'test'
-    xResponse.send(payload)
+    xResponse.jsonify(payload)
   },
   blank: function (payload, xResponse) {
-    xResponse.send('blank', 201)
+    xResponse.writeHead(201)
+    xResponse.jsonify('blank')
   }
 }

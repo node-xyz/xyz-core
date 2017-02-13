@@ -7,7 +7,7 @@ let logger
 class mockNode {
   constructor (name, port, cwd, systemConf) {
     let selfConfiguration = {
-      'logLevel': 'info',
+      'logLevel': 'error',
       'name': name,
       'host': 'localhost',
       'port': port

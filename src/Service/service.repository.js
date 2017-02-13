@@ -101,13 +101,13 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
       let fn = this.services.getPathFunction(body.serviceName)
       if (fn) {
         logger.verbose(`ServiceRepository received service call ${wrapper('bold', body.serviceName)}`)
-        fn(body.userPayload, new XResponse(response))
+        fn(body.userPayload, response)
         return
       } else {
         // this will be rarely reached . most of the time callDisplatchfind middleware will find this.
         // Same problem as explained in TEST/Transport.middleware => early response
         response.writeHead(404, {})
-        response.end(JSON.stringify({userPayload: http.STATUS_CODES[404]}))
+        response.end(JSON.stringify(http.STATUS_CODES[404]))
       }
     })
 

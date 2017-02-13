@@ -2,6 +2,7 @@ const http = require('http')
 const url = require('url')
 const EventEmitter = require('events')
 const CONSTANTS = require('../../Config/Constants')
+const XResponse = require('./../XResponse')
 const logger = require('./../../Log/Logger')
 const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
 const _CONFIGURATION = require('./../../Config/config.global')
@@ -49,6 +50,8 @@ class HTTPServer extends EventEmitter {
           let dismissed = false
           for (let route in this.routes) {
             if (parsedUrl.pathname === `/${route}`) {
+              // wrap response
+              XResponse(resp)
               this.routes[route].apply([req, resp, JSON.parse(body)], 0)
               dismissed = true
               break

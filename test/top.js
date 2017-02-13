@@ -28,14 +28,14 @@ describe('transport authentication midlewares', function () {
   })
 })
 
-describe('cluster and cluster events', function () {
-  describe('add and remove nodes', function () {
-    require('./tests/events.and.cluster')
-  })
-})
-
 describe('Path Handling', function () {
   describe('Static path tests', function () {
     require('./tests/path')
+  })
+})
+
+describe('cluster and cluster events', function () {
+  describe('add and remove nodes', function () {
+    require('./tests/events.and.cluster')
   })
 })

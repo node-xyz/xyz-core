@@ -1,11 +1,5 @@
-module.exports =
-  class XResponse {
-    constructor (response) {
-      this.response = response
-    }
-
-    send (payload, statusCode = 200) {
-      this.response.writeHead(statusCode, {'Content-Type': 'Application/json'})
-      this.response.end(JSON.stringify({userPayload: payload}))
-    }
+module.exports = function (resposenObject) {
+  resposenObject['jsonify'] = (data, ...args) => {
+    resposenObject.end(JSON.stringify(data), ...args)
+  }
 }

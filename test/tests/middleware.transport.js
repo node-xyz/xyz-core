@@ -37,7 +37,7 @@ it('early response', function (done) {
   function earlyResponseMiddleware (params, next, end) {
     // Well, ... this is not that good!
     // THIS is beacuse we are forcing a JSON.parse() even on each response ?
-    params[1].end(JSON.stringify({userPayload: 'This is early temination. note that this must be a json and then stringified'}))
+    params[1].end(JSON.stringify('This is early temination. note that this must be a json and then stringified'))
     end()
   }
 
@@ -68,7 +68,7 @@ it('early termination', function (done) {
 
 it('misc routes', function (done) {
   function earlyResponseMiddleware (params, next, end) {
-    params[1].end(JSON.stringify({userPayload: 'This is early temination. note that this must be a json and then stringified'}))
+    params[1].end(JSON.stringify('This is early temination. note that this must be a json and then stringified'))
     end()
   }
 

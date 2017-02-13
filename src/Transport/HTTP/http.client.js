@@ -50,7 +50,7 @@ class HTTPClient {
       this.routes[prefix] = gmwh
     } else {
       this.routes[prefix] = new GenericMiddlewareHandler(this.xyz, `${prefix}-MiddlewareHandler`)
-      this.routes[prefix].register(-1, require('./../Middlewares/call/call.dispatch.export.middleware'))
+      this.routes[prefix].register(-1, require('./../Middlewares/call/http.export.middleware'))
     }
   }
 
