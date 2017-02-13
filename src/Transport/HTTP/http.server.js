@@ -104,7 +104,7 @@ class HTTPServer extends EventEmitter {
       logger.warn(`call middleware with prefix ${prefix} already exists`)
       return -1
     } else {
-      gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}-MddlewareHandler`)
+      gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}-MddlewareHandler`, prefix)
       this.routes[prefix] = gmwh
       logger.info(`HTTP Server:: new call route ${wrapper('bold', prefix)} added`)
       return 1

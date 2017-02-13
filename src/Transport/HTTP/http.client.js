@@ -59,7 +59,7 @@ class HTTPClient {
   //   - route {string} url of outgoing middleware stack
   //   - payload {object}. depending on `route` , it can have `userPayload`, `service` or `sender`
   send (opt, responseCallback) {
-    logger.debug(`${wrapper('bold', 'HTTP Client')} :: sending request to ${opt.node}/${opt.route} through ${this.routes[opt.route].name}`)
+    logger.verbose(`${wrapper('bold', 'HTTP Client')} :: sending request to ${opt.node}/${opt.route} through ${this.routes[opt.route].name}`)
     opt.route = opt.route || 'CALL'
     let requestConfig = {
       hostname: `${opt.node.split(':')[0]}`,

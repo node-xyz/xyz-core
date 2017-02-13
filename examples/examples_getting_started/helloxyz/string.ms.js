@@ -10,10 +10,10 @@ let stringMS = new xyz({
   }
 })
 stringMS.register('up', (payload, response) => {
-  response.send(payload.toUpperCase())
+  response.jsonify(payload.toUpperCase())
 })
 stringMS.register('down', (payload, response) => {
-  response.send(payload.toLowerCase())
+  response.jsonify(payload.toLowerCase())
 })
 
 setInterval(() => {

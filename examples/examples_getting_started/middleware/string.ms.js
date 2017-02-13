@@ -14,16 +14,16 @@ let stringMS = new xyz({
   }
 })
 
-stringMS.middlewares().transport.callDispatch.register(0, require('./auth.send'))
-stringMS.middlewares().transport.callReceive.register(0, require('./auth.receive'))
+stringMS.middlewares().transport.client('CALL').register(0, require('./auth.send'))
+stringMS.middlewares().transport.server('CALL').register(0, require('./auth.receive'))
 
-// stringMS.middlewares().transport.callDispatch.register(0, require('./dummy.logger'))
+// stringMS.middlewares().transport.client('CALL').register(0, require('./dummy.logger'))
 
 stringMS.register('up', (payload, response) => {
-  response.send(payload.toUpperCase())
+  response.jsonify(payload.toUpperCase())
 })
 stringMS.register('down', (payload, response) => {
-  response.send(payload.toLowerCase())
+  response.jsonify(payload.toLowerCase())
 })
 
 setInterval(() => {

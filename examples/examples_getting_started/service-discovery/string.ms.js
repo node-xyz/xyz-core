@@ -14,15 +14,16 @@ let stringMS = new xyz({
   }
 })
 stringMS.register('up', (payload, response) => {
-  response.send(payload.toUpperCase())
+  response.jsonify(payload.toUpperCase())
 })
 stringMS.register('down', (payload, response) => {
-  response.send(payload.toLowerCase())
+  response.jsonify(payload.toLowerCase())
 })
 
 setInterval(() => {
   stringMS.call({servicePath: 'mul', payload: {x: 2, y: 5}, sendStrategy: sendToAll}, (err, body, res) => {
-    console.log(`my fellwo service reponded with ${body}`)
+    console.log(`my fellwo service reponded with`)
+    console.log(body)
   })
 }, 2000)
 

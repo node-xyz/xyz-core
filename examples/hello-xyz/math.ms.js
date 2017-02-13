@@ -12,16 +12,16 @@ var mathMs = new XYZ({
 })
 
 mathMs.register('/math/decimal/mul', (payload, response) => {
-  console.log(payload)
-  response.send('ok', 201)
+  response.jsonify('ok')
 })
 mathMs.register('/math/decimal/neg', fn.neg)
 mathMs.register('/math/decimal/sub', fn.sub)
 
 mathMs.register('/math/float/neg', function (payload, XResponse) {
-  XResponse.send('ok whassssaaaap')
+  XResponse.jsonify('ok whassssaaaap')
 })
 
 mathMs.registerServerRoute('foo')
+mathMs.middlewares().transport.server('foo').register(-1, require('./../../src/Transport/Middlewares/call/call.receive.event.middleware'))
 
 console.log(mathMs)

@@ -22,10 +22,16 @@ stringMs.register('/string/down', fn.down)
 stringMs.register('/string/up', fn.up)
 stringMs.register('/finger', fn.finger)
 
+stringMs.registerClientRoute('foo')
+
 setInterval(() => {
   stringMs.call({servicePath: '/math/decimal/*', payload: { x: 1000000, y: new Date().getTime() }}, (err, body, res) => {
-    console.error('response of decimal/* => ', err, body)
+    console.error('response of /math/decimal/* => ', err, body)
     if (res) { console.log(res.statusCode) }
+  })
+
+  stringMs.call({servicePath: '/math/decimal/sub', payload: {x: 10, y: 2}, route: 'foo'}, (err, body, res) => {
+    console.error('response of /math/decimal/sub => ', err, body)
   })
 }, 3000)
 

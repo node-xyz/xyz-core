@@ -11,9 +11,9 @@ let mathMS = new xyz({
 })
 
 mathMS.register('mul', (payload, response) => {
-  response.send(payload.x * payload.y)
+  response.jsonify(payload.x * payload.y)
 })
 
 mathMS.register('add', (payload, response) => {
-  response.send(payload.x + payload.y)
+  response.jsonify(payload.x + payload.y)
 })
