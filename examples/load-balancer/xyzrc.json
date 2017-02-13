@@ -1,0 +1,25 @@
+{
+  "nodes": [
+    {
+      "path": "client.ms.js",
+      "instance": 3,
+      "port": 3000,
+      "stdio": "file",
+      "params": ""
+    },
+    {
+      "path": "worker.ms.js",
+      "instance": 2,
+      "port": 4000,
+      "stdio": "file",
+      "params": ""
+    },
+    {
+      "path": "load.balancer.js",
+      "instance": 1,
+      "port": 5000,
+      "stdio": "file",
+      "params": ""
+    }
+  ]
+}
