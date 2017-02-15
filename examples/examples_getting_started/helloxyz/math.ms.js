@@ -1,4 +1,5 @@
 let xyz = require('xyz-core')
+
 let mathMS = new xyz({
   selfConf: {
     name: 'MathMS',
