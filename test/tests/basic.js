@@ -11,7 +11,6 @@ before(function (done) {
   snd = testSystem.snd
   rcv = testSystem.rcv
   system = testSystem.system
-  cwd = testSystem.cwd
   setTimeout(done, 1000)
 })
 
@@ -55,6 +54,22 @@ it('HTTP statusCode', function (done) {
   }, (err, body, response) => {
     expect(response.statusCode).to.equal(201)
     done()
+  })
+})
+
+it.skip('id and inspect', function (done) {
+  done()
+})
+
+it('a warning to all about paths', function (done) {
+  rcv.register('/math/decimal/mul', mockFunctions.mul)
+
+  snd.call({servicePath: '/mul', payload: {x: 2, y: 3}}, (err, body, response) => {
+    expect(body).to.equal(6)
+    snd.call({servicePath: '/math/decimal'}, (err, body) => {
+      expect(err).to.equal('Not Found')
+      done()
+    })
   })
 })
 

@@ -2,21 +2,21 @@
   "nodes": [
     {
       "path": "string.ms.js",
-      "instance": 3,
+      "instance": 1,
       "port": 5000,
       "stdio": "file",
-      "params": "--xyz-logLevel verbose --xyz-seed 127.0.0.1:4000 --xyz-defaultSendStrategy xyz.service.send.to.all"
+      "params": "--xyz-logLevel verbose"
     },
     {
       "path": "math.ms.js",
       "instance": 1,
       "port": 4000,
       "stdio": "file",
-      "params": "--xyz-logLevel info --xyz-allowJoin true --xyz-name math.ms.master"
+      "params": "--xyz-logLevel verbose "
     },
     {
       "path": "math.ms.js",
-      "instance": 1,
+      "instance": 0,
       "port": 6000,
       "stdio": "file",
       "params": "--xyz-logLevel info --xyz-seed 127.0.0.1:4000 --xyz-name math.ms.slave"

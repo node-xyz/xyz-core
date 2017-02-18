@@ -3,8 +3,8 @@ let mockNode = require('./ms/mock.node').mockNode
 let mockFunctions = require('./ms/mock.functions')
 let mockSystem = require('./ms/mock.system')
 
-exports.init = () => {
-  let cwd, snd, rcv, system
+exports.init = function () {
+  var cwd, snd, rcv, system
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
   system.addNode('localhost:3333')
@@ -18,6 +18,7 @@ exports.init = () => {
   rcv.register('/neg', mockFunctions.neg)
   rcv.register('/finger', mockFunctions.finger)
   rcv.register('/blank', mockFunctions.blank)
+  rcv.register('/none', mockFunctions.none)
 
   rcv.register('/math/mul', mockFunctions.mul)
   rcv.register('/math/add', mockFunctions.add)

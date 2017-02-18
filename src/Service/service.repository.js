@@ -3,11 +3,13 @@
 // This module handles service dependant tasks such as managing list of other services
 // and their functions, keeping track of other nodes, performing ping etc.
 //
-// Note that any code and function regarding the calls should be inside undelying transportClient and
+// Note that any code and function regarding the calls
+// should be inside undelying transportClient and
 // transportServer
 
 let http = require('http')
-let HTTP = require('../Transport/Transport').HTTP
+const Transport = require('./../Transport/Transport')
+let UDP = require('../Transport/Transport').UDP
 let CONSTANTS = require('../Config/Constants')
 let GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
 let CONFIG = require('./../Config/config.global')
@@ -30,8 +32,12 @@ class ServiceRepository extends EventEmitter {
     // note that a ref. to xyz will be passed all the way down. this is to ensure that
     // every middleware will have access to it and
     // there will be no circular dependency
-    this.transportServer = new HTTP.Server(xyz)
-    this.transportClient = new HTTP.Client(xyz)
+    this.transport = new Transport(xyz)
+    this.selfConf = CONFIG.getSelfConf()
+
+    for (let t of this.selfConf.transport) {
+      this.registerServer(t.type, t.port, true)
+    }
 
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callDispatchMiddlewareStack')
 
@@ -47,18 +53,19 @@ class ServiceRepository extends EventEmitter {
 
     // list of current services
     this.services = new PathTree()
-    this._sender = CONFIG.getSelfConf().host + ':' + CONFIG.getSelfConf().port
+    this._id = CONFIG.getSelfConf().host + ':' + CONFIG.getSelfConf().transport[0].port
 
     // list of foreign nodes and services respectively
     this.foreignNodes = {}
-    this.foreignNodes[`${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`] = {}
+    this.foreignNodes[`${xyz.id().host}:${xyz.id().port}`] = {}
     this.outOfReachNodes = {}
+    this.foreignRoutes = {}
     this.xyz = xyz
 
     this.INTERVALS = CONFIG.getSelfConf().intervals
 
     // Bind events
-    this.bindTransportEvents()
+    // this.bindTransportEvents()
 
     // Seed if possible
     if (CONFIG.getSelfConf().seed.length) {
@@ -76,12 +83,10 @@ class ServiceRepository extends EventEmitter {
     let str = `
 ${wrapper('green', wrapper('bold', 'Middlewares'))}:
   ${this.callDispatchMiddlewareStack.inspect()}
-${wrapper('green', wrapper('bold', 'Services'))}:
-`
+${wrapper('green', wrapper('bold', 'Services'))}:\n`
 
     for (let s of this.services.plainTree) {
-      str += `  ${s.name} @ ${s.path}
-`
+      str += `  ${s.name} @ ${s.path}\n`
     }
     return str
   }
@@ -93,14 +98,12 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
     }
   }
 
-  // Bind all of the events fromm the transport client.
-  // All of these should happen as the module loads.
-  bindTransportEvents () {
-    this.transportServer.on(CONSTANTS.events.REQUEST, (body, response) => {
-      this.emit('request:receive', {body: body})
-      let fn = this.services.getPathFunction(body.serviceName)
+  _bindTransportEvent (server) {
+    server.on(CONSTANTS.events.REQUEST, (body, response) => {
+      this.emit('message:receive', {body: body})
+      let fn = this.services.getPathFunction(body.service)
       if (fn) {
-        logger.verbose(`ServiceRepository received service call ${wrapper('bold', body.serviceName)}`)
+        logger.verbose(`ServiceRepository received service call ${wrapper('bold', body.service)}`)
         fn(body.userPayload, response)
         return
       } else {
@@ -111,7 +114,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
       }
     })
 
-    this.transportServer.on(CONSTANTS.events.JOIN, (body, response) => {
+    server.on(CONSTANTS.events.JOIN, (body, response) => {
       this.emit('cluster:join', {body: body})
       response.end(JSON.stringify(CONFIG.getSystemConf()))
     })
@@ -122,10 +125,11 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   // TODO: in this case, unlike in config, sendStrategy MUST be a function
   // better to allow string as well
   call (opt, responseCallback) {
-    this.emit('request:send', {opt: opt})
+    this.emit('message:send', {opt: opt})
     opt.payload = opt.payload || null
     opt.servicePath = Path.format(opt.servicePath)
     opt.route = opt.route || 'CALL'
+    opt.redirect = opt.redirect || false
 
     if (opt.sendStrategy) {
       // this is trying to imitate the middleware signature
@@ -138,7 +142,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   contactSeed (idx) {
     // error. check the vlaidity of casse where 404 or no 200 is the Response
     let seeds = CONFIG.getSelfConf().seed
-    this.transportClient.send({node: seeds[idx], payload: {sender: this._sender}, route: 'JOIN'}, (err, body, res) => {
+    this.transport.send({node: seeds[idx], payload: {_id: this._id}, route: 'JOIN'}, (err, body, res) => {
       if (!err) {
         logger.info(`${wrapper('bold', 'JOINED CLUSTER')}. cluster memebers : ${body.nodes}`)
         for (let node of body.nodes) {
@@ -149,6 +153,19 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
         setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx), this.INTERVALS.reconnect)
       }
     })
+  }
+
+  // it is VERY important to use this method when adding new servers at
+  // tuntime. This is because from here, we can add bindings to receive
+  // messages in this server
+  registerServer (type, port, e) {
+    let s = this.transport.registerServer(type, port, e)
+    if (s) {
+      logger.info(`new transport server [${type}] bounded on port ${port}`)
+      if (e) {
+        this._bindTransportEvent(s)
+      }
+    }
   }
 
   joinNode (aNode) {
@@ -164,7 +181,10 @@ ${wrapper('green', wrapper('bold', 'Services'))}:
   }
 
   terminate () {
-    this.transportServer.close()
+    for (let s in this.transport.servers) {
+      logger.warn(`sutting down server ${s}`)
+      this.transport.servers[s].close()
+    }
   }
 }
 

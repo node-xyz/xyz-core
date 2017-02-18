@@ -2,20 +2,21 @@ const logger = require('./../../../Log/Logger')
 const CONSTANTS = require('./../../../Config/Constants')
 const url = require('url')
 
-function _callEvent (params, next, end, xyz) {
+function _httpMessageEvent (params, next, end, xyz) {
   let request = params[0]
   let response = params[1]
   let body = params[2]
-  let _transport = xyz.serviceRepository.transportServer
+  let port = params[3]
+  let _transport = xyz.serviceRepository.transport.servers[port]
 
-  logger.debug(`CALL :: Passing request to ${request.url} up to service repo with ${JSON.stringify(body)}`)
+  logger.debug(`HTTP Receive emitter :: Passing request to ${request.url} up to service repo with ${JSON.stringify(body)}`)
   _transport.emit(
     CONSTANTS.events.REQUEST, {
       userPayload: body.userPayload,
-      serviceName: body.service
+      service: body.service
     },
     response)
   next()
 }
 
-module.exports = _callEvent
+module.exports = _httpMessageEvent

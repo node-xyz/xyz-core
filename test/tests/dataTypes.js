@@ -10,7 +10,6 @@ before(function (done) {
   snd = testSystem.snd
   rcv = testSystem.rcv
   system = testSystem.system
-  cwd = testSystem.cwd
 
   setTimeout(done, 500)
 })
@@ -28,7 +27,7 @@ it('nothing', function (done) {
 })
 it('obj', function (done) {
   snd.call({servicePath: '/finger', payload: {
-      data: 'data'
+    data: 'data'
   }}, (err, body, response) => {
     expect(body['test']).to.equal('test')
     done()

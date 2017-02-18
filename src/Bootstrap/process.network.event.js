@@ -4,12 +4,12 @@ const reset = 2500 // 2.5sec accuracy
 function processNetworkEvent (xyz) {
   // count receives
 
-  xyz.serviceRepository.on('request:receive', () => {
+  xyz.serviceRepository.on('message:receive', () => {
     load.rcv += 1
   })
 
   // count sends
-  xyz.serviceRepository.on('request:send', () => {
+  xyz.serviceRepository.on('message:send', () => {
     load.snd += 1
   })
 

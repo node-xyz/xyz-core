@@ -10,11 +10,10 @@ const PathTree = require('./../../src/Service/path.tree')
 let cwd, system, snd, rcv
 before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
-  system = new mockSystem(cwd)
-  system.addNode('localhost:3333')
-  system.addNode('localhost:3334')
-  snd = new mockNode('snd', 3334, cwd, system.getSystemConf())
-  rcv = new mockNode('rcv', 3333, cwd, system.getSystemConf())
+  let testSystem = common.init()
+  snd = testSystem.snd
+  rcv = testSystem.rcv
+  system = testSystem.system
 
   rcv.register('/math/decimal/mul', mockFunctions.mul)
   rcv.register('/math/decimal/add', mockFunctions.add)
@@ -50,15 +49,15 @@ it('path validation', function (done) {
 
 it('adjunct to path tree', function (done) {
   let pt = new PathTree()
-  let dummy = function () { console.log('dummy')}
+  let dummy = function () { console.log('dummy') }
   pt.createPathSubtree('/math/add', dummy)
   done()
 })
 
-it('path mathcing' , function (done) {
+it('path mathcing', function (done) {
   let pt = new PathTree()
 
-  let dummy = function () { console.log('dummy')}
+  let dummy = function () { console.log('dummy') }
   pt.createPathSubtree('/math/add/decimal', dummy)
   pt.createPathSubtree('/math/add/float', dummy)
   pt.createPathSubtree('/math/sub/decimal', dummy)
@@ -77,16 +76,6 @@ it('path mathcing' , function (done) {
   expect(Path.match('/foo/*/*/duck/*', pt.serializedTree).length).to.equal(3)
 
   done()
-})
-
-it('first find scenarios', function (done) {
-  snd.call({servicePath: '/math/decimal/mul', payload: {x: 2, y: 3}} , (err, body, response) => {
-    expect(body).to.equal(6)
-    snd.call({servicePath: '/math/mul'} , (err, body) => {
-      expect(err).to.equal('Not Found')
-      done()
-    })
-  })
 })
 
 after(function () {

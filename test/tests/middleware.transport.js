@@ -24,28 +24,26 @@ it('manipulator', function (done) {
     params[2].userPayload = str
     next()
   }
-  rcv.middlewares().transport.server('CALL').register(0, manipulatorMiddleware)
+  rcv.middlewares().transport.server('CALL')(rcv.xyz.id().port).register(0, manipulatorMiddleware)
 
   snd.call({servicePath: 'up', payload: 'hello'}, (err, body, response) => {
     expect(body).to.equal(str.toUpperCase())
-    rcv.middlewares().transport.server('CALL').remove(0)
+    rcv.middlewares().transport.server('CALL')(rcv.xyz.id().port).remove(0)
     done()
   })
 })
 
 it('early response', function (done) {
   function earlyResponseMiddleware (params, next, end) {
-    // Well, ... this is not that good!
-    // THIS is beacuse we are forcing a JSON.parse() even on each response ?
     params[1].end(JSON.stringify('This is early temination. note that this must be a json and then stringified'))
     end()
   }
 
-  rcv.middlewares().transport.server('CALL').register(0, earlyResponseMiddleware)
+  rcv.middlewares().transport.server('CALL')(rcv.xyz.id().port).register(0, earlyResponseMiddleware)
 
   snd.call({servicePath: 'up', payload: 'hello'}, (err, body, response) => {
     expect(body).to.equal('This is early temination. note that this must be a json and then stringified')
-    rcv.middlewares().transport.server('CALL').remove(0)
+    rcv.middlewares().transport.server('CALL')(rcv.xyz.id().port).remove(0)
     done()
   })
 })
@@ -56,12 +54,12 @@ it('early termination', function (done) {
     end()
   }
 
-  rcv.middlewares().transport.server('CALL').register(0, terminatorMiddleware)
+  rcv.middlewares().transport.server('CALL')(rcv.xyz.id().port).register(0, terminatorMiddleware)
 
   snd.call({servicePath: 'up', payload: 'hello'}, (err, body, response) => {
     expect(body).to.equal(null)
     expect(response).to.equal(null)
-    rcv.middlewares().transport.server('CALL').remove(0)
+    rcv.middlewares().transport.server('CALL')(rcv.xyz.id().port).remove(0)
     done()
   })
 })
@@ -72,16 +70,21 @@ it('misc routes', function (done) {
     end()
   }
 
-  rcv.xyz.registerServerRoute('testRoute')
+  rcv.xyz.registerServerRoute(rcv.xyz.id().port, 'testRoute')
   snd.xyz.registerClientRoute('testRoute')
-  rcv.xyz.middlewares().transport.server('testRoute').register(0, earlyResponseMiddleware)
+
+  snd.middlewares().transport.client('testRoute').register(0, require('./../../src/Transport/Middlewares/call/http.export.middleware'))
+  rcv.middlewares().transport.server('testRoute')(rcv.xyz.id().port).register(0, earlyResponseMiddleware)
 
   snd.call({servicePath: 'up', payload: 'hello', route: 'testRoute'}, (err, body, response) => {
     expect(body).to.equal('This is early temination. note that this must be a json and then stringified')
 
-    // TODO this must work in the future ...
-    snd.call({servicePath: 'does not matter', payload: 'does not matter', route: 'PING'}, (err, body, response) => {
-      console.log(2, err, body)
+    // note taht servicePath must be simething valid so the service discovery
+    // will not fail
+    snd.call({servicePath: 'up', payload: 'does not matter', route: 'PING'}, (err, body, response) => {
+      expect(err).to.equal(null)
+      expect(typeof (body)).to.equal('object')
+      expect(Object.keys(body).indexOf('services')).to.be.above(-1)
       done()
     })
   })

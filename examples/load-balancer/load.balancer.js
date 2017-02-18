@@ -1,7 +1,11 @@
 let XYZ = require('./../../index')
 
 let loadBalancer = new XYZ({
-  selfConf: { logLevel: 'verbose', name: 'load.balancer', port: 5000, defaultSendStrategy: require('./round.robin.send')}
+  selfConf: {
+    logLevel: 'verbose',
+    name: 'load.balancer',
+    transport: [{type: 'HTTP', port: 5000}],
+    defaultSendStrategy: require('./round.robin.send')}
 })
 
 loadBalancer.bootstrap(require('./../../../xyz.monitor.basic.bootstrap').bootstrap, 0)

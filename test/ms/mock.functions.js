@@ -6,7 +6,7 @@ module.exports = {
     xResponse.jsonify(payload.x + payload.y)
   },
   sub: function add (payload, xResponse) {
-    xResponse.jsonify(payload.x - payload.y)
+    if (xResponse) xResponse.jsonify(payload.x - payload.y)
   },
   up: function (payload, xResponse) {
     xResponse.jsonify(payload.toUpperCase())
@@ -27,5 +27,8 @@ module.exports = {
   blank: function (payload, xResponse) {
     xResponse.writeHead(201)
     xResponse.jsonify('blank')
+  },
+  none: function (payload, xResponse) {
+    console.log(payload)
   }
 }

@@ -13,7 +13,7 @@ function wrongServicediscoveryMiddleware (params, next, end, xyz) {
   let servicePath = params[0].servicePath,
     userPayload = params[0].payload,
     foreignNodes = xyz.serviceRepository.foreignNodes,
-    transportClient = xyz.serviceRepository.transportClient
+    transportClient = xyz.serviceRepository.transport
   responseCallback = params[1]
 
   let serviceTokens = servicePath.split('/')
@@ -86,6 +86,10 @@ it('change sendStrategy per call', function (done) {
     expect(Object.keys(body).length).to.equal(3)
     done()
   })
+})
+
+it.skip('send to all', function () {
+  done()
 })
 
 after(function () {

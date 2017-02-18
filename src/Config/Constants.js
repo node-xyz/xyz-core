@@ -33,8 +33,10 @@ module.exports = {
       logLevel: 'info',
       // default seed nodes
       seed: [],
-      // port
-      port: 3333,
+      // default transport layer service
+      transport: [
+        {type: 'HTTP', port: '4000', event: 1}
+      ],
       // ip
       host: '127.0.0.1',
 

@@ -8,19 +8,13 @@ const http = require('http')
 
 let cwd, system, snd, rcv
 let mocks = []
-let mocks_count = 3
+let mocks_count = 6
 before(function (done) {
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
-  system = new mockSystem(cwd)
-
-  // the system is consisted of snd and rcv only
-  system.addNode('localhost:3333')
-  system.addNode('localhost:3334')
-
-  snd = new mockNode('snd', 3334, cwd, system.getSystemConf())
-  rcv = new mockNode('rcv', 3333, cwd, system.getSystemConf())
-  rcv.register('mul', mockFunctions.mul)
-  rcv.register('up', mockFunctions.up)
+  let testSystem = common.init()
+  snd = testSystem.snd
+  rcv = testSystem.rcv
+  system = testSystem.system
 
   for (let i = 0; i < mocks_count; i++) {
     let mock = new mockNode(`mock_${i}`, 3335 + i, cwd, system.getSystemConf())
@@ -35,7 +29,7 @@ it('is anybody there ?', function (done) {
     expect(snd.xyz.CONFIG.getSystemConf().nodes.length).to.equal(mocks_count + 2)
     expect(rcv.xyz.CONFIG.getSystemConf().nodes.length).to.equal(mocks_count + 2)
     for (let i = 0; i < mocks_count; i++) {
-      expect(Object.keys(mocks[i].xyz.serviceRepository.foreignNodes).length).to.equal(mocks_count + 2)
+      expect(mocks[i].xyz.CONFIG.getSystemConf().nodes.length).to.equal(mocks_count + 2)
     }
     done()
   }, 5000)
@@ -58,4 +52,7 @@ it('what goes up must come down ?', function (done) {
 after(function () {
   snd.stop()
   rcv.stop()
+  for (let mock of mocks) {
+    mock.stop()
+  }
 })

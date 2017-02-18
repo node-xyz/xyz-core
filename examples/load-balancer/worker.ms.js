@@ -2,7 +2,7 @@ var XYZ = require('./../../index')
 let sendToAll = require('xyz.service.send.to.all')
 const fs = require('fs')
 let worker = new XYZ({
-  selfConf: {name: 'worker.ms', port: 3000},
+  selfConf: {name: 'worker.ms', transport: [{type: 'HTTP', port: 3000}]},
   systemConf: {nodes: ['127.0.0.1:5000']}
 })
 

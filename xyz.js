@@ -15,8 +15,10 @@ class NodeXYZ {
     CONFIG.setSelfConf(configuration.selfConf, cmdLineArgs)
     CONFIG.setSystemConf(configuration.systemConf)
 
+    this.selfConf = CONFIG.getSelfConf()
+
     // just for logging convention
-    global._serviceName = `${CONFIG.getSelfConf().name}@${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().port}`
+    global._serviceName = this.id()._identifier
 
     // Global exported functions and modules
     this.CONFIG = CONFIG
@@ -24,6 +26,7 @@ class NodeXYZ {
     this.path = require('./src/Service/path')
     this.CONSTANTS = require('./src/Config/Constants')
     this.Util = require('./src/Util/Util')
+    this.gmwh = require('./src/Middleware/generic.middleware.handler')
 
     this.serviceRepository = new ServiceRepository(this)
     this.bootstrapFunctions = []
@@ -31,14 +34,14 @@ class NodeXYZ {
     // lunch the default bootstrat.
     // Note that if you ever decide to override defaultBootstrap, you MUST manually apply `pingBoostrap` in it
     // otherwise the service discovery mechanism will not work
-    if (CONFIG.getSelfConf().defaultBootstrap) {
-      this.bootstrap(pingBoostrap, CONFIG.getSelfConf().cli.enable)
+    if (this.selfConf.defaultBootstrap) {
+      this.bootstrap(pingBoostrap, this.selfConf.cli.enable, this.selfConf.transport[0].port)
     }
 
     // send an inti message to the cli process
-    if (CONFIG.getSelfConf().cli.enable) {
+    if (this.selfConf.cli.enable) {
       logger.verbose(`sending config info for possible xyz-cli listener instance`)
-      process.send({ title: 'init', body: CONFIG.getSelfConf()})
+      process.send({ title: 'init', body: this.selfConf})
 
       // note that not only that these two are used by cli's `top` command,
       // they are actually no use when cli is not working
@@ -53,7 +56,7 @@ class NodeXYZ {
     let pref = `
 ____________________  GLOBAL ____________________
 ${wrapper('bold', wrapper('blue', 'selfConfig'))}:
-  ${JSON.stringify(CONFIG.getSelfConf(), null, 2)}
+  ${JSON.stringify(this.selfConf, null, 2)}
 ${wrapper('bold', wrapper('blue', 'systemConf'))}:
   ${JSON.stringify(CONFIG.getSystemConf(), null, 2)}
 ${wrapper('bold', wrapper('blue', 'Bootstrap Functions'))}:
@@ -61,10 +64,8 @@ ${wrapper('bold', wrapper('blue', 'Bootstrap Functions'))}:
 ____________________  SERVICE REPOSITORY ____________________
 ${this.serviceRepository.inspect()}
 ____________________  TRANSPORT LAYER ____________________
-${wrapper('bold', wrapper('blue', 'Transport Client'))}:
-  ${this.serviceRepository.transportClient.inspect()}
-${wrapper('bold', wrapper('blue', 'Transport Server'))}:
-  ${this.serviceRepository.transportServer.inspect()}
+${wrapper('bold', wrapper('blue', 'Transport'))}:
+  ${this.serviceRepository.transport.inspect()}
 `
     return pref
   }
@@ -73,7 +74,7 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     return {
       global: {
         systemConf: CONFIG.getSystemConf(),
-        selfConf: CONFIG.getSelfConf(),
+        selfConf: this.selfConf,
         bootstrapFunctions: this.bootstrapFunctions,
         machineReport: {
           cpu: machineReporter.getCPU(),
@@ -82,10 +83,7 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
         }
       },
       ServiceRepository: this.serviceRepository.inspectJSON(),
-      Transport: {
-        transportClient: this.serviceRepository.transportClient.inspectJSON(),
-        transportServer: this.serviceRepository.transportServer.inspectJSON()
-      }
+      Transport: this.serviceRepository.transport.inspectJSON()
     }
   }
 
@@ -108,6 +106,8 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   //   - `servicePath`: {String}
   //   - `sendStrategy`: {function}
   //   - `payload`: {Object|Number|Boolean}
+  //   - `route`
+  //   - `destPort`
   call (opt, responseCallback) {
     this.serviceRepository.call(opt, responseCallback)
   }
@@ -130,8 +130,8 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
   middlewares () {
     return {
       transport: {
-        client: (prefix) => this.serviceRepository.transportClient.routes[prefix],
-        server: (prefix) => this.serviceRepository.transportServer.routes[prefix]
+        client: (prefix) => this.serviceRepository.transport.routes[prefix],
+        server: (prefix) => (port) => this.serviceRepository.transport.servers[port].routes[prefix]
       },
       serviceRepository: {
         callDispatch: this.serviceRepository.callDispatchMiddlewareStack
@@ -139,12 +139,25 @@ ${wrapper('bold', wrapper('blue', 'Transport Server'))}:
     }
   }
 
-  registerServerRoute (prefix) {
-    return this.serviceRepository.transportServer.registerRoute(prefix)
+  registerServerRoute (port, prefix, gmwh) {
+    return this.serviceRepository.transport.servers[port].registerRoute(prefix, gmwh)
   }
 
-  registerClientRoute (prefix) {
-    return this.serviceRepository.transportClient.registerRoute(prefix)
+  registerClientRoute (prefix, gmwh) {
+    return this.serviceRepository.transport.registerRoute(prefix, gmwh)
+  }
+
+  registerServer (type, port, e) {
+    return this.serviceRepository.registerServer(type, port, e)
+  }
+
+  id () {
+    return {
+      name: CONFIG.getSelfConf().name,
+      host: CONFIG.getSelfConf().host,
+      port: CONFIG.getSelfConf().transport[0].port,
+      _identifier: `${CONFIG.getSelfConf().name}@${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().transport[0].port}`
+    }
   }
 }
 

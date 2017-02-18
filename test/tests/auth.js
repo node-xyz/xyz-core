@@ -24,7 +24,7 @@ before(function (done) {
 
 it('Add auth on the fly', function (done) {
   snd.middlewares().transport.client('CALL').register(0, require('xyz.transport.auth.basic.send'))
-  rcv.middlewares().transport.server('CALL').register(0, require('xyz.transport.auth.basic.receive'))
+  rcv.middlewares().transport.server('CALL')(rcv.xyz.id().port).register(0, require('xyz.transport.auth.basic.receive'))
 
   snd.call({servicePath: '/mul', payload: { x: 2, y: 10 }}, (err, body, response) => {
     expect(body).to.equal(20)

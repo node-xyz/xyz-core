@@ -64,13 +64,11 @@ let configuration = {
     // this is to allow cli admin to inject some args like commandline arguments
     let args = cmdLineArgs ? cmdLineArgs : argParser.xyzGeneric()
     for (let arg in args) {
-      logger.verbose(`overriding ${arg} from command line`)
+      logger.verbose(`overriding ${arg} from command line value {${args[arg]}}`)
       let keys = arg.split('.')
       if (keys.length === 1) {
         if (keys[0] === 'seed') { selfConf[keys[0]].push(args[arg]) } else if (keys[0] == 'allowJoin') {
-          /*
-          could also use eval here
-           */
+          // could also use eval here
           if (args[arg] === '0' || args[arg] === 'false') {
             selfConf[keys[0]] = false
           } else {
@@ -102,9 +100,20 @@ let configuration = {
     systemConf = MergeRecursive(systemConf, aConf)
 
     logger.debug(`Adding self to systemConf by default`)
-    if (systemConf.nodes.indexOf(`${selfConf.host}:${selfConf.port}`) === -1) {
-      systemConf.nodes.push(`${selfConf.host}:${selfConf.port}`)
+    if (systemConf.nodes.indexOf(`${selfConf.host}:${selfConf.transport[0].port}`) === -1) {
+      systemConf.nodes.push(`${selfConf.host}:${selfConf.transport[0].port}`)
     }
+  },
+
+  addServer: (aServer) => {
+    for (let s of selfConf.transport) {
+      if (s.port === aServer.port) {
+        logger.error(`cannot add a server with port ${aServer.port} to selfConf. already exists`)
+        return false
+      }
+    }
+    logger.info(`new server ${JSON.stringify(aServer)} added at runtime to selfConf`)
+    selfConf.transport.push(aServer)
   },
 
   getSystemConf: () => systemConf,

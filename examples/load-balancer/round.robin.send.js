@@ -8,7 +8,7 @@ let roundRobinSendStrategy = function (params, next, done, xyz) {
     route = params[0].route
 
   foreignNodes = xyz.serviceRepository.foreignNodes,
-    transportClient = xyz.serviceRepository.transportClient
+    _transport = xyz.serviceRepository.transport
 
   let logger = xyz.logger
   let Path = xyz.path
@@ -42,7 +42,7 @@ let roundRobinSendStrategy = function (params, next, done, xyz) {
     let lastIndex = map[servicePath].nodes.indexOf(map[servicePath].node)
     map[servicePath].node = map[servicePath].nodes[lastIndex === map[servicePath].nodes.length - 1 ? 0 : lastIndex + 1]
     logger.verbose(`ROUND ROBIN :: determined node for service ${servicePath} : ${map[servicePath].node}`)
-    transportClient.send({
+    _transport.send({
       node: map[servicePath].node,
       route: route,
       payload: {service: targetPath}}, responseCallback)

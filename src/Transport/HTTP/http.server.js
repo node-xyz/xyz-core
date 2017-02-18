@@ -9,18 +9,15 @@ const _CONFIGURATION = require('./../../Config/config.global')
 let wrapper = require('./../../Util/Util').wrapper
 
 class HTTPServer extends EventEmitter {
-  constructor (xyz) {
+  constructor (xyz, port) {
     super()
     http.globalAgent.maxSockets = Infinity
-    this.port = _CONFIGURATION.getSelfConf().port
+    this.port = port || _CONFIGURATION.getSelfConf().port
     this.xyz = xyz
 
     // 3 default routes
     let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack', 'CALL')
-    callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/call.receive.event.middleware'))
-
-    let pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'pingReceiveMiddlewareStack', 'PING')
-    pingReceiveMiddlewareStack.register(-1, require('./../Middlewares/ping/ping.receive.event.middleware'))
+    callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/http.receive.event'))
 
     let joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack', 'JOIN')
     joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
@@ -29,12 +26,11 @@ class HTTPServer extends EventEmitter {
     this.routes = {}
 
     this.registerRoute('CALL', callReceiveMiddlewareStack)
-    this.registerRoute('PING', pingReceiveMiddlewareStack)
     this.registerRoute('JOIN', joinReceiveMiddlewareStack)
 
     this.server = http.createServer()
       .listen(this.port, () => {
-        logger.info(`Server listening on port : ${this.port}`)
+        logger.info(`HTTP Server listening on port : ${this.port}`)
       }).on('request', (req, resp) => {
         var body = []
         req
@@ -52,7 +48,7 @@ class HTTPServer extends EventEmitter {
             if (parsedUrl.pathname === `/${route}`) {
               // wrap response
               XResponse(resp)
-              this.routes[route].apply([req, resp, JSON.parse(body)], 0)
+              this.routes[route].apply([req, resp, JSON.parse(body), this.port], 0)
               dismissed = true
               break
             }
@@ -75,8 +71,8 @@ class HTTPServer extends EventEmitter {
 
   inspectJSON () {
     let ret = []
-    for (let route in this.routes) ret.push(this.routes[route])
-    ret
+    for (let route in this.routes) ret.push(this.routes[route].inspectJSON())
+    return ret
   }
 
   close () {
@@ -101,12 +97,12 @@ class HTTPServer extends EventEmitter {
   // a communication way
   registerRoute (prefix, gmwh) {
     if (this.routes[prefix]) {
-      logger.warn(`call middleware with prefix ${prefix} already exists`)
+      logger.warn(`message middleware with prefix ${prefix} already exists`)
       return -1
     } else {
-      gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}-MddlewareHandler`, prefix)
+      gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}-MiddlewareHandler`, prefix)
       this.routes[prefix] = gmwh
-      logger.info(`HTTP Server:: new call route ${wrapper('bold', prefix)} added`)
+      logger.info(`HTTP Server:: new message route ${wrapper('bold', prefix)} added`)
       return 1
     }
   }

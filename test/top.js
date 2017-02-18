@@ -4,6 +4,12 @@ describe('basic', function () {
   })
 })
 
+describe('clusters', function () {
+  describe('add and remove nodes in cluster', function () {
+    require('./tests/cluster')
+  })
+})
+
 describe('data Types', function () {
   describe('testing different data types', function () {
     require('./tests/dataTypes')
@@ -28,14 +34,40 @@ describe('transport authentication midlewares', function () {
   })
 })
 
+describe('different transport layers', function () {
+  describe('UDP', function () {
+    require('./tests/udp.message')
+  })
+})
+
 describe('Path Handling', function () {
   describe('Static path tests', function () {
     require('./tests/path')
   })
 })
 
-describe('cluster and cluster events', function () {
-  describe('add and remove nodes', function () {
-    require('./tests/events.and.cluster')
+describe('events', function () {
+  describe('basic events', function () {
+    require('./tests/events')
   })
 })
+
+describe('routes and servers', function () {
+  describe('basic routing', function () {
+    require('./tests/multiple.routes')
+  })
+
+  describe('basic server management', function () {
+    require('./tests/multiple.servers')
+  })
+})
+
+describe.skip('Ping', function () {
+  describe('heartbeat-based pings', function () {
+    require('./tests/ping.types')
+  })
+})
+
+// describe.skip('bootstrap functions', function () {
+//   require('./tests')
+// })

@@ -3,23 +3,23 @@
     {
       "path": "string.ms.js",
       "instance": 3,
-      "port": 5000,
+      "port": 4000,
       "stdio": "file",
-      "params": "--xyz-logLevel verbose --xyz-seed 127.0.0.1:4000 --xyz-defaultSendStrategy xyz.service.send.to.all"
+      "params": "--xyz-logLevel verbose --xyz-seed 127.0.0.1:5000"
     },
     {
       "path": "math.ms.js",
       "instance": 1,
-      "port": 4000,
+      "port": 5000,
       "stdio": "file",
-      "params": "--xyz-logLevel info --xyz-allowJoin true --xyz-name math.ms.master"
+      "params": "--xyz-logLevel verbose --xyz-allowJoin true"
     },
     {
       "path": "math.ms.js",
       "instance": 1,
       "port": 6000,
       "stdio": "file",
-      "params": "--xyz-logLevel info --xyz-seed 127.0.0.1:4000 --xyz-name math.ms.slave"
+      "params": "--xyz-logLevel verbose --xyz-seed 127.0.0.1:5000 --xyz-name math.ms.slave"
     }
   ]
 }
