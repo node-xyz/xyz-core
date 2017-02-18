@@ -36,7 +36,7 @@ Node XYZ is a NodeJS toolkit for creating microservice based distributed applica
       - [x] Event for node leaving the event + configuration for it
       - [x] Permission for nodes to accept and admit new nodes
         - Followed by sending cluster events to other nodes, informing them that a new node has been joined and they have to update their configurations.
-    - [ ] Stochastic ping instead of default ping
+    - [x] Stochastic ping instead of default ping
 
   - [x] [Command line interface](https://github.com/node-xyz/xyz-cli)
     - [x] Used locally to create and debug nodes
@@ -46,9 +46,9 @@ Node XYZ is a NodeJS toolkit for creating microservice based distributed applica
   - [x] [BOOTSTRAP] Monitor node traffic and status
   - [ ] Communicate XYZ runtime
   - [ ] XYZ CLI daemon
-  - [ ] TCP transport layer with the same API
+  - [x] UDP transport layer with the same API
   - [ ] Default SSL/TLS authentication between nodes
   - [ ] Advanced examples and plugins
-  - [ ] Load Balancer node
+  - [x] Load Balancer node
   - [ ] Message Queue
-  - [ ] Authentication plugins
+  - [ ] JWT Authentication plugins
