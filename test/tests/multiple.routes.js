@@ -19,7 +19,6 @@ before(function (done) {
   rcv.xyz.registerServerRoute(rcv.xyz.id().port, 'foo')
   rcv.xyz.middlewares().transport.server('foo')(rcv.xyz.id().port).register(0, require('./../../src/Transport/Middlewares/call/http.receive.event'))
 
-  // console.log('mr', rcv.xyz.CONFIG.getSelfConf())
   setTimeout(done, 1000)
 })
 

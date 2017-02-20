@@ -12,7 +12,7 @@
       "instance": 1,
       "port": 5000,
       "stdio": "file",
-      "params": "--xyz-logLevel verbose --xyz-allowJoin true"
+      "params": "--xyz-logLevel verbose --xyz-name math.ms.master --xyz-allowJoin true"
     },
     {
       "path": "math.ms.js",

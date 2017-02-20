@@ -7,7 +7,6 @@ var stringMs = new XYZ({
     name: 'string.ms',
     logLevel: 'verbose',
     host: '127.0.0.1',
-    seed: ['127.0.0.1:4000'],
     transport: [{type: 'HTTP', port: 5000}],
     defaultBootstrap: false
   },

@@ -62,6 +62,10 @@ describe('routes and servers', function () {
   })
 })
 
+describe('inspections', function () {
+  require('./tests/inspect')
+})
+
 describe.skip('Ping', function () {
   describe('heartbeat-based pings', function () {
     require('./tests/ping.types')
@@ -69,5 +73,5 @@ describe.skip('Ping', function () {
 })
 
 // describe.skip('bootstrap functions', function () {
-//   require('./tests')
+  // require('./tests')
 // })

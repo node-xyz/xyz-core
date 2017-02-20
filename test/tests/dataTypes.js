@@ -35,7 +35,7 @@ it('obj', function (done) {
 })
 it('arr', function (done) {
   snd.call({servicePath: '/rev', payload: [1, 2, 3]}, (err, body, response) => {
-    expect(body).to.eql([3, 2, 1])
+    expect(body).to.equal([3, 2, 1])
     done()
   })
 })

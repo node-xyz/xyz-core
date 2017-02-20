@@ -41,6 +41,10 @@ class NodeXYZ {
     // send an inti message to the cli process
     if (this.selfConf.cli.enable) {
       logger.verbose(`sending config info for possible xyz-cli listener instance`)
+      if (!process.send) {
+        logger.error(`IPC channel not open. failed to communicate with cli`)
+        return
+      }
       process.send({ title: 'init', body: this.selfConf})
 
       // note that not only that these two are used by cli's `top` command,

@@ -57,7 +57,10 @@ it('HTTP statusCode', function (done) {
   })
 })
 
-it.skip('id and inspect', function (done) {
+it('iddddd', function (done) {
+  console.log(snd.xyz.id())
+  console.log(rcv.xyz.id())
+
   done()
 })
 
