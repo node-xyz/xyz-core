@@ -15,6 +15,8 @@ before(function (done) {
 })
 
 it('hello world', function (done) {
+  console.log(snd)
+  console.log(rcv)
   snd.call({
     servicePath: '/mul',
     payload: {x: 2, y: 3}
@@ -44,7 +46,10 @@ it('local not found', function (done) {
 
 it('no Callback for sender call', function (done) {
   snd.call({servicePath: 'mul', payload: {x: 2, y: 3}})
-  done()
+  rcv.xyz.serviceRepository.once('message:receive', (data) => {
+    console.log(data)
+    done()
+  })
 })
 
 it('HTTP statusCode', function (done) {
@@ -55,13 +60,6 @@ it('HTTP statusCode', function (done) {
     expect(response.statusCode).to.equal(201)
     done()
   })
-})
-
-it('iddddd', function (done) {
-  console.log(snd.xyz.id())
-  console.log(rcv.xyz.id())
-
-  done()
 })
 
 it('a warning to all about paths', function (done) {

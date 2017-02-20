@@ -114,10 +114,10 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
       }
     })
 
-    server.on(CONSTANTS.events.JOIN, (body, response) => {
-      this.emit('cluster:join', {body: body})
-      response.end(JSON.stringify(CONFIG.getSystemConf()))
-    })
+    // server.on(CONSTANTS.events.JOIN, (body, response) => {
+    //   this.emit('cluster:join', {body: body})
+    //   response.end(JSON.stringify(CONFIG.getSystemConf()))
+    // })
   }
 
   // Call a service. A middleware will be called with aproppiate arguments to find the receiving service etc.
@@ -142,14 +142,16 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   contactSeed (idx) {
     // error. check the vlaidity of casse where 404 or no 200 is the Response
     let seeds = CONFIG.getSelfConf().seed
-    this.transport.send({node: seeds[idx], payload: {_id: this._id}, route: 'JOIN'}, (err, body, res) => {
+    this.transport.send({node: seeds[idx], payload: {id: this._id}, route: 'PING'}, (err, body, res) => {
       if (!err) {
-        logger.info(`${wrapper('bold', 'JOINED CLUSTER')}. cluster memebers : ${body.nodes}`)
+        logger.info(`${wrapper('bold', 'JOIN PING ACCEPTED')}. response : ${JSON.stringify(body)}`)
         for (let node of body.nodes) {
           this.joinNode(node)
         }
+        // no need to do this. guess why :D
+        // this.joinNode(seeds[idx])
       } else {
-        logger.error(`${wrapper('bold', 'JOIN FAILED')} :: a seed node ${seeds[idx]} rejected with `)
+        logger.error(`${wrapper('bold', 'JOIN PING REJECTED')} :: seed node ${seeds[idx]} rejected with `)
         setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx), this.INTERVALS.reconnect)
       }
     })

@@ -7,7 +7,7 @@ let logger
 class mockNode {
   constructor (name, port, cwd, systemConf) {
     let selfConf = {
-      'logLevel': 'debug',
+      'logLevel': 'info',
       'name': name,
       'host': 'localhost',
       'transport': [{type: 'HTTP', port: port}]
@@ -18,8 +18,6 @@ class mockNode {
       selfConf: selfConf,
       systemConf: systemConf
     })
-
-    console.log('creating', selfConf)
 
     logger = this.xyz.logger
   }

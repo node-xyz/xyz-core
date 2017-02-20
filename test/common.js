@@ -12,9 +12,6 @@ exports.init = function () {
   snd = new mockNode('snd', 3334, cwd, system.getSystemConf())
   rcv = new mockNode('rcv', 3333, cwd, system.getSystemConf())
 
-  console.log('sndConf', snd.conf, snd.xyz.CONFIG.getSelfConf())
-  console.log('rcvConf', rcv.conf, rcv.xyz.CONFIG.getSelfConf())
-
   rcv.register('/mul', mockFunctions.mul)
   rcv.register('/up', mockFunctions.up)
   rcv.register('/rev', mockFunctions.rev)

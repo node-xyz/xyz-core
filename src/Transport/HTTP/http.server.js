@@ -5,28 +5,29 @@ const CONSTANTS = require('../../Config/Constants')
 const XResponse = require('./../XResponse')
 const logger = require('./../../Log/Logger')
 const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
-const _CONFIGURATION = require('./../../Config/config.global')
+const CONFIG = require('./../../Config/config.global')
 let wrapper = require('./../../Util/Util').wrapper
 
 class HTTPServer extends EventEmitter {
   constructor (xyz, port) {
     super()
     http.globalAgent.maxSockets = Infinity
-    this.port = port || _CONFIGURATION.getSelfConf().port
+    this.port = port || CONFIG.getSelfConf().port
     this.xyz = xyz
 
-    // 3 default routes
-    let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack', 'CALL')
-    callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/http.receive.event'))
-
-    let joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack', 'JOIN')
-    joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
-
-    // user defined routes
     this.routes = {}
 
+    let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack', 'CALL')
+    callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/http.receive.event'))
     this.registerRoute('CALL', callReceiveMiddlewareStack)
-    this.registerRoute('JOIN', joinReceiveMiddlewareStack)
+
+    // if (CONFIG.getSelfConf().allowJoin) {
+    //   let joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack', 'JOIN')
+    //   joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
+    //   this.registerRoute('JOIN', joinReceiveMiddlewareStack)
+    // }
+
+    // user defined routes
 
     this.server = http.createServer()
       .listen(this.port, () => {

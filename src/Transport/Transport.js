@@ -10,17 +10,16 @@ class Transport {
   constructor (xyz) {
     this.xyz = xyz
 
-    let callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMiddlewareStack', 'CALL')
-    callDispatchMiddlewareStack.register(-1, require('./Middlewares/call/http.export.middleware'))
-
-    let joinDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'joinDispatchMiddlewareStack', 'JOIN')
-    joinDispatchMiddlewareStack.register(-1, require('./Middlewares/call/http.export.middleware'))
-
     this.routes = {}
     this.servers = {}
 
+    let callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMiddlewareStack', 'CALL')
+    callDispatchMiddlewareStack.register(-1, require('./Middlewares/call/http.export.middleware'))
     this.registerRoute('CALL', callDispatchMiddlewareStack)
-    this.registerRoute('JOIN', joinDispatchMiddlewareStack)
+
+    // let joinDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'joinDispatchMiddlewareStack', 'JOIN')
+    // joinDispatchMiddlewareStack.register(-1, require('./Middlewares/call/http.export.middleware'))
+    // this.registerRoute('JOIN', joinDispatchMiddlewareStack)
   }
 
   inspect () {

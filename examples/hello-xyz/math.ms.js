@@ -20,10 +20,10 @@ mathMs.register('/math/float/neg', function (payload, XResponse) {
   XResponse.jsonify('ok whassssaaaap')
 })
 
-setInterval(() => {
-  mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, res) => {
-    console.error('response of /string/up => ', err, body)
-  })
-}, 3000)
+// setInterval(() => {
+//   mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, res) => {
+//     console.error('response of /string/up => ', err, body)
+//   })
+// }, 6000)
 
 console.log(mathMs)
