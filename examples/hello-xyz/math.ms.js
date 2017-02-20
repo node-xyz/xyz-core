@@ -3,7 +3,6 @@ let fn = require('./../../test/ms/mock.functions')
 
 var mathMs = new XYZ({
   selfConf: {
-    allowJoin: true,
     name: 'math.ms',
     host: '127.0.0.1'
   },
@@ -20,10 +19,10 @@ mathMs.register('/math/float/neg', function (payload, XResponse) {
   XResponse.jsonify('ok whassssaaaap')
 })
 
-// setInterval(() => {
-//   mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, res) => {
-//     console.error('response of /string/up => ', err, body)
-//   })
-// }, 6000)
+setInterval(() => {
+  mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, res) => {
+    console.error('response of /string/up => ', err, body)
+  })
+}, 6000)
 
 console.log(mathMs)

@@ -27,8 +27,6 @@ module.exports = {
       name: 'node-xyz-init',
       // the default middleware funciton used with `.call(...)`
       defaultSendStrategy: 'xyz.service.send.first.find',
-      // allow requests to `/join` be processed
-      allowJoin: false,
       // log level used by winston
       logLevel: 'info',
       // default seed nodes
