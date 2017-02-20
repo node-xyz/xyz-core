@@ -26,14 +26,14 @@ it('inspectJSON', function (done) {
   expect(sndj.ServiceRepository.services.length).to.equal(0)
   expect(rcvj.ServiceRepository.services.length).to.equal(10)
 
-  expect(rcvj.Transport.outgoingRoutes.length).to.equal(3)
-  expect(sndj.Transport.outgoingRoutes.length).to.equal(3)
+  expect(rcvj.Transport.outgoingRoutes.length).to.equal(2)
+  expect(sndj.Transport.outgoingRoutes.length).to.equal(2)
 
   expect(rcvj.Transport.servers.length).to.equal(1)
   expect(sndj.Transport.servers.length).to.equal(1)
 
-  expect(rcvj.Transport.servers[0].length).to.equal(3)
-  expect(sndj.Transport.servers[0].length).to.equal(3)
+  expect(rcvj.Transport.servers[0].length).to.equal(2)
+  expect(sndj.Transport.servers[0].length).to.equal(2)
 
   done()
 })

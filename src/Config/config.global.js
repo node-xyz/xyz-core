@@ -98,6 +98,14 @@ let configuration = {
     systemConf = CONSTANTS.defaultConfig.systemConf
     logger.info('reading systemConf from user')
     systemConf = MergeRecursive(systemConf, aConf)
+    logger.info('Reading selfConf from command line')
+    let args = argParser.xyzGeneric('--xys-')
+    for (let arg in args) {
+      logger.verbose(`overriding ${arg} from command line value {${args[arg]}}`)
+      if (arg === 'node') {
+        systemConf.nodes.push(args[arg])
+      }
+    }
 
     logger.debug(`Adding self to systemConf by default`)
     if (systemConf.nodes.indexOf(`${selfConf.host}:${selfConf.transport[0].port}`) === -1) {

@@ -15,12 +15,12 @@ function has (argName) {
   return args.indexOf(argName) > -1
 }
 
-function xyzGeneric () {
+function xyzGeneric (prefix = '--xyz-') {
   let args = process.argv
   let _args = {}
-  for ( let idx = 2; idx < args.length; idx++) {
+  for (let idx = 2; idx < args.length; idx++) {
     let arg = args[idx]
-    if (arg.slice(0, 6) === '--xyz-') {
+    if (arg.slice(0, 6) === prefix) {
       let specificArg = arg.slice(6)
       _args[specificArg] = args[idx + 1]
       idx += 1
