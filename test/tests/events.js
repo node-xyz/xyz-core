@@ -19,7 +19,6 @@ before(function (done) {
   snd.xyz.registerClientRoute('udp')
   snd.xyz.middlewares().transport.client('udp').register(0, require('./../../src/Transport/Middlewares/call/udp.export.middleware'))
 
-  // console.log(rcv.xyz.CONFIG.getSelfConf())
   setTimeout(done, 500)
 })
 
@@ -29,7 +28,7 @@ it('service level http message send and receive', function (done) {
     sent = true
   })
   rcv.xyz.serviceRepository.once('message:receive', function (data) {
-    expect(data.body.userPayload.x).to.equal(2)
+    expect(data.userPayload.x).to.equal(2)
     expect(sent).to.equal(true)
     done()
   })
@@ -42,7 +41,7 @@ it('service level udp message send and receive', function (done) {
     sent = true
   })
   rcv.xyz.serviceRepository.once('message:receive', function (data) {
-    expect(data.body.userPayload.x).to.equal(2)
+    expect(data.userPayload.x).to.equal(2)
     expect(sent).to.equal(true)
     done()
   })

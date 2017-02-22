@@ -100,7 +100,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
 
   _bindTransportEvent (server) {
     server.on(CONSTANTS.events.MESSAGE, (data, response) => {
-      this.emit('message:receive', {data: data})
+      this.emit('message:receive', data)
       let fn = this.services.getPathFunction(data.service)
       if (fn) {
         logger.verbose(`ServiceRepository received service call ${wrapper('bold', data.service)}`)

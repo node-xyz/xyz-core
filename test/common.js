@@ -35,5 +35,4 @@ exports.expect = expect
 exports.mockNode = mockNode
 exports.mockFunctions = mockFunctions
 exports.mockSystem = mockSystem
-exports.firstfind = require('./../../xyz.service.send.first.find')
-exports.sendToAll = require('./../../xyz.service.send.to.all')
+exports.firstfind = require('xyz.service.send.first.find')
