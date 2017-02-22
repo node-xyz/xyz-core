@@ -82,11 +82,11 @@ class HTTPServer extends EventEmitter {
 
   validator (req, body) {
     if (req.method !== 'POST') {
-      logger.warn(`a suspicous request was received.`)
+      logger.warn(`a suspicous message was received.`)
       return false
     }
     if (body.length === 0) {
-      logger.warn(`a suspicous request was received.`)
+      logger.warn(`a suspicous message was received.`)
       return false
     }
     return true

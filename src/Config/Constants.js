@@ -4,21 +4,14 @@ module.exports = {
     xyzport: 3000
   },
   events: {
-    REQUEST: 'request',
-    SERVICE_CALL: 'serviceCall',
-    PING: 'ping',
-    JOIN: 'join'
+    MESSAGE: 'xyz_message',
+    PING: 'xyz_ping'
   },
   url: {
     CALL: 'CALL',
     PING: 'PING',
     JOIN: 'JOIN'
   },
-  environmet: {
-    dev: 'dev',
-    production: 'prod'
-  },
-
   // the default configuration. the will be merged recursively with
   // the object passed by the user.
   defaultConfig: {

@@ -114,7 +114,7 @@ class GenericMiddlewareHandler {
     } else if (idx > -1 && idx < this.middlewares.length) {
       this.middlewares.splice(idx, 1)
     } else {
-      logger.error(`Trying to remove a middle ware that does not exists.`)
+      logger.error(`Trying to remove a middleware that does not exists.`)
     }
   }
 }

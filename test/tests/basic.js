@@ -15,8 +15,6 @@ before(function (done) {
 })
 
 it('hello world', function (done) {
-  console.log(snd)
-  console.log(rcv)
   snd.call({
     servicePath: '/mul',
     payload: {x: 2, y: 3}

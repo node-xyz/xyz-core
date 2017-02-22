@@ -12,7 +12,7 @@ function _udpEvent (params, next, end, xyz) {
   }
   logger.debug(`UDP receive emitter :: Passing message from ${params[1]} up to service repo with ${JSON.stringify(msgToSR)}`)
   _transport.emit(
-    CONSTANTS.events.REQUEST, msgToSR)
+    CONSTANTS.events.MESSAGE, msgToSR)
   next()
 }
 

@@ -99,7 +99,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   }
 
   _bindTransportEvent (server) {
-    server.on(CONSTANTS.events.REQUEST, (body, response) => {
+    server.on(CONSTANTS.events.MESSAGE, (body, response) => {
       this.emit('message:receive', {body: body})
       let fn = this.services.getPathFunction(body.service)
       if (fn) {

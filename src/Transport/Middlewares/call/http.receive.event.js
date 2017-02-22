@@ -11,7 +11,7 @@ function _httpMessageEvent (params, next, end, xyz) {
 
   logger.debug(`HTTP Receive emitter :: Passing request to ${request.url} up to service repo with ${JSON.stringify(body)}`)
   _transport.emit(
-    CONSTANTS.events.REQUEST, {
+    CONSTANTS.events.MESSAGE, {
       userPayload: body.userPayload,
       service: body.service
     },
