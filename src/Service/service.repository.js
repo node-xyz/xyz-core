@@ -99,12 +99,12 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   }
 
   _bindTransportEvent (server) {
-    server.on(CONSTANTS.events.MESSAGE, (body, response) => {
-      this.emit('message:receive', {body: body})
-      let fn = this.services.getPathFunction(body.service)
+    server.on(CONSTANTS.events.MESSAGE, (data, response) => {
+      this.emit('message:receive', {data: data})
+      let fn = this.services.getPathFunction(data.service)
       if (fn) {
-        logger.verbose(`ServiceRepository received service call ${wrapper('bold', body.service)}`)
-        fn(body.userPayload, response)
+        logger.verbose(`ServiceRepository received service call ${wrapper('bold', data.service)}`)
+        fn(data.userPayload, response)
         return
       } else {
         // this will be rarely reached . most of the time callDisplatchfind middleware will find this.
