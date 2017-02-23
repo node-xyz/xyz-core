@@ -1,71 +1,47 @@
-describe('basic', function () {
-  describe('basic test as a hello world', function () {
-    require('./tests/basic')
+describe('xyz-core layer', function () {
+  describe('basic', function () {
+    require('./tests/core.basic')
+  })
+  describe('data types', function () {
+    require('./tests/core.dataTypes')
+  })
+
+  describe('inspection', function () {
+    require('./tests/core.inspect')
   })
 })
 
-describe('clusters', function () {
-  describe('add and remove nodes in cluster', function () {
-    require('./tests/cluster')
+describe('service layer', function () {
+  describe('service discovery with default ping', function () {
+    require('./tests/service.cluster')
+  })
+
+  describe('middlewares', function () {
+    require('./tests/service.middlewares')
+  })
+
+  describe('path Handling', function () {
+    require('./tests/service.path')
+  })
+
+  describe('serviceRepository events', function () {
+    require('./tests/service.events')
   })
 })
 
-describe('data Types', function () {
-  describe('testing different data types', function () {
-    require('./tests/dataTypes')
+describe('Transport layer', function () {
+  describe('additional transport layers', function () {
+    require('./tests/transport.udp.message')
   })
-})
-
-describe('transport middlewares', function () {
-  describe('transport middleware test', function () {
-    require('./tests/middleware.transport')
-  })
-})
-
-describe('service middlewares', function () {
-  describe('service layer middleware', function () {
-    require('./tests/middleware.service')
-  })
-})
-
-describe('different transport layers', function () {
-  describe('UDP', function () {
-    require('./tests/udp.message')
-  })
-})
-
-describe('Path Handling', function () {
-  describe('Static path tests', function () {
-    require('./tests/path')
-  })
-})
-
-describe('events', function () {
-  describe('basic events', function () {
-    require('./tests/events')
-  })
-})
-
-describe('routes and servers', function () {
-  describe('basic routing', function () {
-    require('./tests/multiple.routes')
+  describe('middlewares', function () {
+    require('./tests/transport.middlewares')
   })
 
-  describe('basic server management', function () {
-    require('./tests/multiple.servers')
+  describe('routing', function () {
+    require('./tests/transport.routes')
+  })
+
+  describe('server management', function () {
+    require('./tests/transport.servers')
   })
 })
-
-describe('inspections', function () {
-  require('./tests/inspect')
-})
-
-describe.skip('Ping', function () {
-  describe('heartbeat-based pings', function () {
-    require('./tests/ping.types')
-  })
-})
-
-// describe.skip('bootstrap functions', function () {
-  // require('./tests')
-// })

@@ -14,7 +14,7 @@ before(function (done) {
   setTimeout(done, 1000)
 })
 
-it('hello world', function (done) {
+it('sending a basic message - call()', function (done) {
   snd.call({
     servicePath: '/mul',
     payload: {x: 2, y: 3}
@@ -22,6 +22,7 @@ it('hello world', function (done) {
     expect(body1).to.equal(6)
     expect(err1).to.equal(null)
     expect(response1.statusCode).to.equal(200)
+
     snd.call({servicePath: '/up', payload: 'hello'}, (err2, body2, response2) => {
       expect(body2).to.equal('HELLO')
       expect(err2).to.equal(null)

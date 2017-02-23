@@ -39,6 +39,17 @@ it('arr', function (done) {
     done()
   })
 })
+
+it('string', function (done) {
+  snd.call({
+    servicePath: 'up',
+    payload: 'yo'},
+    (err, body) => {
+      expect(body).to.equal('YO')
+      done()
+    })
+})
+
 after(function () {
   snd.stop()
   rcv.stop()
