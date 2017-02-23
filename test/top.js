@@ -28,12 +28,6 @@ describe('service middlewares', function () {
   })
 })
 
-describe('transport authentication midlewares', function () {
-  describe('simple authentication', function () {
-    require('./tests/auth')
-  })
-})
-
 describe('different transport layers', function () {
   describe('UDP', function () {
     require('./tests/udp.message')

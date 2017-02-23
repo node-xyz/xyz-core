@@ -1,8 +1,8 @@
 let interval = 2000
 let threshold = 2000
 let kick = 5
-const GenericMiddlewareHandler = require('xyz-core/src/Middleware/generic.middleware.handler')
-const _httpExport = require('xyz-core/src/Transport/Middlewares/call/http.export.middleware')
+const GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
+const _httpExport = require('./../Transport/Middlewares/call/http.export.middleware')
 
 let pingBoostraper = (xyz, event, port) => {
   let Util = xyz.Util

@@ -20,6 +20,6 @@
         "liberty-global-docco-theme": "latest"
     },
     "dependencies": {
-        "winston": "^2.2.0",
+        "winston": "^2.2.0"
     }
 }

@@ -50,5 +50,5 @@ Node XYZ is a NodeJS toolkit for creating microservice based distributed applica
   - [ ] Default SSL/TLS authentication between nodes
   - [ ] Advanced examples and plugins
   - [x] Load Balancer node
-  - [ ] Message Queue
+  - [x] Message Queue
   - [ ] JWT Authentication plugins
