@@ -1,25 +1,25 @@
 {
-    "name": "xyz-core",
-    "version": "0.3.0",
-    "description": "Microservice platform wrapper for node js ",
-    "main": "index.js",
-    "scripts": {
-        "test": "./node_modules/.bin/mocha --reporter spec",
-        "docs": "jsdoc -c jsdoc.json -r -d ./../node-xyz.github.io/apidoc",
-        "docco": "find . -name '*.js' | grep -v node_modules | grep -v examples| grep -v test | xargs docco -o ./../node-xyz.github.io/apidoc",
-        "lint": "./node_modules/jshint/bin/jshint src --config ./jshintrc"
-    },
-    "author": "Kian.peymani@gmail.com",
-    "license": "ISC",
-    "devDependencies": {
-        "chai": "^3.5.0",
-        "jsdoc": "^3.4.0",
-        "jshint": "^2.9.2",
-        "mocha": "^2.5.3",
-        "docco": "latest",
-        "liberty-global-docco-theme": "latest"
-    },
-    "dependencies": {
-        "winston": "^2.2.0"
-    }
+  "name": "xyz-core",
+  "version": "0.3.1",
+  "description": "Microservice platform wrapper for node js ",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "docs": "jsdoc -c jsdoc.json -r -d ./../node-xyz.github.io/apidoc",
+    "docco": "find . -name '*.js' | grep -v node_modules | grep -v examples| grep -v test | xargs docco -o ./../node-xyz.github.io/apidoc",
+    "lint": "./node_modules/jshint/bin/jshint src --config ./jshintrc"
+  },
+  "author": "Kian.peymani@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "jsdoc": "^3.4.0",
+    "jshint": "^2.9.2",
+    "mocha": "^2.5.3",
+    "docco": "latest",
+    "liberty-global-docco-theme": "latest"
+  },
+  "dependencies": {
+    "winston": "^2.2.0"
+  }
 }
