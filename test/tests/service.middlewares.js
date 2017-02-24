@@ -50,6 +50,7 @@ before(function (done) {
   system = testSystem.system
   cwd = testSystem.cwd
 
+
   setTimeout(done, 500)
 })
 
@@ -79,17 +80,13 @@ it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
   })
 })
 
-it('change sendStrategy per call', function (done) {
+it('change sendStrategy per call - sendToAll', function (done) {
   snd.call({servicePath: '/math/*', payload: {x: 2, y: 2}, sendStrategy: common.sendToAll}, (err, body, response) => {
     expect(err).to.equal(null)
     // expecting three results
     expect(Object.keys(body).length).to.equal(3)
     done()
   })
-})
-
-it.skip('send to all', function () {
-  done()
 })
 
 after(function () {
