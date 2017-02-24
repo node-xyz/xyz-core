@@ -2,6 +2,7 @@ describe('xyz-core layer', function () {
   describe('basic', function () {
     require('./tests/core.basic')
   })
+
   describe('data types', function () {
     require('./tests/core.dataTypes')
   })
