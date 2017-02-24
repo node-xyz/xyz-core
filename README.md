@@ -1,6 +1,12 @@
 
 ## Node XYZ
 
+---
+
+[![Build Status](https://travis-ci.org/node-xyz/xyz-core.svg?branch=master)](https://travis-ci.org/node-xyz/xyz-core)
+
+---
+
 Node XYZ is a NodeJS toolkit for creating microservice based distributed applications. The main aim of XYZ is to cover following aspects of microservice architecture:
 
   - **Service discovery and Communication**:
