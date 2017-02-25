@@ -50,7 +50,6 @@ before(function (done) {
   system = testSystem.system
   cwd = testSystem.cwd
 
-
   setTimeout(done, 500)
 })
 
