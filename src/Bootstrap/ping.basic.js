@@ -9,7 +9,6 @@ let pingBoostraper = (xyz, event, port) => {
   let logger = xyz.logger
   let CONFIG = xyz.CONFIG
   const CONSTANTS = xyz.CONSTANTS
-  let wrapper = xyz.Util.wrapper
 
   let SR = xyz.serviceRepository
   const _id = `${xyz.id().host}:${xyz.id().port}`
@@ -22,7 +21,8 @@ let pingBoostraper = (xyz, event, port) => {
       SR.transport.send({
         route: 'PING',
         node: node,
-        payload: {id: _id }}, (err, body, res) => {
+        payload: {id: _id}
+      }, (err, body, res) => {
         if (err == null) {
           SR.foreignNodes[node] = body.services
           SR.foreignRoutes[node] = body.transportServers
@@ -55,7 +55,7 @@ let pingBoostraper = (xyz, event, port) => {
 
     for (let cNode of joinCandidate) {
       if (cNode) {
-        SR.transport.send({ node: cNode, route: 'PING', payload: {id: _id}}, (err, body, res) => {
+        SR.transport.send({node: cNode, route: 'PING', payload: {id: _id}}, (err, body, res) => {
           // this candidate has failed to prove itself
           if (err) {
             logger.error(`join candidate ${cNode} rejected due to ${err}`)
@@ -83,17 +83,17 @@ let pingBoostraper = (xyz, event, port) => {
   }
 
   function _pingEvent (params, next, end, xyz) {
-    let request = params[0]
+    // let request = params[0]
     let response = params[1]
     let body = params[2]
     let _transport = xyz.serviceRepository.transport.servers[port]
 
-    logger.silly(`PING :: Passing ping to up to service repo`)
+    logger.silly('PING :: Passing ping to up to service repo')
     _transport.emit(CONSTANTS.events.PING, body, response)
     next()
   }
 
-  let pingInterval = setInterval(_ping, interval + Util.Random(threshold))
+  setInterval(_ping, interval + Util.Random(threshold))
 
   // bind listener
   let pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'pingReceiveMiddlewareStack', 'PING')
@@ -114,7 +114,7 @@ let pingBoostraper = (xyz, event, port) => {
       if (data.title === 'pingRate') {
         process.send({
           title: data.title,
-          body: {interval: interval, maxInterval: interval, minInterval: interval }
+          body: {interval: interval, maxInterval: interval, minInterval: interval}
         })
       }
     })

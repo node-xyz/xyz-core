@@ -1,5 +1,5 @@
-let xyz = require('xyz-core')
-let stringMS = new xyz({
+let XYZ = require('xyz-core')
+let stringMS = new XYZ({
   selfConf: {
     name: 'stringMS',
     host: '127.0.0.1',
@@ -19,6 +19,7 @@ stringMS.register('down', (payload, response) => {
 
 setInterval(() => {
   stringMS.call({servicePath: 'mul', payload: {x: 2, y: 5}}, (err, body, res) => {
+    if (err) throw err
     console.log(`my fellwo service reponded with ${body}`)
   })
 }, 2000)

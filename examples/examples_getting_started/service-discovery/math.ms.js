@@ -1,5 +1,5 @@
-let xyz = require('xyz-core')
-let mathMS = new xyz({
+let XYZ = require('xyz-core')
+let mathMS = new XYZ({
   selfConf: {
     allowJoin: true,
     name: 'MathMS',

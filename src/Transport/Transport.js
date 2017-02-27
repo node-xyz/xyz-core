@@ -1,4 +1,3 @@
-const CONSTANTS = require('./../Config/Constants')
 const logger = require('./../Log/Logger')
 const CONFIG = require('./../Config/config.global')
 const GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
@@ -16,10 +15,6 @@ class Transport {
     let callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMiddlewareStack', 'CALL')
     callDispatchMiddlewareStack.register(-1, require('./Middlewares/call/http.export.middleware'))
     this.registerRoute('CALL', callDispatchMiddlewareStack)
-
-    // let joinDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'joinDispatchMiddlewareStack', 'JOIN')
-    // joinDispatchMiddlewareStack.register(-1, require('./Middlewares/call/http.export.middleware'))
-    // this.registerRoute('JOIN', joinDispatchMiddlewareStack)
   }
 
   inspect () {
@@ -64,7 +59,7 @@ class Transport {
       _port = this._findTargetPort(opt.route, opt.node)
       if (_port === -1) {
         logger.error(`Transport Client :: could not find route ${opt.route} in destination node ${opt.node}. aborting transmission`)
-        responseCallback(`target port/route not found`, null)
+        responseCallback('target port/route not found', null)
         return
       }
     }
@@ -73,7 +68,7 @@ class Transport {
       hostname: `${opt.node.split(':')[0]}`,
       port: _port ? _port : `${opt.node.split(':')[1]}`,
       path: `/${opt.route}`,
-      method: `POST`,
+      method: 'POST',
       json: opt.payload
     }
     this.routes[opt.route].apply([requestConfig, responseCallback], 0)

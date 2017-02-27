@@ -1,7 +1,6 @@
 const http = require('http')
 const url = require('url')
 const EventEmitter = require('events')
-const CONSTANTS = require('../../Config/Constants')
 const XResponse = require('./../XResponse')
 const logger = require('./../../Log/Logger')
 const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
@@ -82,11 +81,11 @@ class HTTPServer extends EventEmitter {
 
   validator (req, body) {
     if (req.method !== 'POST') {
-      logger.warn(`a suspicous message was received.`)
+      logger.warn('a suspicous message was received.')
       return false
     }
     if (body.length === 0) {
-      logger.warn(`a suspicous message was received.`)
+      logger.warn('a suspicous message was received.')
       return false
     }
     return true

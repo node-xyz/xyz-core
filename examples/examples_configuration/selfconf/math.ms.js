@@ -1,5 +1,5 @@
-let xyz = require('xyz-core')
-let mathMS = new xyz({
+let XYZ = require('xyz-core')
+let mathMS = new XYZ({
   selfConf: {
     port: 10000,
     name: 'from-self-conf'

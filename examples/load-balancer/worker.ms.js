@@ -1,5 +1,4 @@
 var XYZ = require('./../../index')
-let sendToAll = require('xyz.service.send.to.all')
 const fs = require('fs')
 let worker = new XYZ({
   selfConf: {name: 'worker.ms', transport: [{type: 'HTTP', port: 3000}]},

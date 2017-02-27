@@ -1,6 +1,5 @@
 const fn = require('./../../test/ms/mock.functions')
 const XYZ = require('./../../index')
-const sendToAll = require('xyz.service.send.to.all')
 const GenericMiddlewareHandler = require('./../../src/Middleware/generic.middleware.handler')
 
 let stringMs = new XYZ({

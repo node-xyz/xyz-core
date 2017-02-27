@@ -9,6 +9,7 @@ let networkMonitorBootstrap = require('./src/Bootstrap/process.network.event')
 // Detail about system Conf keys
 // TODO
 class NodeXYZ {
+
   // an example of the configuration requried can be found in CONSTANTS.js file.
   // Note that if you do not set a value, they'll be replaced.
   constructor (configuration, cmdLineArgs) {
@@ -40,9 +41,9 @@ class NodeXYZ {
 
     // send an inti message to the cli process
     if (this.selfConf.cli.enable) {
-      logger.verbose(`sending config info for possible xyz-cli listener instance`)
+      logger.verbose('sending config info for possible xyz-cli listener instance')
       if (!process.send) {
-        logger.error(`IPC channel not open. failed to communicate with cli`)
+        logger.error('IPC channel not open. failed to communicate with cli')
         return
       }
       process.send({ title: 'init', body: this.selfConf})
@@ -55,7 +56,9 @@ class NodeXYZ {
     }
   }
 
-  // override the default `console.log()` behavior
+  /**
+   * Extents the default `console.log` method
+   */
   inspect () {
     let pref = `
 ____________________  GLOBAL ____________________
@@ -74,6 +77,9 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
     return pref
   }
 
+  /**
+   * returns the info printed by `inspect` in JSON format
+   */
   inspectJSON () {
     return {
       global: {
@@ -91,27 +97,33 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
     }
   }
 
-  //  Stop XYZ system. will stop all ping and communication requests.
-  //  Should onle be used with tests.
+  /**
+   * Stop XYZ system. will stop all ping and communication requests.
+   *  Should onle be used with tests.
+   */
   terminate () {
     this.serviceRepository.terminate()
   }
 
-  //  Register a new function to be exported.
-  //  @param  {String}   serviceName       Unique name for this service.
-  //  @param  {Function} fn                Handler function for this service
-  register (serviceName, fn) {
-    this.serviceRepository.register(serviceName, fn)
+  /**
+   * Register a new function to be exported.
+   * @param  {String}   servicePath       Unique path for this service.
+   * @param  {Function} fn                Handler function for this service
+   */
+  register (servicePath, fn) {
+    this.serviceRepository.register(servicePath, fn)
   }
 
-  // call a service
-  // uses the default /call route
-  // opt is an object with keys like :
-  //   - `servicePath`: {String}
-  //   - `sendStrategy`: {function}
-  //   - `payload`: {Object|Number|Boolean}
-  //   - `route`
-  //   - `destPort`
+  /**
+   * call a service
+   * uses the default /call route
+   * opt is an object with keys like :
+   * - `servicePath`: {String}
+   * - `sendStrategy`: {function}
+   * - `payload`: {Object|Number|Boolean}
+   * - `route`
+   * - `destPort`
+   */
   call (opt, responseCallback) {
     this.serviceRepository.call(opt, responseCallback)
   }

@@ -1,7 +1,7 @@
-let xyz = require('xyz-core')
+let XYZ = require('xyz-core')
 let sendToAll = require('xyz.service.send.to.all')
 
-let stringMS = new xyz({
+let stringMS = new XYZ({
   defaultSendStrategy: sendToAll,
   selfConf: {
     name: 'stringMS',
@@ -28,6 +28,7 @@ stringMS.register('down', (payload, response) => {
 
 setInterval(() => {
   stringMS.call({servicePath: '/*/mul', payload: {x: 2, y: 5}}, (err, body, res) => {
+    if (err) throw err
     console.log(`my fellow service responded with ${JSON.stringify(body)}`)
   })
 }, 2000)

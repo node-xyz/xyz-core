@@ -6,7 +6,9 @@ var mathMs = new XYZ({
     name: 'math.ms',
     host: '127.0.0.1'
   },
-  systemConf: { nodes: []}
+  systemConf: {
+    nodes: []
+  }
 })
 
 mathMs.register('/math/decimal/mul', (payload, response) => {
@@ -21,6 +23,7 @@ mathMs.register('/math/float/neg', function (payload, XResponse) {
 
 setInterval(() => {
   mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, res) => {
+    if (err) throw err
     console.error('response of /string/up => ', err, body)
   })
 }, 6000)

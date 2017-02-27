@@ -33,9 +33,9 @@ class GenericMiddlewareHandler {
 
   // print function
   inspect () {
-    let str = this.route ?
-      `${wrapper('bold', this.name)} [/${wrapper('yellow', this.route)}] || ` :
-      `${wrapper('bold', this.name)} || `
+    let str = this.route
+    ? `${wrapper('bold', this.name)} [/${wrapper('yellow', this.route)}] || `
+    : `${wrapper('bold', this.name)} || `
 
     for (let i = 0; i < this.middlewares.length; i++) {
       if (i === this.middlewares.length - 1) {
@@ -64,7 +64,7 @@ class GenericMiddlewareHandler {
     logger.debug(`Registering middleware at ${this.name}[${index}] : ${fn.name}`)
     if (index === -1) {
       this.middlewares.push(fn)
-    } else if (index == 0) {
+    } else if (index === 0) {
       this.middlewares.unshift(fn)
     } else {
       this.middlewares.splice(index, 0, fn)
@@ -87,7 +87,6 @@ class GenericMiddlewareHandler {
   apply (params, index) {
     logger.silly(`applying middleware ${this.name}[${index}]`)
 
-    let self = this
     this.middlewares[index](params,
       (_params) => { // next
         if ((index + 1) < this.middlewares.length) {
@@ -108,13 +107,13 @@ class GenericMiddlewareHandler {
   // Remove a middleware form the stack
   remove (idx) {
     logger.silly(`removing middleware ${this.name}[${this.middlewareIndex}]`)
-    if (idx == -1) {
+    if (idx === -1) {
       this.middlewares = []
       this.middlewareIndex = 0
     } else if (idx > -1 && idx < this.middlewares.length) {
       this.middlewares.splice(idx, 1)
     } else {
-      logger.error(`Trying to remove a middleware that does not exists.`)
+      logger.error('Trying to remove a middleware that does not exists.')
     }
   }
 }
