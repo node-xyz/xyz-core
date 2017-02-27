@@ -6,8 +6,7 @@ let wrapper = require('./src/Util/Util').wrapper
 let machineReporter = require('./src/Util/machine.reporter')
 let inspectBootstrap = require('./src/Bootstrap/process.inspect.event')
 let networkMonitorBootstrap = require('./src/Bootstrap/process.network.event')
-// Detail about system Conf keys
-// TODO
+
 class NodeXYZ {
 
   // an example of the configuration requried can be found in CONSTANTS.js file.

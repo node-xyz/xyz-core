@@ -1,12 +1,3 @@
-// Service Repository
-//
-// This module handles service dependant tasks such as managing list of other services
-// and their functions, keeping track of other nodes, performing ping etc.
-//
-// Note that any code and function regarding the calls
-// should be inside undelying transportClient and
-// transportServer
-
 let http = require('http')
 const Transport = require('./../Transport/Transport')
 let CONSTANTS = require('../Config/Constants')
@@ -19,11 +10,24 @@ const Path = require('./path')
 const wrapper = require('./../Util/Util').wrapper
 const EventEmitter = require('events')
 
+/**
+ *
+ *
+ *  This module handles service dependant tasks such as managing list of other services
+ *  and their functions, keeping track of other nodes, performing ping etc.
+ *
+ *  Note that any code and function regarding the calls
+ *  should be inside undelying transportClient and
+ *  transportServer
+ */
 class ServiceRepository extends EventEmitter {
 
-  //  Creates a new ServiceRepository
-  //  Request ( call ) and Ping Events are bounded to this object
-  //  Transport client and server will be composed by ServiceRepository
+  /**
+   * Creates a new ServiceRepository
+   * Transport client and server will be composed by ServiceRepository
+   *
+   * @param {Object} xyz the current xyz instance
+   */
   constructor (xyz) {
     super()
 
@@ -71,12 +75,23 @@ class ServiceRepository extends EventEmitter {
     }
   }
 
-  //  Register a new service at a given path.
-  //  The first parameter `path` will indicate the path of the service. Note that this path must be valid.
+  /**
+   * Register a new service at a given path.
+   *
+   * The first parameter `path` will indicate the path of the service. Note that this path must be valid.
+   *
+   * `xyz.register()` will invoke this method
+   *
+   * @param {String} path  path of the service
+   * @param {Function} fn function to be registered
+   */
   register (path, fn) {
     this.services.createPathSubtree(path, fn)
   }
 
+  /**
+   * override the default `console.log` function
+   */
   inspect () {
     let str = `
 ${wrapper('green', wrapper('bold', 'Middlewares'))}:
@@ -89,6 +104,9 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     return str
   }
 
+  /**
+   * same as `inspect()` in JSON format
+   */
   inspectJSON () {
     return {
       services: this.services.plainTree,
@@ -96,7 +114,16 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     }
   }
 
-  _bindTransportEvent (server) {
+  /**
+   * bind default events for a given server. Should not be called directly.
+   * The use can use this y setting the third parameter to `registerServer`, `e`
+   * to `true`. This will case this method to be called.
+   *
+   * this method will cause services to be searched an invoked via `CONSTANTS.events.MESSAGE`
+   *  event, which is equal to `message`. This event will be emitter by default from
+   *  `http.receive.event.js` middleware.
+   */
+  bindTransportEvent (server) {
     server.on(CONSTANTS.events.MESSAGE, (data, response) => {
       this.emit('message:receive', data)
       let fn = this.services.getPathFunction(data.service)
@@ -111,11 +138,6 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
         response.end(JSON.stringify(http.STATUS_CODES[404]))
       }
     })
-
-    // server.on(CONSTANTS.events.JOIN, (body, response) => {
-    //   this.emit('cluster:join', {body: body})
-    //   response.end(JSON.stringify(CONFIG.getSystemConf()))
-    // })
   }
 
   // Call a service. A middleware will be called with aproppiate arguments to find the receiving service etc.
@@ -163,7 +185,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     if (s) {
       logger.info(`new transport server [${type}] bounded on port ${port}`)
       if (e) {
-        this._bindTransportEvent(s)
+        this.bindTransportEvent(s)
       }
     }
   }

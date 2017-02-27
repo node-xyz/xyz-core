@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "docs": "jsdoc -c jsdoc.json -r -d ./../node-xyz.github.io/apidoc",
+    "docs": "jsdoc -c jsdoc.json -r -R ./README.md -d ./../node-xyz.github.io/apidoc",
     "docco": "find . -name '*.js' | grep -v node_modules | grep -v examples| grep -v test | xargs docco -o ./../node-xyz.github.io/code",
     "lintit": "standard './src' './examples' --fix"
   },
@@ -14,6 +14,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "docco": "latest",
+    "docdash": "^0.4.0",
     "jsdoc": "^3.4.0",
     "jshint": "^2.9.2",
     "mocha": "^2.5.3",
