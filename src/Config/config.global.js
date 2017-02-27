@@ -8,7 +8,7 @@ let selfConf = {}
 function MergeRecursive (obj1, obj2) {
   for (var p in obj2) {
     try {
-      if (obj2[p].constructor == Object) {
+      if (obj2[p].constructor === Object) {
         obj1[p] = MergeRecursive(obj1[p], obj2[p])
       } else {
         obj1[p] = obj2[p]
@@ -67,7 +67,7 @@ let configuration = {
       logger.verbose(`overriding ${arg} from command line value {${args[arg]}}`)
       let keys = arg.split('.')
       if (keys.length === 1) {
-        if (keys[0] === 'seed') { selfConf[keys[0]].push(args[arg]) } else if (keys[0] == 'allowJoin') {
+        if (keys[0] === 'seed') { selfConf[keys[0]].push(args[arg]) } else if (keys[0] === 'allowJoin') {
           // could also use eval here
           if (args[arg] === '0' || args[arg] === 'false') {
             selfConf[keys[0]] = false
@@ -79,7 +79,7 @@ let configuration = {
         }
       } else if (keys.length === 2) {
         if (!selfConf[keys[0]]) selfConf[keys[0]] = {}
-        selfConf[keys[0]][keys[1]] = keys[1] == 'enable' ? eval(args[arg]) : args[arg]
+        selfConf[keys[0]][keys[1]] = keys[1] === 'enable' ? eval(args[arg]) : args[arg]
       } else if (keys.length === 3) {
         if (!selfConf[keys[0]]) selfConf[keys[0]] = {}
         if (!selfConf[keys[1]]) selfConf[keys[1]] = {}
@@ -107,7 +107,7 @@ let configuration = {
       }
     }
 
-    logger.debug(`Adding self to systemConf by default`)
+    logger.debug('Adding self to systemConf by default')
     if (systemConf.nodes.indexOf(`${selfConf.host}:${selfConf.transport[0].port}`) === -1) {
       systemConf.nodes.push(`${selfConf.host}:${selfConf.transport[0].port}`)
     }

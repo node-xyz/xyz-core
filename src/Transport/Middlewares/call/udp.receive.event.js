@@ -1,6 +1,5 @@
 const logger = require('./../../../Log/Logger')
 const CONSTANTS = require('./../../../Config/Constants')
-const url = require('url')
 
 function _udpEvent (params, next, end, xyz) {
   let message = params[0]

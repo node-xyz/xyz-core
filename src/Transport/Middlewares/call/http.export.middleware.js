@@ -10,8 +10,9 @@ let _httpExport = function (params, next, end, xyz) {
   requestConfig['Content-Length'] = Buffer.byteLength(String(postData))
   requestConfig['Content-Type'] = 'application/json'
 
+  let req
   if (responseCallback) {
-    var req = http.request(requestConfig, (res) => {
+    req = http.request(requestConfig, (res) => {
       let body = []
 
       res.on('data', (chunck) => {
@@ -24,7 +25,7 @@ let _httpExport = function (params, next, end, xyz) {
       })
     })
   } else {
-    var req = http.request(requestConfig)
+    req = http.request(requestConfig)
   }
 
   req.on('error', (e) => {

@@ -8,7 +8,7 @@ var mathMs = new XYZ({
     transport: [{type: 'HTTP', port: 5000}, {type: 'UDP', port: 6000}]
     // defaultBootstrap: false
   },
-  systemConf: { nodes: []}
+  systemConf: {nodes: []}
 })
 
 mathMs.serviceRepository.transport.registerServer(6000, 'UDP')

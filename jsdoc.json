@@ -4,7 +4,7 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "source": {
-        "include": ["./src" , "./index.js"],
+        "include": ["./src" , "./index.js", "./xyz.js"],
 	"exclude": ["./src/Util/Util.js"],
         "excludePattern": "(^|\\/|\\\\)_"
     },

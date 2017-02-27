@@ -23,7 +23,11 @@ stringMs.register('/finger', fn.finger)
 stringMs.registerClientRoute('foo')
 
 setInterval(() => {
-  stringMs.call({servicePath: '/math/decimal/*', payload: { x: 1000000, y: new Date().getTime() }, sendStrategy: sendToAll}, (err, body, res) => {
+  stringMs.call({
+    servicePath: '/math/decimal/*',
+    payload: { x: 1000000, y: new Date().getTime() },
+    sendStrategy: sendToAll}, (err, body, res) => {
+    if (err) throw err
     console.error('response of /math/decimal/* => ', err, body)
   })
 }, 1000)

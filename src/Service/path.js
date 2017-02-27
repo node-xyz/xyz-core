@@ -1,5 +1,3 @@
-let logger = require('./../Log/Logger')
-
 let Path = {
   validate: function (path) {
     if (path === '/') {
@@ -25,7 +23,7 @@ let Path = {
     )
   },
 
-  match(path, serializedTree) {
+  match (path, serializedTree) {
     let matches = []
     let pathToken = path.split('/')
     let pathIndex = 0
@@ -36,20 +34,18 @@ let Path = {
       if (pathToken[pathIndex] === '*') {
         // last token // TODO redundant
         if (pathIndex === pathToken.length - 1) {
-          for ( let child in pathTree) {
-            matches = this.merge(matches, this.match(`${child}` , pathTree), computedPath, '')
+          for (let child in pathTree) {
+            matches = this.merge(matches, this.match(`${child}`, pathTree), computedPath, '')
+          }
+          break
+        } else {
+          // intermediate token
+          for (let child in pathTree) {
+            matches = this.merge(matches, this.match(`${pathToken.slice(pathIndex + 1).join('/')}`, pathTree[child]), computedPath, child)
           }
           break
         }
-        // intermediate token
-        else {
-          for ( let child in pathTree) {
-            matches = this.merge(matches, this.match(`${pathToken.slice(pathIndex+1).join('/')}` , pathTree[child]), computedPath, child)
-          }
-          break
-        }
-      }
-      else if (pathTree[pathToken[pathIndex]]) {
+      } else if (pathTree[pathToken[pathIndex]]) {
         if (pathTree[pathToken[pathIndex]]) {
           computedPath = computedPath + '/' + pathToken[pathIndex]
           if (pathIndex === pathToken.length - 1) {
@@ -58,7 +54,7 @@ let Path = {
           }
           pathTree = pathTree[pathToken[pathIndex]]
           pathIndex += 1
-        }else {
+        } else {
           break
         }
       } else {

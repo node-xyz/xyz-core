@@ -2,7 +2,7 @@ const logger = require('./../../../Log/Logger')
 const wrapper = require('./../../../Util/Util').wrapper
 const CONSTANTS = require('./../../../Config/Constants')
 function joinAcceptAll (params, next, end, xyz) {
-  let request = params[0]
+  // let request = params[0]
   let response = params[1]
   let body = params[2]
   let port = params[3]

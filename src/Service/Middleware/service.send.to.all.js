@@ -1,19 +1,21 @@
 const http = require('http')
 
 function sendToAll (params, next, done, xyz) {
-  let servicePath = params[0].servicePath,
-    userPayload = params[0].payload,
-    responseCallback = params[1]
+  let servicePath = params[0].servicePath
+  let userPayload = params[0].payload
+  let responseCallback = params[1]
 
   let foreignNodes = xyz.serviceRepository.foreignNodes
   let transport = xyz.serviceRepository.transport
   let logger = xyz.logger
   let Path = xyz.path
 
-  let serviceTokens = servicePath.split('/')
+  // let serviceTokens = servicePath.split('/')
   let wait = 0
   let calls = []
   let responses = {}
+
+  let matches
   for (let node in foreignNodes) {
     matches = Path.match(servicePath, foreignNodes[node])
     if (matches.length) {

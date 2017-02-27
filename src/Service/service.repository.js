@@ -9,11 +9,9 @@
 
 let http = require('http')
 const Transport = require('./../Transport/Transport')
-let UDP = require('../Transport/Transport').UDP
 let CONSTANTS = require('../Config/Constants')
 let GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
 let CONFIG = require('./../Config/config.global')
-const XResponse = require('../Transport/XResponse')
 const logger = require('./../Log/Logger')
 const Util = require('./../Util/Util')
 const PathTree = require('./path.tree')
@@ -152,7 +150,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
         // this.joinNode(seeds[idx])
       } else {
         logger.error(`${wrapper('bold', 'JOIN PING REJECTED')} :: seed node ${seeds[idx]} rejected with `)
-        setTimeout(() => this.contactSeed(idx == seeds.length - 1 ? 0 : ++idx), this.INTERVALS.reconnect)
+        setTimeout(() => this.contactSeed(idx === seeds.length - 1 ? 0 : ++idx), this.INTERVALS.reconnect)
       }
     })
   }

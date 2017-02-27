@@ -23,11 +23,11 @@ class PathTree {
     let stree = this.serializedTree
     for (let token of tokens) {
       if (tree[token] === undefined) {
-        tree[token] = { subtree: {}}
+        tree[token] = {subtree: {}}
       }
       if (token !== tokens[tokens.length - 1]) {
         tree = tree[token].subtree
-      }else {
+      } else {
         tree = tree[token]
       }
       if (stree[token] === undefined) {
@@ -39,7 +39,7 @@ class PathTree {
     if (fn) {
       tree.fn = fn
     }
-    this.plainTree.push({ path: path, name: fn.name || 'anonymousFN'})
+    this.plainTree.push({path: path, name: fn.name || 'anonymousFN'})
     return tree
   }
 
@@ -53,7 +53,7 @@ class PathTree {
         } else {
           tree = tree[token].subtree
         }
-      }else {
+      } else {
         return false
       }
     }

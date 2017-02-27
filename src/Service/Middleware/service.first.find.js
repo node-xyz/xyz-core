@@ -1,20 +1,22 @@
 let http = require('http')
 
 function firstFind (params, next, done, xyz) {
-  let servicePath = params[0].servicePath,
-    userPayload = params[0].payload,
-    responseCallback = params[1],
-    route = params[0].route
+  let servicePath = params[0].servicePath
+  let userPayload = params[0].payload
+  let responseCallback = params[1]
+  let route = params[0].route
 
-  foreignNodes = xyz.serviceRepository.foreignNodes,
-    transport = xyz.serviceRepository.transport
+  let foreignNodes = xyz.serviceRepository.foreignNodes
+  let transport = xyz.serviceRepository.transport
 
   let logger = xyz.logger
   let wrapper = xyz.Util.wrapper
   let Path = xyz.path
 
-  let serviceTokens = servicePath.split('/')
+  // not used, but good to know sth like this exists!
+  // let serviceTokens = servicePath.split('/')
 
+  let matches
   for (let node in foreignNodes) {
     matches = Path.match(servicePath, foreignNodes[node])
     if (matches.length) {

@@ -1,6 +1,6 @@
-let xyz = require('xyz-core')
+let XYZ = require('xyz-core')
 
-let mathMS = new xyz({
+let mathMS = new XYZ({
   selfConf: {
     name: 'MathMS',
     host: '127.0.0.1',

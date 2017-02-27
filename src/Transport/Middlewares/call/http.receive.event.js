@@ -1,6 +1,5 @@
 const logger = require('./../../../Log/Logger')
 const CONSTANTS = require('./../../../Config/Constants')
-const url = require('url')
 
 function _httpMessageEvent (params, next, end, xyz) {
   let request = params[0]
