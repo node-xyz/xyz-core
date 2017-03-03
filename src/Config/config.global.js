@@ -76,8 +76,11 @@ let configuration = {
     for (let arg in args) {
       logger.verbose(`overriding selfConf.${arg} from command line value {${args[arg]}}`)
       let keys = arg.split('.')
+      // length 1
       if (keys.length === 1) {
-        if (keys[0] === 'seed') { selfConf[keys[0]].push(args[arg]) } else if (keys[0] === 'allowJoin') {
+        if (keys[0] === 'seed') {
+          selfConf[keys[0]].push(args[arg])
+        } else if (keys[0] === 'defaultBootstrap') {
           // could also use eval here
           if (args[arg] === '0' || args[arg] === 'false') {
             selfConf[keys[0]] = false
