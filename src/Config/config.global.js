@@ -30,9 +30,19 @@ let configuration = {
     }
   },
 
+  ensureNode: (aNode) => {
+    if (systemConf.nodes.indexOf(aNode) === -1) {
+      logger.info(`A new node {${aNode}} added to systemConf`)
+      systemConf.nodes.push(aNode)
+      return 1
+    }
+    return -1
+  },
+
   kickNode: (aNode) => {
     let index = systemConf.nodes.indexOf(aNode)
     if (index > -1) {
+      logger.warn(`node ${aNode} removed from systemConf.`)
       systemConf.nodes.splice(systemConf.nodes.indexOf(aNode), 1)
     } else {
       logger.warn(`Attempting to remove ${aNode} which does not exist`)
@@ -64,7 +74,7 @@ let configuration = {
     // this is to allow cli admin to inject some args like commandline arguments
     let args = cmdLineArgs ? cmdLineArgs : argParser.xyzGeneric()
     for (let arg in args) {
-      logger.verbose(`overriding ${arg} from command line value {${args[arg]}}`)
+      logger.verbose(`overriding selfConf.${arg} from command line value {${args[arg]}}`)
       let keys = arg.split('.')
       if (keys.length === 1) {
         if (keys[0] === 'seed') { selfConf[keys[0]].push(args[arg]) } else if (keys[0] === 'allowJoin') {
@@ -101,9 +111,13 @@ let configuration = {
     logger.info('Reading selfConf from command line')
     let args = argParser.xyzGeneric('--xys-')
     for (let arg in args) {
-      logger.verbose(`overriding ${arg} from command line value {${args[arg]}}`)
+      logger.verbose(`overriding systemConf.${arg} from command line value {${args[arg]}}`)
       if (arg === 'node') {
-        systemConf.nodes.push(args[arg])
+        if (typeof (args[arg]) === 'object') {
+          systemConf.nodes = systemConf.nodes.concat(args[arg])
+        } else {
+          systemConf.nodes.push(args[arg])
+        }
       }
     }
 

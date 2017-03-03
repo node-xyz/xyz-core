@@ -171,6 +171,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
       name: CONFIG.getSelfConf().name,
       host: CONFIG.getSelfConf().host,
       port: CONFIG.getSelfConf().transport[0].port,
+      netId: `${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().transport[0].port}`,
       _identifier: `${CONFIG.getSelfConf().name}@${CONFIG.getSelfConf().host}:${CONFIG.getSelfConf().transport[0].port}`
     }
   }

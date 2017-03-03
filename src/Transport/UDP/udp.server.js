@@ -24,7 +24,7 @@ class UDPServer extends EventEmitter {
       let _message = JSON.parse(message.toString())
       for (let route in this.routes) {
         if (_message.path === `/${route}`) {
-          logger.debug(`udp message received for /${wrapper('bold', route)}`)
+          logger.debug(`udp message received for /${wrapper('bold', route)} [${JSON.stringify(_message)}]`)
           this.routes[route].apply([_message, remote, port], 0)
           break
         }

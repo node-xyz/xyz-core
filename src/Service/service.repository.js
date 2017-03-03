@@ -44,11 +44,11 @@ class ServiceRepository extends EventEmitter {
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callDispatchMiddlewareStack')
 
     // note that this can be either string or `require`
-    let sendStategy = Util._require(`./Middleware/${CONFIG.getSelfConf().defaultSendStrategy}`)
+    let sendStategy = Util._require(`./../Service/Middleware/${CONFIG.getSelfConf().defaultSendStrategy}`)
     if (sendStategy) {
       this.callDispatchMiddlewareStack.register(0, sendStategy)
     } else {
-      logger.error(`defaultSendStrategy passed to config [${sendStategy}] not found. setting the default value`)
+      logger.error(`defaultSendStrategy passed to config [${CONFIG.getSelfConf().defaultSendStrategy}] not found. setting the default value`)
       this.callDispatchMiddlewareStack.register(0, require('./Middleware/service.first.find'))
     }
     logger.info(`default sendStategy set to ${this.callDispatchMiddlewareStack.middlewares[0].name}`)
@@ -70,9 +70,9 @@ class ServiceRepository extends EventEmitter {
     // this.bindTransportEvents()
 
     // Seed if possible
-    if (CONFIG.getSelfConf().seed.length) {
-      this.contactSeed(0)
-    }
+    // if (CONFIG.getSelfConf().seed.length) {
+    //   this.contactSeed(0)
+    // }
   }
 
   /**
@@ -110,6 +110,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   inspectJSON () {
     return {
       services: this.services.plainTree,
+      foreignServices: this.foreignNodes,
       middlewares: [this.callDispatchMiddlewareStack.inspectJSON()]
     }
   }
@@ -178,7 +179,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   }
 
   // it is VERY important to use this method when adding new servers at
-  // tuntime. This is because from here, we can add bindings to receive
+  // runtime. This is because from here, we can add bindings to receive
   // messages in this server
   registerServer (type, port, e) {
     let s = this.transport.registerServer(type, port, e)
@@ -193,13 +194,22 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   joinNode (aNode) {
     this.foreignNodes[aNode] = {}
     this.outOfReachNodes[aNode] = 0
+    this.foreignRoutes[aNode] = {}
     CONFIG.joinNode(aNode)
+    this.logSystemUpdates()
   }
 
   kickNode (aNode) {
     // we will not assume that this node has any function anymore
     delete this.foreignNodes[aNode]
+    delete this.foreignRoutes[aNode]
+    delete this.outOfReachNodes[aNode]
     CONFIG.kickNode(aNode)
+    this.logSystemUpdates()
+  }
+
+  logSystemUpdates () {
+    logger.info(` SR :: ${wrapper('bold', 'System Configuration changed')} new values: ${JSON.stringify(CONFIG.getSystemConf())}`)
   }
 
   terminate () {

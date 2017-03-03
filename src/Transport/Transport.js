@@ -55,22 +55,27 @@ class Transport {
     }
 
     let _port
+    // TODO: BUG
+    // here we are assuming that a route is unique in each NODE, not server
+    // at it should be checked...
     if (opt.redirect) {
       _port = this._findTargetPort(opt.route, opt.node)
       if (_port === -1) {
         logger.error(`Transport Client :: could not find route ${opt.route} in destination node ${opt.node}. aborting transmission`)
-        responseCallback('target port/route not found', null)
+        if (responseCallback) {
+          responseCallback('target port/route not found', null)
+        }
         return
       }
     }
-    logger.debug(`${wrapper('bold', 'Transport Client')} :: sending message to ${opt.node}/${opt.route} through ${this.routes[opt.route].name} middleware`)
     let requestConfig = {
       hostname: `${opt.node.split(':')[0]}`,
-      port: _port ? _port : `${opt.node.split(':')[1]}`,
+      port: _port || `${opt.node.split(':')[1]}`,
       path: `/${opt.route}`,
       method: 'POST',
       json: opt.payload
     }
+    logger.debug(`${wrapper('bold', 'Transport Client')} :: sending message to ${requestConfig.hostname}:${requestConfig.port}/${opt.route} through ${this.routes[opt.route].name} middleware`)
     this.routes[opt.route].apply([requestConfig, responseCallback], 0)
   }
 

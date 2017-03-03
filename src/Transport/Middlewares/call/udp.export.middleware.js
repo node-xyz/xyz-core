@@ -9,7 +9,7 @@ let _udpExport = function (params, next, end, xyz) {
   client.send(buff, 0, buff.length, Number(requestConfig.port), requestConfig.hostname, (err, bytes) => {
     if (err) responseCallback(err, null)
     else {
-      logger.debug(`exported message using _udpExport to ${requestConfig.hostname}:${Number(requestConfig.port)}`)
+      logger.silly(`exporting message using _udpExport to ${requestConfig.hostname}:${Number(requestConfig.port)}`)
       if (responseCallback) {
         responseCallback(null, `${bytes} bytes sent`)
       }
