@@ -1,11 +1,9 @@
 
 ## Node XYZ
 
----
-
 [![Build Status](https://travis-ci.org/node-xyz/xyz-core.svg?branch=master)](https://travis-ci.org/node-xyz/xyz-core)
-| [![Code Climate](https://codeclimate.com/github/node-xyz/xyz-core/badges/gpa.svg)](https://codeclimate.com/github/node-xyz/xyz-core)
-| [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com/)
+[![Code Climate](https://codeclimate.com/github/node-xyz/xyz-core/badges/gpa.svg)](https://codeclimate.com/github/node-xyz/xyz-core)
+[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com/)
 
 ---
 

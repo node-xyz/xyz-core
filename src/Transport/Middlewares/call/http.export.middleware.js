@@ -32,7 +32,6 @@ let _httpExport = function (params, next, end, xyz) {
     if (responseCallback) {
       responseCallback(e, null, null)
     }
-    logger.error(`problem with http request beign sent to ${requestConfig} :: ${e}`)
   })
 
   req.write(JSON.stringify(postData))

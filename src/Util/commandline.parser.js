@@ -22,7 +22,14 @@ function xyzGeneric (prefix = '--xyz-') {
     let arg = args[idx]
     if (arg.slice(0, 6) === prefix) {
       let specificArg = arg.slice(6)
-      _args[specificArg] = args[idx + 1]
+      if (_args[specificArg]) {
+        if (typeof (_args[specificArg]) !== 'object') {
+          _args[specificArg] = [_args[specificArg]]
+        }
+        _args[specificArg].push(args[idx + 1])
+      } else {
+        _args[specificArg] = args[idx + 1]
+      }
       idx += 1
     }
   }

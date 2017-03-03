@@ -4,13 +4,19 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "source": {
-        "include": ["./src" , "./index.js", "./xyz.js"],
-	"exclude": ["./src/Util/Util.js"],
-        "excludePattern": "(^|\\/|\\\\)_"
+      "include": ["./xyz.js", "./src"],
+      "includePattern": ".+\\.js(doc)?$",
+	    "exclude": ["./src/Util/Util.js", "node_modules", "./examples"],
+      "excludePattern": "(^|\\/|\\\\)_"
     },
-    "plugins": [],
+    "plugins": [
+    "plugins/markdown"
+    ],
     "templates": {
         "cleverLinks": false,
         "monospaceLinks": false
+    },
+    "opts": {
+      "template": "node_modules/docdash"
     }
 }
