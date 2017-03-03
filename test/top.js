@@ -28,6 +28,10 @@ describe('service layer', function () {
   describe('serviceRepository events', function () {
     require('./tests/service.events')
   })
+
+  describe('ping', function () {
+    require('./tests/ping.types')
+  })
 })
 
 describe('Transport layer', function () {

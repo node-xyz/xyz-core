@@ -65,14 +65,6 @@ class ServiceRepository extends EventEmitter {
     this.xyz = xyz
 
     this.INTERVALS = CONFIG.getSelfConf().intervals
-
-    // Bind events
-    // this.bindTransportEvents()
-
-    // Seed if possible
-    // if (CONFIG.getSelfConf().seed.length) {
-    //   this.contactSeed(0)
-    // }
   }
 
   /**
@@ -158,24 +150,6 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     } else {
       this.callDispatchMiddlewareStack.apply([opt, responseCallback], 0)
     }
-  }
-
-  contactSeed (idx) {
-    // error. check the vlaidity of casse where 404 or no 200 is the Response
-    let seeds = CONFIG.getSelfConf().seed
-    this.transport.send({node: seeds[idx], payload: {id: this._id}, route: 'PING'}, (err, body, res) => {
-      if (!err) {
-        logger.info(`${wrapper('bold', 'JOIN PING ACCEPTED')}. response : ${JSON.stringify(body)}`)
-        for (let node of body.nodes) {
-          this.joinNode(node)
-        }
-        // no need to do this. guess why :D
-        // this.joinNode(seeds[idx])
-      } else {
-        logger.error(`${wrapper('bold', 'JOIN PING REJECTED')} :: seed node ${seeds[idx]} rejected with `)
-        setTimeout(() => this.contactSeed(idx === seeds.length - 1 ? 0 : ++idx), this.INTERVALS.reconnect)
-      }
-    })
   }
 
   // it is VERY important to use this method when adding new servers at

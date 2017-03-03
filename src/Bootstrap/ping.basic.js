@@ -6,14 +6,33 @@ const _httpExport = require('./../Transport/Middlewares/call/http.export.middlew
 
 let pingBoostraper = (xyz, event, port) => {
   let Util = xyz.Util
+  let wrapper = Util.wrapper
   let logger = xyz.logger
   let CONFIG = xyz.CONFIG
   const CONSTANTS = xyz.CONSTANTS
 
   let SR = xyz.serviceRepository
+  let transport = SR.transport
   const _id = `${xyz.id().host}:${xyz.id().port}`
 
   let joinCandidate = []
+
+  let seeds = CONFIG.getSelfConf().seed
+  function contactSeed (idx) {
+    transport.send({node: seeds[idx], payload: {id: _id}, route: 'PING'}, (err, body, res) => {
+      if (!err) {
+        logger.info(`${wrapper('bold', 'JOIN PING ACCEPTED')}. response : ${JSON.stringify(body)}`)
+        for (let node of body.nodes) {
+          SR.joinNode(node)
+        }
+        // no need to do this. guess why :D
+        // this.joinNode(seeds[idx])
+      } else {
+        logger.error(`${wrapper('bold', 'JOIN PING REJECTED')} :: seed node ${seeds[idx]} rejected with `)
+        setTimeout(() => contactSeed(idx === seeds.length - 1 ? 0 : ++idx), interval + Util.Random(threshold))
+      }
+    })
+  }
 
   function _ping () {
     let nodes = CONFIG.getSystemConf().nodes
@@ -62,7 +81,7 @@ let pingBoostraper = (xyz, event, port) => {
           } else {
             // note that we do not use the body (services) here.
             // we wait until the next ping round for double check
-            CONFIG.joinNode(cNode)
+            SR.joinNode(cNode)
           }
           joinCandidate.splice(joinCandidate.indexOf(cNode), 1)
         })
@@ -121,6 +140,10 @@ let pingBoostraper = (xyz, event, port) => {
   }
 
   _ping()
+
+  if (seeds.length) {
+    contactSeed(0)
+  }
 }
 
 module.exports = pingBoostraper

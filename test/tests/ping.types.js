@@ -14,6 +14,18 @@ before(function (done) {
   setTimeout(done, 1000)
 })
 
+it.skip('initial state', function (done) {
+
+})
+
+it.skip('add node on the fly - using seed node', function (done) {
+
+})
+
+it.skip('remove on the fly', function (done) {
+
+})
+
 after(function () {
   snd.stop()
   rcv.stop()
