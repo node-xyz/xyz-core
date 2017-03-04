@@ -13,6 +13,7 @@
   "author": "Kian.peymani@gmail.com",
   "license": "ISC",
   "devDependencies": {
+    "xyz-cli": "^0.3.2",
     "chai": "^3.5.0",
     "docco": "latest",
     "docdash": "^0.4.0",
