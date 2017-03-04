@@ -5,6 +5,7 @@ function firstFind (params, next, done, xyz) {
   let userPayload = params[0].payload
   let responseCallback = params[1]
   let route = params[0].route
+  let redirect = params[0].redirect
 
   let foreignNodes = xyz.serviceRepository.foreignNodes
   let transport = xyz.serviceRepository.transport
@@ -22,7 +23,7 @@ function firstFind (params, next, done, xyz) {
     if (matches.length) {
       logger.verbose(`${wrapper('bold', 'FIRST FIND')} :: determined node for service ${wrapper('bold', servicePath)} by first find strategy : ${wrapper('bold', node + ':' + matches[0])}`)
       transport.send({
-        redirect: params[0].redirect,
+        redirect: redirect,
         node: node,
         route: route,
         payload: {userPayload: userPayload, service: matches[0]}}, responseCallback)

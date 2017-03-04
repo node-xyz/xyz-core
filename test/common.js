@@ -7,13 +7,15 @@ exports.init = function () {
   var cwd, snd, rcv, system
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
-  system.addNode('localhost:3333')
-  system.addNode('localhost:3334')
+  system.addNode('127.0.0.1:3333')
+  system.addNode('127.0.0.1:3334')
   snd = new mockNode('snd', 3334, cwd, system.getSystemConf())
   rcv = new mockNode('rcv', 3333, cwd, system.getSystemConf())
 
   rcv.register('/mul', mockFunctions.mul)
   rcv.register('/up', mockFunctions.up)
+  rcv.register('/add', mockFunctions.add)
+  rcv.register('/sub', mockFunctions.sub)
   rcv.register('/rev', mockFunctions.rev)
   rcv.register('/neg', mockFunctions.neg)
   rcv.register('/finger', mockFunctions.finger)
@@ -37,3 +39,6 @@ exports.mockFunctions = mockFunctions
 exports.mockSystem = mockSystem
 exports.firstfind = require('./../src/Service/Middleware/service.first.find')
 exports.sendToAll = require('./../src/Service/Middleware/service.send.to.all')
+exports.broadcastLocal = require('./../src/Service/Middleware/service.broadcast.local')
+exports.broadcastGlobal = require('./../src/Service/Middleware/service.broadcast.global')
+exports.sendToTarget = require('./../src/Service/Middleware/service.sent.to.target')

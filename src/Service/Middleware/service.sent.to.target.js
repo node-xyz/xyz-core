@@ -6,14 +6,16 @@ function _sendToTarget (_target) {
     let userPayload = params[0].payload
     let responseCallback = params[1]
     let route = params[0].route
+    let redirect = params[0].redirect
+    const wrapper = xyz.Util.wrapper
 
     let transport = xyz.serviceRepository.transport
 
     let logger = xyz.logger
 
-    logger.verbose(`SEND TO TARGET :: redirecting message directly to ${target}`)
+    logger.verbose(`${wrapper('bold', 'SEND TO TARGET')} :: redirecting message directly to ${wrapper('bold', target)}:${params[0].servicePath}`)
     transport.send({
-      redirect: params[0].redirect,
+      redirect: redirect,
       node: target,
       route: route,
       payload: {

@@ -1,6 +1,15 @@
 const http = require('http')
 
-function sendToAll (params, next, done, xyz) {
+/**
+ * will ignore the service path enitrely and will send the message to every
+ * known host in localhost. Note that this module does not resolve path addresses
+ * @method braodcastLocal
+ * @param  {Array}       params [description]
+ * @param  {Function}     next   used to call the next middleware
+ * @param  {Function}     done   used to end the middleware stack
+ * @param  {Object}       xyz    reference to the caller's xyz instance
+ */
+function _broadcastLocal (params, next, done, xyz) {
   let servicePath = params[0].servicePath
   let userPayload = params[0].payload
   let responseCallback = params[1]
@@ -11,30 +20,28 @@ function sendToAll (params, next, done, xyz) {
   let transport = xyz.serviceRepository.transport
   let logger = xyz.logger
   let Path = xyz.path
-  let wrapper = xyz.Util.wrapper
+  const wrapper = xyz.Util.wrapper
 
-  // let serviceTokens = servicePath.split('/')
   let wait = 0
   let calls = []
   let responses = {}
 
   let matches
+  const HOST = xyz.id().host
   for (let node in foreignNodes) {
-    matches = Path.match(servicePath, foreignNodes[node])
-    if (matches.length) {
-      for (let match of matches) {
-        calls.push({ match: match, node: node })
-      }
-      logger.verbose(`${wrapper('bold', 'SEND TO ALL')} :: determined node for service ${servicePath} by first find strategy ${calls.map((o) => o.node + ':' + o.match)},   `)
+    if (node.split(':')[0] === HOST) {
+      calls.push({ match: servicePath, node: node })
     }
   }
+
+  logger.verbose(`${wrapper('bold', 'BROADCAST LOCAL')} :: sending message to ${calls.map((o) => o.node + ':' + o.match)},  `)
 
   for (let call of calls) {
     if (responseCallback) {
       transport.send({
         route: route,
-        node: call.node,
         redirect: redirect,
+        node: call.node,
         payload: {
           userPayload: userPayload,
           service: call.match}},
@@ -58,11 +65,11 @@ function sendToAll (params, next, done, xyz) {
 
   // if no node matched
   if (!calls.length) {
-    logger.warn(`SEND TO ALL :: Sending a message to ${servicePath} from send to all strategy failed (Local Response)`)
+    logger.warn(`BROADCAST LOCAL :: Sending a message to ${servicePath} from failed (Local Response)`)
     if (responseCallback) {
       responseCallback(http.STATUS_CODES[404], null, null)
     }
   }
 }
 
-module.exports = sendToAll
+module.exports = _broadcastLocal

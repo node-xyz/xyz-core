@@ -161,6 +161,52 @@ it('broadcast local - wrong case', function (done) {
   )
 })
 
+it('broadcast global - correct case', function (done) {
+  let broadcast = require('./../../src/Service/Middleware/service.broadcast.global')
+  snd.call({
+    servicePath: '/math/mul',
+    payload: {x: 2, y: 3},
+    sendStrategy: broadcast},
+    (err, body, resp) => {
+      expect(err).to.equal(null)
+      let responses = body
+      expect(Object.keys(responses)).to.have.lengthOf(2)
+
+      // snd
+      expect(responses['localhost:3334:/math/mul'][0]).to.equal(http.STATUS_CODES[404])
+      expect(responses['localhost:3334:/math/mul'][1]).to.equal(http.STATUS_CODES[404])
+
+      // rcv
+      expect(responses['localhost:3333:/math/mul'][0]).to.equal(null)
+      expect(responses['localhost:3333:/math/mul'][1]).to.equal(2 * 3)
+      done()
+    }
+  )
+})
+
+it('broadcast global - wrong case', function (done) {
+  let broadcast = require('./../../src/Service/Middleware/service.broadcast.global')
+  snd.call({
+    servicePath: '/math/*', // will not work cos the receiver can not resolve this
+    payload: {x: 2, y: 3},
+    sendStrategy: broadcast},
+    (err, body, resp) => {
+      expect(err).to.equal(null)
+      let responses = body
+      expect(Object.keys(responses)).to.have.lengthOf(2)
+
+      // snd
+      expect(responses['localhost:3334:/math/*'][0]).to.equal(http.STATUS_CODES[404])
+      expect(responses['localhost:3334:/math/*'][1]).to.equal(http.STATUS_CODES[404])
+
+      // rcv
+      expect(responses['localhost:3333:/math/*'][0]).to.equal(http.STATUS_CODES[404])
+      expect(responses['localhost:3333:/math/*'][1]).to.equal(http.STATUS_CODES[404])
+      done()
+    }
+  )
+})
+
 after(function () {
   snd.stop()
   rcv.stop()
