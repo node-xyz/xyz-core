@@ -8,5 +8,5 @@ deploy:
   api_key:
     secure: An6OrDGwY7jTC9tVjLWjXTVDx0gJMVV1rzx2Qy5+AZvGkqBRXm+evQ/eSbXijKFUiIduO1BQmy1prLUdLRL6+SyL4F9d+8WIS/IhM7PLS65d7tsS4O2wHVzSxgT8AidRBzu3+wsBfsoeqIbUO0xlYZumyI4PEl97RY/lWXrVPLmqDqnKfpwR8voxCt2+INUvaL6djFB9Jo4M1Q05rtNgrJGwfjbEa03YepmRz4ypo7CLEfh/bjNxH5YsuWnLMpdO+ILElSQnjGgXJ68cvYoAwpEJzST18gtvWs+pc4YDXW3Vquf46CnXHRfEohWVYpY/HHFA69AmLOAaCLzmhuQrIufzo9LCo39/1JdeFBg1g1f6CS5Wz4egXe79m27duHbpl6SVHNb8KVM9nmT4iOg5NQR7ZxdBrAscdqXtPntUxSncIHymxvzRIJ7+T5Uu1h3AEIh0wyhOktfzo/5/6z8SimIutkbGvYXHk+AvBIUAg3AMvWWP7U6QqQeopbSPp6eO7+LdchTTGp+vkcA9x9Lq7AWvSk6Cgg4fq8fWfy/iknJ2nnzLB8fNOUf0GJ5FVelygJ7IDkqsZOMb9SjtbxxY+U3Wl9RS4ZaI0ZDaXyOEURnbh1pZDNHLO0FWjZxt/04EI+AUnfBsM/v+OSlsb71AE6xCyl9hlNsvhZX3YihNPJg=
   on:
-    repo: node-xyz/xyz-cli
+    repo: node-xyz/xyz-core
     branch: master

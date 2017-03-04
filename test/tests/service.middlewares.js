@@ -88,6 +88,34 @@ it('change sendStrategy per call - sendToAll', function (done) {
   })
 })
 
+it('send to target - correct usage', function (done) {
+  let sentToTarget = require('./../../src/Service/Middleware/service.sent.to.target')
+  snd.call({
+    servicePath: '/math/mul',
+    payload: {x: 2, y: 3},
+    sendStrategy: sentToTarget(`127.0.0.1:${rcv.xyz.id().port}`)},
+    (err, body, resp) => {
+      expect(body).to.equal(6)
+      done()
+    }
+  )
+})
+
+it('send to target - wrong usage', function (done) {
+  let sentToTarget = require('./../../src/Service/Middleware/service.sent.to.target')
+  snd.call({
+    servicePath: '/math/mul',
+    payload: {x: 2, y: 3},
+    sendStrategy: sentToTarget(`127.0.0.1:${rcv.xyz.id().port + 200}`)},
+    (err, body, resp) => {
+      expect(err).to.not.equal(null)
+      console.log(err)
+      expect(body).to.equal(null)
+      done()
+    }
+  )
+})
+
 after(function () {
   snd.stop()
   rcv.stop()

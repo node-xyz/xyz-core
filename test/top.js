@@ -30,7 +30,7 @@ describe('service layer', function () {
   })
 
   describe('ping', function () {
-    require('./tests/ping.types')
+    require('./tests/service.ping.types')
   })
 })
 
