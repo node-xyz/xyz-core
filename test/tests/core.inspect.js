@@ -24,7 +24,7 @@ it('inspectJSON', function (done) {
   let rcvj = rcv.xyz.inspectJSON()
 
   expect(sndj.ServiceRepository.services.length).to.equal(0)
-  expect(rcvj.ServiceRepository.services.length).to.equal(10)
+  expect(rcvj.ServiceRepository.services.length).to.equal(12)
 
   expect(rcvj.Transport.outgoingRoutes.length).to.equal(2)
   expect(sndj.Transport.outgoingRoutes.length).to.equal(2)
