@@ -13,7 +13,7 @@ function _require (name) {
 
   let ret
   try {
-    ret = require(name)
+    ret = require(`./../Service/${name}`)
   } catch (e) {
     ret = false
   } finally {

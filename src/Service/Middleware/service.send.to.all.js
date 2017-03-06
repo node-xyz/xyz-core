@@ -43,6 +43,7 @@ function sendToAll (params, next, done, xyz) {
         wait += 1
         if (wait === calls.length) {
           responseCallback(null, responses)
+          if (done) done()
         }
       }.bind(null, call))
     } else {
@@ -61,6 +62,7 @@ function sendToAll (params, next, done, xyz) {
     logger.warn(`SEND TO ALL :: Sending a message to ${servicePath} from send to all strategy failed (Local Response)`)
     if (responseCallback) {
       responseCallback(http.STATUS_CODES[404], null, null)
+      if (done) done()
     }
   }
 }

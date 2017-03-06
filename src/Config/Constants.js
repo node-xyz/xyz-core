@@ -19,7 +19,7 @@ module.exports = {
       // name of the service. used in logs etc.
       name: 'node-xyz-init',
       // the default middleware funciton used with `.call(...)`
-      defaultSendStrategy: 'service.first.find',
+      defaultSendStrategy: './Middleware/service.first.find',
       // log level used by winston
       logLevel: 'info',
       // default seed nodes

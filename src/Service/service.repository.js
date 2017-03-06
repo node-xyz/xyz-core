@@ -44,7 +44,7 @@ class ServiceRepository extends EventEmitter {
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callDispatchMiddlewareStack')
 
     // note that this can be either string or `require`
-    let sendStategy = Util._require(`./../Service/Middleware/${CONFIG.getSelfConf().defaultSendStrategy}`)
+    let sendStategy = Util._require(CONFIG.getSelfConf().defaultSendStrategy)
     if (sendStategy) {
       this.callDispatchMiddlewareStack.register(0, sendStategy)
     } else {

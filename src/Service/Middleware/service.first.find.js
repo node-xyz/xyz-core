@@ -27,7 +27,7 @@ function firstFind (params, next, done, xyz) {
         node: node,
         route: route,
         payload: {userPayload: userPayload, service: matches[0]}}, responseCallback)
-      done()
+      if (done) done()
       return
     }
   }
@@ -36,7 +36,7 @@ function firstFind (params, next, done, xyz) {
   logger.warn(`Sending a message to ${servicePath} from first find strategy failed (Local Response)`)
   if (responseCallback) {
     responseCallback(http.STATUS_CODES[404], null, null)
-    done()
+    if (done) done()
     return
   }
 }
