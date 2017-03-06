@@ -1,6 +1,6 @@
 let interval = 2000
 let threshold = 2000
-let kick = 5
+let kick = 10
 const GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
 const _httpExport = require('./../Transport/Middlewares/call/http.export.middleware')
 
@@ -48,7 +48,7 @@ let pingBoostraper = (xyz, event, port) => {
 
           for (let tempNode of body.nodes) {
             if (nodes.indexOf(tempNode) === -1) {
-              logger.warn(`new join candidate suggested by ${node} : {${tempNode}}`)
+              logger.warn(`PING :: new join candidate suggested by ${node} : {${tempNode}}`)
               joinCandidate.push(tempNode)
             }
           }
@@ -58,8 +58,8 @@ let pingBoostraper = (xyz, event, port) => {
           logger.silly(`PING  :: response = ${JSON.stringify(body)}`)
         } else {
           if (SR.outOfReachNodes[node]) {
-            if (SR.outOfReachNodes[node] === (kick) && SR.foreignNodes[node]) {
-              logger.error(`removing node {${node}} from foreignNodes and nodes list`)
+            if (SR.outOfReachNodes[node] >= kick) {
+              logger.error(`PING :: removing node {${node}} from foreignNodes and nodes list`)
               SR.kickNode(node)
               return
             }
