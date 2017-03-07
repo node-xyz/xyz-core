@@ -30,12 +30,7 @@ module.exports = {
       ],
       // ip
       host: '127.0.0.1',
-
-      intervals: {
-        // interval for connecting to seed nodes.
-        // sed only when `seed` is not an empty list
-        reconnect: 2500
-      },
+      
       // the default bootstrap function. Will lunch the default ping bootstrap for service discovery
       defaultBootstrap: true,
       // used only when lunching with ci
