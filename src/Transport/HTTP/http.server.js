@@ -7,7 +7,21 @@ const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.
 const CONFIG = require('./../../Config/config.global')
 let wrapper = require('./../../Util/Util').wrapper
 
+/**
+* This class will call its `call.receive.mw` with the following values in `param`:
+*  [req, resp, JSON.parse(body), this.port]
+*  - **req**: the request object
+*  - **resp**: the response object
+*  - **body** parsed body. also available in req object
+*  - **port**: port of this server
+ */
 class HTTPServer extends EventEmitter {
+
+  /**
+   * Creates a new HTTP server
+   * @param xyz {Object} a reference to the curretn xyz object. will be filled automatically.
+   * @param port {String|Number} The main port of this server.
+   */
   constructor (xyz, port) {
     super()
     http.globalAgent.maxSockets = Infinity
@@ -16,17 +30,9 @@ class HTTPServer extends EventEmitter {
 
     this.routes = {}
 
-    let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'callReceiveMiddlewareStack', 'CALL')
+    let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'call.receive.mw', 'CALL')
     callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/http.receive.event'))
     this.registerRoute('CALL', callReceiveMiddlewareStack)
-
-    // if (CONFIG.getSelfConf().allowJoin) {
-    //   let joinReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'joinReceiveMiddlewareStack', 'JOIN')
-    //   joinReceiveMiddlewareStack.register(-1, require('./../Middlewares/cluster/join.middleware.accept.all'))
-    //   this.registerRoute('JOIN', joinReceiveMiddlewareStack)
-    // }
-
-    // user defined routes
 
     this.server = http.createServer()
       .listen(this.port, () => {

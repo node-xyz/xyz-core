@@ -4,7 +4,7 @@ let kick = 10
 const GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
 const _httpExport = require('./../Transport/Middlewares/call/http.export.middleware')
 
-let pingBoostraper = (xyz, event, port) => {
+let _basicPingBootstrap = (xyz, event, port) => {
   let Util = xyz.Util
   let wrapper = Util.wrapper
   let logger = xyz.logger
@@ -115,8 +115,8 @@ let pingBoostraper = (xyz, event, port) => {
   setInterval(_ping, interval + Util.Random(threshold))
 
   // bind listener
-  let pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'pingReceiveMiddlewareStack', 'PING')
-  let pingDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'pingDispatchMiddlewareStack', 'PING')
+  let pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'ping.receive.mw', 'PING')
+  let pingDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'ping.dispatch.mw', 'PING')
   pingReceiveMiddlewareStack.register(0, _pingEvent)
   pingDispatchMiddlewareStack.register(0, _httpExport)
 
@@ -146,4 +146,4 @@ let pingBoostraper = (xyz, event, port) => {
   }
 }
 
-module.exports = pingBoostraper
+module.exports = _basicPingBootstrap

@@ -7,6 +7,10 @@ let machineReporter = require('./src/Util/machine.reporter')
 let inspectBootstrap = require('./src/Bootstrap/process.inspect.event')
 let networkMonitorBootstrap = require('./src/Bootstrap/process.network.event')
 
+/**
+ * The main class of xyz-core. Most of the functions that the user should work with
+ * live inside this class.
+ */
 class NodeXYZ {
 
   // an example of the configuration requried can be found in CONSTANTS.js file.
@@ -139,9 +143,11 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
     this.serviceRepository.callDispatchMiddlewareStack.register(0, fn)
   }
 
-  //  Return an object of all middleware handlers available in the system. Each can be modified while
-  //  bootstraping or at runtime. See Middleware section for more details. <br>
-  //  returns an Object of middleware handlers.
+  /**
+   *
+   * Return an object of all middleware handlers available in the system. Each can be modified while
+   * bootstraping or at runtime. See Middleware section for more details. <br>
+   */
   middlewares () {
     return {
       transport: {

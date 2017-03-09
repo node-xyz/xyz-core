@@ -6,13 +6,17 @@ const HTTPServer = require('./HTTP/http.server')
 const UDPServer = require('./UDP/udp.server')
 
 class Transport {
+
+  /**
+   * Transport layer. This layer is an abstraction above all different sorts of communication.
+   */
   constructor (xyz) {
     this.xyz = xyz
 
     this.routes = {}
     this.servers = {}
 
-    let callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'callDispatchMiddlewareStack', 'CALL')
+    let callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'call.dispatch.mw', 'CALL')
     callDispatchMiddlewareStack.register(-1, require('./Middlewares/call/http.export.middleware'))
     this.registerRoute('CALL', callDispatchMiddlewareStack)
   }
@@ -42,10 +46,16 @@ class Transport {
     return ret
   }
 
-  // opt should have:
-  //   - node {string} address of destination,
-  //   - route {string} url of outgoing middleware stack
-  //   - payload {object}. depending on `route` , it can have `userPayload`, `service` or `_id`
+  /**
+   *
+   * opt should have:
+   *   - node {string} address of destination,
+   *   - route {string} url of outgoing middleware stack
+   *   - payload {object}. depending on `route` , it can have `userPayload`, `service` or `_id`
+   * @param opt {Obeject} the options object.
+   * @param responseCallback {Function} the callback of the message. Note that this is valid
+   * only for http calls. UDP / TCP calls do not have a callback
+   */
   send (opt, responseCallback) {
     opt.route = opt.route || 'CALL'
     if (!this.routes[opt.route]) {

@@ -30,7 +30,7 @@ module.exports = {
       ],
       // ip
       host: '127.0.0.1',
-      
+
       // the default bootstrap function. Will lunch the default ping bootstrap for service discovery
       defaultBootstrap: true,
       // used only when lunching with ci

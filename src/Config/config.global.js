@@ -143,7 +143,15 @@ let configuration = {
 
   getSystemConf: () => systemConf,
 
-  getSelfConf: () => selfConf
+  getSelfConf: () => selfConf,
+
+  /**
+   * Will cause the system to forget all of the nodes. Should not be used unless in
+   * test environemts
+   * @method forget
+   * @return {Null}
+   */
+  forget: () => { systemConf.nodes = [] }
 }
 
 module.exports = configuration
