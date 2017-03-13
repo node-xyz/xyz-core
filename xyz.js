@@ -13,8 +13,20 @@ let networkMonitorBootstrap = require('./src/Bootstrap/process.network.event')
  */
 class NodeXYZ {
 
-  // an example of the configuration requried can be found in CONSTANTS.js file.
-  // Note that if you do not set a value, they'll be replaced.
+  /**
+   * create a new xyz object
+   * @param {Object} configuration configuration should have two main keys:
+   *   - selfConf
+   *   Will contain information about this node. important keys are **name**, **transport** and **host**
+   *   - systemConf
+   *   Will contain information about the system. The only key is **nodes**
+   *   If `selfConf` or `systemConf` is not fully filled, the default values
+   *   in [Constants.js](/apidoc/constants.html) will be used.
+   * @param {Object} cmdLineArgs a backdoor to inject paramters with high priority
+   * to the constructor, just as if they were passed to `node [filnename].js --xyz-name foo ...`.
+   * These configuration will only override the `selfConf` key and should be an object,
+   * not a string with `--xyz-` prefix. Example: `{name: 'foo'}`
+   */
   constructor (configuration, cmdLineArgs) {
     CONFIG.setSelfConf(configuration.selfConf, cmdLineArgs)
     CONFIG.setSystemConf(configuration.systemConf)
@@ -49,7 +61,7 @@ class NodeXYZ {
         logger.error('IPC channel not open. failed to communicate with cli')
         return
       }
-      process.send({ title: 'init', body: this.selfConf})
+      process.send({title: 'init', body: this.selfConf})
 
       // note that not only that these two are used by cli's `top` command,
       // they are actually no use when cli is not working
@@ -60,7 +72,8 @@ class NodeXYZ {
   }
 
   /**
-   * Extents the default `console.log` method
+   * Extents the default `console.log` method. Will show all important imformations
+   * of a node
    */
   inspect () {
     let pref = `
@@ -101,17 +114,17 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   }
 
   /**
-   * Stop XYZ system. will stop all ping and communication requests.
-   *  Should onle be used with tests.
+   * Stop XYZ system. will call service layer's terminate function. see that for more info
    */
   terminate () {
     this.serviceRepository.terminate()
   }
 
   /**
-   * Register a new function to be exported.
+   * Register a new function to be exported for message calls.
    * @param  {String}   servicePath       Unique path for this service.
    * @param  {Function} fn                Handler function for this service
+   * see [Service layer register method](/apidoc/ServiceRepository.html#register) for more info
    */
   register (servicePath, fn) {
     this.serviceRepository.register(servicePath, fn)
@@ -120,24 +133,41 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   /**
    * call a service
    * uses the default /call route
-   * opt is an object with keys like :
-   * - `servicePath`: {String}
-   * - `sendStrategy`: {function}
-   * - `payload`: {Object|Number|Boolean}
-   * - `route`
-   * - `destPort`
+   *
+   * @param {Object} opt is an object with keys like :
+   * - `servicePath`: {String} the path of the service. Note that the initial `/`
+   * is not needed and will be added by default.
+   * - `sendStrategy`: {Function} optional send strategy. If not filled, the `defaultSendStrategy` in
+   * `selfConf` will be used.
+   * - `payload`: {Object|Number|Boolean|Array} the payload passed to the callee
+   * - `route` : Indicates the route ~ outgoing middleware of the message. By default the default `CALL` route is used
+   * - `redirect`: If filled `true` The Transport layer will try to overrdide the destination's `port` when sending the message
+   * As an example, a `sendStrategy` might resolve `192.168.0.10:5000` as the destination fo a message, but the message's
+   * outgoing middleware uses `_udpExport` hence the message should be sent to destination's udp server, which might be `192.168.0.10:5001`.
+   *
+   * @param responseCallback {Function} the callback for when the callee responds to the message.
+   * Note that this depends on the underlying transport used
    */
   call (opt, responseCallback) {
     this.serviceRepository.call(opt, responseCallback)
   }
 
-  // apply a bootstrap function to xyz
+  /**
+  * apply a bootstrap function to xyz
+  * @param {function} fn the bootstrap function
+  * @param {Any} ...args the arguments passed to the bootstrap function
+  * Note that the first paramters of any bootstrap function is always the xyz instnace
+  * and the rest is filled with `..args`.
+  */
   bootstrap (fn, ...args) {
     this.bootstrapFunctions.push(fn.name)
     fn(this, ...args)
   }
 
-  // for now, only one middleware should be added to this. no more.
+  /**
+  * will override the sendstrategy permanently
+  * @param {Function} fn the new sendStrategy
+  */
   setSendStrategy (fn) {
     this.serviceRepository.callDispatchMiddlewareStack.middlewares = []
     this.serviceRepository.callDispatchMiddlewareStack.register(0, fn)
@@ -146,7 +176,21 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   /**
    *
    * Return an object of all middleware handlers available in the system. Each can be modified while
-   * bootstraping or at runtime. See Middleware section for more details. <br>
+   * bootstraping or at runtime. The returned object has two keys:
+   * - `transport`:
+   * - `serviceRepository`
+   *
+   * Example ussage :
+   *
+   * Get the transport layer middleware for outgoing route **CALL**
+   *
+   * `xyz.middlewares().transport.client("CALL")`
+   *
+   * Get the transport layer middleware for server at port 5000 and incomming route **FOO**
+   *
+   * `xyz.middleware().transport.server("FOO")(5000)`
+   *
+   * see the source code for more inormation
    */
   middlewares () {
     return {
@@ -160,18 +204,51 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
     }
   }
 
+  /**
+  * Register a new server route
+  * @param {Number} port will indicate the port of the target server
+  * @param {String} prefix will indicate the route prefix of the target server
+  * @param {Object} gmwh an instance of the `GenericMiddlewareHandler` class.
+  * if not filled, an empty middleware will be created for this route.
+  * @return {Number} 1 if success, -1 if fail
+  */
   registerServerRoute (port, prefix, gmwh) {
     return this.serviceRepository.transport.servers[port].registerRoute(prefix, gmwh)
   }
 
+  /**
+  * Register a new outgoing message route
+  * @param {String} prefix the route prefix
+  * @param {Object} gmwh an instance of the `GenericMiddlewareHandler` class.
+  * if not filled, an empty middleware will be created for this route.
+  *
+  * @return {Number} 1 if success, -1 if fail
+  */
   registerClientRoute (prefix, gmwh) {
     return this.serviceRepository.transport.registerRoute(prefix, gmwh)
   }
 
+  /**
+  * create and register a new server. After cretaing a server with this port
+  * you can access its middlewares with the given port.
+  *
+  * @param {String} type type of the server. Must be `UDP` or `HTTP`
+  * @param {Number} port the port of the newly created server.
+  * @param {Boolean} e . Event binding. when filled true, if one of the middlewares in
+  * server emits the message `xyz_message` (see `CONSTANTS.events`) it will be received by service layer
+  * and appropriate function, if registered will be called.
+  */
   registerServer (type, port, e) {
     return this.serviceRepository.registerServer(type, port, e)
   }
 
+  /**
+  * return the identification paramters of the node.
+  * note that all ping mechanisms should used `xyz.id()._dentifier` as a node's identifier.
+  * this value is `[NAME]@[HOST]:[PORT OF THE FIRST SERVER]`.
+  *
+  * the port of the first server is always the **primary** port of a node.
+  */
   id () {
     return {
       name: CONFIG.getSelfConf().name,

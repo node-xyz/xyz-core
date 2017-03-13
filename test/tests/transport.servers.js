@@ -19,7 +19,6 @@ before(function (done) {
   snd.xyz.registerClientRoute('http/2')
   snd.xyz.middlewares().transport.client('http/2').register(0, require('./../../src/Transport/Middlewares/call/http.export.middleware'))
 
-  // console.log('ms', rcv.xyz.CONFIG.getSelfConf())
   setTimeout(done, 1000)
 })
 

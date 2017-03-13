@@ -133,7 +133,7 @@ let configuration = {
   addServer: (aServer) => {
     for (let s of selfConf.transport) {
       if (s.port === aServer.port) {
-        logger.error(`cannot add a server with port ${aServer.port} to selfConf. already exists`)
+        logger.warn(`cannot add a server with port ${aServer.port} to selfConf. already exists`)
         return false
       }
     }
@@ -146,7 +146,7 @@ let configuration = {
   getSelfConf: () => selfConf,
 
   /**
-   * Will cause the system to forget all of the nodes. Should not be used unless in
+   * Will cause the system to forget all of the nodes. Should not be used only in
    * test environemts
    * @method forget
    * @return {Null}

@@ -160,6 +160,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     if (s) {
       logger.info(`new transport server [${type}] bounded on port ${port}`)
       if (e) {
+        logger.info(`ServiceRepository events bounded for ${type} server $port {port}`)
         this.bindTransportEvent(s)
       }
     }

@@ -28,7 +28,5 @@ module.exports = {
     xResponse.writeHead(201)
     xResponse.jsonify('blank')
   },
-  none: function (payload, xResponse) {
-    console.log(payload)
-  }
+  none: function (payload, xResponse) {}
 }

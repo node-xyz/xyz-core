@@ -45,8 +45,8 @@ it('what goes up must come down ?', function (done) {
     expect(snd.xyz.CONFIG.getSystemConf().nodes.length).to.equal(mocks_count + 2 - 3)
     expect(rcv.xyz.CONFIG.getSystemConf().nodes.length).to.equal(mocks_count + 2 - 3)
     done()
-  }, 15000)
-  this.timeout(200000)
+  }, 25000)
+  this.timeout(30 * 1000)
 })
 
 after(function () {
