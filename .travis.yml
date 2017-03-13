@@ -1,12 +1,12 @@
 language: node_js
 node_js:
-  - "6.10.0"
-  - "7"
+- 6.10.0
+- '7'
 deploy:
   provider: npm
   email: kian.peymani@gmail.com
   api_key:
-    secure: An6OrDGwY7jTC9tVjLWjXTVDx0gJMVV1rzx2Qy5+AZvGkqBRXm+evQ/eSbXijKFUiIduO1BQmy1prLUdLRL6+SyL4F9d+8WIS/IhM7PLS65d7tsS4O2wHVzSxgT8AidRBzu3+wsBfsoeqIbUO0xlYZumyI4PEl97RY/lWXrVPLmqDqnKfpwR8voxCt2+INUvaL6djFB9Jo4M1Q05rtNgrJGwfjbEa03YepmRz4ypo7CLEfh/bjNxH5YsuWnLMpdO+ILElSQnjGgXJ68cvYoAwpEJzST18gtvWs+pc4YDXW3Vquf46CnXHRfEohWVYpY/HHFA69AmLOAaCLzmhuQrIufzo9LCo39/1JdeFBg1g1f6CS5Wz4egXe79m27duHbpl6SVHNb8KVM9nmT4iOg5NQR7ZxdBrAscdqXtPntUxSncIHymxvzRIJ7+T5Uu1h3AEIh0wyhOktfzo/5/6z8SimIutkbGvYXHk+AvBIUAg3AMvWWP7U6QqQeopbSPp6eO7+LdchTTGp+vkcA9x9Lq7AWvSk6Cgg4fq8fWfy/iknJ2nnzLB8fNOUf0GJ5FVelygJ7IDkqsZOMb9SjtbxxY+U3Wl9RS4ZaI0ZDaXyOEURnbh1pZDNHLO0FWjZxt/04EI+AUnfBsM/v+OSlsb71AE6xCyl9hlNsvhZX3YihNPJg=
+    secure: cSSUaP4V7PutZRkRI9U9/JJ0YqvmToP/D8oEjMRwWH0eQK7+Wx4Ra+NB6glTkBMVoDHDTEgtO56VpWnmI6dVku5/O7DzmV4VUo/Khh4tBY8UTLM51hH5GAl+ac8BAbWuMhzKnkxWdNDTD6bGNBjGlLIC5LgRARphW6ZTJ9A7nbN25/4ve2kx6LSgk+SsizWo95ACQ6hdGcHIfTMwygq1moXRX/nkZxbVTphQ4Eufed+bwN/KMNGVdcmQS8JP5DLgiOWWLlqI040u+v3ULLQrHAZ1RFyshfXOK1GD7RRThU6cNZMsDlQ/mcsgJfXPjtCDEVfL+eJGtr/gZ28dBcG/4nYjBTFMTqfmpThkent4Ham5kqA3+rJ3vTA1TqX3rSbC+zJH5vHNfftOP6du2HMFX67ObIl+6uNfjQhi95bOP2h1oSdeCAbAK688mB2zs3XyH+f3qDzfOg2nYE2OVeW5SHJUUOcyFRdSS1Nyc/VoN5m12cATfd67X8ChtVq1x2Zf5ts7Dku+MLqkedw1LuqMm3dhEqU4K+eWF9BK6JSoQ1eDCa5OgYiN3NoVsns5ogLcAbnQ0EQqcWvISvzrR8xSoh0IdDsxzuuVxvIvRQOBM31fcNboBnkhfxoNShnpTZwNt0RGKpnKSJoe896VfVP+zoJjyte21QOPHltll/XJ3ks=
   on:
     repo: node-xyz/xyz-core
     branch: master
