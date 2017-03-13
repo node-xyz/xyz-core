@@ -151,7 +151,7 @@ let configuration = {
    * @method forget
    * @return {Null}
    */
-  forget: () => { systemConf.nodes = [] }
+  forget: () => { systemConf.nodes = [`${selfConf.host}:${selfConf.transport[0].port}`] }
 }
 
 module.exports = configuration

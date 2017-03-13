@@ -31,10 +31,20 @@ class ServiceRepository extends EventEmitter {
   constructor (xyz) {
     super()
 
-    // note that a ref. to xyz will be passed all the way down. this is to ensure that
-    // every middleware will have access to it and
-    // there will be no circular dependency
+    /**
+     * Transport layer.
+     *
+     * note that a ref. to xyz will be passed all the way down. this is to ensure that
+     * every middleware will have access to it and
+     * there will be no circular dependency
+     * @type {Transport}
+     */
     this.transport = new Transport(xyz)
+
+    /**
+     * Reference to seld conf for easier usage
+     * @type {[type]}
+     */
     this.selfConf = CONFIG.getSelfConf()
 
     for (let t of this.selfConf.transport) {
@@ -53,18 +63,31 @@ class ServiceRepository extends EventEmitter {
     }
     logger.info(`default sendStategy set to ${this.callDispatchMiddlewareStack.middlewares[0].name}`)
 
-    // list of current services
+    /**
+     * List of my this node's  services
+     * @type {PathTree}
+     */
     this.services = new PathTree()
-    this._id = CONFIG.getSelfConf().host + ':' + CONFIG.getSelfConf().transport[0].port
 
-    // list of foreign nodes and services respectively
+    /**
+     * list of foreign nodes. should be filled by ping and should be used by
+     * send strategy
+     * @type {Object}
+     */
     this.foreignNodes = {}
     this.foreignNodes[`${xyz.id().host}:${xyz.id().port}`] = {}
-    this.outOfReachNodes = {}
+    /**
+     * list of foreign routes and servers. should be filled by ping and should be userPayload
+     * by send strategy when `redirect: true`
+     * @type {Object}
+     */
     this.foreignRoutes = {}
-    this.xyz = xyz
 
-    this.INTERVALS = CONFIG.getSelfConf().intervals
+    /**
+     * Reference to the curretn xyz object
+     * @type {XYZ Class}
+     */
+    this.xyz = xyz
   }
 
   /**
@@ -183,10 +206,34 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     this.logSystemUpdates()
   }
 
+  /**
+   * Will cause both the ServiceRepository and CONFIG to forget
+   * about all foreign info. This includes `foreignNodes`, `foreignRoutes` and
+   * `systemConf.nodes[]` to be flushed.
+   * Note that this method should be called, not the one in CONFIG
+   * @return {null}
+   */
+  forget () {
+    for (let node in this.foreignNodes) {
+      if (node !== `${this.xyz.id().netId}`) {
+        delete this.foreignNodes[node]
+      }
+    }
+    this.foreignRoutes = {}
+    CONFIG.forget()
+    logger.warn(`SERVICE :: all foreign nodes have been removed by calling .forget()`)
+  }
+
+  /**
+   * Should be called after any chnage to the configurations of the system
+   */
   logSystemUpdates () {
     logger.info(` SR :: ${wrapper('bold', 'System Configuration changed')} new values: ${JSON.stringify(CONFIG.getSystemConf())}`)
   }
 
+  /**
+   * will stop all servers of the system. should be used in test only.
+   */
   terminate () {
     for (let s in this.transport.servers) {
       logger.warn(`sutting down server ${s}`)
