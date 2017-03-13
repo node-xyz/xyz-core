@@ -191,7 +191,6 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
 
   joinNode (aNode) {
     this.foreignNodes[aNode] = {}
-    this.outOfReachNodes[aNode] = 0
     this.foreignRoutes[aNode] = {}
     CONFIG.joinNode(aNode)
     this.logSystemUpdates()
@@ -201,7 +200,6 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     // we will not assume that this node has any function anymore
     delete this.foreignNodes[aNode]
     delete this.foreignRoutes[aNode]
-    delete this.outOfReachNodes[aNode]
     CONFIG.kickNode(aNode)
     this.logSystemUpdates()
   }
