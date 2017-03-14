@@ -1,7 +1,7 @@
-let XYZ = require('xyz-core')
+let XYZ = require('./../../../index')
 let mathMS = new XYZ({
   selfConf: {},
-  systemConf: {nodes: []}
+  systemConf: {}
 })
 
 mathMS.register('mul', (payload, response) => {

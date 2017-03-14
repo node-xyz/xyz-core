@@ -43,7 +43,7 @@ class ServiceRepository extends EventEmitter {
 
     /**
      * Reference to seld conf for easier usage
-     * @type {[type]}
+     * @type {Object}
      */
     this.selfConf = CONFIG.getSelfConf()
 
@@ -85,7 +85,7 @@ class ServiceRepository extends EventEmitter {
 
     /**
      * Reference to the curretn xyz object
-     * @type {XYZ Class}
+     * @type {XYZ}
      */
     this.xyz = xyz
   }

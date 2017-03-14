@@ -1,8 +1,16 @@
-// a set of constant variables. used as fallback for configurations filled by the user.
+/**
+ * A set of constant values stored in xyz-core
+ * @type {Object}
+ */
 module.exports = {
   commandline: {
     xyzport: 3000
   },
+
+  /**
+   * name of the events emiited by xyz
+   * @type {Object}
+   */
   events: {
     MESSAGE: 'xyz_message',
     PING: 'xyz_ping'
@@ -12,8 +20,13 @@ module.exports = {
     PING: 'PING',
     JOIN: 'JOIN'
   },
-  // the default configuration. the will be merged recursively with
-  // the object passed by the user.
+
+  /**
+   *
+   * the default configuration. the will be merged recursively with
+   * the object passed by the user.
+   * @type {Object}
+   */
   defaultConfig: {
     selfConf: {
       // name of the service. used in logs etc.

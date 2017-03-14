@@ -21,7 +21,6 @@ const wrapper = require('./../Util/Util').wrapper
 class GenericMiddlewareHandler {
   constructor (xyz, name, route) {
     this.middlewares = []
-    this.middlewareIndex = 0
     this.xyz = xyz
     this.name = name
     this.route = route
@@ -66,6 +65,9 @@ class GenericMiddlewareHandler {
    * @param fn {Function} function to be invoked
    */
   register (index, fn) {
+    if (typeof (fn) !== 'function') {
+      logger.error(`GMWH :: attempting to insert ${fn} which is not a function`)
+    }
     logger.debug(`Registering middleware at ${this.name}[${index}] : ${fn.name}`)
     if (index === -1) {
       this.middlewares.push(fn)
@@ -93,7 +95,10 @@ class GenericMiddlewareHandler {
    */
   apply (params, index) {
     logger.silly(`applying middleware ${this.name}[${index}]`)
-
+    if (!this.middlewares[index]) {
+      logger.error(`attempting to call ${this.name}[${index}] which is not defined. teminating execution...`)
+      return
+    }
     this.middlewares[index](params,
       (_params) => { // next
         if ((index + 1) < this.middlewares.length) {
@@ -119,10 +124,9 @@ class GenericMiddlewareHandler {
    * otherwise, the function at index `idx` will be removed
    */
   remove (idx) {
-    logger.silly(`removing middleware ${this.name}[${this.middlewareIndex}]`)
+    logger.silly(`removing middleware ${this.name}[${idx}]`)
     if (idx === -1) {
       this.middlewares = []
-      this.middlewareIndex = 0
     } else if (idx > -1 && idx < this.middlewares.length) {
       this.middlewares.splice(idx, 1)
     } else {

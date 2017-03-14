@@ -1,7 +1,7 @@
-let XYZ = require('xyz-core')
+let XYZ = require('./../../../index')
 let mathMS = new XYZ({
   selfConf: {
-    port: 10000,
+    transport: [{type: 'HTTP', port: 4010}],
     name: 'from-self-conf'
   },
   systemConf: {nodes: []}

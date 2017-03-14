@@ -208,7 +208,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * Register a new server route
   * @param {Number} port will indicate the port of the target server
   * @param {String} prefix will indicate the route prefix of the target server
-  * @param {Object} gmwh an instance of the `GenericMiddlewareHandler` class.
+  * @param {Object} [gmwh] an instance of the `GenericMiddlewareHandler` class.
   * if not filled, an empty middleware will be created for this route.
   * @return {Number} 1 if success, -1 if fail
   */
@@ -219,7 +219,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   /**
   * Register a new outgoing message route
   * @param {String} prefix the route prefix
-  * @param {Object} gmwh an instance of the `GenericMiddlewareHandler` class.
+  * @param {Object} [gmwh] an instance of the `GenericMiddlewareHandler` class.
   * if not filled, an empty middleware will be created for this route.
   *
   * @return {Number} 1 if success, -1 if fail
