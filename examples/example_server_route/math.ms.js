@@ -1,6 +1,15 @@
 let XYZ = require('./../../index')
 let _httpExport = require('./../../src/Transport/Middlewares/call/http.export.middleware')
-let math = new XYZ({})
+let _httpMessageEvent = require('./../../src/Transport/Middlewares/call/http.receive.event')
+let math = new XYZ({
+  selfConf: {
+    transport: [
+      {type: 'HTTP', port: 4000},
+      {type: 'HTTP', port: 5000},
+      {type: 'UDP', port: 6000}
+    ]
+  }
+})
 
 // console.log(math)
 
@@ -25,8 +34,14 @@ math.middlewares().transport.client('CALL').register(0, _msgConfigLogger)
 
 // register a new server route
 math.registerServerRoute(4000, 'SECRET')
+math.middlewares().transport.server('SECRET')(4000).register(0, _httpMessageEvent)
+
+// add a new server
+math.registerServer('UDP', 7000)
+math.registerServer('HTTP', 8000)
 
 // call it. note that we must wait a sec since service discovery must resolve local node
+
 setTimeout(() => {
   math.call({servicePath: 'add', payload: {x: 1, y: 7}, route: 'SECRET'}, (err, body) => {
     console.log(err, body)

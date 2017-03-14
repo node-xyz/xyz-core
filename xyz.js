@@ -234,11 +234,11 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   *
   * @param {String} type type of the server. Must be `UDP` or `HTTP`
   * @param {Number} port the port of the newly created server.
-  * @param {Boolean} e . Event binding. when filled true, if one of the middlewares in
+  * @param {Boolean} [e=true] . Event binding. when filled true, if one of the middlewares in
   * server emits the message `xyz_message` (see `CONSTANTS.events`) it will be received by service layer
   * and appropriate function, if registered will be called.
   */
-  registerServer (type, port, e) {
+  registerServer (type, port, e = true) {
     return this.serviceRepository.registerServer(type, port, e)
   }
 

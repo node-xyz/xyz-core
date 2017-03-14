@@ -68,7 +68,7 @@ class GenericMiddlewareHandler {
     if (typeof (fn) !== 'function') {
       logger.error(`GMWH :: attempting to insert ${fn} which is not a function`)
     }
-    logger.debug(`Registering middleware at ${this.name}[${index}] : ${fn.name}`)
+    logger.debug(`GMWH :: Registering middleware at ${this.name}[${index}] : ${fn.name}`)
     if (index === -1) {
       this.middlewares.push(fn)
     } else if (index === 0) {
@@ -94,9 +94,9 @@ class GenericMiddlewareHandler {
    * @param {Number} index - current index inside the middleware array to be applied
    */
   apply (params, index) {
-    logger.silly(`applying middleware ${this.name}[${index}]`)
+    logger.silly(`GMWH :: applying middleware ${this.name}[${index}]`)
     if (!this.middlewares[index]) {
-      logger.error(`attempting to call ${this.name}[${index}] which is not defined. teminating execution...`)
+      logger.error(`GMWH :: attempting to call ${this.name}[${index}] which is not defined. teminating execution...`)
       return
     }
     this.middlewares[index](params,
@@ -104,10 +104,10 @@ class GenericMiddlewareHandler {
         if ((index + 1) < this.middlewares.length) {
           this.apply(params, index + 1, this.xyz)
         } else {
-          logger.silly(`middleware Stack for ${this.name} finished`)
+          logger.silly(`GMWH :: middleware Stack for ${this.name} finished`)
         }
       }, () => { // end
-        logger.silly(`middleware Stack for ${this.name} terminated by calling end()`)
+        logger.silly(`GMWH :: middleware Stack for ${this.name} terminated by calling end()`)
       }, this.xyz)
   }
 
@@ -124,13 +124,13 @@ class GenericMiddlewareHandler {
    * otherwise, the function at index `idx` will be removed
    */
   remove (idx) {
-    logger.silly(`removing middleware ${this.name}[${idx}]`)
+    logger.silly(`GMWH :: removing middleware ${this.name}[${idx}]`)
     if (idx === -1) {
       this.middlewares = []
     } else if (idx > -1 && idx < this.middlewares.length) {
       this.middlewares.splice(idx, 1)
     } else {
-      logger.error('Trying to remove a middleware that does not exists.')
+      logger.error('GMWH :: Trying to remove a middleware that does not exists.')
     }
   }
 }

@@ -103,10 +103,10 @@ class HTTPServer extends EventEmitter {
   // a communication way
   registerRoute (prefix, gmwh) {
     if (this.routes[prefix]) {
-      logger.warn(`message middleware with prefix ${prefix} already exists`)
+      logger.warn(`HTTP Server:: message middleware with prefix ${prefix} already exists`)
       return -1
     } else {
-      gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}-MiddlewareHandler`, prefix)
+      gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}.receive.mw`, prefix)
       this.routes[prefix] = gmwh
       logger.info(`HTTP Server:: new message route ${wrapper('bold', prefix)} added`)
       return 1

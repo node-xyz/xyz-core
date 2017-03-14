@@ -48,7 +48,7 @@ class ServiceRepository extends EventEmitter {
     this.selfConf = CONFIG.getSelfConf()
 
     for (let t of this.selfConf.transport) {
-      this.registerServer(t.type, t.port, true)
+      this.registerServer(t.type, t.port, !(t.event === false))
     }
 
     this.callDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'service.discovery.mw')
@@ -58,10 +58,10 @@ class ServiceRepository extends EventEmitter {
     if (sendStategy) {
       this.callDispatchMiddlewareStack.register(0, sendStategy)
     } else {
-      logger.error(`defaultSendStrategy passed to config [${CONFIG.getSelfConf().defaultSendStrategy}] not found. setting the default value`)
+      logger.error(`SR :: defaultSendStrategy passed to config [${CONFIG.getSelfConf().defaultSendStrategy}] not found. setting the default value`)
       this.callDispatchMiddlewareStack.register(0, require('./Middleware/service.first.find'))
     }
-    logger.info(`default sendStategy set to ${this.callDispatchMiddlewareStack.middlewares[0].name}`)
+    logger.info(`SR :: default sendStategy set to ${this.callDispatchMiddlewareStack.middlewares[0].name}`)
 
     /**
      * List of my this node's  services
@@ -144,7 +144,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
       this.emit('message:receive', data)
       let fn = this.services.getPathFunction(data.service)
       if (fn) {
-        logger.verbose(`ServiceRepository received service call ${wrapper('bold', data.service)}`)
+        logger.verbose(`SR :: ServiceRepository received service call ${wrapper('bold', data.service)}`)
         fn(data.userPayload, response)
         return
       } else {
@@ -181,9 +181,9 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   registerServer (type, port, e) {
     let s = this.transport.registerServer(type, port, e)
     if (s) {
-      logger.info(`new transport server [${type}] bounded on port ${port}`)
+      logger.info(`SR :: new transport server [${type}] created on port ${port}`)
       if (e) {
-        logger.info(`ServiceRepository events bounded for ${type} server $port {port}`)
+        logger.info(`SR :: ServiceRepository events bounded for [${type}] server port ${port}`)
         this.bindTransportEvent(s)
       }
     }
@@ -219,14 +219,14 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     }
     this.foreignRoutes = {}
     CONFIG.forget()
-    logger.warn(`SERVICE :: all foreign nodes have been removed by calling .forget()`)
+    logger.warn(`SR :: all foreign nodes have been removed by calling .forget()`)
   }
 
   /**
    * Should be called after any chnage to the configurations of the system
    */
   logSystemUpdates () {
-    logger.info(` SR :: ${wrapper('bold', 'System Configuration changed')} new values: ${JSON.stringify(CONFIG.getSystemConf())}`)
+    logger.info(`SR :: ${wrapper('bold', 'System Configuration changed')} new values: ${JSON.stringify(CONFIG.getSystemConf())}`)
   }
 
   /**
@@ -234,7 +234,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
    */
   terminate () {
     for (let s in this.transport.servers) {
-      logger.warn(`sutting down server ${s}`)
+      logger.warn(`SR :: sutting down server ${s}`)
       this.transport.servers[s].close()
     }
   }

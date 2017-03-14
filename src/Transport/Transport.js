@@ -113,7 +113,7 @@ class Transport {
       this.routes[prefix] = gmwh
     } else {
       logger.warn(`no middlewareHandler defined for route ${prefix}. an empty one will be used`)
-      this.routes[prefix] = new GenericMiddlewareHandler(this.xyz, `${prefix}-MiddlewareHandler`, prefix)
+      this.routes[prefix] = new GenericMiddlewareHandler(this.xyz, `${prefix}.dispatch.mw`, prefix)
     }
     return 1
   }

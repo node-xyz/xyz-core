@@ -39,7 +39,7 @@ module.exports = {
       seed: [],
       // default transport layer service
       transport: [
-        {type: 'HTTP', port: '4000', event: 1}
+        {type: 'HTTP', port: '4000', event: true}
       ],
       // ip
       host: '127.0.0.1',
