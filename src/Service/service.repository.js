@@ -76,9 +76,9 @@ class ServiceRepository extends EventEmitter {
      */
     this.foreignNodes = {}
     this.foreignNodes[`${xyz.id().host}:${xyz.id().port}`] = {}
+
     /**
-     * list of foreign routes and servers. should be filled by ping and should be userPayload
-     * by send strategy when `redirect: true`
+     * list of foreign routes and servers. should be filled by ping and should be used by by Transport.send() when `redirect: true`
      * @type {Object}
      */
     this.foreignRoutes = {}
@@ -144,7 +144,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
       this.emit('message:receive', data)
       let fn = this.services.getPathFunction(data.service)
       if (fn) {
-        logger.verbose(`SR :: ServiceRepository received service call ${wrapper('bold', data.service)}`)
+        logger.verbose(`SR :: ServiceRepository received message for service  ${wrapper('bold', data.service)}`)
         fn(data.userPayload, response)
         return
       } else {
@@ -189,6 +189,10 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     }
   }
 
+  /**
+   * should be called by the ping mechanism to inform xyz of a node joining. This will update all related varibales.
+   * @param aNode {String} joinin node's IP:PORT in `xyz.id().netId` format
+   */
   joinNode (aNode) {
     this.foreignNodes[aNode] = {}
     this.foreignRoutes[aNode] = {}
@@ -196,6 +200,10 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     this.logSystemUpdates()
   }
 
+  /**
+   * should be called by the ping mechanism to inform xyz of a node leaving. This will update all related varibales.
+   * @param aNode {String} leaving node's IP:PORT in `xyz.id().netId` format
+   */
   kickNode (aNode) {
     // we will not assume that this node has any function anymore
     delete this.foreignNodes[aNode]

@@ -9,10 +9,10 @@ function firstFind (params, next, done, xyz) {
 
   let foreignNodes = xyz.serviceRepository.foreignNodes
   let transport = xyz.serviceRepository.transport
+  let Path = xyz.path
 
   let logger = xyz.logger
   let wrapper = xyz.Util.wrapper
-  let Path = xyz.path
 
   // not used, but good to know sth like this exists!
   // let serviceTokens = servicePath.split('/')

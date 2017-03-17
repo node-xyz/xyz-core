@@ -23,6 +23,12 @@ let Path = {
     )
   },
 
+  /**
+   * matches a path with the path.tree of another node
+   * @param {String} path the path to be matched.
+   * @param {Object} serializedTree  serializedTree of a node
+   *
+   */
   match (path, serializedTree) {
     let matches = []
     let pathToken = path.split('/')

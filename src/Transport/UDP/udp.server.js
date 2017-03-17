@@ -61,7 +61,7 @@ class UDPServer extends EventEmitter {
       logger.warn(`call middleware with prefix ${prefix} already exists`)
       return -1
     } else {
-      gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}-MddlewareHandler`, prefix)
+      gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}.receive.mw`, prefix)
       this.routes[prefix] = gmwh
       logger.info(`HTTP Server:: new call route ${wrapper('bold', prefix)} added`)
       return 1
