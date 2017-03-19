@@ -67,7 +67,7 @@ class Transport {
     let _port
     // TODO: BUG
     // here we are assuming that a route is unique in each NODE, not server
-    // at it should be checked...
+    // it should be checked...
     if (opt.redirect) {
       _port = this._findTargetPort(opt.route, opt.node)
       if (_port === -1) {
@@ -78,12 +78,15 @@ class Transport {
         return
       }
     }
+    let _payload = opt.payload || {}
+    _payload.senderNetId = this.xyz.id().netId
+
     let requestConfig = {
       hostname: `${opt.node.split(':')[0]}`,
       port: _port || `${opt.node.split(':')[1]}`,
       path: `/${opt.route}`,
       method: 'POST',
-      json: opt.payload
+      json: _payload
     }
     logger.debug(`${wrapper('bold', 'Transport Client')} :: sending message to ${requestConfig.hostname}:${requestConfig.port}/${opt.route} through ${this.routes[opt.route].name} middleware`)
     this.routes[opt.route].apply([requestConfig, responseCallback], 0)
