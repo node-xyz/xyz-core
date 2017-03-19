@@ -2,8 +2,11 @@ const _udpEvent = require('./../Transport/Middlewares/call/udp.receive.event')
 const _udpExport = require('./../Transport/Middlewares/call/udp.export.middleware')
 
 function _udpTunnel (xyz, config) {
+  config = config || {}
   let route = config.route || 'UDP_CALL'
   let port = config.port || xyz.id().port + 10
+
+  const logger = xyz.logger
 
   // server side
   xyz.registerServer('UDP', port)
@@ -16,3 +19,5 @@ function _udpTunnel (xyz, config) {
 
   logger.info(`UDP TUNNEL :: Udp tunnel created with route ${route} | port ${port}`)
 }
+
+module.exports = _udpTunnel

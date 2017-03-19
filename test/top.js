@@ -10,6 +10,10 @@ describe('xyz-core layer', function () {
   describe('inspection', function () {
     require('./tests/core.inspect')
   })
+
+  describe('bootstraps', function () {
+    require('./tests/core.bootstraps')
+  })
 })
 
 describe('service layer', function () {
