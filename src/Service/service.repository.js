@@ -161,6 +161,8 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   // TODO: in this case, unlike in config, sendStrategy MUST be a function
   // better to allow string as well
   call (opt, responseCallback) {
+    let nullFn = () => {}
+
     this.emit('message:send', {opt: opt})
     opt.payload = opt.payload || null
     opt.servicePath = Path.format(opt.servicePath)
@@ -169,7 +171,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
 
     if (opt.sendStrategy) {
       // this is trying to imitate the middleware signature
-      opt.sendStrategy([opt, responseCallback], null, null, this.xyz)
+      opt.sendStrategy([opt, responseCallback], nullFn, nullFn, this.xyz)
     } else {
       this.callDispatchMiddlewareStack.apply([opt, responseCallback], 0)
     }
