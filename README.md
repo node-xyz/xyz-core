@@ -1,5 +1,5 @@
 
-# Node XYZ ![logo](https://github.com/node-xyz/xyz-core/blob/master/media/logo_t.png?raw=true)
+# [Node XYZ](https://node-xyz.github.io/) ![logo](https://github.com/node-xyz/xyz-core/blob/master/media/logo_t.png?raw=true)
 
 [![Build Status](https://travis-ci.org/node-xyz/xyz-core.svg?branch=master)](https://travis-ci.org/node-xyz/xyz-core)
 [![Code Climate](https://codeclimate.com/github/node-xyz/xyz-core/badges/gpa.svg)](https://codeclimate.com/github/node-xyz/xyz-core)
@@ -23,38 +23,5 @@ Node XYZ is a NodeJS toolkit for creating microservice based distributed applica
 
 - [Website](https://node-xyz.github.io)
 - [Getting Started](https://node-xyz.github.io/documentations)
-- [API Doc](https://node-xyz.github.io/apidoc) [in progress]
+- [API Doc](https://node-xyz.github.io/apidoc)
 - [Wiki](https://github.com/node-xyz/xyz-core/wiki)
-
-## Roadmap
-
-- MVP features (until Jan. 2017)
-  - [x] Basic message communication over HTTP
-  - [x] Basic cli for creating / debugging a project
-  - [x] Path based address for **services**
-    - Means that we can have services in node listening in paths (`service@ip:port/math/add` for example)
-    - [x] Path matching and creation class
-    - [x] run-time configurable service call strategy
-      - Means that a foreign node should be able to send a message according to path (`service@ip:port/math/add`), and decide how is the message going to be delivered. As an example, one should be able to call all/one/a subset of services in `/math`, and decide to wait/not wait for one/all of their response(s).
-  - [x] Service Discovery
-    - [x] Basic service discovery with sent-to-all ping according to static JSON file  
-    - [x] Add a node on the fly. This is highly coherent with JSON configuration, since a node will initially read it's configuration
-      - [x] Event for node leaving the event + configuration for it
-      - [x] Permission for nodes to accept and admit new nodes
-        - Followed by sending cluster events to other nodes, informing them that a new node has been joined and they have to update their configurations.
-    - [x] Stochastic ping instead of default ping
-
-  - [x] [Command line interface](https://github.com/node-xyz/xyz-cli)
-    - [x] Used locally to create and debug nodes
-    - [x] Run all services in the current directory without any port/seed hassle.
-
-- Advance features:
-  - [x] [BOOTSTRAP] Monitor node traffic and status
-  - [ ] Communicate XYZ runtime
-  - [ ] XYZ CLI daemon
-  - [x] UDP transport layer with the same API
-  - [ ] Default SSL/TLS authentication between nodes
-  - [ ] Advanced examples and plugins
-  - [x] Load Balancer node
-  - [x] Message Queue
-  - [ ] JWT Authentication plugins
