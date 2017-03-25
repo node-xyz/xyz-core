@@ -1,5 +1,5 @@
 
-# Node XYZ ![logo]()
+# Node XYZ ![logo](https://github.com/node-xyz/xyz-core/blob/master/media/logo_t.png?raw=true)
 
 [![Build Status](https://travis-ci.org/node-xyz/xyz-core.svg?branch=master)](https://travis-ci.org/node-xyz/xyz-core)
 [![Code Climate](https://codeclimate.com/github/node-xyz/xyz-core/badges/gpa.svg)](https://codeclimate.com/github/node-xyz/xyz-core)
