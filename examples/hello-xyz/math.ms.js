@@ -11,15 +11,8 @@ var mathMs = new XYZ({
   }
 })
 
-mathMs.register('/math/decimal/mul', (payload, response) => {
-  response.jsonify('ok')
-})
 mathMs.register('/math/decimal/neg', fn.neg)
 mathMs.register('/math/decimal/sub', fn.sub)
-
-mathMs.register('/math/float/neg', function (payload, XResponse) {
-  XResponse.jsonify('ok whassssaaaap')
-})
 
 setInterval(() => {
   mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, res) => {
