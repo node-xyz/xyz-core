@@ -111,10 +111,9 @@ let _basicPingBootstrap = (xyz, event, port) => {
       transportServers: SR.transport.getServerRoutes()}))
   }
 
-  function _pingEvent (params, next, end, xyz) {
-    // let request = params[0]
-    let response = params[1]
-    let body = params[2]
+  function _pingEvent (xMessage, next, end, xyz) {
+    let response = xMessage.response
+    let body = xMessage.message
     let _transport = xyz.serviceRepository.transport.servers[port]
 
     logger.silly('PING :: Passing ping to up to service repo')

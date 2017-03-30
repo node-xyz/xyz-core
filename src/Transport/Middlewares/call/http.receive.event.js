@@ -1,11 +1,11 @@
 const logger = require('./../../../Log/Logger')
 const CONSTANTS = require('./../../../Config/Constants')
 
-function _httpMessageEvent (params, next, end, xyz) {
-  let request = params[0]
-  let response = params[1]
-  let body = params[2]
-  let port = params[3]
+function _httpMessageEvent (xMessage, next, end, xyz) {
+  let request = xMessage.meta.request
+  let response = xMessage.response
+  let body = xMessage.message
+  let port = xMessage.serverId.port
   let _transport = xyz.serviceRepository.transport.servers[port]
 
   logger.debug(`HTTP Receive emitter :: Passing request to ${request.url} up to service repo with ${JSON.stringify(body)}`)

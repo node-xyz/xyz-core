@@ -5,7 +5,8 @@ const XResponse = require('./../XResponse')
 const logger = require('./../../Log/Logger')
 const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
 const CONFIG = require('./../../Config/config.global')
-let wrapper = require('./../../Util/Util').wrapper
+const wrapper = require('./../../Util/Util').wrapper
+const xReceivedMessage = require('./../xReceivedMessage')
 
 /**
 * This class will call its `call.receive.mw` with the following values in `param`:
@@ -27,6 +28,11 @@ class HTTPServer extends EventEmitter {
     http.globalAgent.maxSockets = Infinity
     this.port = port || CONFIG.getSelfConf().port
     this.xyz = xyz
+
+    this.serverId = {
+      type: 'HTTP',
+      port: port
+    }
 
     this.routes = {}
 
@@ -54,7 +60,15 @@ class HTTPServer extends EventEmitter {
             if (parsedUrl.pathname === `/${route}`) {
               // wrap response
               XResponse(resp)
-              this.routes[route].apply([req, resp, JSON.parse(body), this.port], 0)
+
+              // create mw param message object
+              let xMessage = new xReceivedMessage({
+                serverId: this.serverId,
+                message: JSON.parse(body),
+                response: resp,
+                meta: {request: req}
+              })
+              this.routes[route].apply(xMessage, 0)
               dismissed = true
               break
             }

@@ -3,7 +3,8 @@ const EventEmitter = require('events')
 const logger = require('./../../Log/Logger')
 const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
 const _CONFIGURATION = require('./../../Config/config.global')
-let wrapper = require('./../../Util/Util').wrapper
+const wrapper = require('./../../Util/Util').wrapper
+const xReceivedMessage = require('./../xReceivedMessage')
 
 class UDPServer extends EventEmitter {
   constructor (xyz, port) {
@@ -11,10 +12,22 @@ class UDPServer extends EventEmitter {
     this.port = _CONFIGURATION.getSelfConf().port
     this.xyz = xyz
 
+    /**
+     * Each server should have this attribute and pass it to the constructor of
+     * xMiddlewareParam object
+     */
+    this.serverId = {
+      type: 'UDP',
+      port: port
+    }
+
     this.server = dgram.createSocket('udp4')
     this.routes = {}
 
-    // user defined routes
+    const nullResponse = () => {
+      logger.warn(`UDP SERVER @ ${this.port} :: fail attempt to call
+        'response' on a udp message. udp server does not keep responses`)
+    }
 
     this.server.on('listening', () => {
       let address = this.server.address()
@@ -25,7 +38,16 @@ class UDPServer extends EventEmitter {
       for (let route in this.routes) {
         if (_message.path === `/${route}`) {
           logger.debug(`udp message received for /${wrapper('bold', route)} [${JSON.stringify(_message)}]`)
-          this.routes[route].apply([_message, remote, port], 0)
+
+          let xMessage = new xReceivedMessage({
+            message: _message,
+            response: nullResponse,
+            serverId: this.serverId,
+            meta: remote
+          })
+
+          this.routes[route].apply(xMessage, 0)
+
           break
         }
       }
