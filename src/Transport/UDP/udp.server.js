@@ -69,8 +69,19 @@ class UDPServer extends EventEmitter {
     return ret
   }
 
+  /**
+   * Will close the server. duplicate of `.terminate()`
+   */
   close () {
     this.server.close()
+  }
+
+  /**
+   * Will close the server
+   */
+  terminate () {
+    logger.warn(`UDP SERVER @ ${this.port} :: CLOSING`)
+    this.close()
   }
 
   // will initialize a new route with one default middleware
@@ -79,7 +90,7 @@ class UDPServer extends EventEmitter {
   // a communication way
   registerRoute (prefix, gmwh) {
     if (this.routes[prefix]) {
-      logger.warn(`call middleware with prefix ${prefix} already exists`)
+      logger.warn(`UDP SERVER @ ${this.port} :: call middleware with prefix ${prefix} already exists`)
       return -1
     } else {
       gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}.receive.mw`, prefix)

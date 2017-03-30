@@ -61,7 +61,7 @@ let configuration = {
    */
   ensureNode: (aNode) => {
     if (systemConf.nodes.indexOf(aNode) === -1) {
-      logger.info(`A new node {${aNode}} added to systemConf`)
+      logger.info(`CONFIG :: A new node {${aNode}} added to systemConf`)
       systemConf.nodes.push(aNode)
       return 1
     }
@@ -84,7 +84,7 @@ let configuration = {
       systemConf.nodes.splice(systemConf.nodes.indexOf(aNode), 1)
       return 1
     } else {
-      logger.warn(`Attempting to remove ${aNode} which does not exist`)
+      logger.warn(`CONFIG :: Attempting to remove ${aNode} which does not exist`)
       return -1
     }
   },
@@ -97,7 +97,7 @@ let configuration = {
   ensureNodes: (someNodes) => {
     for (let aNode of someNodes) {
       if (systemConf.nodes.indexOf(aNode) === -1) {
-        logger.info(`A new node {${aNode}} added to systemConf`)
+        logger.info(`CONFIG :: A new node {${aNode}} added to systemConf`)
         systemConf.nodes.push(aNode)
       }
     }
@@ -112,17 +112,17 @@ let configuration = {
    * used insteat of process.argv[1]
    */
   setSelfConf: (aConf, cmdLineArgs) => {
-    logger.info('Setting default selfConf')
+    logger.info('CONFIG :: Setting default selfConf')
     selfConf = CONSTANTS.defaultConfig.selfConf
-    logger.info('Reading selfConf from user')
+    logger.info('CONFIG :: Reading selfConf from user')
     selfConf = MergeRecursive(selfConf, aConf)
-    logger.info('Reading selfConf from command line')
+    logger.info('CONFIG :: Reading selfConf from command line')
     // TODO use MergeRecursive function to get rid of this shitty code
 
     // this is to allow cli admin to inject some args like commandline arguments
     let args = cmdLineArgs ? cmdLineArgs : argParser.xyzGeneric()
     for (let arg in args) {
-      logger.verbose(`overriding selfConf.${arg} from command line value {${args[arg]}}`)
+      logger.verbose(`CONFIG :: overriding selfConf.${arg} from command line value {${args[arg]}}`)
       let keys = arg.split('.')
       // length 1
       if (keys.length === 1) {
@@ -146,7 +146,7 @@ let configuration = {
         if (!selfConf[keys[1]]) selfConf[keys[1]] = {}
         selfConf[keys[0]][keys[1]][keys[2]] = args[arg]
       } else {
-        logger.error('command line arguments with more than three sub-keys are not allowed. passing')
+        logger.error('CONFIG :: command line arguments with more than three sub-keys are not allowed. passing')
       }
     }
 
@@ -160,14 +160,14 @@ let configuration = {
    * @param  {Object}      aConf systemConf with the same format like `xyz`'s constructor
    */
   setSystemConf: (aConf) => {
-    logger.info('Setting default systemConf')
+    logger.info('CONFIG :: Setting default systemConf')
     systemConf = CONSTANTS.defaultConfig.systemConf
-    logger.info('reading systemConf from user')
+    logger.info('CONFIG :: reading systemConf from user')
     systemConf = MergeRecursive(systemConf, aConf)
-    logger.info('Reading selfConf from command line')
+    logger.info('CONFIG :: Reading selfConf from command line')
     let args = argParser.xyzGeneric('--xys-')
     for (let arg in args) {
-      logger.verbose(`overriding systemConf.${arg} from command line value {${args[arg]}}`)
+      logger.verbose(`CONFIG :: overriding systemConf.${arg} from command line value {${args[arg]}}`)
       if (arg === 'node') {
         if (typeof (args[arg]) === 'object') {
           systemConf.nodes = systemConf.nodes.concat(args[arg])
@@ -177,7 +177,7 @@ let configuration = {
       }
     }
 
-    logger.debug('Adding self to systemConf by default')
+    logger.debug('CONFIG :: Adding self to systemConf by default')
     if (systemConf.nodes.indexOf(`${selfConf.host}:${selfConf.transport[0].port}`) === -1) {
       systemConf.nodes.push(`${selfConf.host}:${selfConf.transport[0].port}`)
     }
@@ -192,12 +192,31 @@ let configuration = {
   addServer: (aServer) => {
     for (let s of selfConf.transport) {
       if (s.port === aServer.port) {
-        logger.warn(`cannot add a server with port ${aServer.port} to selfConf. already exists`)
+        logger.warn(`CONFIG :: cannot add a server with port ${aServer.port} to selfConf. already exists`)
         return false
       }
     }
-    logger.info(`new server ${JSON.stringify(aServer)} added at runtime to selfConf`)
+    logger.info(`CONFIG :: new server ${JSON.stringify(aServer)} added at runtime to selfConf`)
     selfConf.transport.push(aServer)
+  },
+
+  /**
+   * Will remove a server from the confg object
+   * @method removeServer
+   * @param  {Number}     aPort port of the server
+   * @return {Boolean}           Status of the operation
+   */
+  removeServer: (aPort) => {
+    for (let s of selfConf.transport) {
+      if (aPort === s.port) {
+        let index = selfConf.transport.indexOf(s)
+        selfConf.transport.splice(index, 1)
+        logger.info(`CONFIG :: removing server ${aPort} from selfConf.`)
+        return true
+      }
+    }
+    logger.error(`CONFIG :: server ${aPort} could not be removed. Not exists`)
+    return false
   },
 
   /**

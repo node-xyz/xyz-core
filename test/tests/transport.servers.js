@@ -57,6 +57,18 @@ it.skip('extra tcp server on the fly', function (done) {
   rcv.xyz.middlewares().transport.server('tcp')(2002).register(0, require('./../../src/Transport/Middlewares/call/tcp.export.middleware'))
 })
 
+it('removeServer :: remove the udp server on rcv and routes on snd', function (done) {
+  rcv.xyz.removeServer(2001)
+  snd.xyz.removeClientRoute('udp')
+  snd.xyz.removeClientRoute('http/2')
+
+  expect(Object.keys(rcv.xyz.serviceRepository.transport.servers).length).to.equal(2)
+  // call + ping
+  expect(Object.keys(snd.xyz.serviceRepository.transport.routes).length).to.equal(2)
+
+  done()
+})
+
 after(function () {
   snd.stop()
   rcv.stop()

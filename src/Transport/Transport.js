@@ -130,15 +130,37 @@ class Transport {
     }
   }
 
+  /**
+   * Creates a new client route
+   * @param {String} prefix
+   * @param {Object} [gmwh] The GenericMiddlewareHandler instance to use for
+   * this route. will create a new one if not provided.
+   *
+   * TODO: check for duplicate
+   */
   registerRoute (prefix, gmwh) {
     logger.info(`Transport :: new outgoing message route ${wrapper('bold', prefix)} added`)
     if (gmwh) {
       this.routes[prefix] = gmwh
     } else {
-      logger.warn(`no middlewareHandler defined for route ${prefix}. an empty one will be used`)
+      logger.warn(`Transport :: no middlewareHandler defined for route ${prefix}. an empty one will be used`)
       this.routes[prefix] = new GenericMiddlewareHandler(this.xyz, `${prefix}.dispatch.mw`, prefix)
     }
     return 1
+  }
+
+  /**
+   * Removes a client route
+   */
+  removeRoute (prefix) {
+    if (this.routes[prefix]) {
+      delete this.routes[prefix]
+      logger.info(`TRANSPORT :: route ${prefix} removed.`)
+      return 1
+    } else {
+      logger.error(`TRANSPORT :: attempting to remove route ${prefix} which does not exist.`)
+      return -1
+    }
   }
 
   getServerRoutes () {

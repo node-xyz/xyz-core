@@ -120,6 +120,14 @@ class HTTPServer extends EventEmitter {
     }
   }
 
+  /**
+   * Will stop the server.
+   */
+  terminate () {
+    logger.warn(`HTTP Server @ ${this.port} :: CLOSING`)
+    this.close()
+  }
+
 }
 
 module.exports = HTTPServer

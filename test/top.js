@@ -42,7 +42,7 @@ describe('Transport layer', function () {
   describe('additional transport layers', function () {
     require('./tests/transport.udp.message')
   })
-  describe('middlewares', function () {
+  describe('transport.middlewares', function () {
     require('./tests/transport.middlewares')
   })
 
@@ -50,7 +50,7 @@ describe('Transport layer', function () {
     require('./tests/transport.routes')
   })
 
-  describe('server management', function () {
+  describe('transport.server', function () {
     require('./tests/transport.servers')
   })
 })

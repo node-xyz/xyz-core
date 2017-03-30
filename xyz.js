@@ -229,6 +229,15 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   }
 
   /**
+   * Will remove a outgoing route
+   * @param {String} prefix the prefix of the route
+   * @return {Number} statuscode. 1 if success and -1 if fail
+   */
+  removeClientRoute (prefix) {
+    return this.serviceRepository.transport.removeRoute(prefix)
+  }
+
+  /**
   * create and register a new server. After cretaing a server with this port
   * you can access its middlewares with the given port.
   *
@@ -240,6 +249,26 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   */
   registerServer (type, port, e = true) {
     return this.serviceRepository.registerServer(type, port, e)
+  }
+
+  /**
+   * Will remove a server from a given port
+   * will cause:
+   *   - The listener to be removed if activated before
+   *   - The server to stop listening
+   *   - all of the routes and middleware to be destroyed
+   * @param {Number} port port to remove the server.
+   */
+  removeServer (port) {
+    if (this.serviceRepository.transport.servers[port]) {
+      this.serviceRepository.transport.servers[port].close()
+      delete this.serviceRepository.transport.servers[port]
+      logger.info(`XYZ :: server on port ${port} removed. Removing from selfConf...`)
+      CONFIG.removeServer(port)
+    } else {
+      logger.error(`XYZ :: attempting to remove server ${port} that does not exist`)
+      return -1
+    }
   }
 
   /**
