@@ -29,7 +29,7 @@ let _basicPingBootstrap = (xyz, event, port) => {
 
   let seeds = CONFIG.getSelfConf().seed
   function contactSeed (idx) {
-    transport.send({node: seeds[idx], payload: {id: _id}, route: 'PING'}, (err, body, res) => {
+    transport.send({node: seeds[idx], route: 'PING'}, (err, body, res) => {
       if (!err) {
         logger.info(`${wrapper('bold', 'JOIN PING ACCEPTED')}. response : ${JSON.stringify(body)}`)
         for (let node of body.nodes) {
@@ -98,11 +98,11 @@ let _basicPingBootstrap = (xyz, event, port) => {
     }
   }
 
-  function onPingReceive (body, response) {
-    logger.debug(`PING message received with ${JSON.stringify(body)}`)
-    if (CONFIG.getSystemConf().nodes.indexOf(body.xyzPayload.senderId) === -1) {
-      logger.warn(`new node is pinging me. adding to joinCandidate list. address : ${body.xyzPayload.senderId}`)
-      joinCandidate.push(body.xyzPayload.senderId)
+  function onPingReceive (sender, response) {
+    logger.debug(`PING :: message received from ${JSON.stringify(sender)}`)
+    if (CONFIG.getSystemConf().nodes.indexOf(sender) === -1) {
+      logger.warn(`PING :: new node is pinging me. adding to joinCandidate list. address : ${sender}`)
+      joinCandidate.push(sender)
     }
     response.end(JSON.stringify({
       services: SR.services.serializedTree,
@@ -112,11 +112,12 @@ let _basicPingBootstrap = (xyz, event, port) => {
 
   function _pingEvent (xMessage, next, end, xyz) {
     let response = xMessage.response
-    let body = xMessage.message
+    let sender = xMessage.message.xyzPayload.senderId
     let _transport = xyz.serviceRepository.transport.servers[port]
 
-    logger.silly('PING :: Passing ping to up to service repo')
-    _transport.emit(CONSTANTS.events.PING, body, response)
+    logger.silly('PING :: Passing ping to up to onPingReceive fn.')
+    console.log(xMessage);
+    _transport.emit(CONSTANTS.events.PING, sender, response)
     next()
   }
 

@@ -6,6 +6,7 @@ class xReceivedMessage {
   constructor (config = {}) {
     /**
      * payload of the message
+     * usually contains `xyzPayload` and `userPayload` keys
      * @type {Any}
      */
     this.message = config.message

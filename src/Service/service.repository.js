@@ -138,14 +138,20 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
    * this method will cause services to be searched an invoked via `CONSTANTS.events.MESSAGE`
    *  event, which is equal to `message`. This event will be emitter by default from
    *  `http.receive.event.js` middleware.
+   *
+   * Note that the CONSTANTS.events.MESSAGE can only be processed if it receives the
+   * entire xMessage object as parameter
    */
   bindTransportEvent (server) {
-    server.on(CONSTANTS.events.MESSAGE, (data, response) => {
-      this.emit('message:receive', data)
-      logger.verbose(`SR :: ServiceRepository received message  ${wrapper('bold', JSON.stringify(data))}`)
-      let fn = this.services.getPathFunction(data.service)
+    server.on(CONSTANTS.events.MESSAGE, (xMessage) => {
+      this.emit('message:receive', xMessage.message)
+      logger.verbose(`SR :: ServiceRepository received message  ${wrapper('bold', JSON.stringify(xMessage.message.userPayload))}`)
+
+      let service = xMessage.message.xyzPayload.service
+      let response = xMessage.response
+      let fn = this.services.getPathFunction(service)
       if (fn) {
-        fn(data.userPayload, response)
+        fn(xMessage.message.userPayload, response, xMessage.message.xyzPayload)
         return
       } else {
         // this will be rarely reached . most of the time callDisplatchfind middleware will find this.

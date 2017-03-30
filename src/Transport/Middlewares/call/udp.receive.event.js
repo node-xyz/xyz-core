@@ -6,14 +6,9 @@ function _udpEvent (xMessage, next, end, xyz) {
   let port = xMessage.serverId.port
   let _transport = xyz.serviceRepository.transport.servers[port]
 
-  let msgToSR = {
-    userPayload: message.userPayload,
-    service: message.xyzPayload.service
-  }
-
-  logger.debug(`UDP receive emitter :: Passing message from ${xMessage.message.senderId} up to service repo with ${JSON.stringify(msgToSR)}`)
+  logger.debug(`UDP receive emitter :: Passing message from ${xMessage.message.xyzPayload.senderId} up to service repo with ${JSON.stringify(xMessage.message.userPayload)}`)
   _transport.emit(
-    CONSTANTS.events.MESSAGE, msgToSR)
+    CONSTANTS.events.MESSAGE, xMessage)
   next()
 }
 

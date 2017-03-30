@@ -37,11 +37,11 @@ it('service level http message send and receive', function (done) {
 
 it('service level udp message send and receive', function (done) {
   let sent = false
-  snd.xyz.serviceRepository.once('message:send', function (_data) {
+  snd.xyz.serviceRepository.once('message:send', function (message) {
     sent = true
   })
-  rcv.xyz.serviceRepository.once('message:receive', function (data) {
-    expect(data.userPayload.x).to.equal(2)
+  rcv.xyz.serviceRepository.once('message:receive', function (message) {
+    expect(message.userPayload.x).to.equal(2)
     expect(sent).to.equal(true)
     done()
   })
