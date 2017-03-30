@@ -57,6 +57,18 @@ it.skip('extra tcp server on the fly', function (done) {
   rcv.xyz.middlewares().transport.server('tcp')(2002).register(0, require('./../../src/Transport/Middlewares/call/tcp.export.middleware'))
 })
 
+it('I am not allowed to add duplicate routes on all servers', function (done) {
+  // adding a route name http/2 to udp server
+  var ret = rcv.xyz.registerServerRoute(2001, 'http/2')
+  expect(ret).to.equal(false)
+
+  // adding a route name http/2 to http server
+  ret = rcv.xyz.registerServerRoute(2000, 'http/2')
+  expect(ret).to.equal(false)
+
+  done()
+})
+
 it('removeServer :: remove the udp server on rcv and routes on snd', function (done) {
   rcv.xyz.removeServer(2001)
   snd.xyz.removeClientRoute('udp')

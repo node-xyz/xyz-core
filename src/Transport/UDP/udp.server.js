@@ -9,7 +9,7 @@ const xReceivedMessage = require('./../xReceivedMessage')
 class UDPServer extends EventEmitter {
   constructor (xyz, port) {
     super()
-    this.port = _CONFIGURATION.getSelfConf().port
+    this.port = port
     this.xyz = xyz
 
     /**
@@ -89,9 +89,10 @@ class UDPServer extends EventEmitter {
   // from whithin xyz. this is designed mostly for users outside of the system to have
   // a communication way
   registerRoute (prefix, gmwh) {
-    if (this.routes[prefix]) {
-      logger.warn(`UDP SERVER @ ${this.port} :: call middleware with prefix ${prefix} already exists`)
-      return -1
+    let globalUnique = this.xyz.serviceRepository.transport._checkUniqueRoute(prefix)
+    if (!globalUnique) {
+      logger.error(`UDP Server @ ${this.port} :: route ${prefix} is not unique.`)
+      return false
     } else {
       gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}.receive.mw`, prefix)
       this.routes[prefix] = gmwh

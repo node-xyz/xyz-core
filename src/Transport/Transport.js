@@ -136,7 +136,6 @@ class Transport {
    * @param {Object} [gmwh] The GenericMiddlewareHandler instance to use for
    * this route. will create a new one if not provided.
    *
-   * TODO: check for duplicate
    */
   registerRoute (prefix, gmwh) {
     logger.info(`Transport :: new outgoing message route ${wrapper('bold', prefix)} added`)
@@ -181,6 +180,17 @@ class Transport {
       }
     }
     return -1
+  }
+
+  _checkUniqueRoute (prefix) {
+    for (let s in this.servers) {
+      for (let r in this.servers[s].routes) {
+        if (r === prefix) {
+          return false
+        }
+      }
+    }
+    return true
   }
 
 }

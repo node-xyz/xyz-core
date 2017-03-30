@@ -30,7 +30,9 @@ class HTTPServer extends EventEmitter {
 
     let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'call.receive.mw', 'CALL')
     callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/http.receive.event'))
-    this.registerRoute('CALL', callReceiveMiddlewareStack)
+    // on this time only we will do it manually instead of calling registerRoute
+    this.routes['CALL'] = callReceiveMiddlewareStack
+    logger.info(`HTTP Server @ ${this.port} :: new message route ${wrapper('bold', 'CALL')} added`)
 
     this.server = http.createServer()
       .listen(this.port, () => {
@@ -109,9 +111,10 @@ class HTTPServer extends EventEmitter {
   // from whithin xyz. this is designed mostly for users outside of the system to have
   // a communication way
   registerRoute (prefix, gmwh) {
-    if (this.routes[prefix]) {
-      logger.warn(`HTTP Server @ ${this.port} :: message middleware with prefix ${prefix} already exists`)
-      return -1
+    let globalUnique = this.xyz.serviceRepository.transport._checkUniqueRoute(prefix)
+    if (!globalUnique) {
+      logger.error(`HTTP Server @ ${this.port} :: route ${prefix} is not unique.`)
+      return false
     } else {
       gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}.receive.mw`, prefix)
       this.routes[prefix] = gmwh
