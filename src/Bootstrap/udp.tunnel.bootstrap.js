@@ -14,7 +14,7 @@ const _udpExport = require('./../Transport/Middlewares/call/udp.export.middlewar
 function _udpTunnel (xyz, config) {
   config = config || {}
   let route = config.route || 'UDP_CALL'
-  let port = config.port || xyz.id().port + 10
+  let port = config.port || xyz.id().port + 1000
 
   const logger = xyz.logger
 

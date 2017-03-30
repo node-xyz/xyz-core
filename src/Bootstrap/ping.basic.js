@@ -49,8 +49,7 @@ let _basicPingBootstrap = (xyz, event, port) => {
     for (let node of nodes) {
       SR.transport.send({
         route: 'PING',
-        node: node,
-        payload: {id: _id}
+        node: node
       }, (err, body, res) => {
         if (err == null) {
           SR.foreignNodes[node] = body.services
@@ -84,7 +83,7 @@ let _basicPingBootstrap = (xyz, event, port) => {
 
     for (let cNode of joinCandidate) {
       if (cNode) {
-        SR.transport.send({node: cNode, route: 'PING', payload: {id: _id}}, (err, body, res) => {
+        SR.transport.send({node: cNode, route: 'PING'}, (err, body, res) => {
           // this candidate has failed to prove itself
           if (err) {
             logger.error(`join candidate ${cNode} rejected due to ${err}`)
@@ -101,9 +100,9 @@ let _basicPingBootstrap = (xyz, event, port) => {
 
   function onPingReceive (body, response) {
     logger.debug(`PING message received with ${JSON.stringify(body)}`)
-    if (CONFIG.getSystemConf().nodes.indexOf(body.id) === -1) {
-      logger.warn(`new node is pinging me. adding to joinCandidate list. address : ${body.id}`)
-      joinCandidate.push(body.id)
+    if (CONFIG.getSystemConf().nodes.indexOf(body.xyzPayload.senderId) === -1) {
+      logger.warn(`new node is pinging me. adding to joinCandidate list. address : ${body.xyzPayload.senderId}`)
+      joinCandidate.push(body.xyzPayload.senderId)
     }
     response.end(JSON.stringify({
       services: SR.services.serializedTree,

@@ -26,9 +26,8 @@ function _sendToTarget (_target) {
       redirect: redirect,
       node: target,
       route: route,
-      payload: {
-        userPayload: userPayload,
-        service: params[0].servicePath}
+      payload: userPayload,
+      service: params[0].servicePath
     }, responseCallback)
     if (done) done()
   }

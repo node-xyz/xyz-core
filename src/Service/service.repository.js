@@ -142,9 +142,9 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   bindTransportEvent (server) {
     server.on(CONSTANTS.events.MESSAGE, (data, response) => {
       this.emit('message:receive', data)
+      logger.verbose(`SR :: ServiceRepository received message  ${wrapper('bold', JSON.stringify(data))}`)
       let fn = this.services.getPathFunction(data.service)
       if (fn) {
-        logger.verbose(`SR :: ServiceRepository received message for service  ${wrapper('bold', data.service)}`)
         fn(data.userPayload, response)
         return
       } else {
@@ -165,7 +165,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     let nullFn = () => {}
 
     this.emit('message:send', {opt: opt})
-    opt.payload = opt.payload || null
+    opt.payload == undefined ? null : opt.payload
     opt.servicePath = Path.format(opt.servicePath)
     opt.route = opt.route || 'CALL'
     opt.redirect = opt.redirect || false

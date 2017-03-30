@@ -37,7 +37,9 @@ function _firstFind (params, next, done, xyz) {
         redirect: redirect,
         node: node,
         route: route,
-        payload: {userPayload: userPayload, service: matches[0]}}, responseCallback)
+        payload: userPayload,
+        service: matches[0]
+      }, responseCallback)
       if (done) done()
       return
     }

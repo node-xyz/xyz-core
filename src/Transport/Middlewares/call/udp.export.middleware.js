@@ -2,10 +2,14 @@ const dgram = require('dgram')
 const logger = require('./../../../Log/Logger')
 let client = dgram.createSocket('udp4')
 
-let _udpExport = function (params, next, end, xyz) {
-  let requestConfig = params[0]
-  let responseCallback = params[1]
-  let buff = new Buffer(JSON.stringify({json: requestConfig.json, path: requestConfig.path}))
+let _udpExport = function (xMessageParam, next, end, xyz) {
+  let requestConfig = xMessageParam.requestConfig
+  let responseCallback = xMessageParam.responseCallback
+
+  // route must be added to the message
+  requestConfig.json.xyzPayload.route = requestConfig.path
+
+  let buff = new Buffer(JSON.stringify(requestConfig.json))
   client.send(buff, 0, buff.length, Number(requestConfig.port), requestConfig.hostname, (err, bytes) => {
     if (err) responseCallback(err, null)
     else {

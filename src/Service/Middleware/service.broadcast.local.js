@@ -44,9 +44,9 @@ function _broadcastLocal (params, next, done, xyz) {
         route: route,
         redirect: redirect,
         node: call.node,
-        payload: {
-          userPayload: userPayload,
-          service: call.match}},
+        payload: userPayload,
+        service: call.match
+      },
       function (_call, err, body, response) {
         responses[`${_call.node}:${_call.match}`] = [err, body]
         wait += 1
@@ -59,9 +59,9 @@ function _broadcastLocal (params, next, done, xyz) {
         route: route,
         redirect: redirect,
         node: call.node,
-        payload: {
-          userPayload: userPayload,
-          service: call.match}})
+        payload: userPayload,
+        service: call.match
+      })
     }
   }
 

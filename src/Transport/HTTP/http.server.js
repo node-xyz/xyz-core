@@ -42,7 +42,7 @@ class HTTPServer extends EventEmitter {
 
     this.server = http.createServer()
       .listen(this.port, () => {
-        logger.info(`HTTP Server listening on port : ${this.port}`)
+        logger.info(`HTTP Server @ ${this.port} :: HTTP Server listening on port : ${this.port}`)
       }).on('request', (req, resp) => {
         var body = []
         req
@@ -68,6 +68,7 @@ class HTTPServer extends EventEmitter {
                 response: resp,
                 meta: {request: req}
               })
+
               this.routes[route].apply(xMessage, 0)
               dismissed = true
               break
@@ -117,12 +118,12 @@ class HTTPServer extends EventEmitter {
   // a communication way
   registerRoute (prefix, gmwh) {
     if (this.routes[prefix]) {
-      logger.warn(`HTTP Server:: message middleware with prefix ${prefix} already exists`)
+      logger.warn(`HTTP Server @ ${this.port} :: message middleware with prefix ${prefix} already exists`)
       return -1
     } else {
       gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}.receive.mw`, prefix)
       this.routes[prefix] = gmwh
-      logger.info(`HTTP Server:: new message route ${wrapper('bold', prefix)} added`)
+      logger.info(`HTTP Server @ ${this.port} :: new message route ${wrapper('bold', prefix)} added`)
       return 1
     }
   }

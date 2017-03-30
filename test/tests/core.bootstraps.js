@@ -25,6 +25,7 @@ it('udp tunnel', function (done) {
       redirect: true,
       payload: {x: 2, y: 3}
     }, (err1, body1) => {
+      console.log(1, err1, body1)
     })
   }, 5 * 1000)
   rcv.xyz.serviceRepository.on('message:receive', (data) => {

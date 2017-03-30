@@ -4,6 +4,8 @@ const GenericMiddlewareHandler = require('./../Middleware/generic.middleware.han
 const wrapper = require('./../Util/Util').wrapper
 const HTTPServer = require('./HTTP/http.server')
 const UDPServer = require('./UDP/udp.server')
+const xSentMessage = require('./xSentMessage')
+const xSentMessageMwParam = require('./xSentMessageMwParam')
 
 class Transport {
 
@@ -58,6 +60,7 @@ class Transport {
    */
   send (opt, responseCallback) {
     opt.route = opt.route || 'CALL'
+
     if (!this.routes[opt.route]) {
       logger.error(`attempting to send message in route ${opt.route}. DOES NOT EXIST`)
       responseCallback('outgoing message route not found', null)
@@ -78,18 +81,35 @@ class Transport {
         return
       }
     }
-    let _payload = opt.payload || {}
-    _payload.senderNetId = this.xyz.id().netId
+
+    let message = {
+      userPayload: opt.payload,
+      xyzPayload: {
+        senderId: this.xyz.id().netId,
+        service: opt.service
+      }
+    }
+
+    // the json key
+    let xMessage = new xSentMessage(message)
 
     let requestConfig = {
       hostname: `${opt.node.split(':')[0]}`,
       port: _port || `${opt.node.split(':')[1]}`,
       path: `/${opt.route}`,
       method: 'POST',
-      json: _payload
+      json: xMessage
     }
-    logger.debug(`${wrapper('bold', 'Transport Client')} :: sending message to ${requestConfig.hostname}:${requestConfig.port}/${opt.route} through ${this.routes[opt.route].name} middleware`)
-    this.routes[opt.route].apply([requestConfig, responseCallback], 0)
+
+    // mw param
+    let xMessageParam = new xSentMessageMwParam({
+      requestConfig: requestConfig,
+      responseCallback: responseCallback
+    })
+
+    logger.debug(`${wrapper('bold', 'Transport Client')} :: sending message to ${wrapper('bold', requestConfig.hostname)}:${requestConfig.port}/${opt.route} through ${this.routes[opt.route].name} middleware :: message ${JSON.stringify(xMessage)}`)
+
+    this.routes[opt.route].apply(xMessageParam, 0)
   }
 
   registerServer (type, port, e) {

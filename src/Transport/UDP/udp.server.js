@@ -36,8 +36,8 @@ class UDPServer extends EventEmitter {
     .on('message', (message, remote) => {
       let _message = JSON.parse(message.toString())
       for (let route in this.routes) {
-        if (_message.path === `/${route}`) {
-          logger.debug(`udp message received for /${wrapper('bold', route)} [${JSON.stringify(_message)}]`)
+        if (_message.xyzPayload.route === `/${route}`) {
+          logger.debug(`UDP SERVER @ ${this.port} :: udp message received for /${wrapper('bold', route)} [${JSON.stringify(_message)}]`)
 
           let xMessage = new xReceivedMessage({
             message: _message,
@@ -47,7 +47,6 @@ class UDPServer extends EventEmitter {
           })
 
           this.routes[route].apply(xMessage, 0)
-
           break
         }
       }
@@ -85,7 +84,7 @@ class UDPServer extends EventEmitter {
     } else {
       gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, `${prefix}.receive.mw`, prefix)
       this.routes[prefix] = gmwh
-      logger.info(`HTTP Server:: new call route ${wrapper('bold', prefix)} added`)
+      logger.info(`UDP Server @ ${this.port} :: new message route ${wrapper('bold', prefix)} added`)
       return 1
     }
   }

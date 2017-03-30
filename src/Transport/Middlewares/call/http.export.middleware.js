@@ -1,9 +1,9 @@
 const http = require('http')
 const logger = require('./../../../Log/Logger')
 
-let _httpExport = function (params, next, end, xyz) {
-  let requestConfig = params[0]
-  let responseCallback = params[1]
+let _httpExport = function (xMessageParam, next, end, xyz) {
+  let requestConfig = xMessageParam.requestConfig
+  let responseCallback = xMessageParam.responseCallback
 
   let postData = requestConfig.json
   delete requestConfig.json

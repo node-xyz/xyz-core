@@ -20,8 +20,8 @@ before(function (done) {
 })
 
 it('manipulator', function (done) {
-  function manipulatorMiddleware (params, next, end) {
-    params[2].userPayload = str
+  function manipulatorMiddleware (xMessage, next, end) {
+    xMessage.message.userPayload = str
     next()
   }
   rcv.middlewares().transport.server('CALL')(rcv.xyz.id().port).register(0, manipulatorMiddleware)
@@ -34,8 +34,8 @@ it('manipulator', function (done) {
 })
 
 it('early response', function (done) {
-  function earlyResponseMiddleware (params, next, end) {
-    params[1].end(JSON.stringify('This is early temination. note that this must be a json and then stringified'))
+  function earlyResponseMiddleware (xReceivedMessage, next, end) {
+    xReceivedMessage.response.end(JSON.stringify('This is early temination. note that this must be a json and then stringified'))
     end()
   }
 
@@ -49,8 +49,8 @@ it('early response', function (done) {
 })
 
 it('early termination', function (done) {
-  function terminatorMiddleware (params, next, end) {
-    params[0].destroy()
+  function terminatorMiddleware (xReceivedMessage, next, end) {
+    xReceivedMessage.response.destroy()
     end()
   }
 
@@ -65,8 +65,8 @@ it('early termination', function (done) {
 })
 
 it('misc routes', function (done) {
-  function earlyResponseMiddleware (params, next, end) {
-    params[1].end(JSON.stringify('This is early temination. note that this must be a json and then stringified'))
+  function earlyResponseMiddleware (xReceivedMessage, next, end) {
+    xReceivedMessage.response.end(JSON.stringify('This is early temination. note that this must be a json and then stringified'))
     end()
   }
 
