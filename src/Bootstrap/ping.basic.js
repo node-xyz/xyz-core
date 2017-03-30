@@ -116,7 +116,6 @@ let _basicPingBootstrap = (xyz, event, port) => {
     let _transport = xyz.serviceRepository.transport.servers[port]
 
     logger.silly('PING :: Passing ping to up to onPingReceive fn.')
-    console.log(xMessage);
     _transport.emit(CONSTANTS.events.PING, sender, response)
     next()
   }

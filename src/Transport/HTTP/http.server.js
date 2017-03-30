@@ -8,14 +8,6 @@ const CONFIG = require('./../../Config/config.global')
 const wrapper = require('./../../Util/Util').wrapper
 const xReceivedMessage = require('./../xReceivedMessage')
 
-/**
-* This class will call its `call.receive.mw` with the following values in `param`:
-*  [req, resp, JSON.parse(body), this.port]
-*  - **req**: the request object
-*  - **resp**: the response object
-*  - **body** parsed body. also available in req object
-*  - **port**: port of this server
- */
 class HTTPServer extends EventEmitter {
 
   /**
