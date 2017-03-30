@@ -1,6 +1,18 @@
+/** @module service-middlewares */
+
 const http = require('http')
 
-function sendToAll (params, next, done, xyz) {
+/**
+ * Will resolve the service path to an array of nodes that can responde to
+ * the target path given. It will then send the message to all of the
+ * node in the array.
+ * @method _sendToAll
+ * @param  {Array}       params [description]
+ * @param  {Function}     next   used to call the next middleware
+ * @param  {Function}     done   used to end the middleware stack
+ * @param  {Object}       xyz    reference to the caller's xyz instance
+ */
+function _sendToAll (params, next, done, xyz) {
   let servicePath = params[0].servicePath
   let userPayload = params[0].payload
   let responseCallback = params[1]
@@ -67,4 +79,4 @@ function sendToAll (params, next, done, xyz) {
   }
 }
 
-module.exports = sendToAll
+module.exports = _sendToAll

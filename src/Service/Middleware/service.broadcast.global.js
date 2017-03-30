@@ -1,8 +1,9 @@
+/** @module service-middlewares */
 const http = require('http')
 
 /**
  * will broadcast a message regardless of the path to all nodes.
- * @method braodcastLocal
+ * @method _braodcastGlobal
  * @param  {Array}       params [description]
  * @param  {Function}     next   used to call the next middleware
  * @param  {Function}     done   used to end the middleware stack

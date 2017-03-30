@@ -1,6 +1,17 @@
+/** @module service-middlewares */
+
 let http = require('http')
 
-function firstFind (params, next, done, xyz) {
+/**
+ * Will resolve the service path to an array of nodes that can responde to
+ * the target path given. It will then send the message to first node in the array.
+ * @method _firstFind
+ * @param  {Array}       params [description]
+ * @param  {Function}     next   used to call the next middleware
+ * @param  {Function}     done   used to end the middleware stack
+ * @param  {Object}       xyz    reference to the caller's xyz instance
+ */
+function _firstFind (params, next, done, xyz) {
   let servicePath = params[0].servicePath
   let userPayload = params[0].payload
   let responseCallback = params[1]
@@ -41,4 +52,4 @@ function firstFind (params, next, done, xyz) {
   }
 }
 
-module.exports = firstFind
+module.exports = _firstFind

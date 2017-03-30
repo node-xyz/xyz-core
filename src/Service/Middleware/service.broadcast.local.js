@@ -1,9 +1,11 @@
+/** @module service-middlewares */
+
 const http = require('http')
 
 /**
  * will ignore the service path enitrely and will send the message to every
  * known host in localhost. Note that this module does not resolve path addresses
- * @function braodcastLocal
+ * @function _braodcastLocal
  * @param  {Array}       params [description]
  * @param  {Function}     next   used to call the next middleware
  * @param  {Function}     done   used to end the middleware stack

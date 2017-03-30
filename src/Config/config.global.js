@@ -1,3 +1,11 @@
+/**
+ * This module is available throughout xyz using `xyz.CONFIG`. It sores important information
+ * about the node and the system. Most of the properties are read-only and should be updated ONLY using
+ * defined methods.
+ *
+ * @module Configuration
+ */
+
 let CONSTANTS = require('./../Config/Constants')
 let argParser = require('./../Util/commandline.parser')
 let logger = require('./../Log/Logger')
@@ -21,15 +29,36 @@ function MergeRecursive (obj1, obj2) {
 }
 
 let configuration = {
+
+  /**
+   * should be called to inform that a new node has joined the system.
+   * This will log the results automatically.
+   * Note that a middleware or bootstrap function should call a method with the
+   * same name in `serviceRepository` layer. This method should not be called directly.
+   * @method joinNode
+   * @param  {String} aNode netId of a node
+   * @return {Number} 1 if ok, -1 if fail.
+   */
   joinNode: (aNode) => {
     if (systemConf.nodes.indexOf(aNode) > -1) {
       logger.warn(`Node ${aNode} already in systemConf. Passing.`)
+      return -1
     } else {
       logger.info(`A new node {${aNode}} added to systemConf`)
       systemConf.nodes.push(aNode)
+      return 1
     }
   },
 
+  /**
+   * Similar to joinNode(). The only difference is that it will not log a warning
+   * if a node already exists.
+   * Note that a middleware or bootstrap function should call a method with the
+   * same name in `serviceRepository` layer. This method should not be called directly.
+   * @method ensureNode
+   * @param  {String}   aNode netId of a node
+   * @return {Number}   1 if ok, -1 if fail.
+   */
   ensureNode: (aNode) => {
     if (systemConf.nodes.indexOf(aNode) === -1) {
       logger.info(`A new node {${aNode}} added to systemConf`)
@@ -39,13 +68,24 @@ let configuration = {
     return -1
   },
 
+  /**
+   * should be called to inform that a node has left the system.
+   * This will log the results automatically.
+   * Note that a middleware or bootstrap function should call a method with the
+   * same name in `serviceRepository` layer. This method should not be called directly.
+   * @method joinNode
+   * @param  {String} aNode netId of a node
+   * @return {Number} 1 if ok, -1 if fail.
+   */
   kickNode: (aNode) => {
     let index = systemConf.nodes.indexOf(aNode)
     if (index > -1) {
       logger.warn(`node ${aNode} removed from systemConf.`)
       systemConf.nodes.splice(systemConf.nodes.indexOf(aNode), 1)
+      return 1
     } else {
       logger.warn(`Attempting to remove ${aNode} which does not exist`)
+      return -1
     }
   },
 
@@ -63,6 +103,14 @@ let configuration = {
     }
   },
 
+  /**
+   * will override the configurations passed to XYZ constructor inside internal variable.
+   * Note that the `xyz.js` constructor should call this and there is no other use case for it.
+   * @method setSelfConf
+   * @param  {Object}    aConf       Object with the same format of xyz's constructor `selfConf`
+   * @param  {String}    cmdLineArgs Manual command line arguments. When this has a value, it will be
+   * used insteat of process.argv[1]
+   */
   setSelfConf: (aConf, cmdLineArgs) => {
     logger.info('Setting default selfConf')
     selfConf = CONSTANTS.defaultConfig.selfConf
@@ -106,6 +154,11 @@ let configuration = {
     logger.debug(`log level set to ${logger.transports.console.level}`)
   },
 
+  /**
+   * Overrides the configuration's `systemConf` inside internal variables
+   * @method setSystemConf
+   * @param  {Object}      aConf systemConf with the same format like `xyz`'s constructor
+   */
   setSystemConf: (aConf) => {
     logger.info('Setting default systemConf')
     systemConf = CONSTANTS.defaultConfig.systemConf
@@ -130,6 +183,12 @@ let configuration = {
     }
   },
 
+  /**
+   * should be called to update the values of `selfConf.transport` when a new server is added.
+   * Should be called from Transport layer, not directly.
+   * @method addServer
+   * @param  {Object}  aServer An object with keys `type`, `port` and `event`. Similar to `selfConf.transport`
+   */
   addServer: (aServer) => {
     for (let s of selfConf.transport) {
       if (s.port === aServer.port) {
@@ -141,8 +200,18 @@ let configuration = {
     selfConf.transport.push(aServer)
   },
 
+  /**
+   * Will return the internal systemConf variable
+   * @method getSystemConf
+   * @return {Object}      node's `systemConf`
+   */
   getSystemConf: () => systemConf,
 
+  /**
+   * will return the internal selfConf variable
+   * @method getSelfConf
+   * @return {Object}    node's `selfConf`
+   */
   getSelfConf: () => selfConf,
 
   /**

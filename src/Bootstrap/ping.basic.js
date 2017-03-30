@@ -4,6 +4,15 @@ let kick = 10
 const GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
 const _httpExport = require('./../Transport/Middlewares/call/http.export.middleware')
 
+ /** @module bootstrapFunctions */
+
+/**
+ * Will setup a basic ping mechanism for the node. This will automatically bootstrap unless `selfConf.defaultBootstrap` is set to `false`
+ * @method _basicPingBootstrap
+ * @param  {Object}            xyz   the automatically injected paramter referring to the current xyz instance.
+ * @param  {Bollean}            event indicates if pingRate message listener should be creted or not.
+ * @param  {Number}            port  the port to identify the route and server to use
+ */
 let _basicPingBootstrap = (xyz, event, port) => {
   let Util = xyz.Util
   let wrapper = Util.wrapper

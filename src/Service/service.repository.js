@@ -156,10 +156,11 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     })
   }
 
-  // Call a service. A middleware will be called with aproppiate arguments to find the receiving service etc.
-  // Details about the arguments in <a href="xyz.html"> xyz.js </a>
-  // TODO: in this case, unlike in config, sendStrategy MUST be a function
-  // better to allow string as well
+  /**
+   * Call a service. A middleware will be called with aproppiate arguments to find the receiving service etc.
+   * @param {Object} opt the options passed to `xyz.call()`
+   * @param {Function} [responseCallback] optional responseCallback
+   */
   call (opt, responseCallback) {
     let nullFn = () => {}
 
@@ -180,6 +181,9 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   // it is VERY important to use this method when adding new servers at
   // runtime. This is because from here, we can add bindings to receive
   // messages in this server
+  /**
+   * create a new server. accpets the same parameters as the method with the same name in  XYZ calss.
+   */
   registerServer (type, port, e) {
     let s = this.transport.registerServer(type, port, e)
     if (s) {

@@ -1,3 +1,11 @@
+/** @module service-middlewares */
+
+/**
+ * Will send a message to exactly one node .
+ * @method _sendToTarget
+ * @param  {String}      _target target node netId
+ * @example `ms.call({... , sendStrategy: sendToTaget('192.168.0.0:5000')}, () => {})`
+ */
 function _sendToTarget (_target) {
   let target = _target
   return function __sendToTarget (params, next, done, xyz) {

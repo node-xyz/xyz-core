@@ -51,6 +51,12 @@ it('extra udp server on the fly', function (done) {
   this.timeout(4000)
 })
 
+it.skip('extra tcp server on the fly', function (done) {
+  rcv.xyz.registerServer('TCP', 2002, true)
+  rcv.xyz.registerServerRoute(2002, 'tcp')
+  rcv.xyz.middlewares().transport.server('tcp')(2002).register(0, require('./../../src/Transport/Middlewares/call/tcp.export.middleware'))
+})
+
 after(function () {
   snd.stop()
   rcv.stop()
