@@ -23,7 +23,6 @@ let _basicPingBootstrap = (xyz, event, port) => {
   let SR = xyz.serviceRepository
   SR.outOfReachNodes = {}
   let transport = SR.transport
-  const _id = `${xyz.id().host}:${xyz.id().port}`
 
   let joinCandidate = []
 
