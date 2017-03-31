@@ -51,7 +51,7 @@ function wrapper(style, str) {
   return `${colors[style]}${str}${colors['reset']}`
 }
 
-bold(str) {
+function bold(str) {
   return wrapper('bold', str)
 }
 

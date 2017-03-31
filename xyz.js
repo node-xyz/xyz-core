@@ -37,10 +37,36 @@ class NodeXYZ {
     global._serviceName = this.id()._identifier
 
     // Global exported functions and modules
+
+    /**
+     * A reference to the config object of the node
+     * @type {Object}
+     */
     this.CONFIG = CONFIG
+
+    /**
+     * Reference to the xyz's internal logger
+     * @type {Object}
+     */
     this.logger = logger
+
+    /**
+     * Reference to the path class. Note that this is static and it can be imported
+     * from the xyz-core module too.
+     * @type {Object}
+     */
     this.path = require('./src/Service/path')
+
+    /**
+     * Reference to the constant values of xyz
+     * @type {Object}
+     */
     this.CONSTANTS = require('./src/Config/Constants')
+
+    /**
+     * reference to the util object
+     * @type {Object}
+     */
     this.Util = require('./src/Util/Util')
     this.gmwh = require('./src/Middleware/generic.middleware.handler')
 
@@ -278,7 +304,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   *
   * the port of the first server is always the **primary** port of a node.
   *
-  * @return {Object} 
+  * @return {Object}
   */
   id () {
     return {
