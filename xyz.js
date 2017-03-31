@@ -1,11 +1,11 @@
 const ServiceRepository = require('./src/Service/service.repository')
 let CONFIG = require('./src/Config/config.global')
-let logger = require('./src/Log/Logger')
-let pingBoostrap = require('./src/Bootstrap/ping.basic')
-let wrapper = require('./src/Util/Util').wrapper
-let machineReporter = require('./src/Util/machine.reporter')
-let inspectBootstrap = require('./src/Bootstrap/process.inspect.event')
-let networkMonitorBootstrap = require('./src/Bootstrap/process.network.event')
+const logger = require('./src/Log/Logger')
+const pingBoostrap = require('./src/Bootstrap/ping.basic')
+const wrapper = require('./src/Util/Util').wrapper
+const machineReporter = require('./src/Util/machine.reporter')
+const inspectBootstrap = require('./src/Bootstrap/process.inspect.event')
+const networkMonitorBootstrap = require('./src/Bootstrap/process.network.event')
 
 /**
  * The main class of xyz-core. Most of the functions that the user should work with
@@ -56,9 +56,9 @@ class NodeXYZ {
 
     // send an inti message to the cli process
     if (this.selfConf.cli.enable) {
-      logger.verbose('sending config info for possible xyz-cli listener instance')
+      logger.verbose('XYZ :: sending config info for possible xyz-cli listener instance')
       if (!process.send) {
-        logger.error('IPC channel not open. failed to communicate with cli')
+        logger.error('XYZ :: IPC channel not open. failed to communicate with cli')
         return
       }
       process.send({title: 'init', body: this.selfConf})
@@ -277,6 +277,8 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * this value is `[NAME]@[HOST]:[PORT OF THE FIRST SERVER]`.
   *
   * the port of the first server is always the **primary** port of a node.
+  *
+  * @return {Object} 
   */
   id () {
     return {

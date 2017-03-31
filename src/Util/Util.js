@@ -51,10 +51,15 @@ function wrapper(style, str) {
   return `${colors[style]}${str}${colors['reset']}`
 }
 
+bold(str) {
+  return wrapper('bold', str)
+}
+
 module.exports = {
   Random: Random,
   _require: _require,
   nodeStringToObject: nodeStringToObject,
   colors: colors,
-  wrapper: wrapper
+  wrapper: wrapper,
+  bold: bold
 }
