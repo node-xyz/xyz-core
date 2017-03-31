@@ -24,11 +24,6 @@ class UDPServer extends EventEmitter {
     this.server = dgram.createSocket('udp4')
     this.routes = {}
 
-    const nullResponse = () => {
-      logger.warn(`UDP SERVER @ ${this.port} :: fail attempt to call
-        'response' on a udp message. udp server does not keep responses`)
-    }
-
     this.server.on('listening', () => {
       let address = this.server.address()
       logger.info(`UDP Server listening on port ${address.address}:${address.port}`)
@@ -41,7 +36,7 @@ class UDPServer extends EventEmitter {
 
           let xMessage = new xReceivedMessage({
             message: _message,
-            response: nullResponse,
+            response: undefined,
             serverId: this.serverId,
             meta: remote
           })
