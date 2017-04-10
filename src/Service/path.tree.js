@@ -44,11 +44,17 @@ class PathTree {
   }
 
   getPathFunction (path) {
+    console.log(1, path)
     let pathTokens = path.split('/')
+    console.log(pathTokens)
     let tree = this.tree
-    for (let token of pathTokens) {
+    let token
+    for (let i = 0; i < pathTokens.lenght; i++) {
+      console.log('here')
+      token = pathTokens[i]
+      console.log(i, token, tree)
       if (tree[token]) {
-        if (token === pathTokens[pathTokens.length - 1]) {
+        if (i === pathTokens.length - 1) {
           return tree[token].fn
         } else {
           tree = tree[token].subtree

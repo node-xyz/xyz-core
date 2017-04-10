@@ -15,12 +15,7 @@ before(function (done) {
   rcv = testSystem.rcv
   system = testSystem.system
 
-  rcv.register('/math/decimal/mul', mockFunctions.mul)
-  rcv.register('/math/decimal/add', mockFunctions.add)
-  rcv.register('/math/decimal/sub', mockFunctions.sub)
-  rcv.register('/math/decimal', mockFunctions.finger)
-
-  setTimeout(done, 500)
+  setTimeout(done, 1500)
 })
 
 it('path formating', function (done) {
@@ -88,6 +83,35 @@ it('path mathcing', function (done) {
   expect(Path.match('/foo/*/*/duck/*', pt.serializedTree).length).to.equal(3)
 
   done()
+})
+
+it('path parent matching', function (done) {
+  this.timeout(10 * 1000)
+  let received = 0
+
+  rcv.register('/', () => {
+    console.log('/')
+    received++
+  })
+
+  rcv.register('/test', () => {
+    console.log('/test')
+    received++
+  })
+
+  rcv.register('/test/test', (body, resp) => {
+    console.log('/test/test')
+    received++
+    resp.jsonify('ok')
+  })
+
+  setTimeout(() => {
+    snd.call({servicePath: '/test/test'}, (err, body) => {
+      console.log(err, body)
+      console.log(received)
+      done()
+    })
+  }, 3 * 1000)
 })
 
 after(function () {

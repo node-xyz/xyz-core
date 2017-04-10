@@ -157,6 +157,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
 
       let service = xMessage.message.xyzPayload.service
       let response = xMessage.response
+
       let fn = this.services.getPathFunction(service)
       if (fn) {
         fn(xMessage.message.userPayload, response, xMessage.message.xyzPayload)
