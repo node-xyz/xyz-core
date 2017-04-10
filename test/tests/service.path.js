@@ -32,6 +32,7 @@ it('path formating', function (done) {
   expect(Path.format(test1)).to.equal(test1)
   expect(Path.format(test3)).to.equal(test3.slice(0, -1))
   expect(Path.format(test4)).to.equal('/aa/bb')
+
   done()
 })
 
@@ -41,11 +42,19 @@ it('path validation', function (done) {
   let test2 = '/'
   let test3 = '/aaa123/123/abc/'
   let test4 = '/asd//asd'
+  let test5 = '/*'
+  let test6 = '/**'
+  let test7 = '/asd*'
+  let test8 = '/abc/*/adc'
   expect(Path.validate(test)).to.equal(false)
   expect(Path.validate(test1)).to.equal(true)
   expect(Path.validate(test2)).to.equal(true)
   expect(Path.validate(test3)).to.equal(false)
   expect(Path.validate(test4)).to.equal(false)
+  expect(Path.validate(test5)).to.equal(true)
+  expect(Path.validate(test6)).to.equal(false)
+  expect(Path.validate(test7)).to.equal(false)
+  expect(Path.validate(test8)).to.equal(true)
   done()
 })
 

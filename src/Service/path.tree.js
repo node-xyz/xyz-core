@@ -12,12 +12,12 @@ class PathTree {
     this.plainTree = []
   }
 
+  /**
+   * Note that the service layer is responsible for
+   * 1- validating this path
+   * 2- formatting it to standard value
+   */
   createPathSubtree (path, fn) {
-    path = Path.format(path)
-    if (!Path.validate(path)) {
-      logger.error(`Creating a new path failed. Invalid Path : ${path}`)
-      return -1
-    }
     let tokens = Path.getTokes(path)
     let tree = this.tree
     let stree = this.serializedTree

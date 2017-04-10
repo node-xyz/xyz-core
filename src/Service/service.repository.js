@@ -102,7 +102,11 @@ class ServiceRepository extends EventEmitter {
    * @param {Function} fn function to be registered
    */
   register (path, fn) {
-    let ret = this.services.createPathSubtree(path, fn)
+    if (!Path.validate(path)) {
+      logger.error(`Creating a new path failed. Invalid Path : ${path}`)
+      return
+    }
+    let ret = this.services.createPathSubtree(Path.format(path), fn)
     if (ret === 1) {
       logger.info(`SR :: new service with path ${BOLD(path)} added.`)
     }
