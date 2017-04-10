@@ -103,12 +103,13 @@ class ServiceRepository extends EventEmitter {
    */
   register (path, fn) {
     if (!Path.validate(path)) {
-      logger.error(`Creating a new path failed. Invalid Path : ${path}`)
-      return
+      logger.error(`SR :: Creating a new path failed. Invalid Path : ${path}`)
+      return false
     }
-    let ret = this.services.createPathSubtree(Path.format(path), fn)
-    if (ret === 1) {
+    let status = this.services.createPathSubtree(Path.format(path), fn)
+    if (status) {
       logger.info(`SR :: new service with path ${BOLD(path)} added.`)
+      return status
     }
   }
 
@@ -159,7 +160,9 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
       let response = xMessage.response
 
       let fn = this.services.getPathFunction(service)
-      let fns = this.services.getPathFunctions(service)
+
+      // EXPERIMENTAL
+      // let fns = this.services.getPathFunctions(service)
 
       if (fn) {
         fn(xMessage.message.userPayload, response, xMessage.message.xyzPayload)
@@ -180,19 +183,26 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
    */
   call (opt, responseCallback) {
     let nullFn = () => {}
-
-    this.emit('message:send', {opt: opt})
     opt.payload == undefined ? null : opt.payload
     opt.servicePath = Path.format(opt.servicePath)
+    if (!Path.validate(opt.servicePath)) {
+      logger.error(`SR :: Aborting message ${BOLD(opt)}. Invalid servicePath`)
+      if (responseCallback) {
+        responseCallback(`SR :: Aborting message. Invalid servicePath`, null)
+      }
+      return false
+    }
     opt.route = opt.route || 'CALL'
     opt.redirect = opt.redirect || false
 
+    this.emit('message:send', {opt: opt})
     if (opt.sendStrategy) {
       // this is trying to imitate the middleware signature
       opt.sendStrategy([opt, responseCallback], nullFn, nullFn, this.xyz)
     } else {
       this.callDispatchMiddlewareStack.apply([opt, responseCallback], 0)
     }
+    return true
   }
 
   // it is VERY important to use this method when adding new servers at

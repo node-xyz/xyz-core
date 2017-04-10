@@ -56,8 +56,10 @@ it('path validation', function (done) {
 it('adjunct to path tree', function (done) {
   let pt = new PathTree()
   let dummy = function () { console.log('dummy') }
-  pt.createPathSubtree('/math/add', dummy)
-  pt.createPathSubtree('//math///neg', dummy)
+  let s1 = pt.createPathSubtree('/math/add', dummy)
+  // note that this will be fixed
+  let s2 = pt.createPathSubtree('//math///neg', dummy)
+  expect(s1 && s2).to.equal(true)
   done()
 })
 
@@ -85,7 +87,37 @@ it('path mathcing', function (done) {
   done()
 })
 
-it('path parent matching', function (done) {
+it('path checking and status code in .register()', function (done) {
+  let status = snd.xyz.register('/aa*')
+  expect(status).to.equal(false)
+  done()
+})
+
+it('path validation .call()', function (done) {
+  snd.call({servicePath: '///ma*//mul', payload: {x: 2, y: 4}}, (err, body) => {
+    expect(body).to.equal(null)
+    expect(err.slice(0, 2)).to.equal('SR')
+    done()
+  })
+})
+
+it('path formating .call()', function (done) {
+  // fix a message path
+  function transportLayerServiceSpy (xSentMessage, next, end, xyz) {
+    expect(xSentMessage.requestConfig.json.xyzPayload.service).to.equal('/math/mul')
+    next()
+  }
+
+  snd.xyz.middlewares().transport.client('CALL').register(0, transportLayerServiceSpy)
+
+  snd.call({servicePath: '///math//mul', payload: {x: 2, y: 4}}, (err, body) => {
+    done()
+  })
+
+  // dont sent it if invalid
+})
+
+it.skip('path parent matching', function (done) {
   this.timeout(10 * 1000)
   let received = 0
 

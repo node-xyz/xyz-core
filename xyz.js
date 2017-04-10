@@ -153,7 +153,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
    * see [Service layer register method](/apidoc/ServiceRepository.html#register) for more info
    */
   register (servicePath, fn) {
-    this.serviceRepository.register(servicePath, fn)
+    return this.serviceRepository.register(servicePath, fn)
   }
 
   /**
