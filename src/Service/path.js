@@ -7,11 +7,25 @@ let Path = {
   },
 
   format: function (path) {
+    /**
+     * If it doesn't start with '/', append to it
+     */
     if (path.slice(0, 1) !== '/') {
       path = '/' + path
     }
+
+    /**
+     * If it ends with a '/', remove it
+     */
     if (path.slice(-1) === '/') {
       path = path.slice(0, -1)
+    }
+
+    /**
+     * Replace (/)* with a single slash
+     */
+    while (path !== path.replace(/\/{2,}/, '/')) {
+      path = path.replace(/\/{2,}/, '/')
     }
     return path
   },

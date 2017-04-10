@@ -27,9 +27,11 @@ it('path formating', function (done) {
   let test = 'a/b/'
   let test1 = '/a/b'
   let test3 = '/aaa123/123/abc/'
+  let test4 = '//aa///////bb/'
   expect(Path.format(test)).to.equal('/a/b')
   expect(Path.format(test1)).to.equal(test1)
   expect(Path.format(test3)).to.equal(test3.slice(0, -1))
+  expect(Path.format(test4)).to.equal('/aa/bb')
   done()
 })
 
@@ -51,6 +53,7 @@ it('adjunct to path tree', function (done) {
   let pt = new PathTree()
   let dummy = function () { console.log('dummy') }
   pt.createPathSubtree('/math/add', dummy)
+  pt.createPathSubtree('//math///neg', dummy)
   done()
 })
 

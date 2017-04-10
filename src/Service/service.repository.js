@@ -8,6 +8,7 @@ const Util = require('./../Util/Util')
 const PathTree = require('./path.tree')
 const Path = require('./path')
 const wrapper = require('./../Util/Util').wrapper
+const BOLD = require('./../Util/Util').bold
 const EventEmitter = require('events')
 
 /**
@@ -101,7 +102,10 @@ class ServiceRepository extends EventEmitter {
    * @param {Function} fn function to be registered
    */
   register (path, fn) {
-    this.services.createPathSubtree(path, fn)
+    let ret = this.services.createPathSubtree(path, fn)
+    if (ret === 1) {
+      logger.info(`SR :: new service with path ${BOLD(path)} added.`)
+    }
   }
 
   /**

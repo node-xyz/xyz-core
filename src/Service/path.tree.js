@@ -40,7 +40,7 @@ class PathTree {
       tree.fn = fn
     }
     this.plainTree.push({path: path, name: fn.name || 'anonymousFN'})
-    return tree
+    return 1
   }
 
   getPathFunction (path) {

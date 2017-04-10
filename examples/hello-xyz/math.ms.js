@@ -13,6 +13,9 @@ var mathMs = new XYZ({
 
 mathMs.register('/math/decimal/neg', fn.neg)
 mathMs.register('/math/decimal/sub', fn.sub)
+mathMs.register('/math/*', (body, resp) => {
+  console.log('loggggg', body)
+})
 
 setInterval(() => {
   mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, res) => {
@@ -21,3 +24,5 @@ setInterval(() => {
 }, 6000)
 
 console.log(mathMs)
+
+console.log(JSON.stringify(mathMs.serviceRepository.services.tree, null, 2))

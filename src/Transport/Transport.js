@@ -116,12 +116,12 @@ class Transport {
     let server
     if (type === 'HTTP') {
       server = new HTTPServer(this.xyz, port)
-      this.servers[port] = server
+      this.servers[Number(port)] = server
       CONFIG.addServer({type: type, port: port, event: e})
       return server
     } else if (type === 'UDP') {
       server = new UDPServer(this.xyz, port)
-      this.servers[port] = server
+      this.servers[Number(port)] = server
       CONFIG.addServer({type: type, port: port, event: e})
       return server
     } else {
