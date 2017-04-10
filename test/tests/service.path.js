@@ -89,24 +89,24 @@ it('path parent matching', function (done) {
   this.timeout(10 * 1000)
   let received = 0
 
-  rcv.register('/', () => {
+  rcv.register('/', function slash () {
     console.log('/')
     received++
   })
 
-  rcv.register('/test', () => {
+  rcv.register('/test', function test () {
     console.log('/test')
     received++
   })
 
-  rcv.register('/test/test', (body, resp) => {
-    console.log('/test/test')
+  rcv.register('/test/test1', function test1 (body, resp) {
+    console.log('/test/test1')
     received++
     resp.jsonify('ok')
   })
 
   setTimeout(() => {
-    snd.call({servicePath: '/test/test'}, (err, body) => {
+    snd.call({servicePath: '/test/test1'}, (err, body) => {
       console.log(err, body)
       console.log(received)
       done()

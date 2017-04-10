@@ -43,26 +43,43 @@ class PathTree {
     return 1
   }
 
+  /**
+   * Will return the function accosiated with a path.
+   * Note that this function will be used at the receiver of a message.
+   * It expects a RESOLVED path (no * included)
+   */
   getPathFunction (path) {
-    console.log(1, path)
     let pathTokens = path.split('/')
-    console.log(pathTokens)
-    let tree = this.tree
+    let tree = this.tree[pathTokens[0]]
     let token
-    for (let i = 0; i < pathTokens.lenght; i++) {
-      console.log('here')
+    for (let i = 1; i < pathTokens.length; i++) {
       token = pathTokens[i]
-      console.log(i, token, tree)
-      if (tree[token]) {
-        if (i === pathTokens.length - 1) {
-          return tree[token].fn
-        } else {
-          tree = tree[token].subtree
-        }
+      if (tree.subtree[token]) {
+        tree = tree.subtree[token]
       } else {
         return false
       }
     }
+    return tree.fn
+  }
+
+  getPathFunctions (path) {
+    let pathTokens = path.split('/')
+    let tree = this.tree[pathTokens[0]]
+    let token
+    let fns = []
+    for (let i = 1; i < pathTokens.length; i++) {
+      if (tree.fn) {
+        fns.push(tree.fn)
+      }
+
+      token = pathTokens[i]
+      if (tree.subtree[token]) {
+        tree = tree.subtree[token]
+      }
+    }
+    fns.push(tree.fn)
+    return fns
   }
 
   getMatches (path, startTree = this.serializedTree) {}
