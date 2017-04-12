@@ -94,6 +94,7 @@ it('path checking and status code in .register()', function (done) {
 })
 
 it('path validation .call()', function (done) {
+  // dont sent it if invalid
   snd.call({servicePath: '///ma*//mul', payload: {x: 2, y: 4}}, (err, body) => {
     expect(body).to.equal(null)
     expect(err.slice(0, 2)).to.equal('SR')
@@ -113,8 +114,6 @@ it('path formating .call()', function (done) {
   snd.call({servicePath: '///math//mul', payload: {x: 2, y: 4}}, (err, body) => {
     done()
   })
-
-  // dont sent it if invalid
 })
 
 it.skip('path parent matching', function (done) {

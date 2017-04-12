@@ -175,7 +175,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
    * Note that this depends on the underlying transport used
    */
   call (opt, responseCallback) {
-    this.serviceRepository.call(opt, responseCallback)
+    return this.serviceRepository.call(opt, responseCallback)
   }
 
   /**
