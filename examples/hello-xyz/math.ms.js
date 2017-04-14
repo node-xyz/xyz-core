@@ -24,5 +24,3 @@ setInterval(() => {
 }, 6000)
 
 console.log(mathMs)
-
-console.log(JSON.stringify(mathMs.serviceRepository.services.tree, null, 2))

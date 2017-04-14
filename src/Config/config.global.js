@@ -123,7 +123,15 @@ let configuration = {
     let args = cmdLineArgs ? cmdLineArgs : argParser.xyzGeneric()
     for (let arg in args) {
       logger.verbose(`CONFIG :: overriding selfConf.${arg} from command line value {${args[arg]}}`)
+
       let keys = arg.split('.')
+
+      // ensure that port is Number not String
+      if (keys.length === 3 && keys[2] === 'port') {
+        console.log('######', args[arg])
+        args[arg] = Number(args[arg])
+      }
+
       // length 1
       if (keys.length === 1) {
         if (keys[0] === 'seed') {
