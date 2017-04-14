@@ -128,7 +128,6 @@ let configuration = {
 
       // ensure that port is Number not String
       if (keys.length === 3 && keys[2] === 'port') {
-        console.log('######', args[arg])
         args[arg] = Number(args[arg])
       }
 
@@ -151,7 +150,7 @@ let configuration = {
         selfConf[keys[0]][keys[1]] = keys[1] === 'enable' ? eval(args[arg]) : args[arg]
       } else if (keys.length === 3) {
         if (!selfConf[keys[0]]) selfConf[keys[0]] = {}
-        if (!selfConf[keys[1]]) selfConf[keys[1]] = {}
+        if (!selfConf[keys[0]][keys[1]]) selfConf[keys[1]] = {}
         selfConf[keys[0]][keys[1]][keys[2]] = args[arg]
       } else {
         logger.error('CONFIG :: command line arguments with more than three sub-keys are not allowed. passing')
