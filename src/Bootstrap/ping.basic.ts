@@ -13,7 +13,7 @@ const _httpExport = require('./../Transport/Middlewares/call/http.export.middlew
  * @param  {Bollean}            event indicates if pingRate message listener should be creted or not.
  * @param  {Number}            port  the port to identify the route and server to use
  */
-let _basicPingBootstrap = (xyz, event, port) => {
+export default  _basicPingBootstrap = (xyz, event, port) => {
   let Util = xyz.Util
   let wrapper = Util.wrapper
   let logger = xyz.logger
@@ -152,5 +152,3 @@ let _basicPingBootstrap = (xyz, event, port) => {
     contactSeed(0)
   }
 }
-
-module.exports = _basicPingBootstrap

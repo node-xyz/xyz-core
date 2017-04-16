@@ -21,7 +21,8 @@ const EventEmitter = require('events')
  *  should be inside undelying transportClient and
  *  transportServer
  */
-class ServiceRepository extends EventEmitter {
+
+export default class ServiceRepository extends EventEmitter {
 
   /**
    * Creates a new ServiceRepository
@@ -280,5 +281,3 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
     }
   }
 }
-
-module.exports = ServiceRepository

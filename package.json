@@ -4,8 +4,9 @@
   "description": "Microservice platform wrapper for node js ",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec",
+    "test": "tsc && ./node_modules/.bin/mocha --reporter spec",
     "test-travis": "rm -Rf node_modules && npm install && ./node_modules/.bin/mocha --reporter spec",
+    "build": "tsc",
     "docs": "jsdoc -c jsdoc.json -r -R ./README.md -d ./../node-xyz.github.io/apidoc",
     "docco": "find . -name '*.js' | grep -v node_modules | grep -v examples| grep -v test | xargs docco -o ./../node-xyz.github.io/code",
     "lintit": "standard './src' './examples' --fix"
@@ -23,6 +24,7 @@
     "standard": "^8.6.0"
   },
   "dependencies": {
+    "typescript": "^2.2.2",
     "winston": "^2.2.0"
   }
 }

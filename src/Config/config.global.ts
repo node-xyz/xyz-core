@@ -249,4 +249,4 @@ let configuration = {
   forget: () => { systemConf.nodes = [`${selfConf.host}:${selfConf.transport[0].port}`] }
 }
 
-module.exports = configuration
+export default configuration

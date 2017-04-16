@@ -7,7 +7,7 @@
  * @param  {Object}            xyz   the automatically injected paramter referring to the current xyz instance.
  */
 
-function _processInspectionEvent (xyz) {
+export default function _processInspectionEvent (xyz) {
   process.on('message', (data) => {
     // this process will responde with a json object containing basic info about the node
     if (data.title === 'inspectJSON') {
@@ -17,5 +17,3 @@ function _processInspectionEvent (xyz) {
     }
   })
 }
-
-module.exports = _processInspectionEvent

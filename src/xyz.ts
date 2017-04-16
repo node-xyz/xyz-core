@@ -1,11 +1,12 @@
-const ServiceRepository = require('./src/Service/service.repository')
-let CONFIG = require('./src/Config/config.global')
-const logger = require('./src/Log/Logger')
-const pingBoostrap = require('./src/Bootstrap/ping.basic')
-const wrapper = require('./src/Util/Util').wrapper
-const machineReporter = require('./src/Util/machine.reporter')
-const inspectBootstrap = require('./src/Bootstrap/process.inspect.event')
-const networkMonitorBootstrap = require('./src/Bootstrap/process.network.event')
+// const ServiceRepository = require('./Service/service.repository')
+import ServiceRepository from './Service/service.repository'
+import CONFIG from './Config/config.global'
+const logger = require('./Log/Logger')
+import pingBoostrap from './Bootstrap/ping.basic'
+const wrapper = require('./Util/Util').wrapper
+import machineReporter from './Util/machine.reporter'
+import inspectBootstrap from './Bootstrap/process.inspect.event'
+import networkMonitorBootstrap from './Bootstrap/process.network.event'
 
 /**
  * The main class of xyz-core. Most of the functions that the user should work with
@@ -55,20 +56,20 @@ class NodeXYZ {
      * from the xyz-core module too.
      * @type {Object}
      */
-    this.path = require('./src/Service/path')
+    this.path = require('./Service/path')
 
     /**
      * Reference to the constant values of xyz
      * @type {Object}
      */
-    this.CONSTANTS = require('./src/Config/Constants')
+    this.CONSTANTS = require('./Config/Constants')
 
     /**
      * reference to the util object
      * @type {Object}
      */
-    this.Util = require('./src/Util/Util')
-    this.gmwh = require('./src/Middleware/generic.middleware.handler')
+    this.Util = require('./Util/Util')
+    this.gmwh = require('./Middleware/generic.middleware.handler')
 
     this.serviceRepository = new ServiceRepository(this)
     this.bootstrapFunctions = []
