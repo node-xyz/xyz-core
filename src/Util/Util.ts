@@ -1,19 +1,20 @@
-function Random (time) {
+export function Random (time) {
   return Math.random() * time
 }
 
-function nodeStringToObject (str) {
+export function nodeStringToObject (str) {
   return {host: str.split(':')[0], port: str.split(':')[1]}
 }
 
-function _require (name) {
+export function _require (name) {
   // if the user has passed a require object to the XYZ()
   if (typeof (name) === 'object' || typeof(name) === 'function')
     return name
 
   let ret
   try {
-    ret = require(`./../Service/${name}`)
+    import aModule from `./../Service/${name}`
+    ret = aModule
   } catch (e) {
     ret = false
   } finally {
@@ -21,7 +22,7 @@ function _require (name) {
   }
 }
 
-let colors = {
+export let colors = {
   "reset": "\033[0m",
   "bold": "\033[1m",
   "boldoff": "\033[22m",
@@ -47,19 +48,10 @@ let colors = {
   "bg_white": "\033[47m"
 }
 
-function wrapper(style, str) {
+export function wrapper(style, str) {
   return `${colors[style]}${str}${colors['reset']}`
 }
 
-function bold(str) {
+export function bold(str) {
   return wrapper('bold', str)
-}
-
-module.exports = {
-  Random: Random,
-  _require: _require,
-  nodeStringToObject: nodeStringToObject,
-  colors: colors,
-  wrapper: wrapper,
-  bold: bold
 }

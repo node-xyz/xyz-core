@@ -1,5 +1,5 @@
-const logger = require('./../Log/Logger')
-const wrapper = require('./../Util/Util').wrapper
+import { logger } from './../Log/Logger'
+import { wrapper } from './../Util/Util'
 
 /**
  * This class is used in various modules to handle middlewares.
@@ -18,7 +18,12 @@ const wrapper = require('./../Util/Util').wrapper
  * ...
  * ```
  */
-class GenericMiddlewareHandler {
+export  default class GenericMiddlewareHandler {
+  middlewares: any[]; 
+  xyz: object;
+  name: string;
+  route: string; 
+
   constructor (xyz, name, route) {
     this.middlewares = []
     this.xyz = xyz
@@ -93,7 +98,7 @@ class GenericMiddlewareHandler {
    * @param  {array} params - Array of parameters passed to the handler
    * @param {Number} index - current index inside the middleware array to be applied
    */
-  apply (params, index) {
+  apply (params, index, xyz=null) {
     logger.silly(`GMWH :: applying middleware ${this.name}[${index}]`)
     if (!this.middlewares[index]) {
       logger.error(`GMWH :: attempting to call ${this.name}[${index}] which is not defined. teminating execution...`)
@@ -134,5 +139,3 @@ class GenericMiddlewareHandler {
     }
   }
 }
-
-module.exports = GenericMiddlewareHandler

@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var interval = 2000;
 var threshold = 2000;
 var kick = 10;
@@ -11,7 +13,7 @@ var _httpExport = require('./../Transport/Middlewares/call/http.export.middlewar
  * @param  {Bollean}            event indicates if pingRate message listener should be creted or not.
  * @param  {Number}            port  the port to identify the route and server to use
  */
-var _basicPingBootstrap = function (xyz, event, port) {
+exports.default = _basicPingBootstrap = function (xyz, event, port) {
     var Util = xyz.Util;
     var wrapper = Util.wrapper;
     var logger = xyz.logger;
@@ -147,4 +149,3 @@ var _basicPingBootstrap = function (xyz, event, port) {
         contactSeed(0);
     }
 };
-module.exports = _basicPingBootstrap;

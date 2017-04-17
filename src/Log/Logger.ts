@@ -1,5 +1,5 @@
 let winston = require('winston')
-const wrapper = require('./../Util/Util').wrapper
+import { wrapper } from './../Util/Util'
 
 function levelColor (level) {
   if (level === 'silly') {
@@ -30,7 +30,7 @@ function getFormattedDate () {
 }
 // { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
 
-var logger = new winston.Logger({
+export var logger = new winston.Logger({
   transports: [
     new winston.transports.Console({
       handleExceptions: false,
@@ -48,5 +48,3 @@ var logger = new winston.Logger({
   ],
   exitOnError: false
 })
-
-module.exports = logger

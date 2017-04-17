@@ -5,6 +5,8 @@
  *
  * @module Configuration
  */
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var CONSTANTS = require('./../Config/Constants');
 var argParser = require('./../Util/commandline.parser');
 var logger = require('./../Log/Logger');
@@ -244,4 +246,4 @@ var configuration = {
      */
     forget: function () { systemConf.nodes = [selfConf.host + ":" + selfConf.transport[0].port]; }
 };
-module.exports = configuration;
+exports.default = configuration;

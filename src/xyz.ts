@@ -1,18 +1,28 @@
 // const ServiceRepository = require('./Service/service.repository')
 import ServiceRepository from './Service/service.repository'
 import CONFIG from './Config/config.global'
-const logger = require('./Log/Logger')
+import { logger } from './Log/Logger'
 import pingBoostrap from './Bootstrap/ping.basic'
-const wrapper = require('./Util/Util').wrapper
+import { wrapper } from './Util/Util'
 import machineReporter from './Util/machine.reporter'
 import inspectBootstrap from './Bootstrap/process.inspect.event'
 import networkMonitorBootstrap from './Bootstrap/process.network.event'
+import GenericMiddlewareHandler from './Middleware/generic.middleware.handler'
 
 /**
  * The main class of xyz-core. Most of the functions that the user should work with
  * live inside this class.
  */
-class NodeXYZ {
+export default class NodeXYZ {
+  selfConf: object; 
+  CONFIG: object;
+  logger: object;
+  path: object;
+  CONSTANTS: object; 
+  Util: object;
+  gmwh: object;
+  serviceRepository: ServiceRepository;
+  bootstrapFunctions: any[];
 
   /**
    * create a new xyz object
@@ -36,6 +46,8 @@ class NodeXYZ {
 
     // just for logging convention
     global._serviceName = this.id()._identifier
+
+
 
     // Global exported functions and modules
 
@@ -65,11 +77,10 @@ class NodeXYZ {
     this.CONSTANTS = require('./Config/Constants')
 
     /**
-     * reference to the util object
+     * Reference to Generic Middleware Handler class
      * @type {Object}
      */
-    this.Util = require('./Util/Util')
-    this.gmwh = require('./Middleware/generic.middleware.handler')
+    this.gmwh = GenericMiddlewareHandler
 
     this.serviceRepository = new ServiceRepository(this)
     this.bootstrapFunctions = []
@@ -317,5 +328,3 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
     }
   }
 }
-
-module.exports = NodeXYZ
