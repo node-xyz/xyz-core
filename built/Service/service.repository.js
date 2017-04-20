@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -10,18 +9,18 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var http = require('http');
-var Transport = require('./../Transport/Transport');
-var CONSTANTS = require('../Config/Constants');
-var GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler');
-var CONFIG = require('./../Config/config.global');
-var logger = require('./../Log/Logger');
-var Util = require('./../Util/Util');
-var PathTree = require('./path.tree');
-var Path = require('./path');
-var wrapper = require('./../Util/Util').wrapper;
-var BOLD = require('./../Util/Util').bold;
-var EventEmitter = require('events');
+var path_tree_1 = require("./path.tree");
+var generic_middleware_handler_1 = require("./../Middleware/generic.middleware.handler");
+var config_global_1 = require("./../Config/config.global");
+var path_1 = require("./path");
+var Logger_1 = require("./../Log/Logger");
+var Constants_1 = require("./../Config/Constants");
+var http = require("http");
+var Transport_1 = require("./../Transport/Transport");
+var Util = require("./../Util/Util");
+var EventEmitter = require("events");
+var wrapper = Util.wrapper;
+var BOLD = Util.bold;
 /**
  *
  *
@@ -50,32 +49,32 @@ var ServiceRepository = (function (_super) {
          * there will be no circular dependency
          * @type {Transport}
          */
-        _this.transport = new Transport(xyz);
+        _this.transport = new Transport_1.default(xyz);
         /**
          * Reference to seld conf for easier usage
          * @type {Object}
          */
-        _this.selfConf = CONFIG.getSelfConf();
+        _this.selfConf = config_global_1.CONFIG.getSelfConf();
         for (var _i = 0, _a = _this.selfConf.transport; _i < _a.length; _i++) {
             var t = _a[_i];
             _this.registerServer(t.type, t.port, !(t.event === false));
         }
-        _this.callDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'service.discovery.mw');
+        _this.callDispatchMiddlewareStack = new generic_middleware_handler_1.GenericMiddlewareHandler(xyz, 'service.discovery.mw');
         // note that this can be either string or `require`
-        var sendStategy = Util._require(CONFIG.getSelfConf().defaultSendStrategy);
+        var sendStategy = Util._require(config_global_1.CONFIG.getSelfConf().defaultSendStrategy);
         if (sendStategy) {
             _this.callDispatchMiddlewareStack.register(0, sendStategy);
         }
         else {
-            logger.error("SR :: defaultSendStrategy passed to config [" + CONFIG.getSelfConf().defaultSendStrategy + "] not found. setting the default value");
+            Logger_1.logger.error("SR :: defaultSendStrategy passed to config [" + config_global_1.CONFIG.getSelfConf().defaultSendStrategy + "] not found. setting the default value");
             _this.callDispatchMiddlewareStack.register(0, require('./Middleware/service.first.find'));
         }
-        logger.info("SR :: default sendStategy set to " + _this.callDispatchMiddlewareStack.middlewares[0].name);
+        Logger_1.logger.info("SR :: default sendStategy set to " + _this.callDispatchMiddlewareStack.middlewares[0].name);
         /**
          * List of my this node's  services
          * @type {PathTree}
          */
-        _this.services = new PathTree();
+        _this.services = new path_tree_1.PathTree();
         /**
          * list of foreign nodes. should be filled by ping and should be used by
          * send strategy
@@ -106,13 +105,13 @@ var ServiceRepository = (function (_super) {
      * @param {Function} fn function to be registered
      */
     ServiceRepository.prototype.register = function (path, fn) {
-        if (!Path.validate(path)) {
-            logger.error("SR :: Creating a new path failed. Invalid Path : " + path);
+        if (!path_1.Path.validate(path)) {
+            Logger_1.logger.error("SR :: Creating a new path failed. Invalid Path : " + path);
             return false;
         }
-        var status = this.services.createPathSubtree(Path.format(path), fn);
+        var status = this.services.createPathSubtree(path_1.Path.format(path), fn);
         if (status) {
-            logger.info("SR :: new service with path " + BOLD(path) + " added.");
+            Logger_1.logger.info("SR :: new service with path " + BOLD(path) + " added.");
             return status;
         }
     };
@@ -151,9 +150,9 @@ var ServiceRepository = (function (_super) {
      */
     ServiceRepository.prototype.bindTransportEvent = function (server) {
         var _this = this;
-        server.on(CONSTANTS.events.MESSAGE, function (xMessage) {
+        server.on(Constants_1.CONSTANTS.events.MESSAGE, function (xMessage) {
             _this.emit('message:receive', xMessage.message);
-            logger.verbose("SR :: ServiceRepository received message  " + wrapper('bold', JSON.stringify(xMessage.message)));
+            Logger_1.logger.verbose("SR :: ServiceRepository received message  " + wrapper('bold', JSON.stringify(xMessage.message)));
             var service = xMessage.message.xyzPayload.service;
             var response = xMessage.response;
             var fn = _this.services.getPathFunction(service);
@@ -179,9 +178,9 @@ var ServiceRepository = (function (_super) {
     ServiceRepository.prototype.call = function (opt, responseCallback) {
         var nullFn = function () { };
         opt.payload == undefined ? null : opt.payload;
-        opt.servicePath = Path.format(opt.servicePath);
-        if (!Path.validate(opt.servicePath)) {
-            logger.error("SR :: Aborting message " + BOLD(opt) + ". Invalid servicePath");
+        opt.servicePath = path_1.Path.format(opt.servicePath);
+        if (!path_1.Path.validate(opt.servicePath)) {
+            Logger_1.logger.error("SR :: Aborting message " + BOLD(opt) + ". Invalid servicePath");
             if (responseCallback) {
                 responseCallback("SR :: Aborting message. Invalid servicePath", null);
             }
@@ -208,9 +207,9 @@ var ServiceRepository = (function (_super) {
     ServiceRepository.prototype.registerServer = function (type, port, e) {
         var s = this.transport.registerServer(type, port, e);
         if (s) {
-            logger.info("SR :: new transport server [" + type + "] created on port " + port);
+            Logger_1.logger.info("SR :: new transport server [" + type + "] created on port " + port);
             if (e) {
-                logger.info("SR :: ServiceRepository events bounded for [" + type + "] server port " + port);
+                Logger_1.logger.info("SR :: ServiceRepository events bounded for [" + type + "] server port " + port);
                 this.bindTransportEvent(s);
             }
         }
@@ -222,7 +221,7 @@ var ServiceRepository = (function (_super) {
     ServiceRepository.prototype.joinNode = function (aNode) {
         this.foreignNodes[aNode] = {};
         this.foreignRoutes[aNode] = {};
-        CONFIG.joinNode(aNode);
+        config_global_1.CONFIG.joinNode(aNode);
         this.logSystemUpdates();
     };
     /**
@@ -233,7 +232,7 @@ var ServiceRepository = (function (_super) {
         // we will not assume that this node has any function anymore
         delete this.foreignNodes[aNode];
         delete this.foreignRoutes[aNode];
-        CONFIG.kickNode(aNode);
+        config_global_1.CONFIG.kickNode(aNode);
         this.logSystemUpdates();
     };
     /**
@@ -250,21 +249,21 @@ var ServiceRepository = (function (_super) {
             }
         }
         this.foreignRoutes = {};
-        CONFIG.forget();
-        logger.warn("SR :: all foreign nodes have been removed by calling .forget()");
+        config_global_1.CONFIG.forget();
+        Logger_1.logger.warn("SR :: all foreign nodes have been removed by calling .forget()");
     };
     /**
      * Should be called after any chnage to the configurations of the system
      */
     ServiceRepository.prototype.logSystemUpdates = function () {
-        logger.info("SR :: " + wrapper('bold', 'System Configuration changed') + " new values: " + JSON.stringify(CONFIG.getSystemConf()));
+        Logger_1.logger.info("SR :: " + wrapper('bold', 'System Configuration changed') + " new values: " + JSON.stringify(config_global_1.CONFIG.getSystemConf()));
     };
     /**
      * will stop all servers of the system. should be used in test only.
      */
     ServiceRepository.prototype.terminate = function () {
         for (var s in this.transport.servers) {
-            logger.warn("SR :: sutting down server " + s);
+            Logger_1.logger.warn("SR :: sutting down server " + s);
             this.transport.servers[s].close();
         }
     };

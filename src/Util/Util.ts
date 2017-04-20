@@ -13,8 +13,7 @@ export function _require (name) {
 
   let ret
   try {
-    import aModule from `./../Service/${name}`
-    ret = aModule
+    ret = require(`./../Service/${name}`)
   } catch (e) {
     ret = false
   } finally {

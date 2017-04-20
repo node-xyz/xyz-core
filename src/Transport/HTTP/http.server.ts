@@ -1,14 +1,14 @@
-const http = require('http')
-const url = require('url')
-const EventEmitter = require('events')
-const XResponse = require('./../XResponse')
-const logger = require('./../../Log/Logger')
-const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
-const CONFIG = require('./../../Config/config.global')
-const wrapper = require('./../../Util/Util').wrapper
-const xReceivedMessage = require('./../xReceivedMessage')
+import { CONFIG } from './../../Config/config.global';
+import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.handler';
+import { logger } from './../../Log/Logger';
+import * as http from 'http'
+import * as url from 'url'
+import * as EventEmitter from 'events'
+import {xResponse, xReceivedMessage} from './../Interfaces'
+import {wrapper} from './../../Util/Util'
+import _httpMessageEvent from './../Middlewares/http.receive.event'
 
-class HTTPServer extends EventEmitter {
+export default class HTTPServer extends EventEmitter {
 
   /**
    * Creates a new HTTP server
@@ -29,7 +29,7 @@ class HTTPServer extends EventEmitter {
     this.routes = {}
 
     let callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'call.receive.mw', 'CALL')
-    callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/http.receive.event'))
+    callReceiveMiddlewareStack.register(-1, _httpMessageEvent)
     // on this time only we will do it manually instead of calling registerRoute
     this.routes['CALL'] = callReceiveMiddlewareStack
     logger.info(`HTTP Server @ ${this.port} :: new message route ${wrapper('bold', 'CALL')} added`)
@@ -53,7 +53,7 @@ class HTTPServer extends EventEmitter {
           for (let route in this.routes) {
             if (parsedUrl.pathname === `/${route}`) {
               // wrap response
-              XResponse(resp)
+              xResponse(resp)
 
               // create mw param message object
               let xMessage = new xReceivedMessage({
@@ -132,5 +132,3 @@ class HTTPServer extends EventEmitter {
   }
 
 }
-
-module.exports = HTTPServer

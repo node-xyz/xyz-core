@@ -1,7 +1,7 @@
 /** @module bootstrapFunctions */
 
-const _udpEvent = require('./../Transport/Middlewares/call/udp.receive.event')
-const _udpExport = require('./../Transport/Middlewares/call/udp.export.middleware')
+import { _udpEvent } from './../Transport/Middlewares/udp.receive.event'
+import { _udpExport } from './../Transport/Middlewares/udp.export.middleware'
 
 /**
  * Will create a new UDP tunnel over a given route and port.
@@ -11,7 +11,7 @@ const _udpExport = require('./../Transport/Middlewares/call/udp.export.middlewar
  * - `config.route`: the route used in both sending side and in the server.
  * - `config.port`: port of the server to create. Note that no ther server should exist in this port.
  */
-function _udpTunnel (xyz, config) {
+export function _udpTunnel (xyz, config) {
   config = config || {}
   let route = config.route || 'UDP_CALL'
   let port = config.port || xyz.id().port + 1000
@@ -29,5 +29,3 @@ function _udpTunnel (xyz, config) {
 
   logger.info(`UDP TUNNEL :: Udp tunnel created with route ${route} | port ${port}`)
 }
-
-module.exports = _udpTunnel

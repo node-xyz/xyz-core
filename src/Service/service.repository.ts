@@ -1,15 +1,16 @@
-let http = require('http')
-const Transport = require('./../Transport/Transport')
-let CONSTANTS = require('../Config/Constants')
-let GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
-let CONFIG = require('./../Config/config.global')
-const logger = require('./../Log/Logger')
-const Util = require('./../Util/Util')
-const PathTree = require('./path.tree')
-const Path = require('./path')
-const wrapper = require('./../Util/Util').wrapper
-const BOLD = require('./../Util/Util').bold
-const EventEmitter = require('events')
+import { PathTree } from './path.tree';
+import { GenericMiddlewareHandler } from './../Middleware/generic.middleware.handler';
+import { CONFIG } from './../Config/config.global';
+import { Path } from './path';
+import { logger } from './../Log/Logger';
+import { CONSTANTS } from './../Config/Constants';
+import * as http from 'http'
+import Transport from './../Transport/Transport'
+import * as Util from './../Util/Util'
+import * as EventEmitter from 'events'
+
+const wrapper = Util.wrapper
+const BOLD = Util.bold
 
 /**
  *

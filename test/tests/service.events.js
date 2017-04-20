@@ -14,10 +14,10 @@ before(function (done) {
 
   rcv.xyz.serviceRepository.registerServer('UDP', 2333, true)
   rcv.xyz.registerServerRoute(2333, 'udp')
-  rcv.xyz.middlewares().transport.server('udp')(2333).register(0, require('./../../src/Transport/Middlewares/call/udp.receive.event'))
+  rcv.xyz.middlewares().transport.server('udp')(2333).register(0, common._udpMessageEvent)
 
   snd.xyz.registerClientRoute('udp')
-  snd.xyz.middlewares().transport.client('udp').register(0, require('./../../src/Transport/Middlewares/call/udp.export.middleware'))
+  snd.xyz.middlewares().transport.client('udp').register(0, common._udpExport)
 
   setTimeout(done, 500)
 })

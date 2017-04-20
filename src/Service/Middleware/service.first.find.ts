@@ -1,6 +1,6 @@
 /** @module service-middlewares */
 
-let http = require('http')
+import * as http from 'http'
 
 /**
  * Will resolve the service path to an array of nodes that can responde to

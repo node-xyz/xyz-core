@@ -1,10 +1,9 @@
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var generic_middleware_handler_1 = require("./../Middleware/generic.middleware.handler");
+var http_export_middleware_1 = require("./../Transport/Middlewares/http.export.middleware");
 var interval = 2000;
 var threshold = 2000;
 var kick = 10;
-var GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler');
-var _httpExport = require('./../Transport/Middlewares/call/http.export.middleware');
 /** @module bootstrapFunctions */
 /**
  * Will setup a basic ping mechanism for the node. This will automatically bootstrap unless `selfConf.defaultBootstrap` is set to `false`
@@ -13,7 +12,7 @@ var _httpExport = require('./../Transport/Middlewares/call/http.export.middlewar
  * @param  {Bollean}            event indicates if pingRate message listener should be creted or not.
  * @param  {Number}            port  the port to identify the route and server to use
  */
-exports.default = _basicPingBootstrap = function (xyz, event, port) {
+function _basicPingBootstrap(xyz, event, port) {
     var Util = xyz.Util;
     var wrapper = Util.wrapper;
     var logger = xyz.logger;
@@ -125,10 +124,10 @@ exports.default = _basicPingBootstrap = function (xyz, event, port) {
     }
     setInterval(_ping, interval + Util.Random(threshold));
     // bind listener
-    var pingReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'ping.receive.mw', 'PING');
-    var pingDispatchMiddlewareStack = new GenericMiddlewareHandler(xyz, 'ping.dispatch.mw', 'PING');
+    var pingReceiveMiddlewareStack = new generic_middleware_handler_1.GenericMiddlewareHandler(xyz, 'ping.receive.mw', 'PING');
+    var pingDispatchMiddlewareStack = new generic_middleware_handler_1.GenericMiddlewareHandler(xyz, 'ping.dispatch.mw', 'PING');
     pingReceiveMiddlewareStack.register(0, _pingEvent);
-    pingDispatchMiddlewareStack.register(0, _httpExport);
+    pingDispatchMiddlewareStack.register(0, http_export_middleware_1.default);
     SR.transport.registerRoute('PING', pingDispatchMiddlewareStack);
     SR.transport.servers[port].registerRoute('PING', pingReceiveMiddlewareStack);
     SR.transport.servers[port].on(CONSTANTS.events.PING, onPingReceive);
@@ -148,4 +147,5 @@ exports.default = _basicPingBootstrap = function (xyz, event, port) {
     if (seeds.length) {
         contactSeed(0);
     }
-};
+}
+exports.default = _basicPingBootstrap;

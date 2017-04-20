@@ -1,4 +1,4 @@
-let Path = {
+export let Path = {
   validate: function (path) {
     if (path === '/') {
       return true
@@ -89,5 +89,3 @@ let Path = {
     return path.split('/')
   }
 }
-
-module.exports = Path

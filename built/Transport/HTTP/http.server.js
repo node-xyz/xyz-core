@@ -8,15 +8,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var http = require('http');
-var url = require('url');
-var EventEmitter = require('events');
-var XResponse = require('./../XResponse');
-var logger = require('./../../Log/Logger');
-var GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler');
-var CONFIG = require('./../../Config/config.global');
-var wrapper = require('./../../Util/Util').wrapper;
-var xReceivedMessage = require('./../xReceivedMessage');
+Object.defineProperty(exports, "__esModule", { value: true });
+var config_global_1 = require("./../../Config/config.global");
+var generic_middleware_handler_1 = require("./../../Middleware/generic.middleware.handler");
+var Logger_1 = require("./../../Log/Logger");
+var http = require("http");
+var url = require("url");
+var EventEmitter = require("events");
+var Interfaces_1 = require("./../Interfaces");
+var Util_1 = require("./../../Util/Util");
+var http_receive_event_1 = require("./../Middlewares/http.receive.event");
 var HTTPServer = (function (_super) {
     __extends(HTTPServer, _super);
     /**
@@ -27,21 +28,21 @@ var HTTPServer = (function (_super) {
     function HTTPServer(xyz, port) {
         var _this = _super.call(this) || this;
         http.globalAgent.maxSockets = Infinity;
-        _this.port = port || CONFIG.getSelfConf().port;
+        _this.port = port || config_global_1.CONFIG.getSelfConf().port;
         _this.xyz = xyz;
         _this.serverId = {
             type: 'HTTP',
             port: port
         };
         _this.routes = {};
-        var callReceiveMiddlewareStack = new GenericMiddlewareHandler(xyz, 'call.receive.mw', 'CALL');
-        callReceiveMiddlewareStack.register(-1, require('./../Middlewares/call/http.receive.event'));
+        var callReceiveMiddlewareStack = new generic_middleware_handler_1.GenericMiddlewareHandler(xyz, 'call.receive.mw', 'CALL');
+        callReceiveMiddlewareStack.register(-1, http_receive_event_1.default);
         // on this time only we will do it manually instead of calling registerRoute
         _this.routes['CALL'] = callReceiveMiddlewareStack;
-        logger.info("HTTP Server @ " + _this.port + " :: new message route " + wrapper('bold', 'CALL') + " added");
+        Logger_1.logger.info("HTTP Server @ " + _this.port + " :: new message route " + Util_1.wrapper('bold', 'CALL') + " added");
         _this.server = http.createServer()
             .listen(_this.port, function () {
-            logger.info("HTTP Server @ " + _this.port + " :: HTTP Server listening on port : " + _this.port);
+            Logger_1.logger.info("HTTP Server @ " + _this.port + " :: HTTP Server listening on port : " + _this.port);
         }).on('request', function (req, resp) {
             var body = [];
             req
@@ -58,9 +59,9 @@ var HTTPServer = (function (_super) {
                 for (var route in _this.routes) {
                     if (parsedUrl.pathname === "/" + route) {
                         // wrap response
-                        XResponse(resp);
+                        Interfaces_1.xResponse(resp);
                         // create mw param message object
-                        var xMessage = new xReceivedMessage({
+                        var xMessage = new Interfaces_1.xReceivedMessage({
                             serverId: _this.serverId,
                             message: JSON.parse(body),
                             response: resp,
@@ -79,7 +80,7 @@ var HTTPServer = (function (_super) {
         return _this;
     }
     HTTPServer.prototype.inspect = function () {
-        var ret = wrapper('green', wrapper('bold', 'Middlewares')) + ":\n";
+        var ret = Util_1.wrapper('green', Util_1.wrapper('bold', 'Middlewares')) + ":\n";
         for (var route in this.routes) {
             ret += "    " + this.routes[route].inspect() + "\n";
         }
@@ -96,11 +97,11 @@ var HTTPServer = (function (_super) {
     };
     HTTPServer.prototype.validator = function (req, body) {
         if (req.method !== 'POST') {
-            logger.warn('a suspicous message was received.');
+            Logger_1.logger.warn('a suspicous message was received.');
             return false;
         }
         if (body.length === 0) {
-            logger.warn('a suspicous message was received.');
+            Logger_1.logger.warn('a suspicous message was received.');
             return false;
         }
         return true;
@@ -112,13 +113,13 @@ var HTTPServer = (function (_super) {
     HTTPServer.prototype.registerRoute = function (prefix, gmwh) {
         var globalUnique = this.xyz.serviceRepository.transport._checkUniqueRoute(prefix);
         if (!globalUnique) {
-            logger.error("HTTP Server @ " + this.port + " :: route " + prefix + " is not unique.");
+            Logger_1.logger.error("HTTP Server @ " + this.port + " :: route " + prefix + " is not unique.");
             return false;
         }
         else {
-            gmwh = gmwh || new GenericMiddlewareHandler(this.xyz, prefix + ".receive.mw", prefix);
+            gmwh = gmwh || new generic_middleware_handler_1.GenericMiddlewareHandler(this.xyz, prefix + ".receive.mw", prefix);
             this.routes[prefix] = gmwh;
-            logger.info("HTTP Server @ " + this.port + " :: new message route " + wrapper('bold', prefix) + " added");
+            Logger_1.logger.info("HTTP Server @ " + this.port + " :: new message route " + Util_1.wrapper('bold', prefix) + " added");
             return 1;
         }
     };
@@ -126,9 +127,9 @@ var HTTPServer = (function (_super) {
      * Will stop the server.
      */
     HTTPServer.prototype.terminate = function () {
-        logger.warn("HTTP Server @ " + this.port + " :: CLOSING");
+        Logger_1.logger.warn("HTTP Server @ " + this.port + " :: CLOSING");
         this.close();
     };
     return HTTPServer;
 }(EventEmitter));
-module.exports = HTTPServer;
+exports.default = HTTPServer;

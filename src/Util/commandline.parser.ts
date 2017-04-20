@@ -1,21 +1,20 @@
-let CONSTANTS = require('./../Config/Constants')
+import { CONSTANTS } from './../Config/Constants';
 
-function get (argName) {
+export function get (argName) {
   let args = process.argv
   for (let idx = 2; idx < args.length; idx++) {
     if (args[idx] === argName) {
       return args[idx + 1]
     }
   }
-  return CONSTANTS.commandline[argName.slice(2)]
 }
 
-function has (argName) {
+export function has (argName) {
   let args = process.argv
   return args.indexOf(argName) > -1
 }
 
-function xyzGeneric (prefix = '--xyz-') {
+export function xyzGeneric (prefix = '--xyz-') {
   let args = process.argv
   let _args = {}
   for (let idx = 2; idx < args.length; idx++) {
@@ -34,10 +33,4 @@ function xyzGeneric (prefix = '--xyz-') {
     }
   }
   return _args
-}
-
-module.exports = {
-  get: get,
-  has: has,
-  xyzGeneric: xyzGeneric
 }

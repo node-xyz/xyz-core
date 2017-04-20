@@ -5,13 +5,12 @@
  *
  * @module Configuration
  */
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONSTANTS = require('./../Config/Constants');
 var argParser = require('./../Util/commandline.parser');
-var logger = require('./../Log/Logger');
+var Logger_1 = require("./../Log/Logger");
+var Constants_1 = require("./Constants");
 var systemConf;
-var selfConf = {};
+var selfConf;
 function MergeRecursive(obj1, obj2) {
     for (var p in obj2) {
         try {
@@ -28,7 +27,7 @@ function MergeRecursive(obj1, obj2) {
     }
     return obj1;
 }
-var configuration = {
+exports.CONFIG = {
     /**
      * should be called to inform that a new node has joined the system.
      * This will log the results automatically.
@@ -40,11 +39,11 @@ var configuration = {
      */
     joinNode: function (aNode) {
         if (systemConf.nodes.indexOf(aNode) > -1) {
-            logger.warn("Node " + aNode + " already in systemConf. Passing.");
+            Logger_1.logger.warn("Node " + aNode + " already in systemConf. Passing.");
             return -1;
         }
         else {
-            logger.info("A new node {" + aNode + "} added to systemConf");
+            Logger_1.logger.info("A new node {" + aNode + "} added to systemConf");
             systemConf.nodes.push(aNode);
             return 1;
         }
@@ -60,7 +59,7 @@ var configuration = {
      */
     ensureNode: function (aNode) {
         if (systemConf.nodes.indexOf(aNode) === -1) {
-            logger.info("CONFIG :: A new node {" + aNode + "} added to systemConf");
+            Logger_1.logger.info("CONFIG :: A new node {" + aNode + "} added to systemConf");
             systemConf.nodes.push(aNode);
             return 1;
         }
@@ -78,12 +77,12 @@ var configuration = {
     kickNode: function (aNode) {
         var index = systemConf.nodes.indexOf(aNode);
         if (index > -1) {
-            logger.warn("node " + aNode + " removed from systemConf.");
+            Logger_1.logger.warn("node " + aNode + " removed from systemConf.");
             systemConf.nodes.splice(systemConf.nodes.indexOf(aNode), 1);
             return 1;
         }
         else {
-            logger.warn("CONFIG :: Attempting to remove " + aNode + " which does not exist");
+            Logger_1.logger.warn("CONFIG :: Attempting to remove " + aNode + " which does not exist");
             return -1;
         }
     },
@@ -96,7 +95,7 @@ var configuration = {
         for (var _i = 0, someNodes_1 = someNodes; _i < someNodes_1.length; _i++) {
             var aNode = someNodes_1[_i];
             if (systemConf.nodes.indexOf(aNode) === -1) {
-                logger.info("CONFIG :: A new node {" + aNode + "} added to systemConf");
+                Logger_1.logger.info("CONFIG :: A new node {" + aNode + "} added to systemConf");
                 systemConf.nodes.push(aNode);
             }
         }
@@ -110,16 +109,16 @@ var configuration = {
      * used insteat of process.argv[1]
      */
     setSelfConf: function (aConf, cmdLineArgs) {
-        logger.info('CONFIG :: Setting default selfConf');
-        selfConf = CONSTANTS.defaultConfig.selfConf;
-        logger.info('CONFIG :: Reading selfConf from user');
+        Logger_1.logger.info('CONFIG :: Setting default selfConf');
+        selfConf = Constants_1.CONSTANTS.defaultConfig.selfConf;
+        Logger_1.logger.info('CONFIG :: Reading selfConf from user');
         selfConf = MergeRecursive(selfConf, aConf);
-        logger.info('CONFIG :: Reading selfConf from command line');
+        Logger_1.logger.info('CONFIG :: Reading selfConf from command line');
         // TODO use MergeRecursive function to get rid of this shitty code
         // this is to allow cli admin to inject some args like commandline arguments
         var args = cmdLineArgs ? cmdLineArgs : argParser.xyzGeneric();
         for (var arg in args) {
-            logger.verbose("CONFIG :: overriding selfConf." + arg + " from command line value {" + args[arg] + "}");
+            Logger_1.logger.verbose("CONFIG :: overriding selfConf." + arg + " from command line value {" + args[arg] + "}");
             var keys = arg.split('.');
             // ensure that port is Number not String
             if (keys.length === 3 && keys[2] === 'port') {
@@ -156,11 +155,11 @@ var configuration = {
                 selfConf[keys[0]][keys[1]][keys[2]] = args[arg];
             }
             else {
-                logger.error('CONFIG :: command line arguments with more than three sub-keys are not allowed. passing');
+                Logger_1.logger.error('CONFIG :: command line arguments with more than three sub-keys are not allowed. passing');
             }
         }
-        logger.transports.console.level = selfConf.logLevel;
-        logger.debug("log level set to " + logger.transports.console.level);
+        Logger_1.logger.transports.console.level = selfConf.logLevel;
+        Logger_1.logger.debug("log level set to " + Logger_1.logger.transports.console.level);
     },
     /**
      * Overrides the configuration's `systemConf` inside internal variables
@@ -168,14 +167,14 @@ var configuration = {
      * @param  {Object}      aConf systemConf with the same format like `xyz`'s constructor
      */
     setSystemConf: function (aConf) {
-        logger.info('CONFIG :: Setting default systemConf');
-        systemConf = CONSTANTS.defaultConfig.systemConf;
-        logger.info('CONFIG :: reading systemConf from user');
+        Logger_1.logger.info('CONFIG :: Setting default systemConf');
+        systemConf = Constants_1.CONSTANTS.defaultConfig.systemConf;
+        Logger_1.logger.info('CONFIG :: reading systemConf from user');
         systemConf = MergeRecursive(systemConf, aConf);
-        logger.info('CONFIG :: Reading selfConf from command line');
+        Logger_1.logger.info('CONFIG :: Reading selfConf from command line');
         var args = argParser.xyzGeneric('--xys-');
         for (var arg in args) {
-            logger.verbose("CONFIG :: overriding systemConf." + arg + " from command line value {" + args[arg] + "}");
+            Logger_1.logger.verbose("CONFIG :: overriding systemConf." + arg + " from command line value {" + args[arg] + "}");
             if (arg === 'node') {
                 if (typeof (args[arg]) === 'object') {
                     systemConf.nodes = systemConf.nodes.concat(args[arg]);
@@ -185,7 +184,7 @@ var configuration = {
                 }
             }
         }
-        logger.debug('CONFIG :: Adding self to systemConf by default');
+        Logger_1.logger.debug('CONFIG :: Adding self to systemConf by default');
         if (systemConf.nodes.indexOf(selfConf.host + ":" + selfConf.transport[0].port) === -1) {
             systemConf.nodes.push(selfConf.host + ":" + selfConf.transport[0].port);
         }
@@ -200,11 +199,11 @@ var configuration = {
         for (var _i = 0, _a = selfConf.transport; _i < _a.length; _i++) {
             var s = _a[_i];
             if (s.port === aServer.port) {
-                logger.warn("CONFIG :: cannot add a server with port " + aServer.port + " to selfConf. already exists");
+                Logger_1.logger.warn("CONFIG :: cannot add a server with port " + aServer.port + " to selfConf. already exists");
                 return false;
             }
         }
-        logger.info("CONFIG :: new server " + JSON.stringify(aServer) + " added at runtime to selfConf");
+        Logger_1.logger.info("CONFIG :: new server " + JSON.stringify(aServer) + " added at runtime to selfConf");
         selfConf.transport.push(aServer);
     },
     /**
@@ -219,11 +218,11 @@ var configuration = {
             if (aPort === s.port) {
                 var index = selfConf.transport.indexOf(s);
                 selfConf.transport.splice(index, 1);
-                logger.info("CONFIG :: removing server " + aPort + " from selfConf.");
+                Logger_1.logger.info("CONFIG :: removing server " + aPort + " from selfConf.");
                 return true;
             }
         }
-        logger.error("CONFIG :: server " + aPort + " could not be removed. Not exists");
+        Logger_1.logger.error("CONFIG :: server " + aPort + " could not be removed. Not exists");
         return false;
     },
     /**
@@ -246,4 +245,3 @@ var configuration = {
      */
     forget: function () { systemConf.nodes = [selfConf.host + ":" + selfConf.transport[0].port]; }
 };
-exports.default = configuration;

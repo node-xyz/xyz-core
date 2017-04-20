@@ -1,4 +1,3 @@
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var winston = require('winston');
 var Util_1 = require("./../Util/Util");

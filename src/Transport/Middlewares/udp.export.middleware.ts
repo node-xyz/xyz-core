@@ -1,8 +1,9 @@
-const dgram = require('dgram')
-const logger = require('./../../../Log/Logger')
+import * as dgram from 'dgram'
+import {logger} from './../../Log/Logger'
+
 let client = dgram.createSocket('udp4')
 
-let _udpExport = function (xMessageParam, next, end, xyz) {
+export function _udpExport(xMessageParam, next, end, xyz) {
   let requestConfig = xMessageParam.requestConfig
   let responseCallback = xMessageParam.responseCallback
 
@@ -23,4 +24,3 @@ let _udpExport = function (xMessageParam, next, end, xyz) {
   end()
 }
 
-module.exports = _udpExport

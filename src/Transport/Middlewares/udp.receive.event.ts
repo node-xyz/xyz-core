@@ -1,7 +1,8 @@
-const logger = require('./../../../Log/Logger')
-const CONSTANTS = require('./../../../Config/Constants')
+import {logger} from './../../Log/Logger'
+import {CONSTANTS} from './../../Config/Constants'
 
-function _udpEvent (xMessage, next, end, xyz) {
+
+export function _udpEvent (xMessage, next, end, xyz) {
   let message = xMessage.message
   let port = xMessage.serverId.port
   let _transport = xyz.serviceRepository.transport.servers[port]
@@ -11,5 +12,3 @@ function _udpEvent (xMessage, next, end, xyz) {
     CONSTANTS.events.MESSAGE, xMessage)
   next()
 }
-
-module.exports = _udpEvent

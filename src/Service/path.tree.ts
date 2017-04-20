@@ -1,7 +1,11 @@
-let Path = require('./path')
-let logger = require('./../Log/Logger')
+import { logger } from './../Log/Logger';
+import { Path } from './path';
 
-class PathTree {
+export class PathTree {
+  tree: object; 
+  serializedTree: object; 
+  plainTree: any; 
+  
   constructor () {
     this.tree = {
       '': {
@@ -84,5 +88,3 @@ class PathTree {
 
   getMatches (path, startTree = this.serializedTree) {}
 }
-
-module.exports = PathTree

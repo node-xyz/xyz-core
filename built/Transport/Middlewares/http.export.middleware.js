@@ -1,5 +1,5 @@
-var http = require('http');
-var logger = require('./../../../Log/Logger');
+Object.defineProperty(exports, "__esModule", { value: true });
+var http = require("http");
 var _httpExport = function (xMessageParam, next, end, xyz) {
     var requestConfig = xMessageParam.requestConfig;
     var responseCallback = xMessageParam.responseCallback;
@@ -15,7 +15,7 @@ var _httpExport = function (xMessageParam, next, end, xyz) {
                 body.push(chunck);
             });
             res.on('end', function () {
-                var err = (parseInt(res.statusCode / 100) === 2 ? null : http.STATUS_CODES[res.statusCode]);
+                var err = (Number(res.statusCode / 100) === 2 ? null : http.STATUS_CODES[res.statusCode]);
                 responseCallback(err, JSON.parse(body), res);
             });
         });
@@ -32,4 +32,4 @@ var _httpExport = function (xMessageParam, next, end, xyz) {
     req.end();
     end();
 };
-module.exports = _httpExport;
+exports.default = _httpExport;

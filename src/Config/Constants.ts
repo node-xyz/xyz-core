@@ -1,11 +1,10 @@
+import {IConstants} from './interface'
+
 /**
  * A set of constant values stored in xyz-core
  * @type {Object}
  */
-module.exports = {
-  commandline: {
-    xyzport: 3000
-  },
+export const CONSTANTS: IConstants = {
 
   /**
    * name of the events emiited by xyz
@@ -39,7 +38,7 @@ module.exports = {
       seed: [],
       // default transport layer service
       transport: [
-        {type: 'HTTP', port: '4000', event: true}
+        {type: 'HTTP', port: 4000, event: true}
       ],
       // ip
       host: '127.0.0.1',

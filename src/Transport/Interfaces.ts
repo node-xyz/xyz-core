@@ -1,8 +1,28 @@
+export class xSentMessageMwParam {
+  constructor (config) {
+    this.requestConfig = config.requestConfig
+    this.responseCallback = config.responseCallback
+  }
+}
+
+export class xSentMessage {
+  constructor (config) {
+    this.userPayload = config.userPayload
+    this.xyzPayload = config.xyzPayload
+  }
+}
+
+export function xResponse(resposenObject) {
+  resposenObject['jsonify'] = (data, ...args) => {
+    resposenObject.end(JSON.stringify(data), ...args)
+  }
+}
+
 
 /**
  * This class is the common class used for all middlewares
  */
-class xReceivedMessage {
+export class xReceivedMessage {
   constructor (config = {}) {
     /**
      * payload of the message
@@ -31,4 +51,3 @@ class xReceivedMessage {
   }
 }
 
-module.exports = xReceivedMessage

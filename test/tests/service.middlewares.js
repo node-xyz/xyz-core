@@ -1,5 +1,4 @@
 const common = require('../common')
-let logger = require('./../../src/Log/Logger')
 const expect = common.expect
 const mockNode = common.mockNode
 const mockSystem = common.mockSystem
@@ -34,7 +33,6 @@ function wrongServicediscoveryMiddleware (params, next, end, xyz) {
       }
     }
     if (!match) {
-      logger.info(`WRONG DISCOVERY :: determined ${node} for ${servicePath}`)
       transportClient.send({ node: node, route: 'CALL', payload: userPayload, service: servicePath}, (err, body, response) => {
         responseCallback(err, body, response)
       })
@@ -89,7 +87,7 @@ it('change sendStrategy per call - sendToAll', function (done) {
 })
 
 it('send to target - correct usage', function (done) {
-  let sentToTarget = require('./../../src/Service/Middleware/service.sent.to.target')
+  let sentToTarget = require('./../../built/Service/Middleware/service.sent.to.target')
   snd.call({
     servicePath: '/math/mul',
     payload: {x: 2, y: 3},
@@ -102,7 +100,7 @@ it('send to target - correct usage', function (done) {
 })
 
 it('send to target - wrong usage', function (done) {
-  let sentToTarget = require('./../../src/Service/Middleware/service.sent.to.target')
+  let sentToTarget = require('./../../built/Service/Middleware/service.sent.to.target')
   snd.call({
     servicePath: '/math/mul',
     payload: {x: 2, y: 3},
@@ -116,7 +114,7 @@ it('send to target - wrong usage', function (done) {
 })
 
 it('broadcast local - correct case', function (done) {
-  let broadcast = require('./../../src/Service/Middleware/service.broadcast.local')
+  let broadcast = require('./../../built/Service/Middleware/service.broadcast.local')
   snd.call({
     servicePath: '/math/mul',
     payload: {x: 2, y: 3},
@@ -140,7 +138,7 @@ it('broadcast local - correct case', function (done) {
 })
 
 it('broadcast local - wrong case', function (done) {
-  let broadcast = require('./../../src/Service/Middleware/service.broadcast.local')
+  let broadcast = require('./../../built/Service/Middleware/service.broadcast.local')
   snd.call({
     servicePath: '/math/*', // will not work cos the receiver can not resolve this
     payload: {x: 2, y: 3},
@@ -163,7 +161,7 @@ it('broadcast local - wrong case', function (done) {
 })
 
 it('broadcast global - correct case', function (done) {
-  let broadcast = require('./../../src/Service/Middleware/service.broadcast.global')
+  let broadcast = require('./../../built/Service/Middleware/service.broadcast.global')
   snd.call({
     servicePath: '/math/mul',
     payload: {x: 2, y: 3},
@@ -186,7 +184,7 @@ it('broadcast global - correct case', function (done) {
 })
 
 it('broadcast global - wrong case', function (done) {
-  let broadcast = require('./../../src/Service/Middleware/service.broadcast.global')
+  let broadcast = require('./../../built/Service/Middleware/service.broadcast.global')
   snd.call({
     servicePath: '/math/*', // will not work cos the receiver can not resolve this
     payload: {x: 2, y: 3},

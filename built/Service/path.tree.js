@@ -1,5 +1,5 @@
-var Path = require('./path');
-var logger = require('./../Log/Logger');
+Object.defineProperty(exports, "__esModule", { value: true });
+var path_1 = require("./path");
 var PathTree = (function () {
     function PathTree() {
         this.tree = {
@@ -16,7 +16,7 @@ var PathTree = (function () {
      * 2- formatting it to standard value
      */
     PathTree.prototype.createPathSubtree = function (path, fn) {
-        var tokens = Path.getTokes(path);
+        var tokens = path_1.Path.getTokes(path);
         var tree = this.tree;
         var stree = this.serializedTree;
         for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
@@ -83,4 +83,4 @@ var PathTree = (function () {
     };
     return PathTree;
 }());
-module.exports = PathTree;
+exports.PathTree = PathTree;

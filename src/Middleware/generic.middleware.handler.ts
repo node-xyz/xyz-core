@@ -18,7 +18,7 @@ import { wrapper } from './../Util/Util'
  * ...
  * ```
  */
-export  default class GenericMiddlewareHandler {
+export class GenericMiddlewareHandler {
   middlewares: any[]; 
   xyz: object;
   name: string;

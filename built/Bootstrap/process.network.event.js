@@ -1,5 +1,4 @@
 /** @module bootstrapFunctions */
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
 * will setup a message listener for the process to responde to `network` event

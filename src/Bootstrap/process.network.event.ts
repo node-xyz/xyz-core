@@ -10,6 +10,7 @@
 let load = {snd: 0, rcv: 0}
 let _load = {snd: 0, rcv: 0}
 const reset = 1000 // 2.5sec accuracy
+
 export default function _processNetworkEvent (xyz) {
   // count receives
   xyz.serviceRepository.on('message:receive', () => {

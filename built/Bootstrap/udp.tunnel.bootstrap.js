@@ -1,6 +1,7 @@
 /** @module bootstrapFunctions */
-var _udpEvent = require('./../Transport/Middlewares/call/udp.receive.event');
-var _udpExport = require('./../Transport/Middlewares/call/udp.export.middleware');
+Object.defineProperty(exports, "__esModule", { value: true });
+var udp_receive_event_1 = require("./../Transport/Middlewares/udp.receive.event");
+var udp_export_middleware_1 = require("./../Transport/Middlewares/udp.export.middleware");
 /**
  * Will create a new UDP tunnel over a given route and port.
  * @method _udpTunnel
@@ -17,10 +18,10 @@ function _udpTunnel(xyz, config) {
     // server side
     xyz.registerServer('UDP', port);
     xyz.registerServerRoute(port, route);
-    xyz.middlewares().transport.server(route)(port).register(0, _udpEvent);
+    xyz.middlewares().transport.server(route)(port).register(0, udp_receive_event_1._udpEvent);
     // client side
     xyz.registerClientRoute(route);
-    xyz.middlewares().transport.client(route).register(0, _udpExport);
+    xyz.middlewares().transport.client(route).register(0, udp_export_middleware_1._udpExport);
     logger.info("UDP TUNNEL :: Udp tunnel created with route " + route + " | port " + port);
 }
-module.exports = _udpTunnel;
+exports._udpTunnel = _udpTunnel;

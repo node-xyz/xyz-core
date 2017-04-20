@@ -1,11 +1,10 @@
-var Path = require('./../../src/Service/path')
 const common = require('../common')
-let logger = require('./../../src/Log/Logger')
+const Path = common.Path
 const expect = common.expect
 const mockNode = common.mockNode
 const mockSystem = common.mockSystem
 const mockFunctions = common.mockFunctions
-const PathTree = require('./../../src/Service/path.tree')
+const PathTree = common.PathTree
 
 let cwd, system, snd, rcv
 before(function (done) {

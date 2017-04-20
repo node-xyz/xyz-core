@@ -1,5 +1,7 @@
-const http = require('http')
-const logger = require('./../../../Log/Logger')
+
+
+import * as http from 'http'
+import {logger} from './../../Log/Logger'
 
 let _httpExport = function (xMessageParam, next, end, xyz) {
   let requestConfig = xMessageParam.requestConfig
@@ -20,7 +22,7 @@ let _httpExport = function (xMessageParam, next, end, xyz) {
       })
 
       res.on('end', () => {
-        let err = (parseInt(res.statusCode / 100) === 2 ? null : http.STATUS_CODES[res.statusCode])
+        let err = (Number(res.statusCode / 100) === 2 ? null : http.STATUS_CODES[res.statusCode])
         responseCallback(err, JSON.parse(body), res)
       })
     })
@@ -39,4 +41,4 @@ let _httpExport = function (xMessageParam, next, end, xyz) {
   end()
 }
 
-module.exports = _httpExport
+export default _httpExport

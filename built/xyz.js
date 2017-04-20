@@ -1,15 +1,13 @@
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// const ServiceRepository = require('./Service/service.repository')
-var service_repository_1 = require("./Service/service.repository");
+var generic_middleware_handler_1 = require("./Middleware/generic.middleware.handler");
 var config_global_1 = require("./Config/config.global");
+var service_repository_1 = require("./Service/service.repository");
 var Logger_1 = require("./Log/Logger");
 var ping_basic_1 = require("./Bootstrap/ping.basic");
 var Util_1 = require("./Util/Util");
 var machine_reporter_1 = require("./Util/machine.reporter");
 var process_inspect_event_1 = require("./Bootstrap/process.inspect.event");
 var process_network_event_1 = require("./Bootstrap/process.network.event");
-var generic_middleware_handler_1 = require("./Middleware/generic.middleware.handler");
 /**
  * The main class of xyz-core. Most of the functions that the user should work with
  * live inside this class.
@@ -30,9 +28,9 @@ var NodeXYZ = (function () {
      * not a string with `--xyz-` prefix. Example: `{name: 'foo'}`
      */
     function NodeXYZ(configuration, cmdLineArgs) {
-        config_global_1.default.setSelfConf(configuration.selfConf, cmdLineArgs);
-        config_global_1.default.setSystemConf(configuration.systemConf);
-        this.selfConf = config_global_1.default.getSelfConf();
+        config_global_1.CONFIG.setSelfConf(configuration.selfConf, cmdLineArgs);
+        config_global_1.CONFIG.setSystemConf(configuration.systemConf);
+        this.selfConf = config_global_1.CONFIG.getSelfConf();
         // just for logging convention
         global._serviceName = this.id()._identifier;
         // Global exported functions and modules
@@ -40,28 +38,29 @@ var NodeXYZ = (function () {
          * A reference to the config object of the node
          * @type {Object}
          */
-        this.CONFIG = config_global_1.default;
+        this.CONFIG = config_global_1.CONFIG;
         /**
          * Reference to the xyz's internal logger
          * @type {Object}
          */
         this.logger = Logger_1.logger;
+        this.Util = require('./Util/Util');
         /**
          * Reference to the path class. Note that this is static and it can be imported
          * from the xyz-core module too.
          * @type {Object}
          */
-        this.path = require('./Service/path');
+        this.path = require('./Service/path').Path;
         /**
          * Reference to the constant values of xyz
          * @type {Object}
          */
-        this.CONSTANTS = require('./Config/Constants');
+        this.CONSTANTS = require('./Config/Constants').CONSTANTS;
         /**
          * Reference to Generic Middleware Handler class
          * @type {Object}
          */
-        this.gmwh = generic_middleware_handler_1.default;
+        this.gmwh = generic_middleware_handler_1.GenericMiddlewareHandler;
         this.serviceRepository = new service_repository_1.default(this);
         this.bootstrapFunctions = [];
         // lunch the default bootstrat.
@@ -90,7 +89,7 @@ var NodeXYZ = (function () {
      * of a node
      */
     NodeXYZ.prototype.inspect = function () {
-        var pref = "\n____________________  GLOBAL ____________________\n" + Util_1.wrapper('bold', Util_1.wrapper('blue', 'selfConfig')) + ":\n  " + JSON.stringify(this.selfConf, null, 2) + "\n" + Util_1.wrapper('bold', Util_1.wrapper('blue', 'systemConf')) + ":\n  " + JSON.stringify(config_global_1.default.getSystemConf(), null, 2) + "\n" + Util_1.wrapper('bold', Util_1.wrapper('blue', 'Bootstrap Functions')) + ":\n  " + this.bootstrapFunctions + "\n____________________  SERVICE REPOSITORY ____________________\n" + this.serviceRepository.inspect() + "\n____________________  TRANSPORT LAYER ____________________\n" + Util_1.wrapper('bold', Util_1.wrapper('blue', 'Transport')) + ":\n  " + this.serviceRepository.transport.inspect() + "\n";
+        var pref = "\n____________________  GLOBAL ____________________\n" + Util_1.wrapper('bold', Util_1.wrapper('blue', 'selfConfig')) + ":\n  " + JSON.stringify(this.selfConf, null, 2) + "\n" + Util_1.wrapper('bold', Util_1.wrapper('blue', 'systemConf')) + ":\n  " + JSON.stringify(config_global_1.CONFIG.getSystemConf(), null, 2) + "\n" + Util_1.wrapper('bold', Util_1.wrapper('blue', 'Bootstrap Functions')) + ":\n  " + this.bootstrapFunctions + "\n____________________  SERVICE REPOSITORY ____________________\n" + this.serviceRepository.inspect() + "\n____________________  TRANSPORT LAYER ____________________\n" + Util_1.wrapper('bold', Util_1.wrapper('blue', 'Transport')) + ":\n  " + this.serviceRepository.transport.inspect() + "\n";
         return pref;
     };
     /**
@@ -99,7 +98,7 @@ var NodeXYZ = (function () {
     NodeXYZ.prototype.inspectJSON = function () {
         return {
             global: {
-                systemConf: config_global_1.default.getSystemConf(),
+                systemConf: config_global_1.CONFIG.getSystemConf(),
                 selfConf: this.selfConf,
                 bootstrapFunctions: this.bootstrapFunctions,
                 machineReport: {
@@ -259,7 +258,7 @@ var NodeXYZ = (function () {
             this.serviceRepository.transport.servers[port].close();
             delete this.serviceRepository.transport.servers[port];
             Logger_1.logger.info("XYZ :: server on port " + port + " removed. Removing from selfConf...");
-            config_global_1.default.removeServer(port);
+            config_global_1.CONFIG.removeServer(port);
         }
         else {
             Logger_1.logger.error("XYZ :: attempting to remove server " + port + " that does not exist");
@@ -277,11 +276,11 @@ var NodeXYZ = (function () {
     */
     NodeXYZ.prototype.id = function () {
         return {
-            name: config_global_1.default.getSelfConf().name,
-            host: config_global_1.default.getSelfConf().host,
-            port: config_global_1.default.getSelfConf().transport[0].port,
-            netId: config_global_1.default.getSelfConf().host + ":" + config_global_1.default.getSelfConf().transport[0].port,
-            _identifier: config_global_1.default.getSelfConf().name + "@" + config_global_1.default.getSelfConf().host + ":" + config_global_1.default.getSelfConf().transport[0].port
+            name: config_global_1.CONFIG.getSelfConf().name,
+            host: config_global_1.CONFIG.getSelfConf().host,
+            port: config_global_1.CONFIG.getSelfConf().transport[0].port,
+            netId: config_global_1.CONFIG.getSelfConf().host + ":" + config_global_1.CONFIG.getSelfConf().transport[0].port,
+            _identifier: config_global_1.CONFIG.getSelfConf().name + "@" + config_global_1.CONFIG.getSelfConf().host + ":" + config_global_1.CONFIG.getSelfConf().transport[0].port
         };
     };
     return NodeXYZ;

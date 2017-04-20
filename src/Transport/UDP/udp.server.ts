@@ -1,12 +1,12 @@
-const dgram = require('dgram')
-const EventEmitter = require('events')
-const logger = require('./../../Log/Logger')
-const GenericMiddlewareHandler = require('./../../Middleware/generic.middleware.handler')
-const _CONFIGURATION = require('./../../Config/config.global')
-const wrapper = require('./../../Util/Util').wrapper
-const xReceivedMessage = require('./../xReceivedMessage')
+import { xReceivedMessage } from './../Interfaces';
+import { CONFIG } from './../../Config/config.global';
+import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.handler';
+import { EventEmitter } from 'events';
+import * as dgram from 'dgram'
+import {logger} from './../../Log/logger'
+import {wrapper} from './../../Util/Util'
 
-class UDPServer extends EventEmitter {
+export default class UDPServer extends EventEmitter {
   constructor (xyz, port) {
     super()
     this.port = port
@@ -46,7 +46,7 @@ class UDPServer extends EventEmitter {
         }
       }
     })
-    .bind(port, _CONFIGURATION.getSelfConf().host)
+    .bind(port, CONFIG.getSelfConf().host)
   }
 
   inspect () {
@@ -97,5 +97,3 @@ class UDPServer extends EventEmitter {
   }
 
 }
-
-module.exports = UDPServer

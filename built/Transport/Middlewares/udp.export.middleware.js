@@ -1,7 +1,8 @@
-var dgram = require('dgram');
-var logger = require('./../../../Log/Logger');
+Object.defineProperty(exports, "__esModule", { value: true });
+var dgram = require("dgram");
+var Logger_1 = require("./../../Log/Logger");
 var client = dgram.createSocket('udp4');
-var _udpExport = function (xMessageParam, next, end, xyz) {
+function _udpExport(xMessageParam, next, end, xyz) {
     var requestConfig = xMessageParam.requestConfig;
     var responseCallback = xMessageParam.responseCallback;
     // route must be added to the message
@@ -11,12 +12,12 @@ var _udpExport = function (xMessageParam, next, end, xyz) {
         if (err)
             responseCallback(err, null);
         else {
-            logger.silly("exporting message using _udpExport to " + requestConfig.hostname + ":" + Number(requestConfig.port));
+            Logger_1.logger.silly("exporting message using _udpExport to " + requestConfig.hostname + ":" + Number(requestConfig.port));
             if (responseCallback) {
                 responseCallback(null, bytes + " bytes sent");
             }
         }
     });
     end();
-};
-module.exports = _udpExport;
+}
+exports._udpExport = _udpExport;

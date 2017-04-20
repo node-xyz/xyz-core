@@ -1,18 +1,20 @@
-// const ServiceRepository = require('./Service/service.repository')
+import { GenericMiddlewareHandler } from './Middleware/generic.middleware.handler';
+import { CONFIG } from './Config/config.global';
 import ServiceRepository from './Service/service.repository'
-import CONFIG from './Config/config.global'
 import { logger } from './Log/Logger'
 import pingBoostrap from './Bootstrap/ping.basic'
 import { wrapper } from './Util/Util'
 import machineReporter from './Util/machine.reporter'
 import inspectBootstrap from './Bootstrap/process.inspect.event'
 import networkMonitorBootstrap from './Bootstrap/process.network.event'
-import GenericMiddlewareHandler from './Middleware/generic.middleware.handler'
+
 
 /**
  * The main class of xyz-core. Most of the functions that the user should work with
  * live inside this class.
  */
+
+
 export default class NodeXYZ {
   selfConf: object; 
   CONFIG: object;
@@ -63,18 +65,20 @@ export default class NodeXYZ {
      */
     this.logger = logger
 
+    this.Util = require('./Util/Util')
+
     /**
      * Reference to the path class. Note that this is static and it can be imported
      * from the xyz-core module too.
      * @type {Object}
      */
-    this.path = require('./Service/path')
+    this.path = require('./Service/path').Path
 
     /**
      * Reference to the constant values of xyz
      * @type {Object}
      */
-    this.CONSTANTS = require('./Config/Constants')
+    this.CONSTANTS = require('./Config/Constants').CONSTANTS
 
     /**
      * Reference to Generic Middleware Handler class

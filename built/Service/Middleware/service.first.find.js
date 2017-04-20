@@ -1,5 +1,6 @@
 /** @module service-middlewares */
-var http = require('http');
+Object.defineProperty(exports, "__esModule", { value: true });
+var http = require("http");
 /**
  * Will resolve the service path to an array of nodes that can responde to
  * the target path given. It will then send the message to first node in the array.

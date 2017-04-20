@@ -1,4 +1,5 @@
-var Path = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Path = {
     validate: function (path) {
         if (path === '/') {
             return true;
@@ -86,4 +87,3 @@ var Path = {
         return path.split('/');
     }
 };
-module.exports = Path;

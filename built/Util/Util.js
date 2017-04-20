@@ -1,4 +1,3 @@
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function Random(time) {
     return Math.random() * time;
@@ -14,8 +13,7 @@ function _require(name) {
         return name;
     var ret;
     try {
-        import aModule from "./../Service/" + name;
-        ret = module_1.default;
+        ret = require("./../Service/" + name);
     }
     catch (e) {
         ret = false;

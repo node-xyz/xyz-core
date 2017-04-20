@@ -1,8 +1,11 @@
+import { CONSTANTS } from './../Config/Constants';
+import { logger } from './../Log/Logger';
+import { GenericMiddlewareHandler } from './../Middleware/generic.middleware.handler';
+import _httpExport from './../Transport/Middlewares/http.export.middleware'
+
 let interval = 2000
 let threshold = 2000
 let kick = 10
-const GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
-const _httpExport = require('./../Transport/Middlewares/call/http.export.middleware')
 
  /** @module bootstrapFunctions */
 
@@ -13,7 +16,7 @@ const _httpExport = require('./../Transport/Middlewares/call/http.export.middlew
  * @param  {Bollean}            event indicates if pingRate message listener should be creted or not.
  * @param  {Number}            port  the port to identify the route and server to use
  */
-export default  _basicPingBootstrap = (xyz, event, port) => {
+export default function _basicPingBootstrap (xyz, event, port) {
   let Util = xyz.Util
   let wrapper = Util.wrapper
   let logger = xyz.logger

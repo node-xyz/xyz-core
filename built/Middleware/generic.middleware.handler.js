@@ -1,4 +1,3 @@
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Logger_1 = require("./../Log/Logger");
 var Util_1 = require("./../Util/Util");
@@ -135,4 +134,4 @@ var GenericMiddlewareHandler = (function () {
     };
     return GenericMiddlewareHandler;
 }());
-exports.default = GenericMiddlewareHandler;
+exports.GenericMiddlewareHandler = GenericMiddlewareHandler;

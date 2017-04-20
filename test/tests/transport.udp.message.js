@@ -1,5 +1,4 @@
 const common = require('../common')
-const logger = require('./../../src/Log/Logger')
 const expect = common.expect
 const mockNode = common.mockNode
 const mockSystem = common.mockSystem
@@ -15,7 +14,7 @@ before(function (done) {
 
   rcv.xyz.serviceRepository.registerServer('UDP', 2333, true)
   rcv.xyz.registerServerRoute(2333, 'udp')
-  rcv.xyz.middlewares().transport.server('udp')(2333).register(0, require('./../../src/Transport/Middlewares/call/udp.receive.event'))
+  rcv.xyz.middlewares().transport.server('udp')(2333).register(0, common._udpMessageEvent)
 
   setTimeout(done, 500)
 })
@@ -23,7 +22,7 @@ before(function (done) {
 it('simple udp message', function (done) {
   // set up udp server in receiver
   snd.xyz.registerClientRoute('udp')
-  snd.xyz.middlewares().transport.client('udp').register(0, require('./../../src/Transport/Middlewares/call/udp.export.middleware'))
+  snd.xyz.middlewares().transport.client('udp').register(0, common._udpExport)
 
   rcv.xyz.serviceRepository.once('message:receive', (data) => {
     done()

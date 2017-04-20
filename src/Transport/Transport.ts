@@ -1,13 +1,14 @@
-const logger = require('./../Log/Logger')
-const CONFIG = require('./../Config/config.global')
-const GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler')
-const wrapper = require('./../Util/Util').wrapper
-const HTTPServer = require('./HTTP/http.server')
-const UDPServer = require('./UDP/udp.server')
-const xSentMessage = require('./xSentMessage')
-const xSentMessageMwParam = require('./xSentMessageMwParam')
+import { CONFIG } from './../Config/config.global';
+import { GenericMiddlewareHandler } from './../Middleware/generic.middleware.handler';
+import { logger } from './../Log/Logger'
+import {wrapper} from './../Util/Util'
+import HTTPServer from './HTTP/http.server'
+import UDPServer from './UDP/udp.server'
+import {xSentMessage, xSentMessageMwParam} from './Interfaces'
+import _httpExport  from './Middlewares/http.export.middleware'
 
-class Transport {
+
+export default class Transport {
 
   /**
    * Transport layer. This layer is an abstraction above all different sorts of communication.
@@ -19,7 +20,7 @@ class Transport {
     this.servers = {}
 
     let callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'call.dispatch.mw', 'CALL')
-    callDispatchMiddlewareStack.register(-1, require('./Middlewares/call/http.export.middleware'))
+    callDispatchMiddlewareStack.register(-1, _httpExport)
     this.registerRoute('CALL', callDispatchMiddlewareStack)
   }
 
@@ -192,7 +193,5 @@ class Transport {
     }
     return true
   }
-
 }
 
-module.exports = Transport

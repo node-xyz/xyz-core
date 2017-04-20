@@ -30,7 +30,7 @@ function getFormattedDate () {
 }
 // { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
 
-export var logger = new winston.Logger({
+export let logger = new winston.Logger({
   transports: [
     new winston.transports.Console({
       handleExceptions: false,

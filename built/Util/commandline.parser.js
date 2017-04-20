@@ -1,4 +1,4 @@
-var CONSTANTS = require('./../Config/Constants');
+Object.defineProperty(exports, "__esModule", { value: true });
 function get(argName) {
     var args = process.argv;
     for (var idx = 2; idx < args.length; idx++) {
@@ -6,12 +6,13 @@ function get(argName) {
             return args[idx + 1];
         }
     }
-    return CONSTANTS.commandline[argName.slice(2)];
 }
+exports.get = get;
 function has(argName) {
     var args = process.argv;
     return args.indexOf(argName) > -1;
 }
+exports.has = has;
 function xyzGeneric(prefix) {
     if (prefix === void 0) { prefix = '--xyz-'; }
     var args = process.argv;
@@ -34,8 +35,4 @@ function xyzGeneric(prefix) {
     }
     return _args;
 }
-module.exports = {
-    get: get,
-    has: has,
-    xyzGeneric: xyzGeneric
-};
+exports.xyzGeneric = xyzGeneric;
