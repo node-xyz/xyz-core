@@ -28,7 +28,7 @@ var HTTPServer = (function (_super) {
     function HTTPServer(xyz, port) {
         var _this = _super.call(this) || this;
         http.globalAgent.maxSockets = Infinity;
-        _this.port = port || config_global_1.CONFIG.getSelfConf().port;
+        _this.port = port || config_global_1.CONFIG.getSelfConf().transport[0].port;
         _this.xyz = xyz;
         _this.serverId = {
             type: 'HTTP',
@@ -59,14 +59,14 @@ var HTTPServer = (function (_super) {
                 for (var route in _this.routes) {
                     if (parsedUrl.pathname === "/" + route) {
                         // wrap response
-                        Interfaces_1.xResponse(resp);
+                        Interfaces_1._xResponse(resp);
                         // create mw param message object
-                        var xMessage = new Interfaces_1.xReceivedMessage({
+                        var xMessage = {
                             serverId: _this.serverId,
                             message: JSON.parse(body),
                             response: resp,
                             meta: { request: req }
-                        });
+                        };
                         _this.routes[route].apply(xMessage, 0);
                         dismissed = true;
                         break;

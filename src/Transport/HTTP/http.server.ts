@@ -4,11 +4,17 @@ import { logger } from './../../Log/Logger';
 import * as http from 'http'
 import * as url from 'url'
 import * as EventEmitter from 'events'
-import {xResponse, xReceivedMessage} from './../Interfaces'
+import {_xResponse, IxReceivedMessage} from './../Interfaces'
 import {wrapper} from './../../Util/Util'
 import _httpMessageEvent from './../Middlewares/http.receive.event'
+import XYZ from './../../xyz'
 
 export default class HTTPServer extends EventEmitter {
+  xyz: XYZ; 
+  port: number; 
+  serverId: Object; 
+  routes: Object; 
+  server: any;
 
   /**
    * Creates a new HTTP server
@@ -18,7 +24,7 @@ export default class HTTPServer extends EventEmitter {
   constructor (xyz, port) {
     super()
     http.globalAgent.maxSockets = Infinity
-    this.port = port || CONFIG.getSelfConf().port
+    this.port = port || CONFIG.getSelfConf().transport[0].port
     this.xyz = xyz
 
     this.serverId = {
@@ -53,15 +59,15 @@ export default class HTTPServer extends EventEmitter {
           for (let route in this.routes) {
             if (parsedUrl.pathname === `/${route}`) {
               // wrap response
-              xResponse(resp)
+              _xResponse(resp)
 
               // create mw param message object
-              let xMessage = new xReceivedMessage({
+              let xMessage: IxReceivedMessage = {
                 serverId: this.serverId,
                 message: JSON.parse(body),
                 response: resp,
                 meta: {request: req}
-              })
+              }
 
               this.routes[route].apply(xMessage, 0)
               dismissed = true

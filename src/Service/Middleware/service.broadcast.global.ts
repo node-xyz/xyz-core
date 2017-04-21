@@ -1,5 +1,5 @@
 /** @module service-middlewares */
-const http = require('http')
+import * as http from 'http'
 
 /**
  * will broadcast a message regardless of the path to all nodes.

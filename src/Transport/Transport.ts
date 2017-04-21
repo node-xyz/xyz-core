@@ -4,11 +4,15 @@ import { logger } from './../Log/Logger'
 import {wrapper} from './../Util/Util'
 import HTTPServer from './HTTP/http.server'
 import UDPServer from './UDP/udp.server'
-import {xSentMessage, xSentMessageMwParam} from './Interfaces'
+import {IxSentMessage, IxSentMessageMwParam, IxMessageConfig} from './Interfaces'
 import _httpExport  from './Middlewares/http.export.middleware'
+import XYZ from './../xyz'
 
 
 export default class Transport {
+  xyz: XYZ; 
+  routes: Object; 
+  servers: Object;
 
   /**
    * Transport layer. This layer is an abstraction above all different sorts of communication.
@@ -83,7 +87,7 @@ export default class Transport {
       }
     }
 
-    let message = {
+    let xMessage: IxSentMessage = {
       userPayload: opt.payload,
       xyzPayload: {
         senderId: this.xyz.id().netId,
@@ -91,10 +95,7 @@ export default class Transport {
       }
     }
 
-    // the json key
-    let xMessage = new xSentMessage(message)
-
-    let requestConfig = {
+    let requestConfig: IxMessageConfig = {
       hostname: `${opt.node.split(':')[0]}`,
       port: _port || `${opt.node.split(':')[1]}`,
       path: `/${opt.route}`,
@@ -103,10 +104,10 @@ export default class Transport {
     }
 
     // mw param
-    let xMessageParam = new xSentMessageMwParam({
+    let xMessageParam: IxSentMessageMwParam = {
       requestConfig: requestConfig,
       responseCallback: responseCallback
-    })
+    }
 
     logger.debug(`${wrapper('bold', 'Transport Client')} :: sending message to ${wrapper('bold', requestConfig.hostname)}:${requestConfig.port}/${opt.route} through ${this.routes[opt.route].name} middleware :: message ${JSON.stringify(xMessage)}`)
 

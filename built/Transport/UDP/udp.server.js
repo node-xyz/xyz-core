@@ -9,7 +9,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var Interfaces_1 = require("./../Interfaces");
 var config_global_1 = require("./../../Config/config.global");
 var generic_middleware_handler_1 = require("./../../Middleware/generic.middleware.handler");
 var events_1 = require("events");
@@ -41,12 +40,12 @@ var UDPServer = (function (_super) {
             for (var route in _this.routes) {
                 if (_message.xyzPayload.route === "/" + route) {
                     logger_1.logger.debug("UDP SERVER @ " + _this.port + " :: udp message received for /" + Util_1.wrapper('bold', route) + " [" + JSON.stringify(_message) + "]");
-                    var xMessage = new Interfaces_1.xReceivedMessage({
+                    var xMessage = {
                         message: _message,
                         response: undefined,
                         serverId: _this.serverId,
                         meta: remote
-                    });
+                    };
                     _this.routes[route].apply(xMessage, 0);
                     break;
                 }

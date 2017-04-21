@@ -5,7 +5,6 @@ var Logger_1 = require("./../Log/Logger");
 var Util_1 = require("./../Util/Util");
 var http_server_1 = require("./HTTP/http.server");
 var udp_server_1 = require("./UDP/udp.server");
-var Interfaces_1 = require("./Interfaces");
 var http_export_middleware_1 = require("./Middlewares/http.export.middleware");
 var Transport = (function () {
     /**
@@ -72,15 +71,13 @@ var Transport = (function () {
                 return;
             }
         }
-        var message = {
+        var xMessage = {
             userPayload: opt.payload,
             xyzPayload: {
                 senderId: this.xyz.id().netId,
                 service: opt.service
             }
         };
-        // the json key
-        var xMessage = new Interfaces_1.xSentMessage(message);
         var requestConfig = {
             hostname: "" + opt.node.split(':')[0],
             port: _port || "" + opt.node.split(':')[1],
@@ -89,10 +86,10 @@ var Transport = (function () {
             json: xMessage
         };
         // mw param
-        var xMessageParam = new Interfaces_1.xSentMessageMwParam({
+        var xMessageParam = {
             requestConfig: requestConfig,
             responseCallback: responseCallback
-        });
+        };
         Logger_1.logger.debug(Util_1.wrapper('bold', 'Transport Client') + " :: sending message to " + Util_1.wrapper('bold', requestConfig.hostname) + ":" + requestConfig.port + "/" + opt.route + " through " + this.routes[opt.route].name + " middleware :: message " + JSON.stringify(xMessage));
         this.routes[opt.route].apply(xMessageParam, 0);
     };

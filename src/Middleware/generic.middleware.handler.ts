@@ -1,5 +1,6 @@
 import { logger } from './../Log/Logger'
 import { wrapper } from './../Util/Util'
+import XYZ from './../xyz'
 
 /**
  * This class is used in various modules to handle middlewares.
@@ -20,11 +21,11 @@ import { wrapper } from './../Util/Util'
  */
 export class GenericMiddlewareHandler {
   middlewares: any[]; 
-  xyz: object;
+  xyz: XYZ;
   name: string;
   route: string; 
 
-  constructor (xyz, name, route) {
+  constructor (xyz: XYZ, name:string, route?: string) {
     this.middlewares = []
     this.xyz = xyz
     this.name = name
@@ -69,7 +70,7 @@ export class GenericMiddlewareHandler {
    * @param index {Number} index of insertion
    * @param fn {Function} function to be invoked
    */
-  register (index, fn) {
+  register (index:number , fn) {
     if (typeof (fn) !== 'function') {
       logger.error(`GMWH :: attempting to insert ${fn} which is not a function`)
     }

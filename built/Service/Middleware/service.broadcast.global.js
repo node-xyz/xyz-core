@@ -1,5 +1,6 @@
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @module service-middlewares */
-var http = require('http');
+var http = require("http");
 /**
  * will broadcast a message regardless of the path to all nodes.
  * @method _braodcastGlobal

@@ -1,3 +1,4 @@
+import { IselfConf, IConfig, IConstants } from './Config/interface';
 import { GenericMiddlewareHandler } from './Middleware/generic.middleware.handler';
 import { CONFIG } from './Config/config.global';
 import ServiceRepository from './Service/service.repository'
@@ -8,7 +9,6 @@ import machineReporter from './Util/machine.reporter'
 import inspectBootstrap from './Bootstrap/process.inspect.event'
 import networkMonitorBootstrap from './Bootstrap/process.network.event'
 
-
 /**
  * The main class of xyz-core. Most of the functions that the user should work with
  * live inside this class.
@@ -16,13 +16,13 @@ import networkMonitorBootstrap from './Bootstrap/process.network.event'
 
 
 export default class NodeXYZ {
-  selfConf: object; 
+  selfConf: IselfConf; 
   CONFIG: object;
   logger: object;
   path: object;
-  CONSTANTS: object; 
+  CONSTANTS: IConstants; 
   Util: object;
-  gmwh: object;
+  gmwh: any;
   serviceRepository: ServiceRepository;
   bootstrapFunctions: any[];
 

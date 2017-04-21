@@ -1,3 +1,4 @@
+import { IselfConf } from './../Config/interface';
 import { PathTree } from './path.tree';
 import { GenericMiddlewareHandler } from './../Middleware/generic.middleware.handler';
 import { CONFIG } from './../Config/config.global';
@@ -8,6 +9,7 @@ import * as http from 'http'
 import Transport from './../Transport/Transport'
 import * as Util from './../Util/Util'
 import * as EventEmitter from 'events'
+import XYZ from './../xyz'
 
 const wrapper = Util.wrapper
 const BOLD = Util.bold
@@ -24,6 +26,13 @@ const BOLD = Util.bold
  */
 
 export default class ServiceRepository extends EventEmitter {
+  transport: Transport; 
+  selfConf: IselfConf;
+  callDispatchMiddlewareStack: GenericMiddlewareHandler
+  services: PathTree;
+  foreignNodes: Object;
+  foreignRoutes: Object; 
+  xyz: XYZ;
 
   /**
    * Creates a new ServiceRepository

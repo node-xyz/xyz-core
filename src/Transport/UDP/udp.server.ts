@@ -1,13 +1,20 @@
-import { xReceivedMessage } from './../Interfaces';
+import { IxReceivedMessage } from './../Interfaces';
 import { CONFIG } from './../../Config/config.global';
 import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.handler';
 import { EventEmitter } from 'events';
 import * as dgram from 'dgram'
 import {logger} from './../../Log/logger'
 import {wrapper} from './../../Util/Util'
+import XYZ from './../../xyz'
 
 export default class UDPServer extends EventEmitter {
-  constructor (xyz, port) {
+  port: number;
+  xyz: XYZ; 
+  serverId: Object; 
+  server: any; 
+  routes: Object; 
+
+  constructor (xyz:XYZ, port:number) {
     super()
     this.port = port
     this.xyz = xyz
@@ -34,12 +41,12 @@ export default class UDPServer extends EventEmitter {
         if (_message.xyzPayload.route === `/${route}`) {
           logger.debug(`UDP SERVER @ ${this.port} :: udp message received for /${wrapper('bold', route)} [${JSON.stringify(_message)}]`)
 
-          let xMessage = new xReceivedMessage({
+          let xMessage : xReceivedMessage{
             message: _message,
             response: undefined,
             serverId: this.serverId,
             meta: remote
-          })
+          }
 
           this.routes[route].apply(xMessage, 0)
           break

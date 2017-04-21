@@ -1,6 +1,6 @@
 /** @module service-middlewares */
 
-const http = require('http')
+import * as http from 'http'
 
 /**
  * will ignore the service path enitrely and will send the message to every

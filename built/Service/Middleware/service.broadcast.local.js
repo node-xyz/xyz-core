@@ -1,5 +1,6 @@
 /** @module service-middlewares */
-var http = require('http');
+Object.defineProperty(exports, "__esModule", { value: true });
+var http = require("http");
 /**
  * will ignore the service path enitrely and will send the message to every
  * known host in localhost. Note that this module does not resolve path addresses

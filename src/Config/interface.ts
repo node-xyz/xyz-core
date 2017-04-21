@@ -1,3 +1,4 @@
+import { IselfConf, IsystemConf } from './interface';
 export interface Itransport {
     type: string; 
     event: boolean; 
@@ -17,6 +18,11 @@ export interface IselfConf {
 
 export interface IsystemConf {
     nodes: string[]
+}
+
+export interface IConfig {
+    selfConf: IselfConf,
+    systemConf: IsystemConf
 }
 
 export interface IConstants {

@@ -1,8 +1,18 @@
+import { ISubtree } from './path.tree';
 import { logger } from './../Log/Logger';
 import { Path } from './path';
 
+export interface ITree { 
+  [index: string] : ISubtree
+}
+
+export interface ISubtree {
+  subtree: ITree; 
+  fn?: () => any
+}
+
 export class PathTree {
-  tree: object; 
+  tree: ITree | ISubtree; 
   serializedTree: object; 
   plainTree: any; 
   
