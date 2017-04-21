@@ -1,3 +1,4 @@
+import { IMessageConfig, INodeIdentifier } from './Interfaces';
 import { IselfConf, IConfig, IConstants } from './Config/interface';
 import { GenericMiddlewareHandler } from './Middleware/generic.middleware.handler';
 import { CONFIG } from './Config/config.global';
@@ -9,12 +10,11 @@ import machineReporter from './Util/machine.reporter'
 import inspectBootstrap from './Bootstrap/process.inspect.event'
 import networkMonitorBootstrap from './Bootstrap/process.network.event'
 
+
 /**
  * The main class of xyz-core. Most of the functions that the user should work with
  * live inside this class.
  */
-
-
 export default class NodeXYZ {
   selfConf: IselfConf; 
   CONFIG: object;
@@ -24,7 +24,7 @@ export default class NodeXYZ {
   Util: object;
   gmwh: any;
   serviceRepository: ServiceRepository;
-  bootstrapFunctions: any[];
+  bootstrapFunctions: string[];
 
   /**
    * create a new xyz object
@@ -40,7 +40,7 @@ export default class NodeXYZ {
    * These configuration will only override the `selfConf` key and should be an object,
    * not a string with `--xyz-` prefix. Example: `{name: 'foo'}`
    */
-  constructor (configuration, cmdLineArgs) {
+  constructor (configuration: IConfig, cmdLineArgs:string ) {
     CONFIG.setSelfConf(configuration.selfConf, cmdLineArgs)
     CONFIG.setSystemConf(configuration.systemConf)
 
@@ -168,7 +168,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
    * @param  {Function} fn                Handler function for this service
    * see [Service layer register method](/apidoc/ServiceRepository.html#register) for more info
    */
-  register (servicePath, fn) {
+  register (servicePath: string, fn: () => void) {
     return this.serviceRepository.register(servicePath, fn)
   }
 
@@ -190,7 +190,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
    * @param responseCallback {Function} the callback for when the callee responds to the message.
    * Note that this depends on the underlying transport used
    */
-  call (opt, responseCallback) {
+  call (opt: IMessageConfig, responseCallback: () => void) {
     return this.serviceRepository.call(opt, responseCallback)
   }
 
@@ -201,7 +201,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * Note that the first paramters of any bootstrap function is always the xyz instnace
   * and the rest is filled with `..args`.
   */
-  bootstrap (fn, ...args) {
+  bootstrap (fn: (xyz: NodeXYZ, ...args) => void , ...args): void {
     this.bootstrapFunctions.push(fn.name)
     fn(this, ...args)
   }
@@ -210,7 +210,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * will override the sendstrategy permanently
   * @param {Function} fn the new sendStrategy
   */
-  setSendStrategy (fn) {
+  setSendStrategy (fn: () => void): void {
     this.serviceRepository.callDispatchMiddlewareStack.middlewares = []
     this.serviceRepository.callDispatchMiddlewareStack.register(0, fn)
   }
@@ -254,7 +254,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * if not filled, an empty middleware will be created for this route.
   * @return {Number} 1 if success, -1 if fail
   */
-  registerServerRoute (port, prefix, gmwh) {
+  registerServerRoute (port: number, prefix:string, gmwh:GenericMiddlewareHandler) {
     return this.serviceRepository.transport.servers[port].registerRoute(prefix, gmwh)
   }
 
@@ -266,7 +266,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   *
   * @return {Number} 1 if success, -1 if fail
   */
-  registerClientRoute (prefix, gmwh) {
+  registerClientRoute (prefix: string, gmwh:GenericMiddlewareHandler) {
     return this.serviceRepository.transport.registerRoute(prefix, gmwh)
   }
 
@@ -275,7 +275,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
    * @param {String} prefix the prefix of the route
    * @return {Number} statuscode. 1 if success and -1 if fail
    */
-  removeClientRoute (prefix) {
+  removeClientRoute (prefix: string) {
     return this.serviceRepository.transport.removeRoute(prefix)
   }
 
@@ -289,7 +289,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * server emits the message `xyz_message` (see `CONSTANTS.events`) it will be received by service layer
   * and appropriate function, if registered will be called.
   */
-  registerServer (type, port, e = true) {
+  registerServer (type: string, port:number , e:boolean = true) {
     return this.serviceRepository.registerServer(type, port, e)
   }
 
@@ -301,7 +301,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
    *   - all of the routes and middleware to be destroyed
    * @param {Number} port port to remove the server.
    */
-  removeServer (port) {
+  removeServer (port: number) {
     if (this.serviceRepository.transport.servers[port]) {
       this.serviceRepository.transport.servers[port].close()
       delete this.serviceRepository.transport.servers[port]
@@ -322,7 +322,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   *
   * @return {Object}
   */
-  id () {
+  id (): INodeIdentifier {
     return {
       name: CONFIG.getSelfConf().name,
       host: CONFIG.getSelfConf().host,

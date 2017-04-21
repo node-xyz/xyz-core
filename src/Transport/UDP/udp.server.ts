@@ -41,7 +41,7 @@ export default class UDPServer extends EventEmitter {
         if (_message.xyzPayload.route === `/${route}`) {
           logger.debug(`UDP SERVER @ ${this.port} :: udp message received for /${wrapper('bold', route)} [${JSON.stringify(_message)}]`)
 
-          let xMessage : xReceivedMessage{
+          let xMessage : IxReceivedMessage = {
             message: _message,
             response: undefined,
             serverId: this.serverId,

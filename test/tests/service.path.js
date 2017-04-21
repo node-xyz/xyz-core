@@ -144,6 +144,23 @@ it.skip('path parent matching', function (done) {
   }, 3 * 1000)
 })
 
+it.skip('wildcard in .register()', function (done) {
+  rcv.register('/major/*', (body, resp) => {
+    console.log(body)
+    resp.jsonify('ok')
+  })
+
+  rcv.register('/major/minor/*', (body, resp) => {
+    console.log(body)
+    resp.jsonify('ok')
+  })
+
+  rcv.register('/major/minor/patch', (body, resp) => {
+    console.log(body)
+    resp.jsonify('ok')
+  })
+})
+
 after(function () {
   snd.stop()
   rcv.stop()
