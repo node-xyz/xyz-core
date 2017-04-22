@@ -1,6 +1,7 @@
 /** @module service-middlewares */
 
-import * as http from 'http'
+import { IServDiscMwParam } from './../service.interfaces';
+import XYZ from './../../xyz'
 
 /**
  * Will resolve the service path to an array of nodes that can responde to
@@ -11,12 +12,12 @@ import * as http from 'http'
  * @param  {Function}     done   used to end the middleware stack
  * @param  {Object}       xyz    reference to the caller's xyz instance
  */
-function _firstFind (params, next, done, xyz) {
-  let servicePath = params[0].servicePath
-  let userPayload = params[0].payload
-  let responseCallback = params[1]
-  let route = params[0].route
-  let redirect = params[0].redirect
+function _firstFind (params:IServDiscMwParam, next, done, xyz: XYZ) {
+  let servicePath = params.opt.servicePath
+  let userPayload = params.opt.payload
+  let responseCallback = params.responseCallback
+  let route = params.opt.route
+  let redirect = params.opt.redirect
 
   let foreignNodes = xyz.serviceRepository.foreignNodes
   let transport = xyz.serviceRepository.transport
@@ -32,25 +33,11 @@ function _firstFind (params, next, done, xyz) {
   for (let node in foreignNodes) {
     matches = Path.match(servicePath, foreignNodes[node])
     if (matches.length) {
-      logger.verbose(`${wrapper('bold', 'FIRST FIND')} :: determined node for service ${wrapper('bold', servicePath)} by first find strategy : ${wrapper('bold', node + ':' + matches[0])}`)
-      transport.send({
-        redirect: redirect,
-        node: node,
-        route: route,
-        payload: userPayload,
-        service: matches[0]
-      }, responseCallback)
-      if (done) done()
-      return
+      logger.verbose(`${wrapper('bold', 'FIRST FIND V2')} :: determined node for service ${wrapper('bold', servicePath)} by first find strategy : ${wrapper('bold', node + ':' + matches[0])}`)
+      params.targets.push({node: node, service: matches[0]})
+      if ( next ) next()
+      break
     }
-  }
-
-  // if no node matched
-  logger.warn(`Sending a message to ${servicePath} from first find strategy failed (Local Response)`)
-  if (responseCallback) {
-    responseCallback(http.STATUS_CODES[404], null, null)
-    if (done) done()
-    return
   }
 }
 

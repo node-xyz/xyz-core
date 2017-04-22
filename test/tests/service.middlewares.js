@@ -87,7 +87,7 @@ it('change sendStrategy per call - sendToAll', function (done) {
 })
 
 it('send to target - correct usage', function (done) {
-  let sentToTarget = require('./../../built/Service/Middleware/service.sent.to.target')
+  let sentToTarget = common.sendToTarget
   snd.call({
     servicePath: '/math/mul',
     payload: {x: 2, y: 3},
@@ -100,7 +100,7 @@ it('send to target - correct usage', function (done) {
 })
 
 it('send to target - wrong usage', function (done) {
-  let sentToTarget = require('./../../built/Service/Middleware/service.sent.to.target')
+  let sentToTarget = common.sendToTarget
   snd.call({
     servicePath: '/math/mul',
     payload: {x: 2, y: 3},
@@ -114,7 +114,7 @@ it('send to target - wrong usage', function (done) {
 })
 
 it('broadcast local - correct case', function (done) {
-  let broadcast = require('./../../built/Service/Middleware/service.broadcast.local')
+  let broadcast = common.broadcastLocal
   snd.call({
     servicePath: '/math/mul',
     payload: {x: 2, y: 3},
@@ -138,7 +138,7 @@ it('broadcast local - correct case', function (done) {
 })
 
 it('broadcast local - wrong case', function (done) {
-  let broadcast = require('./../../built/Service/Middleware/service.broadcast.local')
+  let broadcast = common.broadcastLocal
   snd.call({
     servicePath: '/math/*', // will not work cos the receiver can not resolve this
     payload: {x: 2, y: 3},
@@ -161,7 +161,7 @@ it('broadcast local - wrong case', function (done) {
 })
 
 it('broadcast global - correct case', function (done) {
-  let broadcast = require('./../../built/Service/Middleware/service.broadcast.global')
+  let broadcast = common.broadcastGlobal
   snd.call({
     servicePath: '/math/mul',
     payload: {x: 2, y: 3},
@@ -184,7 +184,7 @@ it('broadcast global - correct case', function (done) {
 })
 
 it('broadcast global - wrong case', function (done) {
-  let broadcast = require('./../../built/Service/Middleware/service.broadcast.global')
+  let broadcast = common.broadcastGlobal
   snd.call({
     servicePath: '/math/*', // will not work cos the receiver can not resolve this
     payload: {x: 2, y: 3},

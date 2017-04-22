@@ -67,9 +67,20 @@ export interface IxReceivedMessage {
  * Generic object created ad transport layers
  */
 export interface IxMessageConfig {
-  hostname: string;
-  port:number; 
-  path: string; 
-  method: string; 
+  hostname: string
+  port:number 
+  path: string
+  method: string
   json: IxSentMessage
+}
+
+/**
+ * Generic interface that must be passed to transport.send()
+ */
+export interface ITransportSendConfig {
+  redirect: boolean
+  route: string
+  node: string
+  payload: any
+  service: string
 }

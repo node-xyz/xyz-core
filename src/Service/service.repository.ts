@@ -1,3 +1,5 @@
+import { IServDiscMwParam } from './service.interfaces';
+import { IMessageConfig } from './../Interfaces';
 import { IselfConf } from './../Config/interface';
 import { PathTree } from './path.tree';
 import { GenericMiddlewareHandler } from './../Middleware/generic.middleware.handler';
@@ -10,6 +12,7 @@ import Transport from './../Transport/Transport'
 import * as Util from './../Util/Util'
 import * as EventEmitter from 'events'
 import XYZ from './../xyz'
+import {_genericTransportInvoke} from './Middleware/service.generic.transport'
 
 const wrapper = Util.wrapper
 const BOLD = Util.bold
@@ -26,6 +29,7 @@ const BOLD = Util.bold
  */
 
 export default class ServiceRepository extends EventEmitter {
+  
   transport: Transport; 
   selfConf: IselfConf;
   callDispatchMiddlewareStack: GenericMiddlewareHandler
@@ -67,12 +71,16 @@ export default class ServiceRepository extends EventEmitter {
 
     // note that this can be either string or `require`
     let sendStategy = Util._require(CONFIG.getSelfConf().defaultSendStrategy)
+
     if (sendStategy) {
       this.callDispatchMiddlewareStack.register(0, sendStategy)
     } else {
       logger.error(`SR :: defaultSendStrategy passed to config [${CONFIG.getSelfConf().defaultSendStrategy}] not found. setting the default value`)
       this.callDispatchMiddlewareStack.register(0, require('./Middleware/service.first.find'))
     }
+
+    this.callDispatchMiddlewareStack.register(-1, _genericTransportInvoke)
+    
     logger.info(`SR :: default sendStategy set to ${this.callDispatchMiddlewareStack.middlewares[0].name}`)
 
     /**
@@ -192,10 +200,11 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
    * @param {Object} opt the options passed to `xyz.call()`
    * @param {Function} [responseCallback] optional responseCallback
    */
-  call (opt, responseCallback) {
+  call (opt:IMessageConfig, responseCallback) {
     let nullFn = () => {}
-    opt.payload == undefined ? null : opt.payload
+    opt.payload === undefined ? null : opt.payload
     opt.servicePath = Path.format(opt.servicePath)
+
     if (!Path.validate(opt.servicePath)) {
       logger.error(`SR :: Aborting message ${BOLD(opt)}. Invalid servicePath`)
       if (responseCallback) {
@@ -203,15 +212,25 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
       }
       return false
     }
+
     opt.route = opt.route || 'CALL'
     opt.redirect = opt.redirect || false
 
     this.emit('message:send', {opt: opt})
+
+    let params: IServDiscMwParam = {
+      opt: opt,
+      responseCallback: responseCallback,
+      targets: []
+    }
+
     if (opt.sendStrategy) {
       // this is trying to imitate the middleware signature
-      opt.sendStrategy([opt, responseCallback], nullFn, nullFn, this.xyz)
+      console.log('XYZ :: OUT OF SERVICE FOR NOW');
+      return false
+      // opt.sendStrategy(params, nullFn, nullFn, this.xyz)
     } else {
-      this.callDispatchMiddlewareStack.apply([opt, responseCallback], 0)
+      this.callDispatchMiddlewareStack.apply(params, 0)
     }
     return true
   }

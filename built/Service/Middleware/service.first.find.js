@@ -1,6 +1,5 @@
 /** @module service-middlewares */
 Object.defineProperty(exports, "__esModule", { value: true });
-var http = require("http");
 /**
  * Will resolve the service path to an array of nodes that can responde to
  * the target path given. It will then send the message to first node in the array.
@@ -11,11 +10,11 @@ var http = require("http");
  * @param  {Object}       xyz    reference to the caller's xyz instance
  */
 function _firstFind(params, next, done, xyz) {
-    var servicePath = params[0].servicePath;
-    var userPayload = params[0].payload;
-    var responseCallback = params[1];
-    var route = params[0].route;
-    var redirect = params[0].redirect;
+    var servicePath = params.opt.servicePath;
+    var userPayload = params.opt.payload;
+    var responseCallback = params.responseCallback;
+    var route = params.opt.route;
+    var redirect = params.opt.redirect;
     var foreignNodes = xyz.serviceRepository.foreignNodes;
     var transport = xyz.serviceRepository.transport;
     var Path = xyz.path;
@@ -27,26 +26,12 @@ function _firstFind(params, next, done, xyz) {
     for (var node in foreignNodes) {
         matches = Path.match(servicePath, foreignNodes[node]);
         if (matches.length) {
-            logger.verbose(wrapper('bold', 'FIRST FIND') + " :: determined node for service " + wrapper('bold', servicePath) + " by first find strategy : " + wrapper('bold', node + ':' + matches[0]));
-            transport.send({
-                redirect: redirect,
-                node: node,
-                route: route,
-                payload: userPayload,
-                service: matches[0]
-            }, responseCallback);
-            if (done)
-                done();
-            return;
+            logger.verbose(wrapper('bold', 'FIRST FIND V2') + " :: determined node for service " + wrapper('bold', servicePath) + " by first find strategy : " + wrapper('bold', node + ':' + matches[0]));
+            params.targets.push({ node: node, service: matches[0] });
+            if (next)
+                next();
+            break;
         }
-    }
-    // if no node matched
-    logger.warn("Sending a message to " + servicePath + " from first find strategy failed (Local Response)");
-    if (responseCallback) {
-        responseCallback(http.STATUS_CODES[404], null, null);
-        if (done)
-            done();
-        return;
     }
 }
 module.exports = _firstFind;

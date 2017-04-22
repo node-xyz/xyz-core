@@ -18,7 +18,7 @@ import networkMonitorBootstrap from './Bootstrap/process.network.event'
 export default class NodeXYZ {
   selfConf: IselfConf; 
   CONFIG: object;
-  logger: object;
+  logger: any;
   path: object;
   CONSTANTS: IConstants; 
   Util: object;

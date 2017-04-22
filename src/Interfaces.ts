@@ -2,7 +2,8 @@ export interface IMessageConfig {
     servicePath: string; 
     payload?: any; 
     sendStrategy?: any;
-    redirect: boolean;  
+    redirect?: boolean;  
+    route?: string 
 }
 
 export interface INodeIdentifier {

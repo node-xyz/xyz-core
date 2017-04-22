@@ -1,10 +1,11 @@
+import { Itransport } from './../Config/interface';
 import { CONFIG } from './../Config/config.global';
 import { GenericMiddlewareHandler } from './../Middleware/generic.middleware.handler';
 import { logger } from './../Log/Logger'
 import {wrapper} from './../Util/Util'
 import HTTPServer from './HTTP/http.server'
 import UDPServer from './UDP/udp.server'
-import {IxSentMessage, IxSentMessageMwParam, IxMessageConfig} from './Interfaces'
+import {IxSentMessage, IxSentMessageMwParam, IxMessageConfig, ITransportSendConfig} from './Interfaces'
 import _httpExport  from './Middlewares/http.export.middleware'
 import XYZ from './../xyz'
 
@@ -63,7 +64,7 @@ export default class Transport {
    * @param responseCallback {Function} the callback of the message. Note that this is valid
    * only for http calls. UDP / TCP calls do not have a callback
    */
-  send (opt, responseCallback) {
+  send (opt: ITransportSendConfig, responseCallback) {
     opt.route = opt.route || 'CALL'
 
     if (!this.routes[opt.route]) {

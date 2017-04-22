@@ -19,6 +19,7 @@ var http = require("http");
 var Transport_1 = require("./../Transport/Transport");
 var Util = require("./../Util/Util");
 var EventEmitter = require("events");
+var service_generic_transport_1 = require("./Middleware/service.generic.transport");
 var wrapper = Util.wrapper;
 var BOLD = Util.bold;
 /**
@@ -69,6 +70,7 @@ var ServiceRepository = (function (_super) {
             Logger_1.logger.error("SR :: defaultSendStrategy passed to config [" + config_global_1.CONFIG.getSelfConf().defaultSendStrategy + "] not found. setting the default value");
             _this.callDispatchMiddlewareStack.register(0, require('./Middleware/service.first.find'));
         }
+        _this.callDispatchMiddlewareStack.register(-1, service_generic_transport_1._genericTransportInvoke);
         Logger_1.logger.info("SR :: default sendStategy set to " + _this.callDispatchMiddlewareStack.middlewares[0].name);
         /**
          * List of my this node's  services
@@ -177,7 +179,7 @@ var ServiceRepository = (function (_super) {
      */
     ServiceRepository.prototype.call = function (opt, responseCallback) {
         var nullFn = function () { };
-        opt.payload == undefined ? null : opt.payload;
+        opt.payload === undefined ? null : opt.payload;
         opt.servicePath = path_1.Path.format(opt.servicePath);
         if (!path_1.Path.validate(opt.servicePath)) {
             Logger_1.logger.error("SR :: Aborting message " + BOLD(opt) + ". Invalid servicePath");
@@ -189,12 +191,19 @@ var ServiceRepository = (function (_super) {
         opt.route = opt.route || 'CALL';
         opt.redirect = opt.redirect || false;
         this.emit('message:send', { opt: opt });
+        var params = {
+            opt: opt,
+            responseCallback: responseCallback,
+            targets: []
+        };
         if (opt.sendStrategy) {
             // this is trying to imitate the middleware signature
-            opt.sendStrategy([opt, responseCallback], nullFn, nullFn, this.xyz);
+            console.log('XYZ :: OUT OF SERVICE FOR NOW');
+            return false;
+            // opt.sendStrategy(params, nullFn, nullFn, this.xyz)
         }
         else {
-            this.callDispatchMiddlewareStack.apply([opt, responseCallback], 0);
+            this.callDispatchMiddlewareStack.apply(params, 0);
         }
         return true;
     };
