@@ -145,7 +145,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   bindTransportEvent (server) {
     server.on(CONSTANTS.events.MESSAGE, (xMessage) => {
       this.emit('message:receive', xMessage.message)
-      logger.verbose(`SR :: ServiceRepository received message  ${wrapper('bold', JSON.stringify(xMessage.message.userPayload))}`)
+      logger.verbose(`SR :: ServiceRepository received message  ${wrapper('bold', JSON.stringify(xMessage.message))}`)
 
       let service = xMessage.message.xyzPayload.service
       let response = xMessage.response

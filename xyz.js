@@ -28,6 +28,9 @@ class NodeXYZ {
    * not a string with `--xyz-` prefix. Example: `{name: 'foo'}`
    */
   constructor (configuration, cmdLineArgs) {
+
+    console.log('se lab commit');
+
     CONFIG.setSelfConf(configuration.selfConf, cmdLineArgs)
     CONFIG.setSystemConf(configuration.systemConf)
 
