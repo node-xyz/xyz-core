@@ -4,10 +4,10 @@
   "description": "Microservice platform wrapper for node js ",
   "main": "index.js",
   "scripts": {
-    "test": "tsc && ./node_modules/.bin/mocha --reporter spec",
+    "test": "./node_modules/typescript/bin/tsc && ./node_modules/.bin/mocha --reporter spec",
     "test-travis": "rm -Rf node_modules && npm install && ./node_modules/.bin/mocha --reporter spec",
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "./node_modules/typescript/bin/tsc",
+    "dev": "./node_modules/typescript/bin/tsc --watch",
     "docs": "jsdoc -c jsdoc.json -r -R ./README.md -d ./../node-xyz.github.io/apidoc",
     "docco": "find . -name '*.js' | grep -v node_modules | grep -v examples| grep -v test | xargs docco -o ./../node-xyz.github.io/code",
     "lintit": "tslint src/*  --type-check --project ./tsconfig.json"
@@ -23,7 +23,8 @@
     "jshint": "^2.9.2",
     "mocha": "^2.5.3",
     "tslint": "^5.1.0",
-    "xyz-cli": "^0.3.2"
+    "xyz-cli": "^0.3.2", 
+    "typescript": "^2.2.2"
   },
   "dependencies": {
     "winston": "^2.2.0"
