@@ -28,8 +28,10 @@ function _sendToAll(params, next, done, xyz) {
                 var match = matches_1[_i];
                 params.targets.push({ service: match, node: node });
             }
-            logger.verbose(wrapper('bold', 'SEND TO ALL') + " :: determined node for service " + servicePath + " by first find strategy " + calls.map(function (o) { return o.node + ':' + o.match; }) + ",   ");
         }
     }
+    logger.verbose(wrapper('bold', 'SEND TO ALL') + " :: determined node for service " + servicePath + " by first find strategy " + params.targets.map(function (o) { return o.node + ':' + o.service; }) + ",   ");
+    if (next)
+        next();
 }
 module.exports = _sendToAll;

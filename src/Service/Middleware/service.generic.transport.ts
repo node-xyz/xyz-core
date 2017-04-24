@@ -10,7 +10,7 @@ export function _genericTransportInvoke(params: IServDiscMwParam, next, end, xyz
     const responseCallback = params.responseCallback
     const logger = xyz.logger
 
-    logger.verbose(`SR :: Generic service discovery message emitter. invoking Transport layer with ${params.targets.map(o => o.node + o.path).join(', ')} | service: ${params.opt.servicePath}.`)
+    logger.verbose(`SR :: Generic service discovery message emitter. invoking Transport layer with ${params.targets.map(o => o.node + o.service).join(', ')} | service: ${params.opt.servicePath}.`)
     
     if ( targets.length === 0 ) {
         logger.warn(`Sending a message to ${params.opt.servicePath} from first find strategy failed (Local Response)`)
@@ -33,12 +33,13 @@ export function _genericTransportInvoke(params: IServDiscMwParam, next, end, xyz
         let wait = 0 
         let responses = {} 
         for ( let target of targets ) {
+            
             let config: ITransportSendConfig = {
-            redirect: params.opt.redirect, 
-            route: params.opt.route,
-            node: params.targets[0].node,
-            payload: params.opt.payload ,
-            service: params.targets[0].service
+                redirect: params.opt.redirect, 
+                route: params.opt.route,
+                node: target.node,
+                payload: params.opt.payload ,
+                service: target.service
             }
 
             if ( responseCallback ) {
@@ -52,7 +53,7 @@ export function _genericTransportInvoke(params: IServDiscMwParam, next, end, xyz
                 }.bind(null, target))
             }
             else {
-
+                transport.send(config)
             }
 
         }

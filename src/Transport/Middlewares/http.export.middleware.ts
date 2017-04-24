@@ -1,9 +1,8 @@
-
-
+import { logger } from './../../Log/Logger';
+import { IxSentMessageMwParam } from './../Interfaces';
 import * as http from 'http'
-import {logger} from './../../Log/Logger'
 
-let _httpExport = function (xMessageParam, next, end, xyz) {
+let _httpExport = function (xMessageParam: IxSentMessageMwParam, next, end, xyz) {
   let requestConfig = xMessageParam.requestConfig
   let responseCallback = xMessageParam.responseCallback
 
@@ -23,7 +22,7 @@ let _httpExport = function (xMessageParam, next, end, xyz) {
 
       res.on('end', () => {
         let err = (Number(res.statusCode / 100) === 2 ? null : http.STATUS_CODES[res.statusCode])
-        responseCallback(err, JSON.parse(body), res)
+        responseCallback(err, JSON.parse(body.toString()), res)
       })
     })
   } else {

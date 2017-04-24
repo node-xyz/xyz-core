@@ -5,7 +5,7 @@ function _genericTransportInvoke(params, next, end, xyz) {
     var transport = xyz.serviceRepository.transport;
     var responseCallback = params.responseCallback;
     var logger = xyz.logger;
-    logger.verbose("SR :: Generic service discovery message emitter. invoking Transport layer with " + params.targets.map(function (o) { return o.node + o.path; }).join(', ') + " | service: " + params.opt.servicePath + ".");
+    logger.verbose("SR :: Generic service discovery message emitter. invoking Transport layer with " + params.targets.map(function (o) { return o.node + o.service; }).join(', ') + " | service: " + params.opt.servicePath + ".");
     if (targets.length === 0) {
         logger.warn("Sending a message to " + params.opt.servicePath + " from first find strategy failed (Local Response)");
         responseCallback(http.STATUS_CODES[404], null, null);
@@ -28,9 +28,9 @@ function _genericTransportInvoke(params, next, end, xyz) {
             var config = {
                 redirect: params.opt.redirect,
                 route: params.opt.route,
-                node: params.targets[0].node,
+                node: target.node,
                 payload: params.opt.payload,
-                service: params.targets[0].service
+                service: target.service
             };
             if (responseCallback) {
                 transport.send(config, function (_target, err, body, response) {
@@ -44,6 +44,7 @@ function _genericTransportInvoke(params, next, end, xyz) {
                 }.bind(null, target));
             }
             else {
+                transport.send(config);
             }
         };
         for (var _i = 0, targets_1 = targets; _i < targets_1.length; _i++) {

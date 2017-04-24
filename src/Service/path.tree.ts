@@ -12,7 +12,7 @@ export interface ISubtree {
 }
 
 export class PathTree {
-  tree: ITree | ISubtree; 
+  tree: any; 
   serializedTree: object; 
   plainTree: any; 
   
@@ -31,8 +31,8 @@ export class PathTree {
    * 1- validating this path
    * 2- formatting it to standard value
    */
-  createPathSubtree (path, fn) {
-    let tokens = Path.getTokes(path)
+  createPathSubtree (path, fn: () => void) {
+    let tokens = Path.getTokens(path)
     let tree = this.tree
     let stree = this.serializedTree
     for (let token of tokens) {
@@ -53,7 +53,7 @@ export class PathTree {
     if (fn) {
       tree.fn = fn
     }
-    this.plainTree.push({path: path, name: fn.name || 'anonymousFN'})
+    this.plainTree.push({path: path, name: fn['name'] || 'anonymousFN'})
     return true
   }
 

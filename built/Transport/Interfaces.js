@@ -1,8 +1,4 @@
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- *
- * function that will wrapp response objects at receivers
- */
 function _xResponse(resposenObject) {
     resposenObject['jsonify'] = function (data) {
         var args = [];

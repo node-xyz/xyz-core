@@ -17,11 +17,11 @@ var Logger_1 = require("./../Log/Logger");
 var Constants_1 = require("./../Config/Constants");
 var http = require("http");
 var Transport_1 = require("./../Transport/Transport");
-var Util = require("./../Util/Util");
+var Util_1 = require("./../Util/Util");
 var EventEmitter = require("events");
 var service_generic_transport_1 = require("./Middleware/service.generic.transport");
-var wrapper = Util.wrapper;
-var BOLD = Util.bold;
+var wrapper = Util_1.Util.wrapper;
+var BOLD = Util_1.Util.bold;
 /**
  *
  *
@@ -62,7 +62,7 @@ var ServiceRepository = (function (_super) {
         }
         _this.callDispatchMiddlewareStack = new generic_middleware_handler_1.GenericMiddlewareHandler(xyz, 'service.discovery.mw');
         // note that this can be either string or `require`
-        var sendStategy = Util._require(config_global_1.CONFIG.getSelfConf().defaultSendStrategy);
+        var sendStategy = Util_1.Util._require(config_global_1.CONFIG.getSelfConf().defaultSendStrategy);
         if (sendStategy) {
             _this.callDispatchMiddlewareStack.register(0, sendStategy);
         }
@@ -198,9 +198,9 @@ var ServiceRepository = (function (_super) {
         };
         if (opt.sendStrategy) {
             // this is trying to imitate the middleware signature
-            console.log('XYZ :: OUT OF SERVICE FOR NOW');
+            opt.sendStrategy(params, nullFn, nullFn, this.xyz);
+            service_generic_transport_1._genericTransportInvoke(params, nullFn, nullFn, this.xyz);
             return false;
-            // opt.sendStrategy(params, nullFn, nullFn, this.xyz)
         }
         else {
             this.callDispatchMiddlewareStack.apply(params, 0);

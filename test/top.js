@@ -17,10 +17,6 @@ describe('xyz-core layer', function () {
 })
 
 describe('service layer', function () {
-  describe('service discovery with default ping', function () {
-    require('./tests/service.cluster')
-  })
-
   describe('middlewares', function () {
     require('./tests/service.middlewares')
   })
@@ -35,6 +31,10 @@ describe('service layer', function () {
 
   describe('ping', function () {
     require('./tests/service.ping.types')
+  })
+
+  describe('service discovery with default ping', function () {
+    require('./tests/service.cluster')
   })
 })
 

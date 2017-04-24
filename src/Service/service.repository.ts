@@ -9,7 +9,7 @@ import { logger } from './../Log/Logger';
 import { CONSTANTS } from './../Config/Constants';
 import * as http from 'http'
 import Transport from './../Transport/Transport'
-import * as Util from './../Util/Util'
+import {Util} from './../Util/Util'
 import * as EventEmitter from 'events'
 import XYZ from './../xyz'
 import {_genericTransportInvoke} from './Middleware/service.generic.transport'
@@ -226,9 +226,9 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
 
     if (opt.sendStrategy) {
       // this is trying to imitate the middleware signature
-      console.log('XYZ :: OUT OF SERVICE FOR NOW');
+      opt.sendStrategy(params, nullFn, nullFn, this.xyz)
+      _genericTransportInvoke(params, nullFn, nullFn, this.xyz)
       return false
-      // opt.sendStrategy(params, nullFn, nullFn, this.xyz)
     } else {
       this.callDispatchMiddlewareStack.apply(params, 0)
     }

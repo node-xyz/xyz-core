@@ -1,14 +1,18 @@
 import { IMessageConfig, INodeIdentifier } from './Interfaces';
-import { IselfConf, IConfig, IConstants } from './Config/interface';
+import { IselfConf, IConfig, IConstants, IConfigObject } from './Config/interface';
 import { GenericMiddlewareHandler } from './Middleware/generic.middleware.handler';
 import { CONFIG } from './Config/config.global';
 import ServiceRepository from './Service/service.repository'
 import { logger } from './Log/Logger'
 import pingBoostrap from './Bootstrap/ping.basic'
-import { wrapper } from './Util/Util'
+import { IUtil, wrapper } from './Util/Util'
 import machineReporter from './Util/machine.reporter'
 import inspectBootstrap from './Bootstrap/process.inspect.event'
 import networkMonitorBootstrap from './Bootstrap/process.network.event'
+
+import * as __Util from './Util/Util'
+import {Path, IPath} from './Service/path'
+import {CONSTANTS} from './Config/Constants'
 
 
 /**
@@ -17,11 +21,11 @@ import networkMonitorBootstrap from './Bootstrap/process.network.event'
  */
 export default class NodeXYZ {
   selfConf: IselfConf; 
-  CONFIG: object;
+  CONFIG: IConfigObject;
   logger: any;
-  path: object;
+  path: IPath;
   CONSTANTS: IConstants; 
-  Util: object;
+  Util: IUtil;
   gmwh: any;
   serviceRepository: ServiceRepository;
   bootstrapFunctions: string[];
@@ -47,7 +51,7 @@ export default class NodeXYZ {
     this.selfConf = CONFIG.getSelfConf()
 
     // just for logging convention
-    global._serviceName = this.id()._identifier
+    global['_serviceName'] = this.id()._identifier
 
 
 
@@ -65,20 +69,20 @@ export default class NodeXYZ {
      */
     this.logger = logger
 
-    this.Util = require('./Util/Util')
+    this.Util = __Util.Util
 
     /**
      * Reference to the path class. Note that this is static and it can be imported
      * from the xyz-core module too.
      * @type {Object}
      */
-    this.path = require('./Service/path').Path
+    this.path = Path
 
     /**
      * Reference to the constant values of xyz
      * @type {Object}
      */
-    this.CONSTANTS = require('./Config/Constants').CONSTANTS
+    this.CONSTANTS = CONSTANTS
 
     /**
      * Reference to Generic Middleware Handler class
@@ -202,7 +206,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * and the rest is filled with `..args`.
   */
   bootstrap (fn: (xyz: NodeXYZ, ...args) => void , ...args): void {
-    this.bootstrapFunctions.push(fn.name)
+    this.bootstrapFunctions.push(fn['name'])
     fn(this, ...args)
   }
 
@@ -240,8 +244,8 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
         client: (prefix) => this.serviceRepository.transport.routes[prefix],
         server: (prefix) => (port) => this.serviceRepository.transport.servers[port].routes[prefix]
       },
-      serviceRepository: {
-        callDispatch: this.serviceRepository.callDispatchMiddlewareStack
+      sr: {
+        serviceDiscovery: this.serviceRepository.callDispatchMiddlewareStack
       }
     }
   }

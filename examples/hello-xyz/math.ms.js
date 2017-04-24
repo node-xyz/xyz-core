@@ -23,6 +23,10 @@ setInterval(() => {
   mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, res) => {
     console.error('response of /string/up => ', err, body)
   })
+
+  mathMs.call({servicePath: '/math/decimal/neg', payload: 2}, (err, body, res) => {
+    console.error('response of /math/decimal/neg => ', err, body)
+  })
 }, 1000)
 
 console.log(mathMs)

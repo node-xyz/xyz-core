@@ -1,3 +1,4 @@
+import { logger } from './../../Log/Logger';
 /** @module service-middlewares */
 import { IServDiscMwParam } from './../service.interfaces';
 import XYZ from './../../xyz'
@@ -31,12 +32,15 @@ function _sendToAll (params: IServDiscMwParam, next, done, xyz:XYZ) {
   for (let node in foreignNodes) {
     matches = Path.match(servicePath, foreignNodes[node])
     if (matches.length) {
-      for (let match of matches) {
+      for (let match of matches) {        
         params.targets.push({ service: match, node: node })
       }
-      logger.verbose(`${wrapper('bold', 'SEND TO ALL')} :: determined node for service ${servicePath} by first find strategy ${calls.map((o) => o.node + ':' + o.match)},   `)
     }
   }
+
+  logger.verbose(`${wrapper('bold', 'SEND TO ALL')} :: determined node for service ${servicePath} by first find strategy ${params.targets.map((o) => o.node + ':' + o.service)},   `)
+  if (next) next()
+
 }
 
 module.exports = _sendToAll

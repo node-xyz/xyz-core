@@ -8,6 +8,9 @@ var Util_1 = require("./Util/Util");
 var machine_reporter_1 = require("./Util/machine.reporter");
 var process_inspect_event_1 = require("./Bootstrap/process.inspect.event");
 var process_network_event_1 = require("./Bootstrap/process.network.event");
+var __Util = require("./Util/Util");
+var path_1 = require("./Service/path");
+var Constants_1 = require("./Config/Constants");
 /**
  * The main class of xyz-core. Most of the functions that the user should work with
  * live inside this class.
@@ -32,7 +35,7 @@ var NodeXYZ = (function () {
         config_global_1.CONFIG.setSystemConf(configuration.systemConf);
         this.selfConf = config_global_1.CONFIG.getSelfConf();
         // just for logging convention
-        global._serviceName = this.id()._identifier;
+        global['_serviceName'] = this.id()._identifier;
         // Global exported functions and modules
         /**
          * A reference to the config object of the node
@@ -44,18 +47,18 @@ var NodeXYZ = (function () {
          * @type {Object}
          */
         this.logger = Logger_1.logger;
-        this.Util = require('./Util/Util');
+        this.Util = __Util.Util;
         /**
          * Reference to the path class. Note that this is static and it can be imported
          * from the xyz-core module too.
          * @type {Object}
          */
-        this.path = require('./Service/path').Path;
+        this.path = path_1.Path;
         /**
          * Reference to the constant values of xyz
          * @type {Object}
          */
-        this.CONSTANTS = require('./Config/Constants').CONSTANTS;
+        this.CONSTANTS = Constants_1.CONSTANTS;
         /**
          * Reference to Generic Middleware Handler class
          * @type {Object}
@@ -159,7 +162,7 @@ var NodeXYZ = (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
-        this.bootstrapFunctions.push(fn.name);
+        this.bootstrapFunctions.push(fn['name']);
         fn.apply(void 0, [this].concat(args));
     };
     /**
@@ -196,8 +199,8 @@ var NodeXYZ = (function () {
                 client: function (prefix) { return _this.serviceRepository.transport.routes[prefix]; },
                 server: function (prefix) { return function (port) { return _this.serviceRepository.transport.servers[port].routes[prefix]; }; }
             },
-            serviceRepository: {
-                callDispatch: this.serviceRepository.callDispatchMiddlewareStack
+            sr: {
+                serviceDiscovery: this.serviceRepository.callDispatchMiddlewareStack
             }
         };
     };

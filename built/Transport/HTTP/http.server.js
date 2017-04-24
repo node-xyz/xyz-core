@@ -63,7 +63,7 @@ var HTTPServer = (function (_super) {
                         // create mw param message object
                         var xMessage = {
                             serverId: _this.serverId,
-                            message: JSON.parse(body),
+                            message: JSON.parse(body.toString()),
                             response: resp,
                             meta: { request: req }
                         };

@@ -7,12 +7,13 @@
  */
 
 let argParser = require('./../Util/commandline.parser')
+import { IConfigObject } from './interface';
 import { logger } from './../Log/Logger';
 import { CONSTANTS } from './Constants';
 import {IselfConf, IsystemConf} from './interface'
 
-let systemConf:IsystemConf
-let selfConf:IselfConf 
+let systemConf: IsystemConf; 
+let selfConf: IselfConf; 
 
 function MergeRecursive (obj1, obj2) {
   for (var p in obj2) {
@@ -29,7 +30,7 @@ function MergeRecursive (obj1, obj2) {
   return obj1
 }
 
-export let CONFIG = {
+export let CONFIG: IConfigObject= {
 
   /**
    * should be called to inform that a new node has joined the system.
@@ -40,7 +41,7 @@ export let CONFIG = {
    * @param  {String} aNode netId of a node
    * @return {Number} 1 if ok, -1 if fail.
    */
-  joinNode: (aNode:string) => {
+  joinNode: (aNode) => {
     if (systemConf.nodes.indexOf(aNode) > -1) {
       logger.warn(`Node ${aNode} already in systemConf. Passing.`)
       return -1

@@ -64,7 +64,7 @@ export default class HTTPServer extends EventEmitter {
               // create mw param message object
               let xMessage: IxReceivedMessage = {
                 serverId: this.serverId,
-                message: JSON.parse(body),
+                message: JSON.parse(body.toString()),
                 response: resp,
                 meta: {request: req}
               }

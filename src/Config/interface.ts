@@ -1,5 +1,4 @@
-import { IselfConf, IsystemConf } from './interface';
-export interface Itransport {
+export interface ITransportServer  {
     type: string; 
     event: boolean; 
     port: number;
@@ -10,7 +9,7 @@ export interface IselfConf {
     defaultSendStrategy: any; // string or function
     logLevel:string; 
     seed: string[]; 
-    transport: Itransport[];
+    transport: ITransportServer[];
     host: string;
     defaultBootstrap: boolean;
     cli: {enable: boolean, stdio: string};  
@@ -22,7 +21,21 @@ export interface IsystemConf {
 
 export interface IConfig {
     selfConf: IselfConf,
-    systemConf: IsystemConf
+    systemConf: IsystemConf, 
+}
+
+export interface IConfigObject {
+    joinNode: (node: string) => void ;
+    ensureNode: (node: string) => void ;
+    ensureNodes: (nodes: string[]) => void ; 
+    kickNode: (node: string) => void ;  
+    setSelfConf: (aConf: object, cmdLineArgs: string) => void ; 
+    setSystemConf: (aConf: object) => void ; 
+    addServer: (server: ITransportServer) => void ;
+    removeServer: (port: number) => void ; 
+    getSystemConf: () => IsystemConf ; 
+    getSelfConf: () => IselfConf; 
+    forget: () => void ;
 }
 
 export interface IConstants {

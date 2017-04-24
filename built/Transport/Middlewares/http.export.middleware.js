@@ -16,7 +16,7 @@ var _httpExport = function (xMessageParam, next, end, xyz) {
             });
             res.on('end', function () {
                 var err = (Number(res.statusCode / 100) === 2 ? null : http.STATUS_CODES[res.statusCode]);
-                responseCallback(err, JSON.parse(body), res);
+                responseCallback(err, JSON.parse(body.toString()), res);
             });
         });
     }

@@ -1,5 +1,5 @@
-import { CONSTANTS } from './../Config/Constants';
 import { logger } from './../Log/Logger';
+import INodeXYZ from './../../src/xyz'
 import { GenericMiddlewareHandler } from './../Middleware/generic.middleware.handler';
 import _httpExport from './../Transport/Middlewares/http.export.middleware'
 
@@ -16,15 +16,16 @@ let kick = 10
  * @param  {Bollean}            event indicates if pingRate message listener should be creted or not.
  * @param  {Number}            port  the port to identify the route and server to use
  */
-export default function _basicPingBootstrap (xyz, event, port) {
+export default function _basicPingBootstrap (xyz: INodeXYZ, event, port) {
   let Util = xyz.Util
   let wrapper = Util.wrapper
   let logger = xyz.logger
   let CONFIG = xyz.CONFIG
   const CONSTANTS = xyz.CONSTANTS
+  
 
   let SR = xyz.serviceRepository
-  SR.outOfReachNodes = {}
+  let outOfReachNodes = {}
   let transport = SR.transport
 
   let joinCandidate = []
@@ -65,20 +66,20 @@ export default function _basicPingBootstrap (xyz, event, port) {
           }
 
           // but we trust the callee 100% so we set it's availability to full
-          SR.outOfReachNodes[node] = 0
+          outOfReachNodes[node] = 0
           logger.silly(`PING  :: response = ${JSON.stringify(body)}`)
         } else {
-          if (SR.outOfReachNodes[node]) {
-            if (SR.outOfReachNodes[node] >= kick) {
+          if (outOfReachNodes[node]) {
+            if (outOfReachNodes[node] >= kick) {
               logger.error(`PING :: removing node {${node}} from foreignNodes and nodes list`)
               SR.kickNode(node)
               return
             }
-            SR.outOfReachNodes[node] += 1
+            outOfReachNodes[node] += 1
           } else {
-            SR.outOfReachNodes[node] = 1
+            outOfReachNodes[node] = 1
           }
-          logger.error(`Ping Error :: ${node} has been out of reach for ${SR.outOfReachNodes[node]} pings ::  ${JSON.stringify(err)}`)
+          logger.error(`Ping Error :: ${node} has been out of reach for ${outOfReachNodes[node]} pings ::  ${JSON.stringify(err)}`)
         }
       })
     }

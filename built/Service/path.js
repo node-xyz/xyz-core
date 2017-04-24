@@ -83,7 +83,7 @@ exports.Path = {
         // TODO Fix this
         return matches.map(function (el) { return el.replace('//', '/'); });
     },
-    getTokes: function (path) {
+    getTokens: function (path) {
         return path.split('/');
     }
 };

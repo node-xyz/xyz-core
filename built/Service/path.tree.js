@@ -16,7 +16,7 @@ var PathTree = (function () {
      * 2- formatting it to standard value
      */
     PathTree.prototype.createPathSubtree = function (path, fn) {
-        var tokens = path_1.Path.getTokes(path);
+        var tokens = path_1.Path.getTokens(path);
         var tree = this.tree;
         var stree = this.serializedTree;
         for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
@@ -38,7 +38,7 @@ var PathTree = (function () {
         if (fn) {
             tree.fn = fn;
         }
-        this.plainTree.push({ path: path, name: fn.name || 'anonymousFN' });
+        this.plainTree.push({ path: path, name: fn['name'] || 'anonymousFN' });
         return true;
     };
     /**

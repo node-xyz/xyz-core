@@ -39,7 +39,7 @@ exports.logger = new winston.Logger({
             },
             formatter: function (options) {
                 // Return string will be passed to logger.
-                return "[" + getFormattedDate() + "][" + Util_1.wrapper('underline', Util_1.wrapper('bold', global._serviceName)) + "] " + Util_1.wrapper('bold', levelColor(options.level)) + " :: " + options.message + " ";
+                return "[" + getFormattedDate() + "][" + Util_1.wrapper('underline', Util_1.wrapper('bold', global['_serviceName'])) + "] " + Util_1.wrapper('bold', levelColor(options.level)) + " :: " + options.message + " ";
             }
         })
     ],

@@ -19,7 +19,7 @@ function _basicPingBootstrap(xyz, event, port) {
     var CONFIG = xyz.CONFIG;
     var CONSTANTS = xyz.CONSTANTS;
     var SR = xyz.serviceRepository;
-    SR.outOfReachNodes = {};
+    var outOfReachNodes = {};
     var transport = SR.transport;
     var joinCandidate = [];
     var seeds = CONFIG.getSelfConf().seed;
@@ -58,22 +58,22 @@ function _basicPingBootstrap(xyz, event, port) {
                         }
                     }
                     // but we trust the callee 100% so we set it's availability to full
-                    SR.outOfReachNodes[node] = 0;
+                    outOfReachNodes[node] = 0;
                     logger.silly("PING  :: response = " + JSON.stringify(body));
                 }
                 else {
-                    if (SR.outOfReachNodes[node]) {
-                        if (SR.outOfReachNodes[node] >= kick) {
+                    if (outOfReachNodes[node]) {
+                        if (outOfReachNodes[node] >= kick) {
                             logger.error("PING :: removing node {" + node + "} from foreignNodes and nodes list");
                             SR.kickNode(node);
                             return;
                         }
-                        SR.outOfReachNodes[node] += 1;
+                        outOfReachNodes[node] += 1;
                     }
                     else {
-                        SR.outOfReachNodes[node] = 1;
+                        outOfReachNodes[node] = 1;
                     }
-                    logger.error("Ping Error :: " + node + " has been out of reach for " + SR.outOfReachNodes[node] + " pings ::  " + JSON.stringify(err));
+                    logger.error("Ping Error :: " + node + " has been out of reach for " + outOfReachNodes[node] + " pings ::  " + JSON.stringify(err));
                 }
             });
         };

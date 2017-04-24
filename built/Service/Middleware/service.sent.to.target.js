@@ -1,3 +1,4 @@
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @module service-middlewares */
 /**
  * Will send a message to exactly one node .
@@ -10,23 +11,13 @@ function _sendToTarget(_target) {
     return function __sendToTarget(params, next, done, xyz) {
         // note that in per call sendStrategies next and doen might be null
         // so we need an if ()
-        var userPayload = params[0].payload;
-        var responseCallback = params[1];
-        var route = params[0].route;
-        var redirect = params[0].redirect;
         var wrapper = xyz.Util.wrapper;
-        var transport = xyz.serviceRepository.transport;
+        var servicePath = params.opt.servicePath;
         var logger = xyz.logger;
-        logger.verbose(wrapper('bold', 'SEND TO TARGET') + " :: redirecting message directly to " + wrapper('bold', target) + ":" + params[0].servicePath);
-        transport.send({
-            redirect: redirect,
-            node: target,
-            route: route,
-            payload: userPayload,
-            service: params[0].servicePath
-        }, responseCallback);
-        if (done)
-            done();
+        logger.verbose(wrapper('bold', 'SEND TO TARGET') + " :: redirecting message directly to " + wrapper('bold', target) + ":" + servicePath);
+        params.targets.push({ node: _target, service: params.opt.servicePath });
+        if (next)
+            next();
     };
 }
 module.exports = _sendToTarget;

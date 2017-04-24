@@ -9,13 +9,10 @@ let cwd, system, snd, rcv
 let str = 'manipulated'
 
 function wrongServicediscoveryMiddleware (params, next, end, xyz) {
-  let servicePath = params[0].servicePath,
-    userPayload = params[0].payload,
-    foreignNodes = xyz.serviceRepository.foreignNodes,
-    transportClient = xyz.serviceRepository.transport
-  responseCallback = params[1]
+  let servicePath = params.opt.servicePath
 
   let serviceTokens = servicePath.split('/')
+  let foreignNodes = xyz.serviceRepository.foreignNodes
 
   for (let node in foreignNodes) {
     let servicePathIndex = 0
@@ -33,12 +30,15 @@ function wrongServicediscoveryMiddleware (params, next, end, xyz) {
       }
     }
     if (!match) {
-      transportClient.send({ node: node, route: 'CALL', payload: userPayload, service: servicePath}, (err, body, response) => {
-        responseCallback(err, body, response)
+      params.targets.push({
+        node: node,
+        service: servicePath
       })
-      return
+      break
     }
   }
+  console.log(params.targets)
+  if (next) next()
 }
 
 before(function (done) {
@@ -52,14 +52,14 @@ before(function (done) {
 })
 
 it('False servicrDiscovery', function (done) {
-  snd.middlewares().serviceRepository.callDispatch.remove(-1)
-  snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware)
+  snd.middlewares().sr.serviceDiscovery.remove(0)
+  snd.middlewares().sr.serviceDiscovery.register(0, wrongServicediscoveryMiddleware)
   snd.call({servicePath: 'up', payload: 'what the hell'}, (err, body, response) => {
     // this is exacly end of request event on serviceRepository
     expect(response.statusCode).to.equal(404)
     expect(body).to.equal(http.STATUS_CODES[404])
-    snd.middlewares().serviceRepository.callDispatch.remove(0)
-    snd.middlewares().serviceRepository.callDispatch.register(-1, common.firstfind)
+    snd.middlewares().sr.serviceDiscovery.remove(0)
+    snd.middlewares().sr.serviceDiscovery.register(0, common.firstfind)
     done()
   })
 })
@@ -67,11 +67,12 @@ it('False servicrDiscovery', function (done) {
 it('changeMiddlewareOnTheFly - Hot Swap', function (done) {
   snd.call({servicePath: 'up', payload: 'will be ok'}, (err, body, response) => {
     expect(body).to.equal('WILL BE OK')
-    snd.middlewares().serviceRepository.callDispatch.remove(-1)
-    snd.middlewares().serviceRepository.callDispatch.register(-1, wrongServicediscoveryMiddleware)
+    snd.middlewares().sr.serviceDiscovery.remove(0)
+    snd.middlewares().sr.serviceDiscovery.register(0, wrongServicediscoveryMiddleware)
     snd.call({servicePath: 'up', payload: 'will be not OK'}, (err, body, response) => {
       expect(body).to.equal(http.STATUS_CODES[404])
-      snd.middlewares().serviceRepository.callDispatch.remove(0)
+      snd.middlewares().sr.serviceDiscovery.remove(0)
+      snd.middlewares().sr.serviceDiscovery.register(0, common.firstfind)
       done()
     })
   })

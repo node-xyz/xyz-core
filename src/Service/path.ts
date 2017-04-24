@@ -1,4 +1,12 @@
-export let Path = {
+export interface IPath {
+  validate: (path: string) => boolean; 
+  format: (path: string) => string; 
+  merge: (src, dst, prefix, child) => string
+  match: (path: string, serializedTree: Object) => string[]
+  getTokens: (path: string) => string[]; 
+}
+
+export let Path: IPath = {
   validate: function (path) {
     if (path === '/') {
       return true
@@ -85,7 +93,7 @@ export let Path = {
     return matches.map((el) => el.replace('//', '/'))
   },
 
-  getTokes: function (path) {
+  getTokens: function (path) {
     return path.split('/')
   }
 }
