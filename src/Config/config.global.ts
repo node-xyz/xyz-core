@@ -7,16 +7,16 @@
  */
 
 let argParser = require('./../Util/commandline.parser')
-import { IConfigObject } from './interface';
-import { logger } from './../Log/Logger';
-import { CONSTANTS } from './Constants';
-import {IselfConf, IsystemConf} from './interface'
+import { IConfig } from './config.interfaces'
+import { logger } from './../Log/Logger'
+import { CONSTANTS } from './Constants'
+import {ISelfConfValue, ISystemConfValue} from './config.interfaces'
 
-let systemConf: IsystemConf; 
-let selfConf: IselfConf; 
+let systemConf: ISystemConfValue
+let selfConf: ISelfConfValue
 
 function MergeRecursive (obj1, obj2) {
-  for (var p in obj2) {
+  for (let p in obj2) {
     try {
       if (obj2[p].constructor === Object) {
         obj1[p] = MergeRecursive(obj1[p], obj2[p])
@@ -30,7 +30,7 @@ function MergeRecursive (obj1, obj2) {
   return obj1
 }
 
-export let CONFIG: IConfigObject= {
+export let CONFIG: IConfig = {
 
   /**
    * should be called to inform that a new node has joined the system.

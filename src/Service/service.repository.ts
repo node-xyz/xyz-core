@@ -1,12 +1,12 @@
-import { IServDiscMwParam } from './service.interfaces';
-import { IMessageConfig } from './../Interfaces';
-import { IselfConf } from './../Config/interface';
-import { PathTree } from './path.tree';
-import { GenericMiddlewareHandler } from './../Middleware/generic.middleware.handler';
-import { CONFIG } from './../Config/config.global';
-import { Path } from './path';
-import { logger } from './../Log/Logger';
-import { CONSTANTS } from './../Config/Constants';
+import { IServDiscMwParam } from './service.interfaces'
+import { IxyzMessageConfig } from './../xyz.interfaces'
+import { ISelfConfValue } from './../Config/config.interfaces'
+import { PathTree } from './path.tree'
+import { GenericMiddlewareHandler } from './../Middleware/generic.middleware.handler'
+import { CONFIG } from './../Config/config.global'
+import { Path } from './path'
+import { logger } from './../Log/Logger'
+import { CONSTANTS } from './../Config/Constants'
 import * as http from 'http'
 import Transport from './../Transport/Transport'
 import {Util} from './../Util/Util'
@@ -27,16 +27,14 @@ const BOLD = Util.bold
  *  should be inside undelying transportClient and
  *  transportServer
  */
-
 export default class ServiceRepository extends EventEmitter {
-  
-  transport: Transport; 
-  selfConf: IselfConf;
+  transport: Transport
+  selfConf: ISelfConfValue
   callDispatchMiddlewareStack: GenericMiddlewareHandler
-  services: PathTree;
-  foreignNodes: Object;
-  foreignRoutes: Object; 
-  xyz: XYZ;
+  services: PathTree
+  foreignNodes: Object
+  foreignRoutes: Object
+  xyz: XYZ
 
   /**
    * Creates a new ServiceRepository
@@ -80,7 +78,7 @@ export default class ServiceRepository extends EventEmitter {
     }
 
     this.callDispatchMiddlewareStack.register(-1, _genericTransportInvoke)
-    
+
     logger.info(`SR :: default sendStategy set to ${this.callDispatchMiddlewareStack.middlewares[0].name}`)
 
     /**
@@ -176,7 +174,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
       logger.verbose(`SR :: ServiceRepository received message  ${wrapper('bold', JSON.stringify(xMessage.message))}`)
 
       let service = xMessage.message.xyzPayload.service
-      let response = xMessage.response; 
+      let response = xMessage.response
 
       let fn = this.services.getPathFunction(service)
 
@@ -200,9 +198,9 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
    * @param {Object} opt the options passed to `xyz.call()`
    * @param {Function} [responseCallback] optional responseCallback
    */
-  call (opt:IMessageConfig, responseCallback) {
+  call (opt: IxyzMessageConfig, responseCallback) {
     let nullFn = () => {}
-    opt.payload === undefined ? null : opt.payload
+    opt.payload = opt.payload || undefined
     opt.servicePath = Path.format(opt.servicePath)
 
     if (!Path.validate(opt.servicePath)) {

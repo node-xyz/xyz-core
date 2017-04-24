@@ -4,7 +4,7 @@ import { logger } from './../../Log/Logger'
 import * as http from 'http'
 import * as url from 'url'
 import * as EventEmitter from 'events'
-import {_xResponse, IxReceivedMessage} from './../Interfaces'
+import {_xResponse, ITransportReceivedMessage} from './../transport.interfaces'
 import {wrapper} from './../../Util/Util'
 import _httpMessageEvent from './../Middlewares/http.receive.event'
 import XYZ from './../../xyz'
@@ -62,7 +62,7 @@ export default class HTTPServer extends EventEmitter {
               _xResponse(resp)
 
               // create mw param message object
-              let xMessage: IxReceivedMessage = {
+              let xMessage: ITransportReceivedMessage = {
                 serverId: this.serverId,
                 message: JSON.parse(body.toString()),
                 response: resp,

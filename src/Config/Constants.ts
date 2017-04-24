@@ -1,4 +1,4 @@
-import {IConstants} from './interface'
+import {IConstants} from './config.interfaces'
 
 /**
  * A set of constant values stored in xyz-core

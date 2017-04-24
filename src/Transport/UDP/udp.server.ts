@@ -1,20 +1,20 @@
-import { wrapper } from './../../Util/Util';
-import { logger } from './../../Log/Logger';
-import { IxReceivedMessage } from './../Interfaces';
-import { CONFIG } from './../../Config/config.global';
-import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.handler';
+import { wrapper } from './../../Util/Util'
+import { logger } from './../../Log/Logger'
+import { ITransportReceivedMessage } from './../transport.interfaces'
+import { CONFIG } from './../../Config/config.global'
+import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.handler'
 import { EventEmitter } from 'events'
 import * as dgram from 'dgram'
 import XYZ from './../../xyz'
 
 export default class UDPServer extends EventEmitter {
-  port: number;
-  xyz: XYZ; 
-  serverId: Object; 
-  server: any; 
-  routes: Object; 
+  port: number
+  xyz: XYZ
+  serverId: Object
+  server: any
+  routes: Object
 
-  constructor (xyz:XYZ, port:number) {
+  constructor (xyz: XYZ, port: number) {
     super()
     this.port = port
     this.xyz = xyz
@@ -41,7 +41,7 @@ export default class UDPServer extends EventEmitter {
         if (_message.xyzPayload.route === `/${route}`) {
           logger.debug(`UDP SERVER @ ${this.port} :: udp message received for /${wrapper('bold', route)} [${JSON.stringify(_message)}]`)
 
-          let xMessage : IxReceivedMessage = {
+          let xMessage: ITransportReceivedMessage = {
             message: _message,
             response: undefined,
             serverId: this.serverId,

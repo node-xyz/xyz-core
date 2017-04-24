@@ -1,8 +1,8 @@
-import { logger } from './../../Log/Logger';
-import { IxSentMessageMwParam } from './../Interfaces';
+import { logger } from './../../Log/Logger'
+import { ITransportSentMessageMwParam } from './../transport.interfaces'
 import * as http from 'http'
 
-let _httpExport = function (xMessageParam: IxSentMessageMwParam, next, end, xyz) {
+let _httpExport = function (xMessageParam: ITransportSentMessageMwParam, next, end, xyz) {
   let requestConfig = xMessageParam.requestConfig
   let responseCallback = xMessageParam.responseCallback
 

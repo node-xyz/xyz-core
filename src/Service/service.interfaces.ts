@@ -1,7 +1,7 @@
-import { IMessageConfig } from './../Interfaces';
+import { IxyzMessageConfig } from './../xyz.interfaces'
 
 export interface IServDiscMwParam {
-    opt: IMessageConfig, 
-    responseCallback: (err: any, body:any , response: any) => void,
-    targets: {node: string, service: string}[]
+  opt: IxyzMessageConfig,
+  responseCallback: (err: any, body: any , response: any) => void,
+  targets: {node: string, service: string}[]
 }
