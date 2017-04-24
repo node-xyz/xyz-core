@@ -1,10 +1,10 @@
+import { wrapper } from './../../Util/Util';
+import { logger } from './../../Log/Logger';
 import { IxReceivedMessage } from './../Interfaces';
 import { CONFIG } from './../../Config/config.global';
 import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.handler';
 import { EventEmitter } from 'events';
 import * as dgram from 'dgram'
-import {logger} from './../../Log/logger'
-import {wrapper} from './../../Util/Util'
 import XYZ from './../../xyz'
 
 export default class UDPServer extends EventEmitter {

@@ -9,12 +9,12 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var Util_1 = require("./../../Util/Util");
+var Logger_1 = require("./../../Log/Logger");
 var config_global_1 = require("./../../Config/config.global");
 var generic_middleware_handler_1 = require("./../../Middleware/generic.middleware.handler");
 var events_1 = require("events");
 var dgram = require("dgram");
-var logger_1 = require("./../../Log/logger");
-var Util_1 = require("./../../Util/Util");
 var UDPServer = (function (_super) {
     __extends(UDPServer, _super);
     function UDPServer(xyz, port) {
@@ -33,13 +33,13 @@ var UDPServer = (function (_super) {
         _this.routes = {};
         _this.server.on('listening', function () {
             var address = _this.server.address();
-            logger_1.logger.info("UDP Server listening on port " + address.address + ":" + address.port);
+            Logger_1.logger.info("UDP Server listening on port " + address.address + ":" + address.port);
         })
             .on('message', function (message, remote) {
             var _message = JSON.parse(message.toString());
             for (var route in _this.routes) {
                 if (_message.xyzPayload.route === "/" + route) {
-                    logger_1.logger.debug("UDP SERVER @ " + _this.port + " :: udp message received for /" + Util_1.wrapper('bold', route) + " [" + JSON.stringify(_message) + "]");
+                    Logger_1.logger.debug("UDP SERVER @ " + _this.port + " :: udp message received for /" + Util_1.wrapper('bold', route) + " [" + JSON.stringify(_message) + "]");
                     var xMessage = {
                         message: _message,
                         response: undefined,
@@ -77,7 +77,7 @@ var UDPServer = (function (_super) {
      * Will close the server
      */
     UDPServer.prototype.terminate = function () {
-        logger_1.logger.warn("UDP SERVER @ " + this.port + " :: CLOSING");
+        Logger_1.logger.warn("UDP SERVER @ " + this.port + " :: CLOSING");
         this.close();
     };
     // will initialize a new route with one default middleware
@@ -87,13 +87,13 @@ var UDPServer = (function (_super) {
     UDPServer.prototype.registerRoute = function (prefix, gmwh) {
         var globalUnique = this.xyz.serviceRepository.transport._checkUniqueRoute(prefix);
         if (!globalUnique) {
-            logger_1.logger.error("UDP Server @ " + this.port + " :: route " + prefix + " is not unique.");
+            Logger_1.logger.error("UDP Server @ " + this.port + " :: route " + prefix + " is not unique.");
             return false;
         }
         else {
             gmwh = gmwh || new generic_middleware_handler_1.GenericMiddlewareHandler(this.xyz, prefix + ".receive.mw", prefix);
             this.routes[prefix] = gmwh;
-            logger_1.logger.info("UDP Server @ " + this.port + " :: new message route " + Util_1.wrapper('bold', prefix) + " added");
+            Logger_1.logger.info("UDP Server @ " + this.port + " :: new message route " + Util_1.wrapper('bold', prefix) + " added");
             return 1;
         }
     };
