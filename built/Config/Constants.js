@@ -1,11 +1,9 @@
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * A set of constant values stored in xyz-core
  * @type {Object}
  */
-module.exports = {
-    commandline: {
-        xyzport: 3000
-    },
+exports.CONSTANTS = {
     /**
      * name of the events emiited by xyz
      * @type {Object}
@@ -37,7 +35,7 @@ module.exports = {
             seed: [],
             // default transport layer service
             transport: [
-                { type: 'HTTP', port: '4000', event: true }
+                { type: 'HTTP', port: 4000, event: true }
             ],
             // ip
             host: '127.0.0.1',

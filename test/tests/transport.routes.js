@@ -13,11 +13,11 @@ before(function (done) {
   cwd = testSystem.cwd
 
   snd.xyz.registerClientRoute('foo')
-  snd.xyz.middlewares().transport.client('foo').register(0, require('./../../src/Transport/Middlewares/call/http.export.middleware'))
+  snd.xyz.middlewares().transport.client('foo').register(0, common._httpExport)
 
   // default port
   rcv.xyz.registerServerRoute(rcv.xyz.id().port, 'foo')
-  rcv.xyz.middlewares().transport.server('foo')(rcv.xyz.id().port).register(0, require('./../../src/Transport/Middlewares/call/http.receive.event'))
+  rcv.xyz.middlewares().transport.server('foo')(rcv.xyz.id().port).register(0, common._httpMessageEvent)
 
   setTimeout(done, 1000)
 })
@@ -31,11 +31,11 @@ it('multiple routes', function (done) {
 
 it('add routes on the fly', function (done) {
   snd.xyz.registerClientRoute('bar')
-  snd.xyz.middlewares().transport.client('bar').register(0, require('./../../src/Transport/Middlewares/call/http.export.middleware'))
+  snd.xyz.middlewares().transport.client('bar').register(0, common._httpExport)
 
   // default port
   rcv.xyz.registerServerRoute(rcv.xyz.id().port, 'bar')
-  rcv.xyz.middlewares().transport.server('bar')(rcv.xyz.id().port).register(0, require('./../../src/Transport/Middlewares/call/http.receive.event'))
+  rcv.xyz.middlewares().transport.server('bar')(rcv.xyz.id().port).register(0, common._httpMessageEvent)
 
   snd.call({servicePath: '/mul', route: 'bar', payload: {x: 2, y: 3}}, (err, body) => {
     expect(body).to.equal(6)

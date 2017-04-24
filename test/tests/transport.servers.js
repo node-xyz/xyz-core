@@ -14,10 +14,10 @@ before(function (done) {
 
   rcv.xyz.registerServer('HTTP', 2000, true)
   rcv.xyz.registerServerRoute(2000, 'http/2')
-  rcv.xyz.middlewares().transport.server('http/2')(2000).register(0, require('./../../src/Transport/Middlewares/call/http.receive.event'))
+  rcv.xyz.middlewares().transport.server('http/2')(2000).register(0, common._httpMessageEvent)
 
   snd.xyz.registerClientRoute('http/2')
-  snd.xyz.middlewares().transport.client('http/2').register(0, require('./../../src/Transport/Middlewares/call/http.export.middleware'))
+  snd.xyz.middlewares().transport.client('http/2').register(0, common._httpExport)
 
   setTimeout(done, 1000)
 })
@@ -33,10 +33,10 @@ it('duplicate http server', function (done) {
 it('extra udp server on the fly', function (done) {
   rcv.xyz.registerServer('UDP', 2001, true)
   rcv.xyz.registerServerRoute(2001, 'udp')
-  rcv.xyz.middlewares().transport.server('udp')(2001).register(0, require('./../../src/Transport/Middlewares/call/udp.receive.event'))
+  rcv.xyz.middlewares().transport.server('udp')(2001).register(0, common._udpMessageEvent)
 
   snd.xyz.registerClientRoute('udp')
-  snd.xyz.middlewares().transport.client('udp').register(0, require('./../../src/Transport/Middlewares/call/udp.export.middleware'))
+  snd.xyz.middlewares().transport.client('udp').register(0, common._udpExport)
 
   snd.call({servicePath: '/mul', route: 'udp', redirect: true, payload: {x: 2, y: 3}}, (err, body) => {
     expect(err).to.not.equal(null)

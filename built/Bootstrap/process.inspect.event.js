@@ -1,4 +1,5 @@
 /** @module bootstrapFunctions */
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * will setup a message listener for the process to responde to `inspect` and `inspectJSON` events.
  * This will be used by xyz-cli. please see the source code for more information.
@@ -16,4 +17,4 @@ function _processInspectionEvent(xyz) {
         }
     });
 }
-module.exports = _processInspectionEvent;
+exports.default = _processInspectionEvent;

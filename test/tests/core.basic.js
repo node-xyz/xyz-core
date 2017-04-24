@@ -14,7 +14,7 @@ before(function (done) {
   setTimeout(done, 1000)
 })
 
-it('sending a basic message - call()', function (done) {
+it('should send a basic message - call()', function (done) {
   snd.call({
     servicePath: '/mul',
     payload: {x: 2, y: 3}
@@ -32,7 +32,7 @@ it('sending a basic message - call()', function (done) {
   })
 })
 
-it('local not found', function (done) {
+it('should allow local not found', function (done) {
   snd.call({servicePath: '/mullll', payload: {
     x: 2,
     y: 3
@@ -43,14 +43,14 @@ it('local not found', function (done) {
   })
 })
 
-it('no Callback for sender message - default ', function (done) {
+it('should allow no callback for sender message - default ', function (done) {
   snd.call({servicePath: 'mul', payload: {x: 2, y: 3}})
   rcv.xyz.serviceRepository.once('message:receive', (data) => {
     done()
   })
 })
 
-it('no callback for sender message - different send strategies', function (done) {
+it('should allow no callback for sender message - different send strategies', function (done) {
   let total = {snd: 0, rcv: 0}
   let _total = {snd: 0, rcv: 0}
 
@@ -65,7 +65,7 @@ it('no callback for sender message - different send strategies', function (done)
   snd.call({servicePath: 'add', payload: {x: 2, y: 3}, sendStrategy: common.firstFind})
   total.rcv += 1
 
-  snd.call({servicePath: 'math/*', payload: {x: 2, y: 3}, sendStrategy: common.sendToAll})
+  snd.call({servicePath: 'math/*', payload: {x: 2, y: 10}, sendStrategy: common.sendToAll})
   total.rcv += 3
 
   snd.call({servicePath: 'sub', payload: {x: 2, y: 3}, sendStrategy: common.broadcastLocal})
@@ -91,7 +91,7 @@ it('no callback for sender message - different send strategies', function (done)
   // })
 })
 
-it('HTTP statusCode', function (done) {
+it('should incldue HTTP statusCode', function (done) {
   snd.call({
     servicePath: '/blank',
     payload: 'whatever'
@@ -101,7 +101,7 @@ it('HTTP statusCode', function (done) {
   })
 })
 
-it('a warning to all about paths', function (done) {
+it('should be fixed. a warning to all about paths', function (done) {
   rcv.register('/math/decimal/mul', mockFunctions.mul)
 
   snd.call({servicePath: '/mul', payload: {x: 2, y: 3}}, (err, body, response) => {

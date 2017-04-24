@@ -1,11 +1,11 @@
-var logger = require('./../Log/Logger');
-var CONFIG = require('./../Config/config.global');
-var GenericMiddlewareHandler = require('./../Middleware/generic.middleware.handler');
-var wrapper = require('./../Util/Util').wrapper;
-var HTTPServer = require('./HTTP/http.server');
-var UDPServer = require('./UDP/udp.server');
-var xSentMessage = require('./xSentMessage');
-var xSentMessageMwParam = require('./xSentMessageMwParam');
+Object.defineProperty(exports, "__esModule", { value: true });
+var config_global_1 = require("./../Config/config.global");
+var generic_middleware_handler_1 = require("./../Middleware/generic.middleware.handler");
+var Logger_1 = require("./../Log/Logger");
+var Util_1 = require("./../Util/Util");
+var http_server_1 = require("./HTTP/http.server");
+var udp_server_1 = require("./UDP/udp.server");
+var http_export_middleware_1 = require("./Middlewares/http.export.middleware");
 var Transport = (function () {
     /**
      * Transport layer. This layer is an abstraction above all different sorts of communication.
@@ -14,18 +14,18 @@ var Transport = (function () {
         this.xyz = xyz;
         this.routes = {};
         this.servers = {};
-        var callDispatchMiddlewareStack = new GenericMiddlewareHandler(this.xyz, 'call.dispatch.mw', 'CALL');
-        callDispatchMiddlewareStack.register(-1, require('./Middlewares/call/http.export.middleware'));
+        var callDispatchMiddlewareStack = new generic_middleware_handler_1.GenericMiddlewareHandler(this.xyz, 'call.dispatch.mw', 'CALL');
+        callDispatchMiddlewareStack.register(-1, http_export_middleware_1.default);
         this.registerRoute('CALL', callDispatchMiddlewareStack);
     }
     Transport.prototype.inspect = function () {
-        var ret = wrapper('green', wrapper('bold', 'outgoing middlewares')) + ":\n";
+        var ret = Util_1.wrapper('green', Util_1.wrapper('bold', 'outgoing middlewares')) + ":\n";
         for (var route in this.routes) {
             ret += "    " + this.routes[route].inspect() + "\n";
         }
         ret += '\n';
         for (var s in this.servers) {
-            ret += "  " + wrapper('bold', wrapper('magenta', this.servers[s].constructor.name + ' @ ' + s)) + " ::\n";
+            ret += "  " + Util_1.wrapper('bold', Util_1.wrapper('magenta', this.servers[s].constructor.name + ' @ ' + s)) + " ::\n";
             ret += "    " + this.servers[s].inspect() + "\n";
         }
         return ret;
@@ -53,7 +53,7 @@ var Transport = (function () {
     Transport.prototype.send = function (opt, responseCallback) {
         opt.route = opt.route || 'CALL';
         if (!this.routes[opt.route]) {
-            logger.error("attempting to send message in route " + opt.route + ". DOES NOT EXIST");
+            Logger_1.logger.error("attempting to send message in route " + opt.route + ". DOES NOT EXIST");
             responseCallback('outgoing message route not found', null);
             return;
         }
@@ -64,22 +64,20 @@ var Transport = (function () {
         if (opt.redirect) {
             _port = this._findTargetPort(opt.route, opt.node);
             if (_port === -1) {
-                logger.error("Transport Client :: could not find route " + opt.route + " in destination node " + opt.node + ". aborting transmission");
+                Logger_1.logger.error("Transport Client :: could not find route " + opt.route + " in destination node " + opt.node + ". aborting transmission");
                 if (responseCallback) {
                     responseCallback('target port/route not found', null);
                 }
                 return;
             }
         }
-        var message = {
+        var xMessage = {
             userPayload: opt.payload,
             xyzPayload: {
                 senderId: this.xyz.id().netId,
                 service: opt.service
             }
         };
-        // the json key
-        var xMessage = new xSentMessage(message);
         var requestConfig = {
             hostname: "" + opt.node.split(':')[0],
             port: _port || "" + opt.node.split(':')[1],
@@ -88,29 +86,29 @@ var Transport = (function () {
             json: xMessage
         };
         // mw param
-        var xMessageParam = new xSentMessageMwParam({
+        var xMessageParam = {
             requestConfig: requestConfig,
             responseCallback: responseCallback
-        });
-        logger.debug(wrapper('bold', 'Transport Client') + " :: sending message to " + wrapper('bold', requestConfig.hostname) + ":" + requestConfig.port + "/" + opt.route + " through " + this.routes[opt.route].name + " middleware :: message " + JSON.stringify(xMessage));
+        };
+        Logger_1.logger.debug(Util_1.wrapper('bold', 'Transport Client') + " :: sending message to " + Util_1.wrapper('bold', requestConfig.hostname) + ":" + requestConfig.port + "/" + opt.route + " through " + this.routes[opt.route].name + " middleware :: message " + JSON.stringify(xMessage));
         this.routes[opt.route].apply(xMessageParam, 0);
     };
     Transport.prototype.registerServer = function (type, port, e) {
         var server;
         if (type === 'HTTP') {
-            server = new HTTPServer(this.xyz, port);
+            server = new http_server_1.default(this.xyz, port);
             this.servers[Number(port)] = server;
-            CONFIG.addServer({ type: type, port: port, event: e });
+            config_global_1.CONFIG.addServer({ type: type, port: port, event: e });
             return server;
         }
         else if (type === 'UDP') {
-            server = new UDPServer(this.xyz, port);
+            server = new udp_server_1.default(this.xyz, port);
             this.servers[Number(port)] = server;
-            CONFIG.addServer({ type: type, port: port, event: e });
+            config_global_1.CONFIG.addServer({ type: type, port: port, event: e });
             return server;
         }
         else {
-            logger.error("transport server type " + type + " undefined");
+            Logger_1.logger.error("transport server type " + type + " undefined");
             return false;
         }
     };
@@ -122,13 +120,13 @@ var Transport = (function () {
      *
      */
     Transport.prototype.registerRoute = function (prefix, gmwh) {
-        logger.info("Transport :: new outgoing message route " + wrapper('bold', prefix) + " added");
+        Logger_1.logger.info("Transport :: new outgoing message route " + Util_1.wrapper('bold', prefix) + " added");
         if (gmwh) {
             this.routes[prefix] = gmwh;
         }
         else {
-            logger.warn("Transport :: no middlewareHandler defined for route " + prefix + ". an empty one will be used");
-            this.routes[prefix] = new GenericMiddlewareHandler(this.xyz, prefix + ".dispatch.mw", prefix);
+            Logger_1.logger.warn("Transport :: no middlewareHandler defined for route " + prefix + ". an empty one will be used");
+            this.routes[prefix] = new generic_middleware_handler_1.GenericMiddlewareHandler(this.xyz, prefix + ".dispatch.mw", prefix);
         }
         return 1;
     };
@@ -138,11 +136,11 @@ var Transport = (function () {
     Transport.prototype.removeRoute = function (prefix) {
         if (this.routes[prefix]) {
             delete this.routes[prefix];
-            logger.info("TRANSPORT :: route " + prefix + " removed.");
+            Logger_1.logger.info("TRANSPORT :: route " + prefix + " removed.");
             return 1;
         }
         else {
-            logger.error("TRANSPORT :: attempting to remove route " + prefix + " which does not exist.");
+            Logger_1.logger.error("TRANSPORT :: attempting to remove route " + prefix + " which does not exist.");
             return -1;
         }
     };
@@ -177,4 +175,4 @@ var Transport = (function () {
     };
     return Transport;
 }());
-module.exports = Transport;
+exports.default = Transport;

@@ -17,7 +17,7 @@ before(function (done) {
 
 it('udp tunnel', function (done) {
   this.timeout(10 * 1000)
-  rcv.xyz.bootstrap(require('./../../src/Bootstrap/udp.tunnel.bootstrap'))
+  rcv.xyz.bootstrap(require('./../../built/Bootstrap/udp.tunnel.bootstrap')._udpTunnel)
   setTimeout(() => {
     rcv.call({
       servicePath: '/mul',

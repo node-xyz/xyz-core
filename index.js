@@ -1,11 +1,11 @@
-let xyz = require('./xyz')
+let xyz = require('./built/xyz.js')
 
 /**
  * some stuff
  * some stuff
  */
-module.exports = xyz
+module.exports = xyz.default
 module.exports.bootstrapFunctions = {
-  'process.inspect.event': require('./src/Bootstrap/process.inspect.event'),
-  'process.network.event': require('./src/Bootstrap/process.network.event')
+  'process.inspect.event': require('./built/Bootstrap/process.inspect.event'),
+  'process.network.event': require('./built/Bootstrap/process.network.event')
 }

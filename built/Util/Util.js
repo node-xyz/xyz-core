@@ -1,25 +1,5 @@
-function Random(time) {
-    return Math.random() * time;
-}
-function nodeStringToObject(str) {
-    return { host: str.split(':')[0], port: str.split(':')[1] };
-}
-function _require(name) {
-    // if the user has passed a require object to the XYZ()
-    if (typeof (name) === 'object' || typeof (name) === 'function')
-        return name;
-    var ret;
-    try {
-        ret = require("./../Service/" + name);
-    }
-    catch (e) {
-        ret = false;
-    }
-    finally {
-        return ret;
-    }
-}
-var colors = {
+Object.defineProperty(exports, "__esModule", { value: true });
+var COLORS = {
     "reset": "\033[0m",
     "bold": "\033[1m",
     "boldoff": "\033[22m",
@@ -44,17 +24,35 @@ var colors = {
     "bg_cyan": "\033[46m",
     "bg_white": "\033[47m"
 };
-function wrapper(style, str) {
-    return "" + colors[style] + str + colors['reset'];
-}
-function bold(str) {
-    return wrapper('bold', str);
-}
-module.exports = {
-    Random: Random,
-    _require: _require,
-    nodeStringToObject: nodeStringToObject,
-    colors: colors,
-    wrapper: wrapper,
-    bold: bold
+exports.Util = {
+    Random: function (time) {
+        return Math.random() * time;
+    },
+    nodeStringToObject: function (str) {
+        return { host: str.split(':')[0], port: str.split(':')[1] };
+    },
+    _require: function (name) {
+        // if the user has passed a require object to the XYZ()
+        if (typeof (name) === 'object' || typeof (name) === 'function')
+            return name;
+        var ret;
+        try {
+            ret = require("./../Service/" + name);
+        }
+        catch (e) {
+            ret = false;
+        }
+        finally {
+            return ret;
+        }
+    },
+    wrapper: function (style, str) {
+        return "" + COLORS[style] + str + COLORS['reset'];
+    },
+    bold: function (str) {
+        return "" + COLORS['bold'] + str + COLORS['reset'];
+    },
+    colors: COLORS
 };
+exports.wrapper = exports.Util.wrapper;
+exports.bold = exports.Util.bold;

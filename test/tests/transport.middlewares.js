@@ -1,5 +1,4 @@
 const common = require('../common')
-let logger = require('./../../src/Log/Logger')
 const expect = common.expect
 const mockNode = common.mockNode
 const mockSystem = common.mockSystem
@@ -73,7 +72,7 @@ it('misc routes', function (done) {
   rcv.xyz.registerServerRoute(rcv.xyz.id().port, 'testRoute')
   snd.xyz.registerClientRoute('testRoute')
 
-  snd.middlewares().transport.client('testRoute').register(0, require('./../../src/Transport/Middlewares/call/http.export.middleware'))
+  snd.middlewares().transport.client('testRoute').register(0, common._httpExport)
   rcv.middlewares().transport.server('testRoute')(rcv.xyz.id().port).register(0, earlyResponseMiddleware)
 
   snd.call({servicePath: 'up', payload: 'hello', route: 'testRoute'}, (err, body, response) => {

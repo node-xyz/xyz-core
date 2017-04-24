@@ -1,9 +1,11 @@
 let XYZ = require('./../../index')
 let fn = require('./../../test/ms/mock.functions')
+let sendToAll = require('./../../built/Service/Middleware/service.send.to.all')
 
 var mathMs = new XYZ({
   selfConf: {
-    name: 'math.ms',
+    logLevel: 'verbose',
+    name: 'math.mss',
     host: '127.0.0.1'
   },
   systemConf: {
@@ -21,6 +23,10 @@ setInterval(() => {
   mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, res) => {
     console.error('response of /string/up => ', err, body)
   })
-}, 6000)
+
+  mathMs.call({servicePath: '/math/decimal/neg', payload: 2}, (err, body, res) => {
+    console.error('response of /math/decimal/neg => ', err, body)
+  })
+}, 1000)
 
 console.log(mathMs)

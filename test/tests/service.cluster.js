@@ -1,5 +1,4 @@
 const common = require('../common')
-let logger = require('./../../src/Log/Logger')
 const expect = common.expect
 const mockNode = common.mockNode
 const mockSystem = common.mockSystem

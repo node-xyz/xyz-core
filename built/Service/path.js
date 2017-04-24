@@ -1,4 +1,5 @@
-var Path = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Path = {
     validate: function (path) {
         if (path === '/') {
             return true;
@@ -82,8 +83,7 @@ var Path = {
         // TODO Fix this
         return matches.map(function (el) { return el.replace('//', '/'); });
     },
-    getTokes: function (path) {
+    getTokens: function (path) {
         return path.split('/');
     }
 };
-module.exports = Path;

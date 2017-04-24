@@ -1,23 +1,24 @@
+Object.defineProperty(exports, "__esModule", { value: true });
 var winston = require('winston');
-var wrapper = require('./../Util/Util').wrapper;
+var Util_1 = require("./../Util/Util");
 function levelColor(level) {
     if (level === 'silly') {
-        return wrapper('magenta', level);
+        return Util_1.wrapper('magenta', level);
     }
     if (level === 'debug') {
-        return wrapper('cyan', level);
+        return Util_1.wrapper('cyan', level);
     }
     if (level === 'verbose') {
-        return wrapper('blue', level);
+        return Util_1.wrapper('blue', level);
     }
     if (level === 'info') {
-        return wrapper('green', level);
+        return Util_1.wrapper('green', level);
     }
     if (level === 'warn') {
-        return wrapper('yellow', level);
+        return Util_1.wrapper('yellow', level);
     }
     if (level === 'error') {
-        return wrapper('red', level);
+        return Util_1.wrapper('red', level);
     }
 }
 function getFormattedDate() {
@@ -26,7 +27,7 @@ function getFormattedDate() {
     return str;
 }
 // { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
-var logger = new winston.Logger({
+exports.logger = new winston.Logger({
     transports: [
         new winston.transports.Console({
             handleExceptions: false,
@@ -38,10 +39,9 @@ var logger = new winston.Logger({
             },
             formatter: function (options) {
                 // Return string will be passed to logger.
-                return "[" + getFormattedDate() + "][" + wrapper('underline', wrapper('bold', global._serviceName)) + "] " + wrapper('bold', levelColor(options.level)) + " :: " + options.message + " ";
+                return "[" + getFormattedDate() + "][" + Util_1.wrapper('underline', Util_1.wrapper('bold', global['_serviceName'])) + "] " + Util_1.wrapper('bold', levelColor(options.level)) + " :: " + options.message + " ";
             }
         })
     ],
     exitOnError: false
 });
-module.exports = logger;

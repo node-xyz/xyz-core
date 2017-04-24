@@ -1,0 +1,13 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "outDir": "./built",
+        "allowJs": true,
+        "target": "es5",
+        "noImplicitUseStrict": true
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "module": "amd"
+}

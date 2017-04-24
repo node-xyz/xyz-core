@@ -1,11 +1,10 @@
-var Path = require('./../../src/Service/path')
 const common = require('../common')
-let logger = require('./../../src/Log/Logger')
+const Path = common.Path
 const expect = common.expect
 const mockNode = common.mockNode
 const mockSystem = common.mockSystem
 const mockFunctions = common.mockFunctions
-const PathTree = require('./../../src/Service/path.tree')
+const PathTree = common.PathTree
 
 let cwd, system, snd, rcv
 before(function (done) {
@@ -143,6 +142,23 @@ it.skip('path parent matching', function (done) {
       done()
     })
   }, 3 * 1000)
+})
+
+it.skip('wildcard in .register()', function (done) {
+  rcv.register('/major/*', (body, resp) => {
+    console.log(body)
+    resp.jsonify('ok')
+  })
+
+  rcv.register('/major/minor/*', (body, resp) => {
+    console.log(body)
+    resp.jsonify('ok')
+  })
+
+  rcv.register('/major/minor/patch', (body, resp) => {
+    console.log(body)
+    resp.jsonify('ok')
+  })
 })
 
 after(function () {

@@ -1,4 +1,5 @@
 /** @module bootstrapFunctions */
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
 * will setup a message listener for the process to responde to `network` event
 * This will be used by xyz-cli. please see the source code for more information.
@@ -30,4 +31,4 @@ function _processNetworkEvent(xyz) {
         load.rcv = 0;
     }, reset);
 }
-module.exports = _processNetworkEvent;
+exports.default = _processNetworkEvent;

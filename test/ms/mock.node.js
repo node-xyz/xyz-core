@@ -1,5 +1,4 @@
 const XYZ = require('./../../index')
-const fs = require('fs')
 let logger
 /**
  * A Wrapper class around microservice interface

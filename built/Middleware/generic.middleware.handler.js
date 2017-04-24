@@ -1,5 +1,6 @@
-var logger = require('./../Log/Logger');
-var wrapper = require('./../Util/Util').wrapper;
+Object.defineProperty(exports, "__esModule", { value: true });
+var Logger_1 = require("./../Log/Logger");
+var Util_1 = require("./../Util/Util");
 /**
  * This class is used in various modules to handle middlewares.
  *
@@ -29,8 +30,8 @@ var GenericMiddlewareHandler = (function () {
      */
     GenericMiddlewareHandler.prototype.inspect = function () {
         var str = this.route
-            ? wrapper('bold', this.name) + " [/" + wrapper('yellow', this.route) + "] || "
-            : wrapper('bold', this.name) + " || ";
+            ? Util_1.wrapper('bold', this.name) + " [/" + Util_1.wrapper('yellow', this.route) + "] || "
+            : Util_1.wrapper('bold', this.name) + " || ";
         for (var i = 0; i < this.middlewares.length; i++) {
             if (i === this.middlewares.length - 1) {
                 str += this.middlewares[i].name + "[" + i + "]";
@@ -61,9 +62,9 @@ var GenericMiddlewareHandler = (function () {
      */
     GenericMiddlewareHandler.prototype.register = function (index, fn) {
         if (typeof (fn) !== 'function') {
-            logger.error("GMWH :: attempting to insert " + fn + " which is not a function");
+            Logger_1.logger.error("GMWH :: attempting to insert " + fn + " which is not a function");
         }
-        logger.debug("GMWH :: Registering middleware at " + this.name + "[" + index + "] : " + fn.name);
+        Logger_1.logger.debug("GMWH :: Registering middleware at " + this.name + "[" + index + "] : " + fn.name);
         if (index === -1) {
             this.middlewares.push(fn);
         }
@@ -89,11 +90,12 @@ var GenericMiddlewareHandler = (function () {
      * @param  {array} params - Array of parameters passed to the handler
      * @param {Number} index - current index inside the middleware array to be applied
      */
-    GenericMiddlewareHandler.prototype.apply = function (params, index) {
+    GenericMiddlewareHandler.prototype.apply = function (params, index, xyz) {
         var _this = this;
-        logger.silly("GMWH :: applying middleware " + this.name + "[" + index + "]");
+        if (xyz === void 0) { xyz = null; }
+        Logger_1.logger.silly("GMWH :: applying middleware " + this.name + "[" + index + "]");
         if (!this.middlewares[index]) {
-            logger.error("GMWH :: attempting to call " + this.name + "[" + index + "] which is not defined. teminating execution...");
+            Logger_1.logger.error("GMWH :: attempting to call " + this.name + "[" + index + "] which is not defined. teminating execution...");
             return;
         }
         this.middlewares[index](params, function (_params) {
@@ -101,10 +103,10 @@ var GenericMiddlewareHandler = (function () {
                 _this.apply(params, index + 1, _this.xyz);
             }
             else {
-                logger.silly("GMWH :: middleware Stack for " + _this.name + " finished");
+                Logger_1.logger.silly("GMWH :: middleware Stack for " + _this.name + " finished");
             }
         }, function () {
-            logger.silly("GMWH :: middleware Stack for " + _this.name + " terminated by calling end()");
+            Logger_1.logger.silly("GMWH :: middleware Stack for " + _this.name + " terminated by calling end()");
         }, this.xyz);
     };
     /**
@@ -119,7 +121,7 @@ var GenericMiddlewareHandler = (function () {
      * otherwise, the function at index `idx` will be removed
      */
     GenericMiddlewareHandler.prototype.remove = function (idx) {
-        logger.silly("GMWH :: removing middleware " + this.name + "[" + idx + "]");
+        Logger_1.logger.silly("GMWH :: removing middleware " + this.name + "[" + idx + "]");
         if (idx === -1) {
             this.middlewares = [];
         }
@@ -127,9 +129,9 @@ var GenericMiddlewareHandler = (function () {
             this.middlewares.splice(idx, 1);
         }
         else {
-            logger.error('GMWH :: Trying to remove a middleware that does not exists.');
+            Logger_1.logger.error('GMWH :: Trying to remove a middleware that does not exists.');
         }
     };
     return GenericMiddlewareHandler;
 }());
-module.exports = GenericMiddlewareHandler;
+exports.GenericMiddlewareHandler = GenericMiddlewareHandler;
