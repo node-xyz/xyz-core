@@ -10,7 +10,7 @@
     "dev": "tsc --watch",
     "docs": "jsdoc -c jsdoc.json -r -R ./README.md -d ./../node-xyz.github.io/apidoc",
     "docco": "find . -name '*.js' | grep -v node_modules | grep -v examples| grep -v test | xargs docco -o ./../node-xyz.github.io/code",
-    "lintit": "standard './src' './examples' --fix"
+    "lintit": "tslint src/*  --type-check --project ./tsconfig.json"
   },
   "author": "Kian.peymani@gmail.com",
   "license": "ISC",
@@ -22,11 +22,10 @@
     "jsdoc": "^3.4.0",
     "jshint": "^2.9.2",
     "mocha": "^2.5.3",
-    "standard": "^8.6.0",
+    "tslint": "^5.1.0",
     "xyz-cli": "^0.3.2"
   },
   "dependencies": {
-    "typescript": "^2.2.2",
     "winston": "^2.2.0"
   }
 }

@@ -1,6 +1,6 @@
-import { CONFIG } from './../../Config/config.global';
-import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.handler';
-import { logger } from './../../Log/Logger';
+import { CONFIG } from './../../Config/config.global'
+import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.handler'
+import { logger } from './../../Log/Logger'
 import * as http from 'http'
 import * as url from 'url'
 import * as EventEmitter from 'events'
@@ -10,11 +10,11 @@ import _httpMessageEvent from './../Middlewares/http.receive.event'
 import XYZ from './../../xyz'
 
 export default class HTTPServer extends EventEmitter {
-  xyz: XYZ; 
-  port: number; 
-  serverId: Object; 
-  routes: Object; 
-  server: any;
+  xyz: XYZ
+  port: number
+  serverId: Object
+  routes: Object
+  server: any
 
   /**
    * Creates a new HTTP server
@@ -44,7 +44,7 @@ export default class HTTPServer extends EventEmitter {
       .listen(this.port, () => {
         logger.info(`HTTP Server @ ${this.port} :: HTTP Server listening on port : ${this.port}`)
       }).on('request', (req, resp) => {
-        var body = []
+        let body = []
         req
         .on('data', (chuck) => {
           body.push(chuck)

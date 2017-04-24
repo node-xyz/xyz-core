@@ -1,7 +1,7 @@
-import { IMessageConfig, INodeIdentifier } from './Interfaces';
-import { IselfConf, IConfig, IConstants, IConfigObject } from './Config/interface';
-import { GenericMiddlewareHandler } from './Middleware/generic.middleware.handler';
-import { CONFIG } from './Config/config.global';
+import { IMessageConfig, INodeIdentifier } from './Interfaces'
+import { IselfConf, IConfig, IConstants, IConfigObject } from './Config/interface'
+import { GenericMiddlewareHandler } from './Middleware/generic.middleware.handler'
+import { CONFIG } from './Config/config.global'
 import ServiceRepository from './Service/service.repository'
 import { logger } from './Log/Logger'
 import pingBoostrap from './Bootstrap/ping.basic'
@@ -14,23 +14,21 @@ import * as __Util from './Util/Util'
 import {Path, IPath} from './Service/path'
 import {CONSTANTS} from './Config/Constants'
 
-
 /**
  * The main class of xyz-core. Most of the functions that the user should work with
  * live inside this class.
  */
 export default class NodeXYZ {
-  selfConf: IselfConf; 
-  CONFIG: IConfigObject;
-  logger: any;
-  path: IPath;
-  CONSTANTS: IConstants; 
-  Util: IUtil;
-  gmwh: any;
-  serviceRepository: ServiceRepository;
-  bootstrapFunctions: string[];
+  selfConf: IselfConf;  CONFIG: IConfigObject;
+ logger: any;
+ path: IPath;
+ CONSTANTS: IConstants;
+ Util: IUtil;
+ gmwh: any;
+ serviceRepository: ServiceRepository;
+ bootstrapFunctions: string[];
 
-  /**
+ /**
    * create a new xyz object
    * @param {Object} configuration configuration should have two main keys:
    *   - selfConf
@@ -45,7 +43,7 @@ export default class NodeXYZ {
    * not a string with `--xyz-` prefix. Example: `{name: 'foo'}`
    */
   constructor (configuration: IConfig, cmdLineArgs:string ) {
-    CONFIG.setSelfConf(configuration.selfConf, cmdLineArgs)
+    C ONFIG.setSelfConf(configuration.selfConf, cmdLineArgs)
     CONFIG.setSystemConf(configuration.systemConf)
 
     this.selfConf = CONFIG.getSelfConf()
@@ -55,7 +53,7 @@ export default class NodeXYZ {
 
 
 
-    // Global exported functions and modules
+  // Global exported functions and modules
 
     /**
      * A reference to the config object of the node
@@ -258,7 +256,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * if not filled, an empty middleware will be created for this route.
   * @return {Number} 1 if success, -1 if fail
   */
-  registerServerRoute (port: number, prefix:string, gmwh:GenericMiddlewareHandler) {
+  registerServerRoute (port: number, prefix:string, gmwh:Gener icMiddlewareH andler) {
     return this.serviceRepository.transport.servers[port].registerRoute(prefix, gmwh)
   }
 
@@ -270,7 +268,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   *
   * @return {Number} 1 if success, -1 if fail
   */
-  registerClientRoute (prefix: string, gmwh:GenericMiddlewareHandler) {
+  registerClientRoute (prefix: string, gmwh:GenericMiddlewareH andler) {
     return this.serviceRepository.transport.registerRoute(prefix, gmwh)
   }
 
@@ -293,8 +291,8 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * server emits the message `xyz_message` (see `CONSTANTS.events`) it will be received by service layer
   * and appropriate function, if registered will be called.
   */
-  registerServer (type: string, port:number , e:boolean = true) {
-    return this.serviceRepository.registerServer(type, port, e)
+  registerServer (type: string, port:number , e:boolean  = true) {
+     return this.serviceRepository.registerServer(type, port, e)
   }
 
   /**

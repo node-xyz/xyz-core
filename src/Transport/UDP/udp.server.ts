@@ -3,7 +3,7 @@ import { logger } from './../../Log/Logger';
 import { IxReceivedMessage } from './../Interfaces';
 import { CONFIG } from './../../Config/config.global';
 import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.handler';
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'events'
 import * as dgram from 'dgram'
 import XYZ from './../../xyz'
 

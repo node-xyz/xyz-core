@@ -176,7 +176,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
       logger.verbose(`SR :: ServiceRepository received message  ${wrapper('bold', JSON.stringify(xMessage.message))}`)
 
       let service = xMessage.message.xyzPayload.service
-      let response = xMessage.response
+      let response = xMessage.response; 
 
       let fn = this.services.getPathFunction(service)
 
