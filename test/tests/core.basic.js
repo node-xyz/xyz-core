@@ -101,16 +101,28 @@ it('should incldue HTTP statusCode', function (done) {
   })
 })
 
+/**
+ * The point is that message to /foo and /foo/bar are being sent, but they are responded remotely
+ * with Not Found
+ */
 it('should be fixed. a warning to all about paths', function (done) {
-  rcv.register('/math/decimal/mul', mockFunctions.mul)
-
-  snd.call({servicePath: '/mul', payload: {x: 2, y: 3}}, (err, body, response) => {
-    expect(body).to.equal(6)
-    snd.call({servicePath: '/math/decimal'}, (err, body) => {
+  this.timeout(5 * 1000)
+  rcv.register('/foo/bar/baz', mockFunctions.mul)
+  setTimeout(() => {
+    snd.call({servicePath: '/foo', payload: {x: 2, y: 3}}, (err, body, response) => {
+      console.log(1, err, body)
       expect(err).to.equal('Not Found')
-      done()
+      snd.call({servicePath: '/foo/bar'}, (err, body) => {
+        console.log(2, err, body)
+        expect(err).to.equal('Not Found')
+        snd.call({servicePath: '/foo/bar/baz', payload: {x: 2, y:10}}, (err, body) => {
+          console.log(3, err, body)
+          expect(body).to.equal(20)
+          done()
+        })
+      })
     })
-  })
+  }, 3 * 1000)
 })
 
 after(function () {

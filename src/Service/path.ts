@@ -1,9 +1,9 @@
 export interface IPath {
-  validate: (path: string) => boolean; 
-  format: (path: string) => string; 
+  validate: (path: string) => boolean
+  format: (path: string) => string
   merge: (src, dst, prefix, child) => string
   match: (path: string, serializedTree: Object) => string[]
-  getTokens: (path: string) => string[]; 
+  getTokens: (path: string) => string[]
 }
 
 export let Path: IPath = {

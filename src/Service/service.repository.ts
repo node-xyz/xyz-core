@@ -1,4 +1,4 @@
-import { IServDiscMwParam } from './service.interfaces'
+import { IServDiscMwParam, IServOptions } from './service.interfaces'
 import { IxyzMessageConfig } from './../xyz.interfaces'
 import { ISelfConfValue } from './../Config/config.interfaces'
 import { PathTree } from './path.tree'
@@ -35,6 +35,7 @@ export default class ServiceRepository extends EventEmitter {
   foreignNodes: Object
   foreignRoutes: Object
   xyz: XYZ
+  options: IServOptions
 
   /**
    * Creates a new ServiceRepository
@@ -119,6 +120,8 @@ export default class ServiceRepository extends EventEmitter {
    * @param {Function} fn function to be registered
    */
   register (path, fn) {
+    path = Path.format(path)
+
     if (!Path.validate(path)) {
       logger.error(`SR :: Creating a new path failed. Invalid Path : ${path}`)
       return false
@@ -171,7 +174,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
   bindTransportEvent (server) {
     server.on(CONSTANTS.events.MESSAGE, (xMessage) => {
       this.emit('message:receive', xMessage.message)
-      logger.verbose(`SR :: ServiceRepository received message  ${wrapper('bold', JSON.stringify(xMessage.message))}`)
+      logger.verbose(`${BOLD('SR')} :: ServiceRepository received message  ${wrapper('bold', JSON.stringify(xMessage.message))}`)
 
       let service = xMessage.message.xyzPayload.service
       let response = xMessage.response
@@ -179,7 +182,13 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
       let fn = this.services.getPathFunction(service)
 
       // EXPERIMENTAL
-      // let fns = this.services.getPathFunctions(service)
+      // console.log(this.services)
+      // let resolvedServices = Path.match(service, this.services.serializedTree)
+      // console.log(resolvedServices)
+      // resolvedServices.map( (o) => {
+      //   return this.services.getPathFunction(o)
+      // })
+      // console.log(resolvedServices)
 
       if (fn) {
         fn(xMessage.message.userPayload, response, xMessage.message.xyzPayload)

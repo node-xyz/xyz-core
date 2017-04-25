@@ -144,7 +144,8 @@ it.skip('path parent matching', function (done) {
   }, 3 * 1000)
 })
 
-it.skip('wildcard in .register()', function (done) {
+it.skip('should allowWildcard in .register()', function (done) {
+  this.timeout(10 * 1000)
   rcv.register('/major/*', (body, resp) => {
     console.log(body)
     resp.jsonify('ok')
@@ -159,6 +160,13 @@ it.skip('wildcard in .register()', function (done) {
     console.log(body)
     resp.jsonify('ok')
   })
+
+  setTimeout(() => {
+    snd.call({servicePath: '/major/minor'}, (err, body) => {
+      console.log(err, body)
+      done()
+    })
+  }, 3 * 1000)
 })
 
 after(function () {

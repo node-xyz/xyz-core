@@ -5,3 +5,7 @@ export interface IServDiscMwParam {
   responseCallback: (err: any, body: any , response: any) => void,
   targets: {node: string, service: string}[]
 }
+
+export interface IServOptions {
+  resolveLocally: boolean
+}

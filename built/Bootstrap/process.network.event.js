@@ -1,14 +1,14 @@
 /** @module bootstrapFunctions */
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
-* will setup a message listener for the process to responde to `network` event
-* This will be used by xyz-cli. please see the source code for more information.
-* @function _processNetworkEvent
-* @param  {Object}   xyz   the automatically injected paramter referring to the current xyz instance.
-*/
+ * will setup a message listener for the process to responde to `network` event
+ * This will be used by xyz-cli. please see the source code for more information.
+ * @function _processNetworkEvent
+ * @param  {Object}   xyz   the automatically injected paramter referring to the current xyz instance.
+ */
 var load = { snd: 0, rcv: 0 };
 var _load = { snd: 0, rcv: 0 };
-var reset = 1000; // 2.5sec accuracy
+var reset = 500; // .5sec accuracy
 function _processNetworkEvent(xyz) {
     // count receives
     xyz.serviceRepository.on('message:receive', function () {

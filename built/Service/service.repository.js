@@ -107,6 +107,7 @@ var ServiceRepository = (function (_super) {
      * @param {Function} fn function to be registered
      */
     ServiceRepository.prototype.register = function (path, fn) {
+        path = path_1.Path.format(path);
         if (!path_1.Path.validate(path)) {
             Logger_1.logger.error("SR :: Creating a new path failed. Invalid Path : " + path);
             return false;
@@ -154,12 +155,18 @@ var ServiceRepository = (function (_super) {
         var _this = this;
         server.on(Constants_1.CONSTANTS.events.MESSAGE, function (xMessage) {
             _this.emit('message:receive', xMessage.message);
-            Logger_1.logger.verbose("SR :: ServiceRepository received message  " + wrapper('bold', JSON.stringify(xMessage.message)));
+            Logger_1.logger.verbose(BOLD('SR') + " :: ServiceRepository received message  " + wrapper('bold', JSON.stringify(xMessage.message)));
             var service = xMessage.message.xyzPayload.service;
             var response = xMessage.response;
             var fn = _this.services.getPathFunction(service);
             // EXPERIMENTAL
-            // let fns = this.services.getPathFunctions(service)
+            // console.log(this.services)
+            // let resolvedServices = Path.match(service, this.services.serializedTree)
+            // console.log(resolvedServices)
+            // resolvedServices.map( (o) => {
+            //   return this.services.getPathFunction(o)
+            // })
+            // console.log(resolvedServices)
             if (fn) {
                 fn(xMessage.message.userPayload, response, xMessage.message.xyzPayload);
                 return;
