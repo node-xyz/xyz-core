@@ -1,6 +1,6 @@
 /** @module service-middlewares */
 
-import { IServDiscMwParam } from './../service.interfaces';
+import { IServDiscMwParam } from './../service.interfaces'
 import XYZ from './../../xyz'
 
 /**
@@ -12,7 +12,7 @@ import XYZ from './../../xyz'
  * @param  {Function}     done   used to end the middleware stack
  * @param  {Object}       xyz    reference to the caller's xyz instance
  */
-function _firstFind (params:IServDiscMwParam, next, done, xyz: XYZ) {
+function _firstFind (params: IServDiscMwParam, next, done, xyz: XYZ) {
   let servicePath = params.opt.servicePath
   let userPayload = params.opt.payload
   let responseCallback = params.responseCallback
@@ -34,7 +34,6 @@ function _firstFind (params:IServDiscMwParam, next, done, xyz: XYZ) {
     matches = Path.match(servicePath, foreignNodes[node])
     if (matches.length) {
       logger.verbose(`${wrapper('bold', 'FIRST FIND')} :: determined node for service ${wrapper('bold', servicePath)} by first find strategy : ${wrapper('bold', node + ':' + matches[0])}`)
-      params.targets.push({node: node, service: matches[0]})
       params.targets.push({node: node, service: matches[0]})
       break
     }
