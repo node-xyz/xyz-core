@@ -203,7 +203,6 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   * and the rest is filled with `..args`.
   */
   bootstrap (fn: (xyz: NodeXYZ, ...args) => void , ...args): void {
-    console.log(fn)
     this.bootstrapFunctions.push(fn['name'])
     fn(this, ...args)
   }
