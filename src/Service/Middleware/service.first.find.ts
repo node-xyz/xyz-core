@@ -35,6 +35,7 @@ function _firstFind (params:IServDiscMwParam, next, done, xyz: XYZ) {
     if (matches.length) {
       logger.verbose(`${wrapper('bold', 'FIRST FIND')} :: determined node for service ${wrapper('bold', servicePath)} by first find strategy : ${wrapper('bold', node + ':' + matches[0])}`)
       params.targets.push({node: node, service: matches[0]})
+      params.targets.push({node: node, service: matches[0]})
       break
     }
   }

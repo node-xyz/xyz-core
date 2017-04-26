@@ -4,8 +4,8 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "source": {
-      "include": ["./xyz.js", "./src"],
-      "includePattern": ".+\\.js(doc)?$",
+      "include": ["./index.js", "./built"],
+      "includePattern": ".+\\.ts(doc)?$",
 	    "exclude": ["./src/Util/Util.js", "node_modules", "./examples"],
       "excludePattern": "(^|\\/|\\\\)_"
     },

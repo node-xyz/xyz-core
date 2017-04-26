@@ -28,6 +28,7 @@ function _firstFind(params, next, done, xyz) {
         if (matches.length) {
             logger.verbose(wrapper('bold', 'FIRST FIND') + " :: determined node for service " + wrapper('bold', servicePath) + " by first find strategy : " + wrapper('bold', node + ':' + matches[0]));
             params.targets.push({ node: node, service: matches[0] });
+            params.targets.push({ node: node, service: matches[0] });
             break;
         }
     }

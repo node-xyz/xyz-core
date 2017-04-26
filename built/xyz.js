@@ -162,6 +162,7 @@ var NodeXYZ = (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
+        console.log(fn);
         this.bootstrapFunctions.push(fn['name']);
         fn.apply(void 0, [this].concat(args));
     };

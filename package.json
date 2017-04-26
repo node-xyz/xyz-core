@@ -8,8 +8,7 @@
     "test-travis": "rm -Rf node_modules && npm install && ./node_modules/.bin/mocha --reporter spec",
     "build": "./node_modules/typescript/bin/tsc",
     "dev": "./node_modules/typescript/bin/tsc --watch",
-    "docs": "jsdoc -c jsdoc.json -r -R ./README.md -d ./../node-xyz.github.io/apidoc",
-    "docco": "find . -name '*.js' | grep -v node_modules | grep -v examples| grep -v test | xargs docco -o ./../node-xyz.github.io/code",
+    "tsdoc": "./node_modules/typedoc/bin/typedoc . --out ./../node-xyz.github.io/apidoc --module commonjs",
     "lintit": "tslint src/*  --type-check --project ./tsconfig.json"
   },
   "author": "Kian.peymani@gmail.com",
@@ -17,14 +16,14 @@
   "devDependencies": {
     "@types/node": "^7.0.12",
     "chai": "^3.5.0",
-    "docco": "latest",
     "docdash": "^0.4.0",
     "jsdoc": "^3.4.0",
     "jshint": "^2.9.2",
     "mocha": "^2.5.3",
     "tslint": "^5.1.0",
-    "xyz-cli": "^0.3.2", 
-    "typescript": "^2.2.2"
+    "typedoc": "^0.5.10",
+    "typescript": "^2.2.2",
+    "xyz-cli": "^0.3.2"
   },
   "dependencies": {
     "winston": "^2.2.0"
