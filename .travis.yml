@@ -2,11 +2,11 @@ language: node_js
 node_js:
 - '7'
 
--install: 
+install: 
   - npm install
   - tsc 
 
--script: 
+script: 
   - ./node_modules/.bin/mocha --reporter spec
 
 deploy:
