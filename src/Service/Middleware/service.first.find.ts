@@ -1,6 +1,7 @@
 /** @module service-middlewares */
 
 import { IServDiscMwParam } from './../service.interfaces'
+import { bold } from './../../Util/Util'
 import XYZ from './../../xyz'
 
 /**
@@ -26,9 +27,7 @@ function _firstFind (params: IServDiscMwParam, next, done, xyz: XYZ) {
   let logger = xyz.logger
   let wrapper = xyz.Util.wrapper
 
-  // not used, but good to know sth like this exists!
-  // let serviceTokens = servicePath.split('/')
-
+  logger.debug(`${bold('FIRST FIND')} :: invoking self with ${JSON.stringify(foreignNodes)}`)
   let matches
   for (let node in foreignNodes) {
     matches = Path.match(servicePath, foreignNodes[node])
