@@ -3,11 +3,11 @@ node_js:
 - '7'
 
 -install: 
-- npm install
-- tsc 
+  - npm install
+  - tsc 
 
 -script: 
-- ./node_modules/.bin/mocha --reporter spec
+  - ./node_modules/.bin/mocha --reporter spec
 
 deploy:
   provider: npm
