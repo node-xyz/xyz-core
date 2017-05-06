@@ -2,9 +2,12 @@ language: node_js
 node_js:
 - '7'
 
-before_script:
-  - npm run-script build
+-install: 
+- npm install
+- tsc 
 
+-script: 
+- ./node_modules/.bin/mocha --reporter spec
 
 deploy:
   provider: npm
