@@ -88,4 +88,3 @@ esdoc/*
 /test/tests/*.json
 cli/test/*
 out/
-built
