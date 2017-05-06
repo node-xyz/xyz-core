@@ -13,7 +13,7 @@ export function _genericTransportInvoke (params: IServDiscMwParam, next, end, xy
   logger.verbose(`SR :: Generic service discovery message emitter. invoking Transport layer with ${params.targets.map(o => o.node + o.service).join(', ')} | service: ${params.opt.servicePath}.`)
 
   if (targets.length === 0) {
-    logger.warn(`Sending a message to ${params.opt.servicePath} from first find strategy failed (Local Response)`)
+    logger.warn(`Sending a message to ${params.opt.servicePath} failed (Local Response)`)
     responseCallback(http.STATUS_CODES[404], null, null)
   } else if ( targets.length === 1 ) {
     let config: ITransportSendMessageParams = {

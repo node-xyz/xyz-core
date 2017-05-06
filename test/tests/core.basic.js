@@ -7,11 +7,12 @@ const http = require('http')
 
 let cwd, system, snd, rcv
 before(function (done) {
+  this.timeout(5 * 1000)
   let testSystem = common.init()
   snd = testSystem.snd
   rcv = testSystem.rcv
   system = testSystem.system
-  setTimeout(done, 1000)
+  setTimeout(done, 2500)
 })
 
 it('should send a basic message - call()', function (done) {
