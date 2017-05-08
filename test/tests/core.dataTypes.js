@@ -6,12 +6,13 @@ let mockSystem = common.mockSystem
 
 let cwd, system, snd, rcv
 before(function (done) {
+  this.timeout(10 * 1000)
   let testSystem = common.init()
   snd = testSystem.snd
   rcv = testSystem.rcv
   system = testSystem.system
 
-  setTimeout(done, 500)
+  setTimeout(done, 5000)
 })
 it('bool', function (done) {
   snd.call({servicePath: '/neg', payload: false}, (err, body, response) => {
