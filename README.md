@@ -5,6 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/node-xyz/xyz-core/badges/gpa.svg)](https://codeclimate.com/github/node-xyz/xyz-core)
 [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com/)
 [![npm version](https://badge.fury.io/js/xyz-core.svg)](https://badge.fury.io/js/xyz-core)
+[![dependencies Status](https://david-dm.org/node-xyz/xyz-core/status.svg)](https://david-dm.org/node-xyz/xyz-core)
 ---
 
 Node XYZ is a NodeJS toolkit for creating microservice based distributed applications. The main aim of XYZ is to cover following aspects of microservice architecture:
