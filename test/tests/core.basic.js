@@ -12,7 +12,7 @@ before(function (done) {
   snd = testSystem.snd
   rcv = testSystem.rcv
   system = testSystem.system
-  setTimeout(done, 5 * 1000)
+  setTimeout(done, 4 * 1000)
 })
 
 it('should send a basic message - call()', function (done) {
@@ -75,7 +75,7 @@ it('should allow no callback for sender message - different send strategies', fu
   snd.call({servicePath: 'neg', payload: 2, sendStrategy: common.broadcastGlobal})
   total.rcv += 1
 
-  snd.call({servicePath: 'mul', payload: {x: 2, y: 3}, sendStrategy: common.sendToTarget('127.0.0.1:3333')})
+  snd.call({servicePath: 'mul', payload: {x: 2, y: 3}, sendStrategy: common.sendToTarget('127.0.0.1:4000')})
   total.rcv += 1
 
   rcv.xyz.serviceRepository.on('message:receive', check)
@@ -109,6 +109,7 @@ it('should incldue HTTP statusCode', function (done) {
 it('should be fixed. a warning to all about paths', function (done) {
   this.timeout(5 * 1000)
   rcv.register('/foo/bar/baz', mockFunctions.mul)
+
   setTimeout(() => {
     snd.call({servicePath: '/foo', payload: {x: 2, y: 3}}, (err, body, response) => {
       console.log(1, err, body)
@@ -123,7 +124,9 @@ it('should be fixed. a warning to all about paths', function (done) {
         })
       })
     })
-  }, 3 * 1000)
+  }, 4 * 1000)
+
+  
 })
 
 after(function () {

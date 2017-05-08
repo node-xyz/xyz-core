@@ -7,10 +7,10 @@ exports.init = function () {
   var cwd, snd, rcv, system
   cwd = __filename.slice(0, __filename.lastIndexOf('/'))
   system = new mockSystem(cwd)
-  system.addNode('127.0.0.1:3333')
-  system.addNode('127.0.0.1:3334')
-  snd = new mockNode('snd', 3334, cwd, system.getSystemConf())
-  rcv = new mockNode('rcv', 3333, cwd, system.getSystemConf())
+  system.addNode('127.0.0.1:3000')
+  system.addNode('127.0.0.1:4000')
+  snd = new mockNode('snd', 3000, cwd, system.getSystemConf())
+  rcv = new mockNode('rcv', 4000, cwd, system.getSystemConf())
 
   rcv.register('/mul', mockFunctions.mul)
   rcv.register('/up', mockFunctions.up)
