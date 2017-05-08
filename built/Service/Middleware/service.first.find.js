@@ -1,5 +1,6 @@
 /** @module service-middlewares */
 Object.defineProperty(exports, "__esModule", { value: true });
+var Util_1 = require("./../../Util/Util");
 /**
  * Will resolve the service path to an array of nodes that can responde to
  * the target path given. It will then send the message to first node in the array.
@@ -20,8 +21,7 @@ function _firstFind(params, next, done, xyz) {
     var Path = xyz.path;
     var logger = xyz.logger;
     var wrapper = xyz.Util.wrapper;
-    // not used, but good to know sth like this exists!
-    // let serviceTokens = servicePath.split('/')
+    logger.debug(Util_1.bold('FIRST FIND') + " :: invoking self with " + JSON.stringify(foreignNodes));
     var matches;
     for (var node in foreignNodes) {
         matches = Path.match(servicePath, foreignNodes[node]);

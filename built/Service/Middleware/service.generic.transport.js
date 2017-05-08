@@ -7,7 +7,7 @@ function _genericTransportInvoke(params, next, end, xyz) {
     var logger = xyz.logger;
     logger.verbose("SR :: Generic service discovery message emitter. invoking Transport layer with " + params.targets.map(function (o) { return o.node + o.service; }).join(', ') + " | service: " + params.opt.servicePath + ".");
     if (targets.length === 0) {
-        logger.warn("Sending a message to " + params.opt.servicePath + " from first find strategy failed (Local Response)");
+        logger.warn("Sending a message to " + params.opt.servicePath + " failed (Local Response)");
         responseCallback(http.STATUS_CODES[404], null, null);
     }
     else if (targets.length === 1) {

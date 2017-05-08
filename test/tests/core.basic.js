@@ -12,7 +12,7 @@ before(function (done) {
   snd = testSystem.snd
   rcv = testSystem.rcv
   system = testSystem.system
-  setTimeout(done, 2500)
+  setTimeout(done, 5 * 1000)
 })
 
 it('should send a basic message - call()', function (done) {

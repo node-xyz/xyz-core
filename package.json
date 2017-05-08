@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/typescript/bin/tsc && ./node_modules/.bin/mocha --reporter spec",
-    "test-travis": "rm -Rf node_modules && npm install && ./node_modules/.bin/mocha --reporter spec",
+    "test-travis": "rm -Rf node_modules && npm install && tsc && ./node_modules/.bin/mocha --reporter spec",
     "build": "./node_modules/typescript/bin/tsc",
+    
     "dev": "./node_modules/typescript/bin/tsc --watch",
     "tsdoc": "./node_modules/typedoc/bin/typedoc . --out ./../node-xyz.github.io/apidoc --module commonjs",
     "lintit": "tslint src/*  --type-check --project ./tsconfig.json"
