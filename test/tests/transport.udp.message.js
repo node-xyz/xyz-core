@@ -16,7 +16,9 @@ before(function (done) {
   rcv.xyz.registerServerRoute(2333, 'udp')
   rcv.xyz.middlewares().transport.server('udp')(2333).register(0, common._udpMessageEvent)
 
-  setTimeout(done, 500)
+
+  this.timeout(10 * 1000)
+  setTimeout(done, 4000)
 })
 
 it('simple udp message', function (done) {

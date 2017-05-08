@@ -12,7 +12,7 @@ before(function (done) {
   snd = testSystem.snd
   rcv = testSystem.rcv
   system = testSystem.system
-  setTimeout(done, 1000)
+  setTimeout(done, 3 * 1000)
 })
 
 it('udp tunnel', function (done) {

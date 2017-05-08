@@ -15,7 +15,9 @@ before(function (done) {
   system = testSystem.system
   cwd = testSystem.cwd
 
-  setTimeout(done, 500)
+
+  this.timeout(10 * 1000)
+  setTimeout(done, 3000)
 })
 
 it('manipulator', function (done) {

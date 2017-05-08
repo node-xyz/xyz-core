@@ -6,12 +6,13 @@ const mockFunctions = common.mockFunctions
 
 let cwd, system, snd, rcv
 before(function (done) {
+  this.timeout(10 * 1000)
+  setTimeout(done, 4000)
   let testSystem = common.init()
   snd = testSystem.snd
   rcv = testSystem.rcv
   system = testSystem.system
   cwd = testSystem.cwd
-  setTimeout(done, 1000)
 })
 
 it('inspect', function (done) {

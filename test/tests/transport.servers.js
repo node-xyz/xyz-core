@@ -19,7 +19,9 @@ before(function (done) {
   snd.xyz.registerClientRoute('http/2')
   snd.xyz.middlewares().transport.client('http/2').register(0, common._httpExport)
 
-  setTimeout(done, 1000)
+
+  this.timeout(10 * 1000)
+  setTimeout(done, 4000)
 })
 
 it('duplicate http server', function (done) {
@@ -46,9 +48,9 @@ it('extra udp server on the fly', function (done) {
         expect(err).to.equal(null)
         done()
       })
-    }, 3000)
+    }, 6 * 1000)
   })
-  this.timeout(4000)
+  this.timeout(10 * 1000)
 })
 
 it.skip('extra tcp server on the fly', function (done) {

@@ -19,7 +19,9 @@ before(function (done) {
   rcv.xyz.registerServerRoute(rcv.xyz.id().port, 'foo')
   rcv.xyz.middlewares().transport.server('foo')(rcv.xyz.id().port).register(0, common._httpMessageEvent)
 
-  setTimeout(done, 1000)
+
+  this.timeout(10 * 1000)
+  setTimeout(done, 4000)
 })
 
 it('multiple routes', function (done) {

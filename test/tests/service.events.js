@@ -19,7 +19,10 @@ before(function (done) {
   snd.xyz.registerClientRoute('udp')
   snd.xyz.middlewares().transport.client('udp').register(0, common._udpExport)
 
-  setTimeout(done, 500)
+
+  this.timeout(10 * 1000)
+  setTimeout(done, 4000)
+
 })
 
 it('service level http message send and receive', function (done) {
