@@ -17,7 +17,7 @@ before(function (done) {
 
 
   this.timeout(10 * 1000)
-  setTimeout(done, 3000)
+  setTimeout(done, 5000)
 })
 
 it('manipulator', function (done) {
