@@ -50,7 +50,7 @@ before(function (done) {
 
 
   this.timeout(10 * 1000)
-  setTimeout(done, 3000)
+  setTimeout(done, 6000)
 })
 
 it('False servicrDiscovery', function (done) {
