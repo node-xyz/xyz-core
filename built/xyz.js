@@ -275,7 +275,7 @@ var NodeXYZ = (function () {
      *
      * the port of the first server is always the **primary** port of a node.
      *
-     * @return {Object}
+     * @return {IxyzNodeIdentifier}
      */
     NodeXYZ.prototype.id = function () {
         return {

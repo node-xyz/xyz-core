@@ -1,6 +1,6 @@
-import { logger } from './../../Log/Logger';
+import { logger } from './../../Log/Logger'
 /** @module service-middlewares */
-import { IServDiscMwParam } from './../service.interfaces';
+import { IServDiscMwParam } from './../service.interfaces'
 import XYZ from './../../xyz'
 import * as http from 'http'
 
@@ -14,7 +14,7 @@ import * as http from 'http'
  * @param  {Function}     done   used to end the middleware stack
  * @param  {Object}       xyz    reference to the caller's xyz instance
  */
-function _sendToAll (params: IServDiscMwParam, next, done, xyz:XYZ) {
+function _sendToAll (params: IServDiscMwParam, next, done, xyz: XYZ) {
   let servicePath = params.opt.servicePath
   let userPayload = params.opt.payload
   let responseCallback = params.responseCallback
@@ -30,9 +30,9 @@ function _sendToAll (params: IServDiscMwParam, next, done, xyz:XYZ) {
 
   let matches
   for (let node in foreignNodes) {
-    matches = Path.match(servicePath, foreignNodes[node])
+    matches = Path.match(servicePath, foreignNodes[node], false)
     if (matches.length) {
-      for (let match of matches) {        
+      for (let match of matches) {
         params.targets.push({ service: match, node: node })
       }
     }

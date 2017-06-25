@@ -1,100 +1,129 @@
-import { ISubtree } from './path.tree';
-import { logger } from './../Log/Logger';
-import { Path } from './path';
+import { PathNode, SerializedNode } from './path.node'
+import { ISubtree } from './path.tree'
+import { logger } from './../Log/Logger'
+import { Path } from './path'
 
-export interface ITree { 
-  [index: string] : ISubtree
+enum TRAVERSE_RESULT {
+  understep,
+  fit,
+  overstep
 }
 
-export interface ISubtree {
-  subtree: ITree; 
-  fn?: () => any
+interface ITraversalResult {
+  status: TRAVERSE_RESULT
+  node: PathNode
 }
 
 export class PathTree {
-  tree: any; 
-  serializedTree: object; 
-  plainTree: any; 
-  
+  root: PathNode
+  sRoot: SerializedNode
+  serializedTree: SerializedNode
+
+  plainTree: object[]
+
   constructor () {
-    this.tree = {
-      '': {
-        subtree: {}
-      }
-    }
-    this.serializedTree = { '': {} }
+    this.root = new PathNode('', '', 0, null)
+    this.sRoot = new SerializedNode('', '')
+    // TODO: this is only to avoid refactoring
+    this.serializedTree = this.sRoot
     this.plainTree = []
   }
 
-  /**
-   * Note that the service layer is responsible for
-   * 1- validating this path
-   * 2- formatting it to standard value
-   */
-  createPathSubtree (path, fn: () => void) {
-    let tokens = Path.getTokens(path)
-    let tree = this.tree
-    let stree = this.serializedTree
-    for (let token of tokens) {
-      if (tree[token] === undefined) {
-        tree[token] = {subtree: {}}
+  inspect () {
+    return this._inspect(this.root, '')
+  }
+
+  _inspect (node: PathNode = this.root, indent: string = '|  ') {
+    let consoleValue = ''
+
+    for ( let child of node.children ) {
+      consoleValue += (indent + child._inspect() )
+
+      if ( child.children.length ) {
+        consoleValue += this._inspect(child, indent)
       }
-      if (token !== tokens[tokens.length - 1]) {
-        tree = tree[token].subtree
-      } else {
-        tree = tree[token]
-      }
-      if (stree[token] === undefined) {
-        stree[token] = {}
-      }
-      stree = stree[token]
     }
 
-    if (fn) {
-      tree.fn = fn
+    return consoleValue
+  }
+
+  createPathSubtree (path: string, fn: () => any): boolean {
+    if ( this.isRoot(path) ) {
+      this.root.fn = fn
+      return true
     }
-    this.plainTree.push({path: path, name: fn['name'] || 'anonymousFN'})
+    let tokens = this.tokenize(path)
+    let currentNode = this.root
+    let currentSNode = this.sRoot
+
+    let last = tokens[tokens.length - 1]
+    for ( let token of tokens ) {
+      if ( !currentNode.hasChild(token) ) {
+        // add child to main tree
+        currentNode.addChild(token, token === last ? fn : null)
+
+        // add child to serialized tree
+        currentSNode.children.push(new SerializedNode(token, `${currentSNode.path}/${token}`))
+      }
+      currentSNode = currentSNode.getChild(token)
+      currentNode = currentNode.getChild(token)
+    }
+    this.plainTree.push({ path: path, name: fn['name'] || 'anonymousFN' })
     return true
   }
 
-  /**
-   * Will return the function accosiated with a path.
-   * Note that this function will be used at the receiver of a message.
-   * It expects a RESOLVED path (no * included)
-   */
-  getPathFunction (path) {
-    let pathTokens = path.split('/')
-    let tree = this.tree[pathTokens[0]]
-    let token
-    for (let i = 1; i < pathTokens.length; i++) {
-      token = pathTokens[i]
-      if (tree.subtree[token]) {
-        tree = tree.subtree[token]
+  getPathFunction (path: string) {
+    if ( this.isRoot(path) ) return this.root.fn
+    let tokes = this.tokenize(path)
+    let currentNode = this.root
+    for ( let token of tokes) {
+      if ( currentNode.hasChild(token) ) {
+        currentNode = currentNode.getChild(token)
       } else {
         return false
       }
     }
-    return tree.fn
+    return currentNode.fn
   }
 
-  getPathFunctions (path) {
-    let pathTokens = path.split('/')
-    let tree = this.tree[pathTokens[0]]
-    let token
-    let fns = []
-    for (let i = 1; i < pathTokens.length; i++) {
-      if (tree.fn) {
-        fns.push(tree.fn)
-      }
+  isRoot (path) {
+    if ( path === '/' ) return true
+  }
 
-      token = pathTokens[i]
-      if (tree.subtree[token]) {
-        tree = tree.subtree[token]
-      }
+  // deprecated
+  traverse (path: string): ITraversalResult {
+    let tokens = this.tokenize(path)
+    let currentNode: PathNode = this.root
+    let currentIndex: number = 0
+    let currentToken: string = tokens[currentIndex]
+    let maxIndex: number = tokens.length - 1
+
+    while (currentNode.getChild(currentToken)) {
+      currentIndex ++
+      currentToken = tokens[currentIndex]
     }
-    fns.push(tree.fn)
-    return fns
+
+    if ( currentIndex === currentNode.depth ) {
+      return { status: TRAVERSE_RESULT.fit, node: currentNode }
+    }
+    if ( currentIndex > currentNode.depth ) {
+      return { status: TRAVERSE_RESULT.overstep, node: currentNode }
+    }
+    if ( currentIndex < currentNode.depth ) {
+      return {status: TRAVERSE_RESULT.understep, node: currentNode }
+    }
   }
 
-  getMatches (path, startTree = this.serializedTree) {}
+  tokenize (path: string): string[] {
+    return path.split('/').slice(1)
+  }
+}
+
+export interface ITree {
+  [index: string]: ISubtree
+}
+
+export interface ISubtree {
+  subtree: ITree
+  fn?: () => any
 }

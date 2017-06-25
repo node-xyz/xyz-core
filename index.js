@@ -1,9 +1,5 @@
 let xyz = require('./built/xyz.js')
 
-/**
- * some stuff
- * some stuff
- */
 module.exports = xyz.default
 module.exports.bootstrapFunctions = {
   'process.inspect.event': require('./built/Bootstrap/process.inspect.event'),

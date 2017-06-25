@@ -6,11 +6,12 @@ import { GenericMiddlewareHandler } from './../../Middleware/generic.middleware.
 import { EventEmitter } from 'events'
 import * as dgram from 'dgram'
 import XYZ from './../../xyz'
+import { IServerId } from './../transport.interfaces'
 
 export default class UDPServer extends EventEmitter {
   port: number
   xyz: XYZ
-  serverId: Object
+  serverId: IServerId
   server: any
   routes: Object
 

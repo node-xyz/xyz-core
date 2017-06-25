@@ -58,7 +58,7 @@ export default class ServiceRepository extends EventEmitter {
 
     /**
      * Reference to seld conf for easier usage
-     * @type {Object}
+     * @type {ISelfConfValue}
      */
     this.selfConf = CONFIG.getSelfConf()
 
@@ -78,6 +78,7 @@ export default class ServiceRepository extends EventEmitter {
       this.callDispatchMiddlewareStack.register(0, require('./Middleware/service.first.find'))
     }
 
+    // append the generic transport send middleware
     this.callDispatchMiddlewareStack.register(-1, _genericTransportInvoke)
 
     logger.info(`SR :: default sendStategy set to ${this.callDispatchMiddlewareStack.middlewares[0].name}`)
@@ -142,9 +143,8 @@ ${wrapper('green', wrapper('bold', 'Middlewares'))}:
   ${this.callDispatchMiddlewareStack.inspect()}
 ${wrapper('green', wrapper('bold', 'Services'))}:\n`
 
-    for (let s of this.services.plainTree) {
-      str += `  ${s.name} @ ${s.path}\n`
-    }
+    str += this.services.inspect()
+
     return str
   }
 
@@ -165,7 +165,7 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
    * to `true`. This will case this method to be called.
    *
    * this method will cause services to be searched an invoked via `CONSTANTS.events.MESSAGE`
-   *  event, which is equal to `message`. This event will be emitter by default from
+   *  event, which is equal to `message`. This event will be emitted by default from
    *  `http.receive.event.js` middleware.
    *
    * Note that the CONSTANTS.events.MESSAGE can only be processed if it receives the
@@ -178,17 +178,18 @@ ${wrapper('green', wrapper('bold', 'Services'))}:\n`
 
       let service = xMessage.message.xyzPayload.service
       let response = xMessage.response
-
+      
       let fn = this.services.getPathFunction(service)
 
       // EXPERIMENTAL
-      // console.log(this.services)
+      // console.log('-------------------')
       // let resolvedServices = Path.match(service, this.services.serializedTree)
-      // console.log(resolvedServices)
+      // console.log(1, resolvedServices)
       // resolvedServices.map( (o) => {
       //   return this.services.getPathFunction(o)
       // })
-      // console.log(resolvedServices)
+      // console.log(2, resolvedServices)
+      // console.log('-------------------')
 
       if (fn) {
         fn(xMessage.message.userPayload, response, xMessage.message.xyzPayload)

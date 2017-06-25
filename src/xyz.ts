@@ -321,7 +321,7 @@ ${wrapper('bold', wrapper('blue', 'Transport'))}:
   *
   * the port of the first server is always the **primary** port of a node.
   *
-  * @return {Object}
+  * @return {IxyzNodeIdentifier}
   */
   id (): IxyzNodeIdentifier {
     return {

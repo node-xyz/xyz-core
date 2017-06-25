@@ -22,7 +22,6 @@ export default function _basicPingBootstrap (xyz: INodeXYZ, event, port) {
   let logger = xyz.logger
   let CONFIG = xyz.CONFIG
   const CONSTANTS = xyz.CONSTANTS
-  
 
   let SR = xyz.serviceRepository
   let outOfReachNodes = {}
@@ -108,7 +107,7 @@ export default function _basicPingBootstrap (xyz: INodeXYZ, event, port) {
       joinCandidate.push(sender)
     }
     response.end(JSON.stringify({
-      services: SR.services.serializedTree,
+      services: SR.services.sRoot,
       nodes: CONFIG.getSystemConf().nodes,
       transportServers: SR.transport.getServerRoutes()}))
   }

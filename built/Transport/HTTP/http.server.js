@@ -20,11 +20,6 @@ var Util_1 = require("./../../Util/Util");
 var http_receive_event_1 = require("./../Middlewares/http.receive.event");
 var HTTPServer = (function (_super) {
     __extends(HTTPServer, _super);
-    /**
-     * Creates a new HTTP server
-     * @param xyz {Object} a reference to the curretn xyz object. will be filled automatically.
-     * @param port {String|Number} The main port of this server.
-     */
     function HTTPServer(xyz, port) {
         var _this = _super.call(this) || this;
         http.globalAgent.maxSockets = Infinity;

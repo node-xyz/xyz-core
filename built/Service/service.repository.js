@@ -53,7 +53,7 @@ var ServiceRepository = (function (_super) {
         _this.transport = new Transport_1.default(xyz);
         /**
          * Reference to seld conf for easier usage
-         * @type {Object}
+         * @type {ISelfConfValue}
          */
         _this.selfConf = config_global_1.CONFIG.getSelfConf();
         for (var _i = 0, _a = _this.selfConf.transport; _i < _a.length; _i++) {
@@ -70,6 +70,7 @@ var ServiceRepository = (function (_super) {
             Logger_1.logger.error("SR :: defaultSendStrategy passed to config [" + config_global_1.CONFIG.getSelfConf().defaultSendStrategy + "] not found. setting the default value");
             _this.callDispatchMiddlewareStack.register(0, require('./Middleware/service.first.find'));
         }
+        // append the generic transport send middleware
         _this.callDispatchMiddlewareStack.register(-1, service_generic_transport_1._genericTransportInvoke);
         Logger_1.logger.info("SR :: default sendStategy set to " + _this.callDispatchMiddlewareStack.middlewares[0].name);
         /**
@@ -123,10 +124,7 @@ var ServiceRepository = (function (_super) {
      */
     ServiceRepository.prototype.inspect = function () {
         var str = "\n" + wrapper('green', wrapper('bold', 'Middlewares')) + ":\n  " + this.callDispatchMiddlewareStack.inspect() + "\n" + wrapper('green', wrapper('bold', 'Services')) + ":\n";
-        for (var _i = 0, _a = this.services.plainTree; _i < _a.length; _i++) {
-            var s = _a[_i];
-            str += "  " + s.name + " @ " + s.path + "\n";
-        }
+        str += this.services.inspect();
         return str;
     };
     /**
@@ -145,7 +143,7 @@ var ServiceRepository = (function (_super) {
      * to `true`. This will case this method to be called.
      *
      * this method will cause services to be searched an invoked via `CONSTANTS.events.MESSAGE`
-     *  event, which is equal to `message`. This event will be emitter by default from
+     *  event, which is equal to `message`. This event will be emitted by default from
      *  `http.receive.event.js` middleware.
      *
      * Note that the CONSTANTS.events.MESSAGE can only be processed if it receives the
@@ -160,13 +158,14 @@ var ServiceRepository = (function (_super) {
             var response = xMessage.response;
             var fn = _this.services.getPathFunction(service);
             // EXPERIMENTAL
-            // console.log(this.services)
+            // console.log('-------------------')
             // let resolvedServices = Path.match(service, this.services.serializedTree)
-            // console.log(resolvedServices)
+            // console.log(1, resolvedServices)
             // resolvedServices.map( (o) => {
             //   return this.services.getPathFunction(o)
             // })
-            // console.log(resolvedServices)
+            // console.log(2, resolvedServices)
+            // console.log('-------------------')
             if (fn) {
                 fn(xMessage.message.userPayload, response, xMessage.message.xyzPayload);
                 return;

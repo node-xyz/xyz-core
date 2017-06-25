@@ -4,7 +4,7 @@ import { logger } from './../../Log/Logger'
 import * as http from 'http'
 import * as url from 'url'
 import * as EventEmitter from 'events'
-import {_xResponse, ITransportReceivedMessage} from './../transport.interfaces'
+import {_xResponse, ITransportReceivedMessage, IServerId} from './../transport.interfaces'
 import {wrapper} from './../../Util/Util'
 import _httpMessageEvent from './../Middlewares/http.receive.event'
 import XYZ from './../../xyz'
@@ -12,16 +12,11 @@ import XYZ from './../../xyz'
 export default class HTTPServer extends EventEmitter {
   xyz: XYZ
   port: number
-  serverId: Object
+  serverId: IServerId
   routes: Object
   server: any
 
-  /**
-   * Creates a new HTTP server
-   * @param xyz {Object} a reference to the curretn xyz object. will be filled automatically.
-   * @param port {String|Number} The main port of this server.
-   */
-  constructor (xyz, port) {
+  constructor (xyz, port: number) {
     super()
     http.globalAgent.maxSockets = Infinity
     this.port = port || CONFIG.getSelfConf().transport[0].port

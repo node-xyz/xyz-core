@@ -1,13 +1,16 @@
+import { SerializedNode } from './path.node'
+
 export interface IPath {
   validate: (path: string) => boolean
   format: (path: string) => string
   merge: (src, dst, prefix, child) => string
-  match: (path: string, serializedTree: Object) => string[]
-  getTokens: (path: string) => string[]
+  match: (path: string, serializeTree: SerializedNode, partial: boolean) => string[]
+  hasChild: (node: SerializedNode, token: string) => boolean
+  getChild: (node: SerializedNode, token: string) => SerializedNode
 }
 
 export let Path: IPath = {
-  validate: function (path) {
+  validate: function (path: string): boolean {
     if (path === '/') {
       return true
     }
@@ -45,55 +48,43 @@ export let Path: IPath = {
     )
   },
 
-  /**
-   * matches a path with the path.tree of another node
-   * @param {String} path the path to be matched.
-   * @param {Object} serializedTree  serializedTree of a node
-   *
-   */
-  match (path, serializedTree) {
+  match (path: string, serializeTree: SerializedNode, partial: boolean = false) {
     let matches = []
-    let pathToken = path.split('/')
-    let pathIndex = 0
-    let pathTree = serializedTree
-    let computedPath = ''
-    while (Object.keys(pathTree).length) {
-      // wildcard is seen
-      if (pathToken[pathIndex] === '*') {
-        // last token // TODO redundant
-        if (pathIndex === pathToken.length - 1) {
-          for (let child in pathTree) {
-            matches = this.merge(matches, this.match(`${child}`, pathTree), computedPath, '')
-          }
-          break
-        } else {
-          // intermediate token
-          for (let child in pathTree) {
-            matches = this.merge(matches, this.match(`${pathToken.slice(pathIndex + 1).join('/')}`, pathTree[child]), computedPath, child)
-          }
-          break
+    let tokens: Array<string> = path.split('/').slice(1)
+    let currentNode = serializeTree
+
+    let index = 0
+    for ( let token of tokens ) {
+      // wildcard
+      if ( token === '*' ) {
+        for ( let candidate of currentNode.children ) {
+          let candidateResult = Path.match(tokens.slice(index).join('/'), candidate, false)
+          matches = matches.concat(candidateResult)
         }
-      } else if (pathTree[pathToken[pathIndex]]) {
-        if (pathTree[pathToken[pathIndex]]) {
-          computedPath = computedPath + '/' + pathToken[pathIndex]
-          if (pathIndex === pathToken.length - 1) {
-            matches.push(computedPath.slice(1))
-            break
-          }
-          pathTree = pathTree[pathToken[pathIndex]]
-          pathIndex += 1
-        } else {
-          break
-        }
+        return matches
       } else {
-        break
+        if ( Path.hasChild(currentNode, token) ) {
+          currentNode = Path.getChild(currentNode, token)
+        } else {
+          return []
+        }
       }
+      index ++
     }
-    // TODO Fix this
-    return matches.map((el) => el.replace('//', '/'))
+    if ( path !== '/' ) matches.push(currentNode.path)
+    return matches
   },
 
-  getTokens: function (path) {
-    return path.split('/')
+  hasChild (node: SerializedNode, token: string) {
+    for ( let child of node.children ) {
+      if ( child.name === token ) return true
+    }
+    return false
+  },
+
+  getChild (node: SerializedNode, token: string) {
+    for ( let child of node.children ) {
+      if ( child.name === token ) return child
+    }
   }
 }

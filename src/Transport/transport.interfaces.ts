@@ -19,10 +19,15 @@ export function _xResponse (resposenObject) {
   }
 }
 
+export interface IServerId {
+  type: string,
+  port: number
+}
+
 export interface ITransportReceivedMessage {
   message: any
-  serverId: object
-  meta: object
+  serverId: IServerId
+  meta: any
   response: () => void
 }
 

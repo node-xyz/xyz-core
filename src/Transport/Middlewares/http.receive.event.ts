@@ -1,6 +1,7 @@
-import { CONSTANTS } from './../../Config/Constants';
+import { ITransportReceivedMessage } from './../transport.interfaces'
+import { CONSTANTS } from './../../Config/Constants'
 
-function _httpMessageEvent (xMessage, next, end, xyz) {
+function _httpMessageEvent (xMessage: ITransportReceivedMessage, next, end, xyz) {
 
   let request = xMessage.meta.request
   let message = xMessage.message

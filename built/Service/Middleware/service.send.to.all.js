@@ -22,7 +22,7 @@ function _sendToAll(params, next, done, xyz) {
     // let serviceTokens = servicePath.split('/')
     var matches;
     for (var node in foreignNodes) {
-        matches = Path.match(servicePath, foreignNodes[node]);
+        matches = Path.match(servicePath, foreignNodes[node], false);
         if (matches.length) {
             for (var _i = 0, matches_1 = matches; _i < matches_1.length; _i++) {
                 var match = matches_1[_i];

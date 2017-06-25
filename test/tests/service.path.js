@@ -82,6 +82,7 @@ it('path mathcing', function (done) {
   expect(Path.match('/math/*', pt.serializedTree).length).to.equal(2)
   expect(Path.match('/foo/*/*/duck/go', pt.serializedTree).length).to.equal(2)
   expect(Path.match('/foo/*/*/duck/*', pt.serializedTree).length).to.equal(3)
+  expect(Path.match('/math/*/*/*/*', pt.serializedTree).length).to.equal(0)
 
   done()
 })
@@ -115,28 +116,40 @@ it('path formating .call()', function (done) {
   })
 })
 
-it.skip('path parent matching', function (done) {
+it.skip('allow subscribe', function (done) {
+  // static test
+  let dummy = function () { console.log('dummy') }
+  let pt = new PathTree()
+  
+  pt.createPathSubtree('/', dummy)
+  pt.createPathSubtree('/foo', dummy)
+  pt.createPathSubtree('/foo/bar', dummy)
+  pt.createPathSubtree('/foo/bar/baz', dummy)
+  
+  console.log(Path.match('/foo/bar/baz/boz', pt.serializedTree, true))
+  
+  // dynamic test
   this.timeout(10 * 1000)
   let received = 0
 
-  rcv.register('/', function slash () {
+  rcv.subscribe('/', function slash () {
     console.log('/')
     received++
   })
 
-  rcv.register('/test', function test () {
+  rcv.subscribe('/test', function test () {
     console.log('/test')
     received++
   })
 
-  rcv.register('/test/test1', function test1 (body, resp) {
+  rcv.subscribe('/test/test1', function test1 (body, resp) {
     console.log('/test/test1')
     received++
     resp.jsonify('ok')
   })
 
   setTimeout(() => {
-    snd.call({servicePath: '/test/test1'}, (err, body) => {
+    snd.call({servicePath: '/test/test1/extra'}, (err, body) => {
       console.log(err, body)
       console.log(received)
       done()

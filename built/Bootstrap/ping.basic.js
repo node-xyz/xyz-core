@@ -109,7 +109,7 @@ function _basicPingBootstrap(xyz, event, port) {
             joinCandidate.push(sender);
         }
         response.end(JSON.stringify({
-            services: SR.services.serializedTree,
+            services: SR.services.sRoot,
             nodes: CONFIG.getSystemConf().nodes,
             transportServers: SR.transport.getServerRoutes()
         }));

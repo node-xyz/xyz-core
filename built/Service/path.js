@@ -32,58 +32,50 @@ exports.Path = {
             return prefix.slice(1) + "/" + child + "/" + obj;
         }));
     },
-    /**
-     * matches a path with the path.tree of another node
-     * @param {String} path the path to be matched.
-     * @param {Object} serializedTree  serializedTree of a node
-     *
-     */
-    match: function (path, serializedTree) {
+    match: function (path, serializeTree, partial) {
+        if (partial === void 0) { partial = false; }
         var matches = [];
-        var pathToken = path.split('/');
-        var pathIndex = 0;
-        var pathTree = serializedTree;
-        var computedPath = '';
-        while (Object.keys(pathTree).length) {
-            // wildcard is seen
-            if (pathToken[pathIndex] === '*') {
-                // last token // TODO redundant
-                if (pathIndex === pathToken.length - 1) {
-                    for (var child in pathTree) {
-                        matches = this.merge(matches, this.match("" + child, pathTree), computedPath, '');
-                    }
-                    break;
+        var tokens = path.split('/').slice(1);
+        var currentNode = serializeTree;
+        var index = 0;
+        for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
+            var token = tokens_1[_i];
+            // wildcard
+            if (token === '*') {
+                for (var _a = 0, _b = currentNode.children; _a < _b.length; _a++) {
+                    var candidate = _b[_a];
+                    var candidateResult = exports.Path.match(tokens.slice(index).join('/'), candidate, false);
+                    matches = matches.concat(candidateResult);
                 }
-                else {
-                    // intermediate token
-                    for (var child in pathTree) {
-                        matches = this.merge(matches, this.match("" + pathToken.slice(pathIndex + 1).join('/'), pathTree[child]), computedPath, child);
-                    }
-                    break;
-                }
-            }
-            else if (pathTree[pathToken[pathIndex]]) {
-                if (pathTree[pathToken[pathIndex]]) {
-                    computedPath = computedPath + '/' + pathToken[pathIndex];
-                    if (pathIndex === pathToken.length - 1) {
-                        matches.push(computedPath.slice(1));
-                        break;
-                    }
-                    pathTree = pathTree[pathToken[pathIndex]];
-                    pathIndex += 1;
-                }
-                else {
-                    break;
-                }
+                return matches;
             }
             else {
-                break;
+                if (exports.Path.hasChild(currentNode, token)) {
+                    currentNode = exports.Path.getChild(currentNode, token);
+                }
+                else {
+                    return [];
+                }
             }
+            index++;
         }
-        // TODO Fix this
-        return matches.map(function (el) { return el.replace('//', '/'); });
+        if (path !== '/')
+            matches.push(currentNode.path);
+        return matches;
     },
-    getTokens: function (path) {
-        return path.split('/');
+    hasChild: function (node, token) {
+        for (var _i = 0, _a = node.children; _i < _a.length; _i++) {
+            var child = _a[_i];
+            if (child.name === token)
+                return true;
+        }
+        return false;
+    },
+    getChild: function (node, token) {
+        for (var _i = 0, _a = node.children; _i < _a.length; _i++) {
+            var child = _a[_i];
+            if (child.name === token)
+                return child;
+        }
     }
 };
