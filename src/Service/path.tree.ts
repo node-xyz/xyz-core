@@ -1,5 +1,4 @@
 import { PathNode, SerializedNode } from './path.node'
-import { ISubtree } from './path.tree'
 import { logger } from './../Log/Logger'
 import { Path } from './path'
 
@@ -117,13 +116,4 @@ export class PathTree {
   tokenize (path: string): string[] {
     return path.split('/').slice(1)
   }
-}
-
-export interface ITree {
-  [index: string]: ISubtree
-}
-
-export interface ISubtree {
-  subtree: ITree
-  fn?: () => any
 }
